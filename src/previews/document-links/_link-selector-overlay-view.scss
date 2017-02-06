@@ -1,0 +1,36 @@
+$linkable-element-frame-color: ui-color('link');
+$linkable-element-frame-hover-color: ui-color('selection');
+$linkable-element-frame-selected-color: ui-color('selection');
+
+
+// Tables and such
+[cv-is-linkable-element]:not([cv-layout]),
+// Normal CVK elements
+[cv-layout='inline'][cv-is-linkable-element],
+[cv-layout='block'][cv-is-linkable-element] > cv-block-boundary {
+	cursor: pointer;
+
+	box-shadow: 0 0 0 1px transparent;
+	//border-radius: 1px;
+
+	&:hover {
+		box-shadow: 0 0 0 1px $linkable-element-frame-hover-color;
+	}
+}
+
+
+// Tables and such
+[cv-is-linkable-element-and-selected]:not([cv-layout]),
+	// Normal CVK elements
+[cv-layout='inline'][cv-is-linkable-element-and-selected],
+[cv-layout='block'][cv-is-linkable-element-and-selected] > cv-block-boundary {
+	cursor: pointer;
+
+	box-shadow: 0 0 0 2px $linkable-element-frame-selected-color;
+
+	// TODO: animate a glow effect here; similar to highlight transition
+
+	&:hover {
+		box-shadow: 0 0 0 2px $linkable-element-frame-selected-color;
+	}
+}
