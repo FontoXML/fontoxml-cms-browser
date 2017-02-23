@@ -1,5 +1,5 @@
 {
-	"__show-open-document-browser-plus-create-document-form-tabs-modal": {
+	"show-open-document-browser-plus-create-document-form-tabs-modal": {
 		"initialData": {
 			"openDocumentDataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
