@@ -8,7 +8,7 @@ const styles = merge(
 	flex('horizontal'),
 	{
 		flex: 'auto',
-		backgroundColor: color('white'),
+		backgroundColor: color('inlay-background'),
 
 		// Prevent flashing by giving this an approximate min-height of a state message
 		// with a single line title and message (188px = 11.75rem), which is most commonly used here

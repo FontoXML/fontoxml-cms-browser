@@ -50,7 +50,7 @@ const FxLinkableElementDetails = ({ documentId, elementId, linkTypeName }) => {
 
 	return (
 		<fx-linkable-element-details { ...styles }>
-			<Label colorName='text-secondary' isFullWidth>
+			<Label colorName='text-muted-color' isFullWidth>
 				{ t('{LINK_TYPE} to the {MARKUP_LABEL}:', { LINK_TYPE: linkTypeName, MARKUP_LABEL: markupLabel }) }
 			</Label>
 

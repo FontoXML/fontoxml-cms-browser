@@ -10,7 +10,7 @@ const styles = merge(
 	{
 		flex: 'none',
 		width: '35rem',
-		backgroundColor: color('white')
+		backgroundColor: color('inlay-background')
 	}
 );
 

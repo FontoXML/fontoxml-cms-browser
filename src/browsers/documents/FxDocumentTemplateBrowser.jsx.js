@@ -49,8 +49,8 @@ class FxDocumentTemplateBrowser extends Component {
 						if (cachedErrorByRemoteDocumentId[item.id]) {
 							return (
 								<ListItem key={ key } isSelected={ isSelected } isInvalid onClick={ onClick }>
-									<Icon icon={ item.icon || 'file-text-o' } colorName='error' size='s' />
-									<Label colorName='text-secondary'>{ item.label }</Label>
+									<Icon icon={ item.icon || 'file-text-o' } colorName='icon-s-error-color' size='s' />
+									<Label colorName='text-muted-color'>{ item.label }</Label>
 								</ListItem>
 							);
 						}
@@ -76,8 +76,8 @@ class FxDocumentTemplateBrowser extends Component {
 						if (cachedErrorByRemoteDocumentId[item.id]) {
 							return (
 								<GridItem key={ key } isSelected={ isSelected } isInvalid onClick={ onClick }>
-									<Icon icon={ item.icon || 'file-text-o' } colorName='error' size='m' align='center' />
-									<Label align='center' colorName='text-secondary' isFullWidth>{ item.label }</Label>
+									<Icon icon={ item.icon || 'file-text-o' } colorName='icon-m-error-color' size='m' align='center' />
+									<Label align='center' colorName='text-muted-color' isFullWidth>{ item.label }</Label>
 								</GridItem>
 							);
 						}

@@ -299,7 +299,7 @@ class FileOrFolderBrowser extends Component {
 						{ ...block }
 						{ ...borderBottom(color('border')) }
 						{ ...padding('m') }
-						{ ...style({ backgroundColor: color('white') }) }>
+						{ ...style({ backgroundColor: color('inlay-background') }) }>
 						<Toast connotation='error' icon='exclamation-triangle' content={ lastUploadErrorMessage } />
 					</fds-browser-error>
 				) }
