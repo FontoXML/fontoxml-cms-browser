@@ -12,7 +12,7 @@ define([
 	/* @ngInject */ function FxDocumentLinkBrowserModalController ($scope, operationData) {
 		selectionManager.preventEditorFocus();
 
-		reactToAngularModalBridge.operationData = Object.assign({}, operationData, { linkableElementsQuery: '//*[@id]' });
+		reactToAngularModalBridge.operationData = Object.assign({ linkableElementsQuery: '//*[@id]' }, operationData);
 
 		reactToAngularModalBridge.closeModal = function closeModal () {
 			selectionManager.allowEditorFocus();
