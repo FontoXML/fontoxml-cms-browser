@@ -7,10 +7,10 @@
 		"fontoxml-dom-utils": "^1.2.3",
 		"fontoxml-image-resolver": "^1.0.2",
 		"fontoxml-localization": "^1.0.1",
-		"fontoxml-markup-documentation": "^1.1.3",
+		"fontoxml-markup-documentation": "^2.0.0",
 		"fontoxml-modular-ui": "^1.1.0",
 		"fontoxml-selection": "^1.4.0",
-		"fontoxml-templated-views": "^3.2.1",
+		"fontoxml-templated-views": "^4.0.0",
 		"fontoxml-utils": "^1.2.1",
 		"fontoxml-vendor-fds": "^3.0.0",
 		"fontoxml-vendor-react": "^1.1.0"
