@@ -28,8 +28,8 @@ function LinkSelectorOverlayView (viewRootNode, templatedView, linkableElementsQ
 				[ documentElement ];
 
 			const linkableElementsViewNodes = linkableElements
-				.map((linkableElement) => viewRootNode.querySelector(`[node-id="${getNodeId(linkableElement)}"]`))
-				.filter((viewNodeOrNull) => !!viewNodeOrNull);
+				.map((linkableElement) => viewRootNode.querySelectorAll(`[node-id="${getNodeId(linkableElement)}"]`))
+				.reduce((accum, arr) => accum.concat(Array.from(arr)), []);
 
 			linkableElementsViewNodes.forEach((viewNode) => {
 				const isOld = this._linkableElementsViewNodes

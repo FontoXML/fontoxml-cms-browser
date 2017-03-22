@@ -10,7 +10,9 @@
 		"fontoxml-markup-documentation": "^2.0.0",
 		"fontoxml-modular-ui": "^1.1.0",
 		"fontoxml-selection": "^1.4.0",
+		"fontoxml-selectors": "^3.0.0",
 		"fontoxml-templated-views": "^4.0.0",
+		"fontoxml-views": "^2.0.2",
 		"fontoxml-utils": "^1.2.1",
 		"fontoxml-vendor-fds": "^3.0.0",
 		"fontoxml-vendor-react": "^1.1.0"
