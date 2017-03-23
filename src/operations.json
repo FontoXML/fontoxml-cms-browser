@@ -72,6 +72,7 @@
 				"browseContextDocumentId": "{{browseContextDocumentId}}",
 				"dataProviderName": "{{dataProviderName}}",
 				"linkableElementsQuery": "{{linkableElementsQuery}}",
+				"linkType": "{{linkType}}",
 				"targetSpec": "{{targetSpec}}"
 			}
 		}

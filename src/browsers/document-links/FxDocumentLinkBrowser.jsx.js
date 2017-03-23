@@ -21,7 +21,7 @@ class FxDocumentLinkBrowser extends Component {
 	}
 
 	render () {
-		const { dataProviderName, browseContextDocumentId, linkableElementsQuery, selectedLink, onLinkSelect, labels } = this.props;
+		const { dataProviderName, browseContextDocumentId, linkableElementsQuery, linkType, selectedLink, onLinkSelect, labels } = this.props;
 		const { cachedDocumentIdByRemoteDocumentId, cachedErrorByRemoteDocumentId, viewMode } = this.state;
 
 		const rootFolder = { label: labels.rootFolderLabel, type: 'folder', id: null };
@@ -144,7 +144,7 @@ class FxDocumentLinkBrowser extends Component {
 
 								return <FxDocumentPreviewAndLinkSelector
 									documentId={ documentId }
-									linkTypeName={ labels.linkTypeName }
+									linkType={ linkType }
 									linkableElementsQuery={ linkableElementsQuery }
 									selectedLink={ selectedLink }
 									onSelectedLinkableElementChange={ (selectedLinkableElementNodeId) => {
@@ -169,7 +169,8 @@ class FxDocumentLinkBrowser extends Component {
 FxDocumentLinkBrowser.propTypes = {
 	onLinkSelect: PropTypes.func.isRequired,
 	browseContextDocumentId: PropTypes.string,
-	linkableElementsSelector: PropTypes.string
+	linkableElementsSelector: PropTypes.string,
+	linkType: PropTypes.string
 };
 
 FxDocumentLinkBrowser.defaultProps = {

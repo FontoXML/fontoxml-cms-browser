@@ -32,7 +32,7 @@ const quotedElementTextContentStyles = merge(
 	after({ content: 'close-quote' })
 );
 
-const FxLinkableElementDetails = ({ documentId, elementId, linkTypeName }) => {
+const FxLinkableElementDetails = ({ documentId, elementId, linkType }) => {
 	const element = elementId ?
 		documentsManager.getNodeById(elementId, documentId) :
 		documentsManager.getDocumentNode(documentId).documentElement;
@@ -51,7 +51,7 @@ const FxLinkableElementDetails = ({ documentId, elementId, linkTypeName }) => {
 	return (
 		<fx-linkable-element-details { ...styles }>
 			<Label colorName='text-muted-color' isFullWidth>
-				{ t('{LINK_TYPE} to the {MARKUP_LABEL}:', { LINK_TYPE: linkTypeName, MARKUP_LABEL: markupLabel }) }
+				{ t('{LINK_TYPE, select, conref {reuse this {MARKUP_LABEL}:} other {cross link to this {MARKUP_LABEL}:}}', { LINK_TYPE: linkType, MARKUP_LABEL: markupLabel }) }
 			</Label>
 
 			<fx-linkable-element-text-content { ...(

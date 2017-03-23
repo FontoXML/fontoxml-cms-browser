@@ -24,7 +24,7 @@ const footerStyles = merge(
 	padding('l')
 );
 
-const FxDocumentPreviewAndLinkSelector = ({ documentId, linkTypeName, linkableElementsQuery, selectedLink, onSelectedLinkableElementChange }) => (
+const FxDocumentPreviewAndLinkSelector = ({ documentId, linkType, linkableElementsQuery, selectedLink, onSelectedLinkableElementChange }) => (
 	<fx-document-preview-and-link-selector { ...styles }>
 		<fx-document-container { ...documentContainerStyles }>
 			<FxTemplatedView
@@ -44,7 +44,7 @@ const FxDocumentPreviewAndLinkSelector = ({ documentId, linkTypeName, linkableEl
 		{ selectedLink && <fx-document-preview-footer { ...footerStyles }>
 			<HorizontalSeparationLine marginSizeBottom='l' />
 
-			<FxLinkableElementDetails linkTypeName={ linkTypeName } documentId={ selectedLink.documentId } elementId={ selectedLink.nodeId } />
+			<FxLinkableElementDetails linkType={ linkType } documentId={ selectedLink.documentId } elementId={ selectedLink.nodeId } />
 		</fx-document-preview-footer> }
 	</fx-document-preview-and-link-selector>
 );

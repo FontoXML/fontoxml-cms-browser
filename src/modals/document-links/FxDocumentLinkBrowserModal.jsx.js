@@ -8,10 +8,11 @@ import FxDocumentLinkBrowser from '../../browsers/document-links/FxDocumentLinkB
 
 import reactToAngularModalBridge from '../../reactToAngularModalBridge';
 
-const getLabels = (isInEditFlow) => ({
-	modalTitle: isInEditFlow ? t('Replace cross link') : t('Add cross link'),
+const getLabels = (isInEditFlow, linkType) => ({
+	modalTitle: isInEditFlow ?
+		t('Replace {LINK_TYPE, select, conref {reused content} other {cross link}}', { LINK_TYPE: linkType }) :
+		t('Add {LINK_TYPE, select, conref {reused content} other {cross link}}', { LINK_TYPE: linkType }),
 	rootFolderLabel: t('My Drives'),
-	linkTypeName: t('cross link'),
 	states: {
 		loading: {
 			title: t('Loading documents…'),
@@ -44,7 +45,10 @@ class FxDocumentLinkBrowserModal extends Component {
 
 		this.state = { selectedLink: reactToAngularModalBridge.operationData.targetSpec };
 
-		this.labels = getLabels(!!reactToAngularModalBridge.operationData.targetSpec);
+		this.labels = getLabels(
+			!!reactToAngularModalBridge.operationData.targetSpec,
+			reactToAngularModalBridge.operationData.linkType
+		);
 	}
 
 	isSubmitPossible () {
@@ -68,6 +72,7 @@ class FxDocumentLinkBrowserModal extends Component {
 						labels={ this.labels }
 						browseContextDocumentId={ reactToAngularModalBridge.operationData.browseContextDocumentId }
 						linkableElementsQuery={ reactToAngularModalBridge.operationData.linkableElementsQuery }
+						linkType={ reactToAngularModalBridge.operationData.linkType }
 						selectedLink={ selectedLink }
 						onLinkSelect={ (selectedLink) => this.setState({ selectedLink }) }
 					/>
