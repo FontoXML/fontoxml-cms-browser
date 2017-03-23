@@ -7,6 +7,8 @@ import View from 'fontoxml-views/View';
 const LINKABLE_ELEMENT_ATTRIBUTE_NAME = 'cv-is-linkable-element';
 const SELECTED_LINKABLE_ELEMENT_ATTRIBUTE_NAME = 'cv-is-linkable-element-and-selected';
 
+// TODO: Use node highlight manager to simplify highlights when that supports the viewName argument
+// (this would still implement the click toggle)
 function LinkSelectorOverlayView (viewRootNode, templatedView, linkableElementsQuery, initialSelectedLink, onSelectedLinkableElementChange) {
 	View.call(this);
 
@@ -18,7 +20,13 @@ function LinkSelectorOverlayView (viewRootNode, templatedView, linkableElementsQ
 	this._linkableElementsViewNodes = [];
 	this._selectedLinkableElementViewNode = null;
 
+	this._isUpdating = false;
 	this._updateLinkableElements = () => {
+		if (this._isUpdating) {
+			return;
+		}
+
+		this._isUpdating = true;
 		templatedView.mutationLock.unlock(() => {
 			const document = templatedView.getDocument();
 			const documentElement = document.dom.documentNode.documentElement;
@@ -29,20 +37,30 @@ function LinkSelectorOverlayView (viewRootNode, templatedView, linkableElementsQ
 
 			const linkableElementsViewNodes = linkableElements
 				.map((linkableElement) => viewRootNode.querySelectorAll(`[node-id="${getNodeId(linkableElement)}"]`))
-				.reduce((accum, arr) => accum.concat(Array.from(arr)), []);
+				.reduce((combinedViewNodes, linkableElementViewNodes) => {
+					return combinedViewNodes.concat(Array.from(linkableElementViewNodes));
+				}, []);
 
+			let foundSelectedViewNode = false;
 			linkableElementsViewNodes.forEach((viewNode) => {
-				const isOld = this._linkableElementsViewNodes
-					.some((oldViewNode) => oldViewNode.getAttribute('node-id') === viewNode.getAttribute('node-id'));
-				if (isOld) {
-					viewNode.removeAttribute(LINKABLE_ELEMENT_ATTRIBUTE_NAME);
+				viewNode.setAttribute(LINKABLE_ELEMENT_ATTRIBUTE_NAME, '');
+
+				// The view node for the selected node may have changed, look for a new one
+				// TODO: support multiple view nodes per node
+				if (!this._selectedLinkableElementViewNode || foundSelectedViewNode) {
+					return;
 				}
-				else {
-					viewNode.setAttribute(LINKABLE_ELEMENT_ATTRIBUTE_NAME, '');
+
+				if (viewNode.getAttribute('node-id') === this._selectedLinkableElementViewNode.getAttribute('node-id')) {
+					viewNode.setAttribute(SELECTED_LINKABLE_ELEMENT_ATTRIBUTE_NAME, '');
+					this._selectedLinkableElementViewNode = viewNode;
+					foundSelectedViewNode = true;
 				}
 			});
 
 			this._linkableElementsViewNodes = linkableElementsViewNodes;
+
+			// TODO: is the code below really necessary?
 
 			if (this._initialSelectedLinkProcessed) {
 				return;
@@ -69,6 +87,7 @@ function LinkSelectorOverlayView (viewRootNode, templatedView, linkableElementsQ
 				onSelectedLinkableElementChange(initialSelectedLinkNodeId);
 			}
 		});
+		this._isUpdating = false;
 	};
 
 	this._handleLinkableElementClick = (event) => {
@@ -96,6 +115,7 @@ function LinkSelectorOverlayView (viewRootNode, templatedView, linkableElementsQ
 		});
 	};
 	viewRootNode.addEventListener('click', this._handleLinkableElementClick);
+	viewRootNode.addEventListener('unlockedviewmutation', this._updateLinkableElements);
 }
 
 LinkSelectorOverlayView.prototype = Object.create(View.prototype);
