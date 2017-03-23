@@ -35,7 +35,9 @@ class FxDocumentTemplateBrowser extends Component {
 					dataProvider.getFolderContents(browseContextDocumentId, rootFolder, folder.id, noCache)
 				) }
 				onFileOpen={ onDocumentTemplateOpen }
-				onFileOrFolderSelect={ onDocumentTemplateSelect }
+				onFileOrFolderSelect={ (fileOrFolder) => {
+					onDocumentTemplateSelect(fileOrFolder && fileOrFolder.type !== 'folder' ? fileOrFolder : null);
+				} }
 				onViewModeChange={ (viewMode) => this.setState({ viewMode }) }
 				renderLoadingMessage={ () => (
 					<StateMessage visual={ <SpinnerIcon align='center' /> } { ...labels.states.loading } />
