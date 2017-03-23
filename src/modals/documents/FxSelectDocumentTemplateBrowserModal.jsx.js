@@ -8,7 +8,8 @@ const FxSelectDocumentTemplateBrowserModal = ({
 	closeModal, onDocumentTemplateSelect, onModalSubmit,
 	selectedDocumentTemplate,
 	browseContextDocumentId,
-	dataProviderName, labels,
+	dataProviderName,
+	labels
 }) => (
 	<Modal size='m'>
 		<ModalHeader title={ labels.modalTitle } />
