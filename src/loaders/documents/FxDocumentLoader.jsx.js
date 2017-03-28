@@ -36,6 +36,7 @@ class FxDocumentLoader extends Component {
 							return;
 						}
 
+						console.error(error);
 						this.props.onError(error);
 
 						this.setState({ documentId: null, isLoading: false, lastError: error });
