@@ -165,7 +165,7 @@ class FxImageBrowser extends Component {
 											connotation='warning'
 											visual='exclamation-triangle'
 											paddingSize='l'
-											{ ...labels.states.error }
+											{ ...labels.states.previewError }
 										/>
 									);
 								}
