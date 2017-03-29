@@ -52,7 +52,7 @@ class FxDocumentLinkBrowserModal extends Component {
 	}
 
 	isSubmitPossible () {
-		return this.state.selectedLink !== null;
+		return !!this.state.selectedLink && (!!this.state.selectedLink.remoteDocumentId || !!this.state.selectedLink.documentId);
 	}
 
 	submit (link) {
