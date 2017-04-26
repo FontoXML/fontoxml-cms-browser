@@ -23,6 +23,8 @@ define([
 		};
 
 		reactToAngularModalBridge.onModalSubmit = function onModalSubmit (modalData) {
+			selectionManager.allowEditorFocus();
+
 			if (modalData.activeTabId === 'create') {
 				$scope.$close(Object.assign({}, operationData, {
 					selectedDocumentTemplateId: modalData.selectedDocumentTemplate.id,
@@ -31,8 +33,6 @@ define([
 				}));
 			}
 			else if (modalData.activeTabId === 'open') {
-				selectionManager.allowEditorFocus();
-
 				$scope.$close(Object.assign({}, operationData, { documentRemoteId: modalData.selectedDocument.id }));
 			}
 		};
