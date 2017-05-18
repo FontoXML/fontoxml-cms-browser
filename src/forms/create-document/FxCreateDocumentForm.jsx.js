@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { ButtonWithValue, Form, FormRow, Inlay, TextInput } from 'fontoxml-vendor-fds/components';
 

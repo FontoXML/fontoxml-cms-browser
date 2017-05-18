@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import { GridItem, Icon, Label, ListItem, SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 

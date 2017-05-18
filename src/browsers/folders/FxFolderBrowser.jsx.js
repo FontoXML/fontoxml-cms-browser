@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import { SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
 
