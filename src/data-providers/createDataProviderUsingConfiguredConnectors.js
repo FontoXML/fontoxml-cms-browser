@@ -35,8 +35,7 @@ define([
 					items: result.items.map(function (item) {
 						return Object.assign({}, item, {
 							icon: item.metadata.icon,
-							isInvalid: item.metadata.isDisabled,
-							externalUrl: item.metadata.externalUrl
+							isInvalid: item.metadata.isDisabled
 						});
 					})
 				}
@@ -82,7 +81,7 @@ define([
 			 *   metadata: {
 			 *     hierarchy: Array.<String>
 			 *   },
-			 *   items: Array.<{ id: String, label: String, icon: String, isInvalid: Boolean, externalUrl: String }>
+			 *   items: Array.<{ id: String, label: String, icon: String, isInvalid: Boolean }>
 			 * }>}
 			 */
 			getFolderContents: function (browseContextDocumentId, rootFolder, targetFolderId, noCache) {

@@ -36,11 +36,6 @@ class FxFolderBrowser extends Component {
 					<StateMessage connotation='warning' visual='exclamation-triangle' { ...labels.states.browseError } />
 				) }
 				renderEmptyMessage={ () => <StateMessage visual='folder-open-o' { ...labels.states.empty } /> }
-				renderGoToFolderLink={ (folder) => {
-					return folder.externalUrl ?
-						<TextLink icon='external-link' onClick={ () => window.open(folder.externalUrl) } /> :
-						null;
-				} }
 				renderPreview={ () => null }
 				showBreadcrumbs
 				viewMode={ viewMode }

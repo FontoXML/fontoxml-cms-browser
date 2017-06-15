@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { merge, style } from 'glamor';
 
 import {
+	BreadcrumbItemLink,
 	Breadcrumbs,
 	ButtonGroup,
 	Icon,
@@ -23,7 +24,8 @@ import {
 	color,
 	flex,
 	onlyResolveLastPromise,
-	padding
+	padding,
+	truncatedBreadcrumbItemLinkWidth
 } from 'fontoxml-vendor-fds/system';
 
 import BrowserContent from './BrowserContent.jsx';
@@ -152,6 +154,19 @@ class FileOrFolderBrowser extends Component {
 			});
 	}
 
+	handleRenderBreadcrumbItem = ({ key, isDisabled, isLastItem, item }) => (
+		<BreadcrumbItemLink
+			key={ key }
+			label={ item.label }
+			isDisabled={ isDisabled }
+			isLastItem={ isLastItem }
+			onClick={ () => {
+				this.props.onFileOrFolderSelect(item);
+				this.refreshData(item, true);
+			} }
+		/>
+	);
+
 	componentWillMount () {
 		const { rootFolder, onFileOrFolderSelect } = this.props;
 		onFileOrFolderSelect(rootFolder);
@@ -163,7 +178,7 @@ class FileOrFolderBrowser extends Component {
 		const {
 			onFileOrFolderSelect, onFileOpen, onViewModeChange,
 
-			renderEmptyMessage, renderBrowseErrorMessage, renderGoToFolderLink, renderLoadingMessage, renderPreview,
+			renderEmptyMessage, renderBrowseErrorMessage, renderLoadingMessage, renderPreview,
 			renderListItem, renderGridItem,
 
 			showBreadcrumbs,
@@ -208,12 +223,8 @@ class FileOrFolderBrowser extends Component {
 						<Breadcrumbs
 							isDisabled={ isUploading || folderBeingLoaded !== null }
 							items={ folderHierarchy }
-							onItemClick={ (item) => {
-								onFileOrFolderSelect(item);
-
-								this.refreshData(item, true);
-							} }
-							renderGoToFolderLink={ renderGoToFolderLink } />
+							renderBreadcrumbItem={ this.handleRenderBreadcrumbItem }
+							truncatedItemWidth={truncatedBreadcrumbItemLinkWidth} />
 					}
 
 					<BrowserToolbarAlignRight>
@@ -307,7 +318,7 @@ class FileOrFolderBrowser extends Component {
 
 				<BrowserContent>
 					{ folderBeingLoaded && (
-						<BrowserContentStateMessage style={ { visibility: showLoadingMessage ? 'visible' : 'hidden'  } }>
+						<BrowserContentStateMessage style={ { visibility: showLoadingMessage ? 'visible' : 'hidden' } }>
 							{ renderLoadingMessage() }
 						</BrowserContentStateMessage>
 					) }
@@ -361,7 +372,6 @@ FileOrFolderBrowser.propTypes = {
 
 	renderEmptyMessage: PropTypes.func.isRequired,
 	renderBrowseErrorMessage: PropTypes.func.isRequired,
-	renderGoToFolderLink: PropTypes.func,
 	renderLoadingMessage: PropTypes.func,
 	renderPreview: PropTypes.func.isRequired,
 	renderListItem: PropTypes.func,
@@ -387,7 +397,6 @@ FileOrFolderBrowser.defaultProps = {
 	onFileOpen: () => {},
 	onFileOrFolderSelect: () => {},
 	onViewModeChange: () => {},
-	renderGoToFolderLink: () => {},
 	renderLoadingMessage: () => (
 		<SpinnerIcon align='center' />
 	),
