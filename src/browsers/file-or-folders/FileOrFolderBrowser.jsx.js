@@ -154,7 +154,7 @@ class FileOrFolderBrowser extends Component {
 			});
 	}
 
-	handleRenderBreadcrumbItem = ({ key, isDisabled, isLastItem, item }) => (
+	handleRenderBreadcrumbItem = ({ key, isDisabled, isLastItem, item, onRef }) => (
 		<BreadcrumbItemLink
 			key={ key }
 			label={ item.label }
@@ -164,6 +164,7 @@ class FileOrFolderBrowser extends Component {
 				this.props.onFileOrFolderSelect(item);
 				this.refreshData(item, true);
 			} }
+			onRef={onRef}
 		/>
 	);
 
