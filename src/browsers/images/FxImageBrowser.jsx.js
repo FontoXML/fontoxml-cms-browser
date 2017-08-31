@@ -1,10 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { GridItem, Icon, Image, Label, ListItem, SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
+import {
+	ContainedImage,
+	Flex,
+	GridItem,
+	Icon,
+	Label,
+	ListItem,
+	SpinnerIcon,
+	StateMessage,
+	TextLink
+} from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../data-providers/dataProviders';
+import dataProviders from '../../dataProviders';
 import FxImageLoader from '../../loaders/images/FxImageLoader.jsx';
 import FxImagePreview from '../../previews/images/FxImagePreview.jsx';
 
@@ -54,7 +64,12 @@ class FxImageBrowser extends Component {
 					<StateMessage connotation='warning' visual='exclamation-triangle' { ...labels.states.browseError } />
 				) }
 				renderEmptyMessage={ () => <StateMessage visual='folder-open-o' { ...labels.states.empty } /> }
-				renderListItem={ ({ key, item, isSelected, isDisabled, isInvalid, onClick, onDoubleClick }) => {
+				renderGoToFolderLink={ (folder) => {
+					return folder.externalUrl ?
+						<TextLink icon='external-link' onClick={ () => window.open(folder.externalUrl) } /> :
+						null;
+				} }
+				renderListItem={ ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
 					if (item.type === 'folder') {
 						return (
 							<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
@@ -69,7 +84,7 @@ class FxImageBrowser extends Component {
 							key={ key }
 							cache={ this.cachedImageDataByRemoteImageId }
 							renderLoadingMessage={ () => (
-								<ListItem isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick }>
+								<ListItem isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick }>
 									<Icon icon={ item.icon || 'file-image-o' } size='s' />
 									<Label>{ item.label }</Label>
 								</ListItem>
@@ -78,7 +93,7 @@ class FxImageBrowser extends Component {
 							{ (imageData, error) => {
 								if (error) {
 									return (
-										<ListItem isSelected={ isSelected } isInvalid onClick={ onClick }>
+										<ListItem isSelected={ isSelected } onClick={ onClick }>
 											<Icon icon={ item.icon || 'file-image-o' } colorName='icon-s-error-color' size='s' />
 											<Label colorName='text-muted-color'>{ item.label }</Label>
 										</ListItem>
@@ -86,8 +101,10 @@ class FxImageBrowser extends Component {
 								}
 
 								return (
-									<ListItem isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick } onDoubleClick={ onDoubleClick }>
-										<Image src={ imageData.dataUrl } width='.875rem' height='.875rem' />
+									<ListItem isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
+										<Flex applyCss={{ width: '.875rem', height: '.875rem' }}>
+											<ContainedImage src={ imageData.dataUrl } />
+										</Flex>
 										<Label>{ item.label }</Label>
 									</ListItem>
 								);
@@ -95,7 +112,7 @@ class FxImageBrowser extends Component {
 						</FxImageLoader>
 					);
 				} }
-				renderGridItem={ ({ key, item, isSelected, isDisabled, isInvalid, onClick, onDoubleClick }) => {
+				renderGridItem={ ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
 					if (item.type === 'folder') {
 						return (
 							<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
@@ -110,7 +127,7 @@ class FxImageBrowser extends Component {
 							key={ key }
 							cache={ this.cachedImageDataByRemoteImageId }
 							renderLoadingMessage={ () => (
-								<GridItem isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick }>
+								<GridItem isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick }>
 									<Icon icon={ item.icon || 'file-image-o' } size='m' align='center' />
 									<Label align='center' isFullWidth>{ item.label }</Label>
 								</GridItem>
@@ -119,7 +136,7 @@ class FxImageBrowser extends Component {
 							{ (imageData, error) => {
 								if (error) {
 									return (
-										<GridItem isSelected={ isSelected } isInvalid onClick={ onClick }>
+										<GridItem isSelected={ isSelected } onClick={ onClick }>
 											<Icon icon={ item.icon || 'file-image-o' } colorName='icon-m-error-color' size='m' align='center' />
 											<Label align='center' colorName='text-muted-color' isFullWidth>{ item.label }</Label>
 										</GridItem>
@@ -127,8 +144,10 @@ class FxImageBrowser extends Component {
 								}
 
 								return (
-									<GridItem isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick } onDoubleClick={ onDoubleClick }>
-										<Image src={ imageData.dataUrl } height='3rem' />
+									<GridItem isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
+										<Flex alignItems="center" applyCss={{ height: '3rem' }} justifyContent="center">
+											<ContainedImage src={ imageData.dataUrl } />
+										</Flex>
 										<Label align='center' isFullWidth>{ item.label }</Label>
 									</GridItem>
 								);

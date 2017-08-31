@@ -1,12 +1,12 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import documentsManager from 'fontoxml-documents/documentsManager';
 import t from 'fontoxml-localization/t';
 
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-vendor-fds/components';
 
 import FxDocumentBrowser from '../../browsers/documents/FxDocumentBrowser.jsx';
-
-import reactToAngularModalBridge from '../../reactToAngularModalBridge';
 
 const getLabels = () => ({
 	modalTitle: t('Open document'),
@@ -18,7 +18,9 @@ const getLabels = () => ({
 		},
 		browseError: {
 			title: t('Can’t open this folder'),
-			message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+			message: t(
+				'FontoXML can’t open this folder. You can try again, or try a different folder.'
+			)
 		},
 		empty: {
 			title: t('No results'),
@@ -30,7 +32,9 @@ const getLabels = () => ({
 		},
 		previewError: {
 			title: t('Can’t open this document'),
-			message: t('FontoXML can’t open this document. You can try again, or try a different document.')
+			message: t(
+				'FontoXML can’t open this document. You can try again, or try a different document.'
+			)
 		}
 	},
 	cancelButtonLabel: t('Cancel'),
@@ -38,53 +42,60 @@ const getLabels = () => ({
 });
 
 class FxOpenDocumentBrowserModal extends Component {
-	constructor (props) {
-		super(props);
+	static propTypes = {
+		cancelModal: PropTypes.func.isRequired,
+		data: PropTypes.shape({
+			browseContextDocumentId: PropTypes.string,
+			dataProviderName: PropTypes.string.isRequired
+		}).isRequired,
+		submitModal: PropTypes.func.isRequired
+	};
 
-		this.state = { selectedDocument: null };
+	state = { selectedDocument: null };
 
-		this.labels = getLabels();
-	}
+	labels = getLabels();
 
-	componentWillMount () {
-		this.setState({ selectedDocument: null });
-	}
+	handleDocumentSelect = selectedDocument => this.setState({ selectedDocument });
 
-	isSubmitPossible () {
-		return this.state.selectedDocument !== null;
-	}
+	submit = document =>
+		this.props.submitModal({
+			documentId: documentsManager.getDocumentIdByRemoteDocumentId(
+				this.state.selectedDocument.id
+			),
+			documentRemoteId: document.id
+		});
 
-	submit (document) {
-		reactToAngularModalBridge.onModalSubmit({ selectedDocument: document });
-	}
+	handleDocumentOpen = openedDocument => this.submit(openedDocument);
 
-	render () {
+	handleSubmitButton = () => this.submit(this.state.selectedDocument);
+
+	render() {
 		return (
-			<Modal size='m'>
-				<ModalHeader title={ this.labels.modalTitle } />
+			<Modal size="m">
+				<ModalHeader title={this.labels.modalTitle} />
 
-				<ModalBody paddingSize='l'>
+				<ModalBody paddingSize="l">
 					<FxDocumentBrowser
-						dataProviderName={ reactToAngularModalBridge.operationData.dataProviderName }
-						labels={ this.labels }
-						browseContextDocumentId={ reactToAngularModalBridge.operationData.browseContextDocumentId }
-						onDocumentSelect={ (selectedDocument) => this.setState({ selectedDocument }) }
-						onDocumentOpen={ (openedDocument) => this.submit(openedDocument) }
+						dataProviderName={this.props.data.dataProviderName}
+						labels={this.labels}
+						browseContextDocumentId={this.props.data.browseContextDocumentId}
+						onDocumentSelect={this.handleDocumentSelect}
+						onDocumentOpen={this.handleDocumentOpen}
 					/>
 				</ModalBody>
 
 				<ModalFooter>
 					<Button
-						type='default'
-						label={ this.labels.cancelButtonLabel }
-						onClick={ () => reactToAngularModalBridge.closeModal() }
+						type="default"
+						label={this.labels.cancelButtonLabel}
+						onClick={this.props.cancelModal}
 					/>
 
 					<Button
-						type='primary'
-						label={ this.labels.submitButtonLabel }
-						isDisabled={ !this.isSubmitPossible() }
-						onClick={ () => this.submit(this.state.selectedDocument) }
+						type="primary"
+						label={this.labels.submitButtonLabel}
+						isDisabled={this.state.selectedDocument === null}
+						onClick={this.handleSubmitButton}
 					/>
 				</ModalFooter>
 			</Modal>

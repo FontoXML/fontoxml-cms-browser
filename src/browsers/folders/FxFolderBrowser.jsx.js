@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../data-providers/dataProviders';
+import dataProviders from '../../dataProviders';
 
 class FxFolderBrowser extends Component {
 	constructor (props) {
@@ -36,6 +36,11 @@ class FxFolderBrowser extends Component {
 					<StateMessage connotation='warning' visual='exclamation-triangle' { ...labels.states.browseError } />
 				) }
 				renderEmptyMessage={ () => <StateMessage visual='folder-open-o' { ...labels.states.empty } /> }
+				renderGoToFolderLink={ (folder) => {
+					return folder.externalUrl ?
+						<TextLink icon='external-link' onClick={ () => window.open(folder.externalUrl) } /> :
+						null;
+				} }
 				renderPreview={ () => null }
 				showBreadcrumbs
 				viewMode={ viewMode }

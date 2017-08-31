@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import t from 'fontoxml-localization/t';
@@ -6,9 +7,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-ven
 
 import FxImageBrowser from '../../browsers/images/FxImageBrowser.jsx';
 
-import reactToAngularModalBridge from '../../reactToAngularModalBridge';
-
-const getLabels = (isInEditFlow) => ({
+const getLabels = isInEditFlow => ({
 	modalTitle: isInEditFlow ? t('Replace image') : t('Add image'),
 	rootFolderLabel: t('My Drives'),
 	states: {
@@ -18,7 +17,9 @@ const getLabels = (isInEditFlow) => ({
 		},
 		browseError: {
 			title: t('Can’t open this folder'),
-			message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+			message: t(
+				'FontoXML can’t open this folder. You can try again, or try a different folder.'
+			)
 		},
 		empty: {
 			title: t('No results'),
@@ -30,67 +31,73 @@ const getLabels = (isInEditFlow) => ({
 		},
 		previewError: {
 			title: t('Can’t open this image'),
-			message: t('FontoXML can’t open this image. You can try again, or try a different image.')
+			message: t(
+				'FontoXML can’t open this image. You can try again, or try a different image.'
+			)
 		}
 	},
 	cancelButtonLabel: t('Cancel'),
 	submitButtonLabel: isInEditFlow ? t('Replace') : t('Add'),
 	upload: {
 		buttonLabel: t('Upload'),
-		fileSizeTooLargeMessage: t('This image is larger than 4 megabyte, please select another image or resize it and try again.'),
+		fileSizeTooLargeMessage: t(
+			'This image is larger than 4 megabyte, please select another image or resize it and try again.'
+		),
 		serverErrorMessage: t('FontoXML can’t upload this image, please try again.')
 	}
 });
 
 class FxImageBrowserModal extends Component {
-	constructor (props) {
-		super(props);
+	static propTypes = {
+		cancelModal: PropTypes.func.isRequired,
+		data: PropTypes.shape({
+			browseContextDocumentId: PropTypes.string,
+			dataProviderName: PropTypes.string.isRequired,
+			selectedImageId: PropTypes.string
+		}).isRequired,
+		submitModal: PropTypes.func.isRequired
+	};
 
-		this.state = {
-			selectedImageId: reactToAngularModalBridge.operationData && reactToAngularModalBridge.operationData.targetSpec ?
-				reactToAngularModalBridge.operationData.targetSpec.remoteDocumentId :
-				null
-		};
+	labels = getLabels(this.props.data.selectedImageId !== null);
+	state = { selectedImageId: this.props.data.selectedImageId };
 
-		this.labels = getLabels(!!reactToAngularModalBridge.operationData.targetSpec);
+	submit(selectedImageId) {
+		this.props.submitModal({ selectedImageId });
 	}
 
-	isSubmitPossible () {
-		return this.state.selectedImageId !== null;
-	}
+	handleImageBrowserImageSelect = selectedImageId => this.setState({ selectedImageId });
+	handleImageBrowserImageOpen = openedImageId => this.submit(openedImageId);
 
-	submit (selectedImageId) {
-		reactToAngularModalBridge.onModalSubmit({ selectedImageId });
-	}
+	handleSubmitButtonClick = () => this.submit(this.state.selectedImageId);
 
-	render () {
+	render() {
 		return (
-			<Modal size='l' isFullHeight={ true }>
-				<ModalHeader title={ this.labels.modalTitle } />
+			<Modal size="l" isFullHeight={true}>
+				<ModalHeader title={this.labels.modalTitle} />
 
-				<ModalBody paddingSize='l'>
+				<ModalBody paddingSize="l">
 					<FxImageBrowser
-						dataProviderName={ reactToAngularModalBridge.operationData.dataProviderName }
-						labels={ this.labels }
-						browseContextDocumentId={ reactToAngularModalBridge.operationData.browseContextDocumentId }
-						selectedImageId={ this.state.selectedImageId }
-						onImageSelect={ (selectedImageId) => this.setState({ selectedImageId }) }
-						onImageOpen={ (openedImageId) => this.submit(openedImageId) }
+						dataProviderName={this.props.data.dataProviderName}
+						labels={this.labels}
+						browseContextDocumentId={this.props.data.browseContextDocumentId}
+						selectedImageId={this.state.selectedImageId}
+						onImageSelect={this.handleImageBrowserImageSelect}
+						onImageOpen={this.handleImageBrowserImageOpen}
 					/>
 				</ModalBody>
 
 				<ModalFooter>
 					<Button
-						type='default'
-						label={ this.labels.cancelButtonLabel }
-						onClick={ () => reactToAngularModalBridge.closeModal() }
+						type="default"
+						label={this.labels.cancelButtonLabel}
+						onClick={this.props.cancelModal}
 					/>
 
 					<Button
-						type='primary'
-						label={ this.labels.submitButtonLabel }
-						isDisabled={ !this.isSubmitPossible() }
-						onClick={ () => this.submit(this.state.selectedImageId) }
+						type="primary"
+						label={this.labels.submitButtonLabel}
+						isDisabled={this.state.selectedImageId === null}
+						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
 			</Modal>

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import t from 'fontoxml-localization/t';
@@ -7,8 +8,6 @@ import { ModalStack } from 'fontoxml-vendor-fds/components';
 import FxCreateDocumentFormModal from './FxCreateDocumentFormModal.jsx';
 import FxSelectDocumentTemplateBrowserModal from './FxSelectDocumentTemplateBrowserModal.jsx';
 import FxSelectFolderBrowserModal from '../folders/FxSelectFolderBrowserModal.jsx';
-
-import reactToAngularModalBridge from '../../reactToAngularModalBridge';
 
 const getLabels = () => ({
 	create: {
@@ -63,7 +62,9 @@ const getLabels = () => ({
 			},
 			previewError: {
 				title: t('Can’t open this template'),
-				message: t('FontoXML can’t open this template. You can try again, or try a different template.')
+				message: t(
+					'FontoXML can’t open this template. You can try again, or try a different template.'
+				)
 			}
 		},
 		cancelButtonLabel: t('Cancel'),
@@ -72,62 +73,82 @@ const getLabels = () => ({
 });
 
 class FxCreateDocumentFormModalStack extends Component {
-	constructor (props) {
-		super(props);
+	static propTypes = {
+		cancelModal: PropTypes.func.isRequired,
+		data: PropTypes.shape({
+			browseContextDocumentId: PropTypes.string,
+			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
+			selectFolderDataProviderName: PropTypes.string.isRequired
+		}).isRequired,
+		submitModal: PropTypes.func.isRequired
+	};
 
-		this.initialState = {
-			isSelectDocumentTemplateModalOpen: false,
-			isSelectFolderModalOpen: false,
+	state = {
+		isSelectDocumentTemplateModalOpen: false,
+		isSelectFolderModalOpen: false,
 
-			selectedDocumentTemplate: null,
-			selectedFolder: null
-		};
+		selectedDocumentTemplate: null,
+		selectedFolder: null
+	};
 
-		this.state = { ...this.initialState };
+	labels = getLabels();
 
-		this.labels = getLabels();
-	}
+	handleModalSubmit = modalData =>
+		this.props.submitModal({
+			selectedDocumentTemplateId: modalData.selectedDocumentTemplate.id,
+			selectedFolderId: modalData.selectedFolder.id,
+			documentTitle: modalData.documentTitle
+		});
+	handleOpenSelectDocumentTemplateBrowserModal = () =>
+		this.setState({ isSelectDocumentTemplateModalOpen: true });
+	handleOpenSelectFolderBrowserModal = () => this.setState({ isSelectFolderModalOpen: true });
 
-	render () {
-		const { isSelectDocumentTemplateModalOpen, isSelectFolderModalOpen, selectedDocumentTemplate, selectedFolder } = this.state;
+	handleSelectDocumentTemplateCloseModal = () =>
+		this.setState({ isSelectDocumentTemplateModalOpen: false, selectedDocumentTemplate: null });
+	handleDocumentTemplateSelect = selectedDocumentTemplate =>
+		this.setState({ selectedDocumentTemplate });
+	handleSelectDocumentTemplateSubmitModal = selectedDocumentTemplate =>
+		this.setState({ isSelectDocumentTemplateModalOpen: false, selectedDocumentTemplate });
 
+	handleSelectFolderCloseModal = () =>
+		this.setState({ isSelectFolderModalOpen: false, selectedFolder: null });
+	handleSelectFolderSubmitModal = selectedFolder =>
+		this.setState({ isSelectFolderModalOpen: false, selectedFolder });
+
+	render() {
 		return (
 			<ModalStack>
 				<FxCreateDocumentFormModal
-					labels={ this.labels.create }
-					closeModal={ () => reactToAngularModalBridge.closeModal() }
-					onModalSubmit={ (modalData) => reactToAngularModalBridge.onModalSubmit(modalData) }
-					openSelectDocumentTemplateBrowserModal={ () => this.setState({ isSelectDocumentTemplateModalOpen: true }) }
-					openSelectFolderBrowserModal={ () => this.setState({ isSelectFolderModalOpen: true }) }
-					selectedFolder={ selectedFolder }
-					selectedDocumentTemplate={ selectedDocumentTemplate }
+					labels={this.labels.create}
+					closeModal={this.props.cancelModal}
+					onModalSubmit={this.handleModalSubmit}
+					openSelectDocumentTemplateBrowserModal={
+						this.handleOpenSelectDocumentTemplateBrowserModal
+					}
+					openSelectFolderBrowserModal={this.handleOpenSelectFolderBrowserModal}
+					selectedFolder={this.state.selectedFolder}
+					selectedDocumentTemplate={this.state.selectedDocumentTemplate}
 				/>
 
-				{ isSelectDocumentTemplateModalOpen &&
+				{this.state.isSelectDocumentTemplateModalOpen &&
 					<FxSelectDocumentTemplateBrowserModal
-						dataProviderName={ reactToAngularModalBridge.operationData.selectDocumentTemplateDataProviderName }
-						labels={ this.labels.selectTemplate }
-						closeModal={ () =>
-							this.setState({ isSelectDocumentTemplateModalOpen: false, selectedDocumentTemplate: null }) }
-						onDocumentTemplateSelect={ (selectedDocumentTemplate) => this.setState({ selectedDocumentTemplate }) }
-						onModalSubmit={ (selectedDocumentTemplate) =>
-							this.setState({ isSelectDocumentTemplateModalOpen: false, selectedDocumentTemplate }) }
-						selectedDocumentTemplate={ selectedDocumentTemplate }
-						browseContextDocumentId={ reactToAngularModalBridge.operationData.browseContextDocumentId }
-					/>
-				}
+						dataProviderName={this.props.data.selectDocumentTemplateDataProviderName}
+						labels={this.labels.selectTemplate}
+						closeModal={this.handleSelectDocumentTemplateCloseModal}
+						onDocumentTemplateSelect={this.handleDocumentTemplateSelect}
+						onModalSubmit={this.handleSelectDocumentTemplateSubmitModal}
+						selectedDocumentTemplate={this.state.selectedDocumentTemplate}
+						browseContextDocumentId={this.props.data.browseContextDocumentId}
+					/>}
 
-				{ isSelectFolderModalOpen &&
+				{this.state.isSelectFolderModalOpen &&
 					<FxSelectFolderBrowserModal
-						dataProviderName={ reactToAngularModalBridge.operationData.selectFolderDataProviderName }
-						labels={ this.labels.selectFolder }
-						closeModal={ () =>
-							this.setState({ isSelectFolderModalOpen: false, selectedFolder: null }) }
-						onModalSubmit={ (selectedFolder) =>
-							this.setState({ isSelectFolderModalOpen: false, selectedFolder }) }
-						browseContextDocumentId={ reactToAngularModalBridge.operationData.browseContextDocumentId }
-					/>
-				}
+						dataProviderName={this.props.data.selectFolderDataProviderName}
+						labels={this.labels.selectFolder}
+						closeModal={this.handleSelectFolderCloseModal}
+						onModalSubmit={this.handleSelectFolderSubmitModal}
+						browseContextDocumentId={this.props.data.browseContextDocumentId}
+					/>}
 			</ModalStack>
 		);
 	}

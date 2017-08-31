@@ -10,12 +10,12 @@ import domQuery from 'fontoxml-dom-utils/domQuery';
 import truncator from 'fontoxml-utils/truncator';
 
 import { Label } from 'fontoxml-vendor-fds/components';
-import { block, fontSize, fontStack, spaceVertical } from 'fontoxml-vendor-fds/system';
+import { flex, fontSize, fontStack, spaceVertical } from 'fontoxml-vendor-fds/system';
 
 const MAXIMUM_CHARACTERS = 140;
 
 const styles = merge(
-	block,
+	flex('vertical'),
 	spaceVertical('s')
 );
 

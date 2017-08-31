@@ -6,52 +6,56 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-ven
 import FxFolderBrowser from '../../browsers/folders/FxFolderBrowser.jsx';
 
 class FxSelectFolderBrowserModal extends Component {
-	constructor (props) {
-		super(props);
+	static defaultProps = {
+		browseContextDocumentId: null
+	};
 
-		this.state = { selectedFolder: null };
-	}
+	static PropTypes = {
+		closeModal: PropTypes.func.isRequired,
+		onModalSubmit: PropTypes.func.isRequired,
+		browseContextDocumentId: PropTypes.string
+	};
 
-	render () {
+	state = { selectedFolder: null };
+
+	handleFolderSelect = selectedFolder => this.setState({ selectedFolder });
+
+	handleSubmitButton = () => this.props.onModalSubmit(this.state.selectedFolder);
+
+	render() {
 		const { selectedFolder } = this.state;
-		const { closeModal, onModalSubmit, browseContextDocumentId, labels, dataProviderName } = this.props;
+		const { labels } = this.props;
 
 		return (
-			<Modal size='s'>
-				<ModalHeader title={ labels.modalTitle } />
+			<Modal size="s">
+				<ModalHeader title={labels.modalTitle} />
 
-				<ModalBody paddingSize='l'>
+				<ModalBody paddingSize="l">
 					<FxFolderBrowser
-						dataProviderName={ dataProviderName }
-						labels={ labels }
-						onFolderSelect={ (selectedFolder) => this.setState({ selectedFolder }) }
-						browseContextDocumentId={ browseContextDocumentId }
+						dataProviderName={this.props.dataProviderName}
+						labels={labels}
+						onFolderSelect={this.handleFolderSelect}
+						browseContextDocumentId={this.props.browseContextDocumentId}
 					/>
 				</ModalBody>
 
 				<ModalFooter>
-					<Button type='default' label={ labels.cancelButtonLabel } onClick={ closeModal } />
+					<Button
+						type="default"
+						label={labels.cancelButtonLabel}
+						onClick={this.props.closeModal}
+					/>
 
 					<Button
-						type='primary'
-						label={ labels.submitButtonLabel }
-						isDisabled={ selectedFolder === null || selectedFolder.id === null }
-						onClick={ () => onModalSubmit(selectedFolder) }
+						type="primary"
+						label={labels.submitButtonLabel}
+						isDisabled={selectedFolder === null || selectedFolder.id === null}
+						onClick={this.handleSubmitButton}
 					/>
 				</ModalFooter>
 			</Modal>
 		);
 	}
 }
-
-FxSelectFolderBrowserModal.propTypes = {
-	closeModal: PropTypes.func.isRequired,
-	onModalSubmit: PropTypes.func.isRequired,
-	browseContextDocumentId: PropTypes.string
-};
-
-FxSelectFolderBrowserModal.defaultProps = {
-	browseContextDocumentId: null
-};
 
 export default FxSelectFolderBrowserModal;

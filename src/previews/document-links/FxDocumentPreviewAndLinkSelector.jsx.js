@@ -22,8 +22,9 @@ const documentContainerStyles = merge(
 	{ flex: 'auto', overflowY: 'auto' }
 );
 const footerStyles = merge(
-	block,
-	padding('l')
+	flex('vertical'),
+	padding('l'),
+	{ flex: 'none' }
 );
 
 class FxDocumentPreviewAndLinkSelector extends Component {
@@ -47,7 +48,7 @@ class FxDocumentPreviewAndLinkSelector extends Component {
 						} />
 				</fx-document-container>
 
-				{ selectedLink && <fx-document-preview-footer { ...footerStyles }>
+				{ selectedLink.documentId !== null && <fx-document-preview-footer { ...footerStyles }>
 					<HorizontalSeparationLine marginSizeBottom='l' />
 
 					<FxLinkableElementDetails linkType={ linkType } documentId={ selectedLink.documentId } elementId={ selectedLink.nodeId } />

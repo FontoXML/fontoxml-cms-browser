@@ -1,85 +1,77 @@
 import React, { Component } from 'react';
 
-import documentLifecycleManager from 'fontoxml-documents/documentLifecycleManager';
+import documentLoader from 'fontoxml-remote-documents/documentLoader';
 import onlyResolveLastPromise from 'fontoxml-utils/onlyResolveLastPromise';
 
 import { SpinnerIcon } from 'fontoxml-vendor-fds/components';
 
 class FxDocumentLoader extends Component {
-	constructor (props) {
-		super(props);
+	static defaultProps = {
+		renderLoadingMessage: () => <SpinnerIcon align="center" />,
+		onError: () => {},
+		onLoadComplete: () => {}
+	};
 
-		this.state = { documentId: null, isLoading: false, lastError: null };
+	state = { documentId: null, isLoading: false, lastError: null };
 
-		this.loadDocument = onlyResolveLastPromise(
-			(remoteDocumentId) => documentLifecycleManager.loadDocument(remoteDocumentId)
-		);
-	}
+	loadDocument = onlyResolveLastPromise(remoteDocumentId =>
+		documentLoader.loadDocument(remoteDocumentId)
+	);
 
-	refreshData (remoteDocumentId) {
+	refreshData(remoteDocumentId) {
 		this.setState({ isLoading: true });
 
-		this.loadDocument(remoteDocumentId)
-			.then(
-				(documentId) => {
+		this.loadDocument(remoteDocumentId).then(
+			documentId => {
+				if (!this.isComponentMounted) {
+					return;
+				}
+
+				this.props.onLoadComplete(documentId);
+
+				this.setState({ documentId, isLoading: false, lastError: null });
+			},
+			error => {
+				if (error) {
 					if (!this.isComponentMounted) {
 						return;
 					}
 
-					this.props.onLoadComplete(documentId);
+					console.error(error);
+					this.props.onError(error);
 
-					this.setState({ documentId, isLoading: false, lastError: null });
-				},
-				(error) => {
-					if (error) {
-						if (!this.isComponentMounted) {
-							return;
-						}
-
-						console.error(error);
-						this.props.onError(error);
-
-						this.setState({ documentId: null, isLoading: false, lastError: error });
-					}
+					this.setState({ documentId: null, isLoading: false, lastError: error });
 				}
-			);
+			}
+		);
 	}
 
-	componentWillMount () {
+	componentWillMount() {
 		const { remoteDocumentId } = this.props;
 
 		this.refreshData(remoteDocumentId);
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		this.isComponentMounted = true;
 	}
 
-	componentWillReceiveProps (nextProps) {
+	componentWillReceiveProps(nextProps) {
 		if (nextProps.remoteDocumentId !== this.props.remoteDocumentId) {
 			this.refreshData(nextProps.remoteDocumentId);
 		}
 	}
 
-	render () {
+	render() {
 		const { documentId, isLoading, lastError } = this.state;
 		const { renderLoadingMessage } = this.props;
 
-		return isLoading ?
-			renderLoadingMessage() :
-			this.props.children(documentId, lastError);
+		return isLoading ? renderLoadingMessage() : this.props.children(documentId, lastError);
 	}
 
-	componentWillUnmount () {
+	componentWillUnmount() {
 		this.isComponentMounted = false;
 	}
 }
-FxDocumentLoader.defaultProps = {
-	renderLoadingMessage: () => (
-		<SpinnerIcon align='center' />
-	),
-	onError: () => {},
-	onLoadComplete: () => {}
-};
 
 export default FxDocumentLoader;

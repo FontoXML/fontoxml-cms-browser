@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { GridItem, Icon, Label, ListItem, SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../data-providers/dataProviders';
+import dataProviders from '../../dataProviders';
 import FxDocumentLoader from '../../loaders/documents/FxDocumentLoader.jsx';
 import FxDocumentPreview from '../../previews/documents/FxDocumentPreview.jsx';
 
@@ -45,11 +45,16 @@ class FxDocumentBrowser extends Component {
 					<StateMessage connotation='warning' visual='exclamation-triangle' { ...labels.states.browseError } />
 				) }
 				renderEmptyMessage={ () => <StateMessage visual='folder-open-o' { ...labels.states.empty } /> }
-				renderListItem={ ({ key, item, isSelected, isDisabled, isInvalid, onClick, onDoubleClick }) => {
+				renderGoToFolderLink={ (folder) => {
+					return folder.externalUrl ?
+						<TextLink icon='external-link' onClick={ () => window.open(folder.externalUrl) } /> :
+						null;
+				} }
+				renderListItem={ ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
 					if (item.type !== 'folder') {
 						if (cachedErrorByRemoteDocumentId[item.id]) {
 							return (
-								<ListItem key={ key } isSelected={ isSelected } isInvalid onClick={ onClick }>
+								<ListItem key={ key } isSelected={ isSelected } onClick={ onClick }>
 									<Icon icon={ item.icon || 'file-text-o' } colorName='icon-s-error-color' size='s' />
 									<Label colorName='text-muted-color'>{ item.label }</Label>
 								</ListItem>
@@ -57,7 +62,7 @@ class FxDocumentBrowser extends Component {
 						}
 						else if (!cachedDocumentIdByRemoteDocumentId[item.id]) {
 							return (
-								<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick }>
+								<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick }>
 									<Icon icon={ item.icon || 'file-text-o' } size='s' />
 									<Label>{ item.label }</Label>
 								</ListItem>
@@ -66,17 +71,17 @@ class FxDocumentBrowser extends Component {
 					}
 
 					return (
-						<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick } onDoubleClick={ onDoubleClick }>
+						<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
 							<Icon icon={ item.icon } size='s' />
 							<Label>{ item.label }</Label>
 						</ListItem>
 					);
 				} }
-				renderGridItem={ ({ key, item, isSelected, isDisabled, isInvalid, onClick, onDoubleClick }) => {
+				renderGridItem={ ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
 					if (item.type !== 'folder') {
 						if (cachedErrorByRemoteDocumentId[item.id]) {
 							return (
-								<GridItem key={ key } isSelected={ isSelected } isInvalid onClick={ onClick }>
+								<GridItem key={ key } isSelected={ isSelected } onClick={ onClick }>
 									<Icon icon={ item.icon || 'file-text-o' } colorName='icon-m-error-color' size='m' align='center' />
 									<Label align='center' colorName='text-muted-color' isFullWidth>{ item.label }</Label>
 								</GridItem>
@@ -84,7 +89,7 @@ class FxDocumentBrowser extends Component {
 						}
 						else if (!cachedDocumentIdByRemoteDocumentId[item.id]) {
 							return (
-								<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick }>
+								<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick }>
 									<Icon icon={ item.icon || 'file-text-o' } size='m' align='center' />
 									<Label align='center' isFullWidth>{ item.label }</Label>
 								</GridItem>
@@ -93,7 +98,7 @@ class FxDocumentBrowser extends Component {
 					}
 
 					return (
-						<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick } onDoubleClick={ onDoubleClick }>
+						<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
 							<Icon icon={ item.icon } size='m' align='center' />
 							<Label align='center' isFullWidth>{ item.label }</Label>
 						</GridItem>

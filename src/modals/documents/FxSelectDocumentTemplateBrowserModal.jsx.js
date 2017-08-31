@@ -1,54 +1,62 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-vendor-fds/components';
 
 import FxDocumentTemplateBrowser from '../../browsers/documents/FxDocumentTemplateBrowser.jsx';
 
-const FxSelectDocumentTemplateBrowserModal = ({
-	closeModal, onDocumentTemplateSelect, onModalSubmit,
-	selectedDocumentTemplate,
-	browseContextDocumentId,
-	dataProviderName,
-	labels
-}) => (
-	<Modal size='m'>
-		<ModalHeader title={ labels.modalTitle } />
+class FxSelectDocumentTemplateBrowserModal extends Component {
+	static defaultProps = {
+		selectedDocumentTemplate: null,
+		browseContextDocumentId: null
+	};
 
-		<ModalBody paddingSize='l'>
-			<FxDocumentTemplateBrowser
-				dataProviderName={ dataProviderName }
-				labels={ labels }
-				onDocumentTemplateSelect={ onDocumentTemplateSelect }
-				onDocumentTemplateOpen={ (selectedDocumentTemplate) => onModalSubmit(selectedDocumentTemplate) }
-				browseContextDocumentId={ browseContextDocumentId }
-			/>
-		</ModalBody>
+	static PropTypes = {
+		closeModal: PropTypes.func.isRequired,
+		onDocumentTemplateSelect: PropTypes.func.isRequired,
+		onModalSubmit: PropTypes.func.isRequired,
+		selectedDocumentTemplate: PropTypes.object,
+		browseContextDocumentId: PropTypes.string
+	};
 
-		<ModalFooter>
-			<Button type='default' label={ labels.cancelButtonLabel } onClick={ closeModal } />
+	handleDocumentTemplateOpen = selectedDocumentTemplate =>
+		this.props.onModalSubmit(selectedDocumentTemplate);
+	handleSubmitButton = () => this.props.onModalSubmit(this.props.selectedDocumentTemplate);
 
-			<Button
-				type='primary'
-				label={ labels.submitButtonLabel }
-				isDisabled={ selectedDocumentTemplate === null }
-				onClick={ () => onModalSubmit(selectedDocumentTemplate) }
-			/>
-		</ModalFooter>
-	</Modal>
-);
+	render() {
+		const { labels } = this.props;
 
-FxSelectDocumentTemplateBrowserModal.propTypes = {
-	closeModal: PropTypes.func.isRequired,
-	onDocumentTemplateSelect: PropTypes.func.isRequired,
-	onModalSubmit: PropTypes.func.isRequired,
-	selectedDocumentTemplate: PropTypes.object,
-	browseContextDocumentId: PropTypes.string
-};
+		return (
+			<Modal size="m">
+				<ModalHeader title={labels.modalTitle} />
 
-FxSelectDocumentTemplateBrowserModal.defaultProps = {
-	selectedDocumentTemplate: null,
-	browseContextDocumentId: null
-};
+				<ModalBody paddingSize="l">
+					<FxDocumentTemplateBrowser
+						dataProviderName={this.props.dataProviderName}
+						labels={labels}
+						onDocumentTemplateSelect={this.props.onDocumentTemplateSelect}
+						onDocumentTemplateOpen={this.handleDocumentTemplateOpen}
+						browseContextDocumentId={this.props.browseContextDocumentId}
+					/>
+				</ModalBody>
+
+				<ModalFooter>
+					<Button
+						type="default"
+						label={labels.cancelButtonLabel}
+						onClick={this.props.closeModal}
+					/>
+
+					<Button
+						type="primary"
+						label={labels.submitButtonLabel}
+						isDisabled={this.props.selectedDocumentTemplate === null}
+						onClick={this.handleSubmitButton}
+					/>
+				</ModalFooter>
+			</Modal>
+		);
+	}
+}
 
 export default FxSelectDocumentTemplateBrowserModal;

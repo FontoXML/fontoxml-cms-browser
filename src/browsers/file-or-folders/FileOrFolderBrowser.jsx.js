@@ -43,28 +43,6 @@ const styles = merge(
 	{ minHeight: 0 }
 );
 
-/* eslint-disable no-unused-vars */
-// TODO: use this if no hierarchy is returned by getFolderContents
-function updateFolderHierarchy (folderHierarchy, newLastFolderInHierarchy) {
-	const updatedFolderHierarchy = folderHierarchy.slice();
-	const newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(folder => folder === newLastFolderInHierarchy);
-	if (!newLastFolderIsInCurrentFolderHierarchy) {
-		updatedFolderHierarchy.push(newLastFolderInHierarchy);
-		return updatedFolderHierarchy;
-	}
-
-	let foundNewLastFolderInHierarchy = false;
-	while (!foundNewLastFolderInHierarchy) {
-		const removedFolder = updatedFolderHierarchy.pop();
-		foundNewLastFolderInHierarchy = removedFolder === newLastFolderInHierarchy;
-	}
-
-	updatedFolderHierarchy.push(newLastFolderInHierarchy);
-
-	return updatedFolderHierarchy;
-}
-/* eslint-enable no-unused-vars */
-
 class FileOrFolderBrowser extends Component {
 	constructor (props) {
 		super(props);
@@ -226,7 +204,7 @@ class FileOrFolderBrowser extends Component {
 							items={ folderHierarchy }
 							renderBreadcrumbItem={ this.handleRenderBreadcrumbItem }
 							truncatedItemWidth={truncatedBreadcrumbItemLinkWidth} />
-					}
+						}
 
 					<BrowserToolbarAlignRight>
 						{ uploadOptions && (
@@ -383,12 +361,12 @@ FileOrFolderBrowser.propTypes = {
 
 	uploadOptions: PropTypes.object,
 	// TODO: specify these uploadOptions properties using PropTypes
-		// fileSizeTooLargeMessage: PropTypes.string.isRequired,
-		// maxFileSizeInBytes: PropTypes.number.isRequired,
-		// mimeTypesToAccept: PropTypes.string.isRequired,
-		// serverErrorMessage: PropTypes.string.isRequired,
-		// buttonLabel: PropTypes.string.isRequired,
-		// upload: PropTypes.func.isRequired, () => Promise.resolve(),
+	// fileSizeTooLargeMessage: PropTypes.string.isRequired,
+	// maxFileSizeInBytes: PropTypes.number.isRequired,
+	// mimeTypesToAccept: PropTypes.string.isRequired,
+	// serverErrorMessage: PropTypes.string.isRequired,
+	// buttonLabel: PropTypes.string.isRequired,
+	// upload: PropTypes.func.isRequired, () => Promise.resolve(),
 
 	viewModeName: PropTypes.string
 };
@@ -401,14 +379,14 @@ FileOrFolderBrowser.defaultProps = {
 	renderLoadingMessage: () => (
 		<SpinnerIcon align='center' />
 	),
-	renderListItem: ({ key, item, isSelected, isDisabled, isInvalid, onClick, onDoubleClick }) => (
-		<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick } onDoubleClick={ onDoubleClick }>
+	renderListItem: ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => (
+		<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
 			<Icon icon={ item.icon || 'file-text-o' } size='s' />
 			<Label>{ item.label }</Label>
 		</ListItem>
 	),
-	renderGridItem: ({ key, item, isSelected, isDisabled, isInvalid, onClick, onDoubleClick }) => (
-		<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } isInvalid={ isInvalid } onClick={ onClick } onDoubleClick={ onDoubleClick }>
+	renderGridItem: ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => (
+		<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
 			<Icon icon={ item.icon || 'folder-o' } size='m' align='center' />
 			<Label align='center' isFullWidth>{ item.label }</Label>
 		</GridItem>

@@ -1,17 +1,21 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import documentsManager from 'fontoxml-documents/documentsManager';
 import t from 'fontoxml-localization/t';
 
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-vendor-fds/components';
 
 import FxDocumentLinkBrowser from '../../browsers/document-links/FxDocumentLinkBrowser.jsx';
 
-import reactToAngularModalBridge from '../../reactToAngularModalBridge';
-
 const getLabels = (isInEditFlow, linkType) => ({
-	modalTitle: isInEditFlow ?
-		t('Replace {LINK_TYPE, select, conref {reused content} other {cross link}}', { LINK_TYPE: linkType }) :
-		t('Add {LINK_TYPE, select, conref {reused content} other {cross link}}', { LINK_TYPE: linkType }),
+	modalTitle: isInEditFlow
+		? t('Replace {LINK_TYPE, select, conref {reused content} other {cross link}}', {
+				LINK_TYPE: linkType
+			})
+		: t('Add {LINK_TYPE, select, conref {reused content} other {cross link}}', {
+				LINK_TYPE: linkType
+			}),
 	rootFolderLabel: t('My Drives'),
 	states: {
 		loading: {
@@ -20,7 +24,9 @@ const getLabels = (isInEditFlow, linkType) => ({
 		},
 		browseError: {
 			title: t('Can’t open this folder'),
-			message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+			message: t(
+				'FontoXML can’t open this folder. You can try again, or try a different folder.'
+			)
 		},
 		empty: {
 			title: t('No results'),
@@ -32,7 +38,9 @@ const getLabels = (isInEditFlow, linkType) => ({
 		},
 		previewError: {
 			title: t('Can’t open this document'),
-			message: t('FontoXML can’t open this document. You can try again, or try a different document.')
+			message: t(
+				'FontoXML can’t open this document. You can try again, or try a different document.'
+			)
 		}
 	},
 	cancelButtonLabel: t('Cancel'),
@@ -40,56 +48,70 @@ const getLabels = (isInEditFlow, linkType) => ({
 });
 
 class FxDocumentLinkBrowserModal extends Component {
-	constructor (props) {
-		super(props);
+	static propTypes = {
+		cancelModal: PropTypes.func.isRequired,
+		data: PropTypes.shape({
+			browseContextDocumentId: PropTypes.string,
+			dataProviderName: PropTypes.string.isRequired,
+			documentId: PropTypes.string,
+			linkableElementsQuery: PropTypes.string.isRequired,
+			linkType: PropTypes.string,
+			nodeId: PropTypes.string
+		}).isRequired,
+		submitModal: PropTypes.func.isRequired
+	};
 
-		this.state = { selectedLink: reactToAngularModalBridge.operationData.targetSpec };
+	state = {
+		selectedLink: {
+			remoteDocumentId: this.props.data.documentId
+				? documentsManager.getDocumentFile(this.props.data.documentId).remoteDocumentId
+				: null,
+			documentId: this.props.data.documentId,
+			nodeId: this.props.data.nodeId
+		}
+	};
 
-		this.labels = getLabels(
-			!!reactToAngularModalBridge.operationData.targetSpec,
-			reactToAngularModalBridge.operationData.linkType
-		);
-	}
+	labels = getLabels(this.props.data.documentId !== null, this.props.data.linkType);
 
-	isSubmitPossible () {
-		return !!this.state.selectedLink && (!!this.state.selectedLink.remoteDocumentId || !!this.state.selectedLink.documentId);
-	}
+	handleDocumentLinkBrowserLinkSelect = selectedLink => this.setState({ selectedLink });
 
-	submit (link) {
-		reactToAngularModalBridge.onModalSubmit({ selectedLink: link });
-	}
+	handleSubmitClick = () =>
+		this.props.submitModal({
+			documentId: this.state.selectedLink.documentId,
+			nodeId: this.state.selectedLink.nodeId
+		});
 
-	render () {
+	render() {
 		const { selectedLink } = this.state;
 
 		return (
-			<Modal size='m' isFullHeight={ true }>
-				<ModalHeader title={ this.labels.modalTitle } />
+			<Modal size="m" isFullHeight={true}>
+				<ModalHeader title={this.labels.modalTitle} />
 
-				<ModalBody paddingSize='l'>
+				<ModalBody paddingSize="l">
 					<FxDocumentLinkBrowser
-						dataProviderName={ reactToAngularModalBridge.operationData.dataProviderName }
-						labels={ this.labels }
-						browseContextDocumentId={ reactToAngularModalBridge.operationData.browseContextDocumentId }
-						linkableElementsQuery={ reactToAngularModalBridge.operationData.linkableElementsQuery }
-						linkType={ reactToAngularModalBridge.operationData.linkType }
-						selectedLink={ selectedLink }
-						onLinkSelect={ (selectedLink) => this.setState({ selectedLink }) }
+						dataProviderName={this.props.data.dataProviderName}
+						labels={this.labels}
+						browseContextDocumentId={this.props.data.browseContextDocumentId}
+						linkableElementsQuery={this.props.data.linkableElementsQuery}
+						linkType={this.props.data.linkType}
+						selectedLink={selectedLink}
+						onLinkSelect={this.handleDocumentLinkBrowserLinkSelect}
 					/>
 				</ModalBody>
 
 				<ModalFooter>
 					<Button
-						type='default'
-						label={ this.labels.cancelButtonLabel }
-						onClick={ () => reactToAngularModalBridge.closeModal() }
+						type="default"
+						label={this.labels.cancelButtonLabel}
+						onClick={this.props.cancelModal}
 					/>
 
 					<Button
-						type='primary'
-						label={ this.labels.submitButtonLabel }
-						isDisabled={ !this.isSubmitPossible() }
-						onClick={ () => this.submit(this.state.selectedLink) }
+						type="primary"
+						label={this.labels.submitButtonLabel}
+						isDisabled={selectedLink.documentId === null}
+						onClick={this.handleSubmitClick}
 					/>
 				</ModalFooter>
 			</Modal>
