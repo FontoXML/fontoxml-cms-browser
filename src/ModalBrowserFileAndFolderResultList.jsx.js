@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
 
-import { Grid, List } from 'fontoxml-vendor-fds/components';
+import { Grid, List, SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
 import refreshItems from './refreshItems.jsx';
 
 class ModalBrowserFileAndFolderResultList extends Component {
 	render() {
-		if (this.props.viewMode === 'list') {
+		const { labels, request, viewMode } = this.props;
+
+		if (request && request.type === 'browse' && request.busy) {
+			return (
+				<StateMessage
+					visual={<SpinnerIcon />}
+					title={labels.states.loading.title}
+					message={labels.states.loading.message}
+				/>
+			);
+		}
+
+		if (viewMode === 'list') {
 			return (
 				<List
 					items={this.props.items}

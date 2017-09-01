@@ -25,7 +25,7 @@ class ImageGridItem extends Component {
 	componentWillReceiveProps(nextProps) {
 		const { item } = this.props;
 
-		if (nextProps.item.id !== item.id) {
+		if (item.type !== 'folder' && nextProps.item.id !== item.id) {
 			if (!this.props.cachedFileByRemoteId[item.id]) {
 				this.setState({ isLoading: true });
 
@@ -34,55 +34,53 @@ class ImageGridItem extends Component {
 		}
 	}
 
+	componentWillMount() {
+		const { item } = this.props;
+
+		if (item.type !== 'folder' && !this.props.cachedFileByRemoteId[item.id]) {
+			this.setState({ isLoading: true });
+
+			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
+		}
+	}
+
 	render() {
-		const { key, item, isSelected, isDisabled, onClick, onDoubleClick } = this.props;
-		if (item === 'folder') {
-			return (
-				<GridItem
-					key={key}
-					isSelected={isSelected}
-					isDisabled={isDisabled}
-					onClick={onClick}
-					onDoubleClick={onDoubleClick}
-				>
-					<Icon align="center" icon={item.icon || 'folder-o'} size="m" />
-					<Label align="center" flex="1">{item.label}</Label>
-				</GridItem>
-			);
-		}
+		const { item, isSelected, isDisabled, onClick, onDoubleClick } = this.props;
+		let GridItemContent = null;
 
-		if (this.state.isLoading) {
-			return (
-				<GridItem
-					key={key}
-					isSelected={isSelected}
-					isDisabled={isDisabled}
-					onClick={onClick}
-					onDoubleClick={onDoubleClick}
-				>
-					<SpinnerIcon align="center" size="m" />
-					<Label align="center" flex="1">{item.label}</Label>
-				</GridItem>
+		if (item.type === 'folder') {
+			GridItemContent = (
+				<Flex alignItems="center" flexDirection="column">
+					<Icon icon={item.icon || 'folder-o'} size="m" />
+					<Label>{item.label}</Label>
+				</Flex>
 			);
-		}
-
-		if (this.props.cachedErrorByRemoteId[item.id]) {
-			return (
-				<GridItem
-					key={key}
-					isSelected={isSelected}
-					isDisabled={isDisabled}
-					onClick={onClick}
-					onDoubleClick={onDoubleClick}
-				>
+		} else if (this.state.isLoading) {
+			GridItemContent = (
+				<Flex alignItems="center" flex="1" flexDirection="column">
+					<SpinnerIcon size="m" />
+					<Label>{item.label}</Label>
+				</Flex>
+			);
+		} else if (this.props.cachedErrorByRemoteId[item.id]) {
+			GridItemContent = (
+				<Flex alignItems="center" flex="1" flexDirection="column">
 					<Icon
-						align="center"
 						colorName="icon-m-error-color"
 						icon={item.icon || 'file-image-o'}
 						size="m"
 					/>
-					<Label align="center" flex="1" colorName="text-muted-color">{item.label}</Label>
-				</GridItem>
+					<Label colorName="text-muted-color">{item.label}</Label>
+				</Flex>
+			);
+		} else {
+			GridItemContent = (
+				<Flex alignItems="center" flex="1" flexDirection="column">
+					<Flex applyCss={{ height: '3rem' }}>
+						<ContainedImage src={this.props.cachedFileByRemoteId[item.id].dataUrl} />
+					</Flex>
+					<Label>{item.label}</Label>
+				</Flex>
 			);
 		}
 
@@ -93,23 +91,13 @@ class ImageGridItem extends Component {
 				onClick={onClick}
 				onDoubleClick={onDoubleClick}
 			>
-				<Flex alignItems="center" applyCss={{ height: '3rem' }} justifyContent="center">
-					<ContainedImage src={this.props.cachedFileByRemoteId[item.id].dataUrl} />
-				</Flex>
-				<Label align="center" flex="1">{item.label}</Label>
+				{GridItemContent}
 			</GridItem>
 		);
 	}
 
 	componentDidMount() {
-		const { item } = this.props;
 		this.isComponentMounted = true;
-
-		if (!this.props.cachedFileByRemoteId[item.id]) {
-			this.setState({ isLoading: true });
-
-			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
-		}
 	}
 
 	componentWillUnmount() {

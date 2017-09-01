@@ -1,11 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-export default function withModularBrowserCapabilities(
-	WrappedComponent,
-	getInitialItems,
-	initialViewMode = null
-) {
+export default function withModularBrowserCapabilities(WrappedComponent, initialViewMode = null) {
 	return class ModularBrowser extends Component {
 		static propTypes = {
 			cancelModal: PropTypes.func.isRequired,
@@ -111,26 +107,6 @@ export default function withModularBrowserCapabilities(
 
 		componentDidMount() {
 			this.isComponentMounted = true;
-			if (typeof getInitialItems !== 'function') {
-				return;
-			}
-
-			this.onUpdateRequest({
-				type: 'initial',
-				busy: true
-			});
-
-			return Promise.resolve(getInitialItems(this.props.data))
-				.then(items => {
-					if (!items || !items.length) {
-						return this.onUpdateRequest(null);
-					}
-					this.onUpdateItems(items, null);
-				})
-				.catch(error => {
-					console.error(error);
-					this.onUpdateRequest(null);
-				});
 		}
 
 		componentWillUnmount() {

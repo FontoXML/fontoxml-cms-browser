@@ -25,7 +25,7 @@ class ImageListItem extends Component {
 	componentWillReceiveProps(nextProps) {
 		const { item } = this.props;
 
-		if (nextProps.item.id !== item.id) {
+		if (item.type !== 'folder' && nextProps.item.id !== item.id) {
 			if (!this.props.cachedFileByRemoteId[item.id]) {
 				this.setState({ isLoading: true });
 
@@ -34,12 +34,22 @@ class ImageListItem extends Component {
 		}
 	}
 
+	componentWillMount() {
+		const { item } = this.props;
+
+		if (item.type !== 'folder' && !this.props.cachedFileByRemoteId[item.id]) {
+			this.setState({ isLoading: true });
+
+			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
+		}
+	}
+
 	render() {
-		const { key, item, isSelected, isDisabled, onClick, onDoubleClick } = this.props;
-		if (item === 'folder') {
+		const { item, isSelected, isDisabled, onClick, onDoubleClick } = this.props;
+
+		if (item.type === 'folder') {
 			return (
 				<ListItem
-					key={key}
 					isSelected={isSelected}
 					isDisabled={isDisabled}
 					onClick={onClick}
@@ -54,7 +64,6 @@ class ImageListItem extends Component {
 		if (this.state.isLoading) {
 			return (
 				<ListItem
-					key={key}
 					isSelected={isSelected}
 					isDisabled={isDisabled}
 					onClick={onClick}
@@ -69,7 +78,6 @@ class ImageListItem extends Component {
 		if (this.props.cachedErrorByRemoteId[item.id]) {
 			return (
 				<ListItem
-					key={key}
 					isSelected={isSelected}
 					isDisabled={isDisabled}
 					onClick={onClick}
@@ -101,14 +109,7 @@ class ImageListItem extends Component {
 	}
 
 	componentDidMount() {
-		const { item } = this.props;
 		this.isComponentMounted = true;
-
-		if (!this.props.cachedFileByRemoteId[item.id]) {
-			this.setState({ isLoading: true });
-
-			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
-		}
 	}
 
 	componentWillUnmount() {

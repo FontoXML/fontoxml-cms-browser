@@ -27,11 +27,10 @@ function updateFolderHierarchy(folderHierarchy, newLastFolderInHierarchy) {
 export default function refreshItems(props, folderToLoad, noCache) {
 	const {
 		breadcrumbItems,
-		dataProviderName,
+		data: { browseContextDocumentId, dataProviderName },
 		onUpdateItems,
 		onUpdateRequest,
-		onItemSelect,
-		browseContextDocumentId
+		onItemSelect
 	} = props;
 
 	onUpdateRequest({ type: 'browse', busy: true });
