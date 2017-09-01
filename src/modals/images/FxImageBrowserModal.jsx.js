@@ -3,13 +3,23 @@ import React, { Component } from 'react';
 
 import t from 'fontoxml-localization/t';
 
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-vendor-fds/components';
+import {
+	Button,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader
+} from 'fontoxml-vendor-fds/components';
 
-import FxImageBrowser from '../../browsers/images/FxImageBrowser.jsx';
+import ImageGridItem from './ImageGridItem.jsx';
+import ImageListItem from './ImageListItem.jsx';
+import ModalBrowserFileAndFolderResultList from '../../ModalBrowserFileAndFolderResultList.jsx';
+import refreshItems, { rootfolder } from '../../refreshItems.jsx';
+import withModularBrowserCapabilities from '../../withModularBrowserCapabilities.jsx';
 
 const getLabels = isInEditFlow => ({
 	modalTitle: isInEditFlow ? t('Replace image') : t('Add image'),
-	rootFolderLabel: t('My Drives'),
 	states: {
 		loading: {
 			title: t('Loading images…'),
@@ -47,6 +57,28 @@ const getLabels = isInEditFlow => ({
 	}
 });
 
+const handleRenderListItem = ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => (
+	<ImageListItem
+		key={key}
+		item={item}
+		isSelected={isSelected}
+		isDisabled={isDisabled}
+		onClick={onClick}
+		onDoubleClick={onDoubleClick}
+	/>
+);
+
+const handleRenderGridItem = ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => (
+	<ImageGridItem
+		key={key}
+		item={item}
+		isSelected={isSelected}
+		isDisabled={isDisabled}
+		onClick={onClick}
+		onDoubleClick={onDoubleClick}
+	/>
+);
+
 class FxImageBrowserModal extends Component {
 	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
@@ -61,29 +93,28 @@ class FxImageBrowserModal extends Component {
 	labels = getLabels(this.props.data.selectedImageId !== null);
 	state = { selectedImageId: this.props.data.selectedImageId };
 
-	submit(selectedImageId) {
-		this.props.submitModal({ selectedImageId });
-	}
+	onSubmit = selectedItem => {
+		this.props.submitModal({ selectedImageId: selectedItem.id });
+	};
 
-	handleImageBrowserImageSelect = selectedImageId => this.setState({ selectedImageId });
-	handleImageBrowserImageOpen = openedImageId => this.submit(openedImageId);
-
-	handleSubmitButtonClick = () => this.submit(this.state.selectedImageId);
+	handleSubmitButtonClick = () => this.onSubmit(this.props.selectedItem);
 
 	render() {
 		return (
 			<Modal size="l" isFullHeight={true}>
 				<ModalHeader title={this.labels.modalTitle} />
 
-				<ModalBody paddingSize="l">
-					<FxImageBrowser
-						dataProviderName={this.props.data.dataProviderName}
-						labels={this.labels}
-						browseContextDocumentId={this.props.data.browseContextDocumentId}
-						selectedImageId={this.state.selectedImageId}
-						onImageSelect={this.handleImageBrowserImageSelect}
-						onImageOpen={this.handleImageBrowserImageOpen}
-					/>
+				<ModalBody>
+					<ModalContent>
+						<ModalContent flexDirection="column">
+							<ModalBrowserFileAndFolderResultList
+								{...this.props}
+								renderListItem={handleRenderListItem}
+								renderGridItem={handleRenderGridItem}
+								onSubmit={this.onSubmit}
+							/>
+						</ModalContent>
+					</ModalContent>
 				</ModalBody>
 
 				<ModalFooter>
@@ -104,5 +135,11 @@ class FxImageBrowserModal extends Component {
 		);
 	}
 }
+
+FxImageBrowserModal = withModularBrowserCapabilities(
+	FxImageBrowserModal,
+	refreshItems(this.props, rootfolder),
+	'grid'
+);
 
 export default FxImageBrowserModal;
