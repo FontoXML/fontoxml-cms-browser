@@ -58,16 +58,6 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
-		// Used by components that changes the visible items
-		onUpdateItems = (items, request = this.state.request) => {
-			if (this.isComponentMounted) {
-				this.setState({
-					items: items,
-					request: request
-				});
-			}
-		};
-
 		// Used by any component that initiates a request
 		onUpdateRequest = request => {
 			if (this.isComponentMounted) {

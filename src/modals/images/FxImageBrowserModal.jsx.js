@@ -8,6 +8,7 @@ import {
 	Modal,
 	ModalBody,
 	ModalContent,
+	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader
 } from 'fontoxml-vendor-fds/components';
@@ -15,6 +16,7 @@ import {
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
 import ModalBrowserFileAndFolderResultList from '../../ModalBrowserFileAndFolderResultList.jsx';
+import ModalBrowserHierarchyBreadcrumbs from '../../ModalBrowserHierarchyBreadcrumbs.jsx';
 import refreshItems, { rootFolder } from '../../refreshItems.jsx';
 import withModularBrowserCapabilities from '../../withModularBrowserCapabilities.jsx';
 
@@ -106,15 +108,23 @@ class FxImageBrowserModal extends Component {
 				<ModalHeader title={this.labels.modalTitle} />
 
 				<ModalBody>
-					<ModalContent>
-						<ModalContent flexDirection="column" isScrollContainer>
-							<ModalBrowserFileAndFolderResultList
-								{...this.props}
-								labels={this.labels}
-								renderListItem={this.handleRenderListItem}
-								renderGridItem={this.handleRenderGridItem}
-								onSubmit={this.onSubmit}
-							/>
+					<ModalContent flexDirection="column">
+						<ModalContentToolbar>
+							{this.props.breadcrumbItems.length > 0 && (
+								<ModalBrowserHierarchyBreadcrumbs {...this.props} />
+							)}
+						</ModalContentToolbar>
+
+						<ModalContent>
+							<ModalContent flexDirection="column" isScrollContainer>
+								<ModalBrowserFileAndFolderResultList
+									{...this.props}
+									labels={this.labels}
+									renderListItem={this.handleRenderListItem}
+									renderGridItem={this.handleRenderGridItem}
+									onSubmit={this.onSubmit}
+								/>
+							</ModalContent>
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
