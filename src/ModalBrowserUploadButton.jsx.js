@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import t from 'fontoxml-localization/t';
+
 import { SelectFileButton } from 'fontoxml-vendor-fds/components';
 
 import dataProviders from './dataProviders';
@@ -10,14 +12,14 @@ class ModalBrowserUploadButton extends PureComponent {
 	uploadOptions = this.dataProvider.getUploadOptions();
 
 	handleOnSelect = selectedFiles => {
-		const { breadcrumbItems, labels, onItemSelect, onUpdateRequest } = this.props;
+		const { breadcrumbItems, onItemSelect, onUpdateRequest, uploadErrorMessages } = this.props;
 		const lastLoadedFolder = breadcrumbItems[breadcrumbItems.length - 1];
 
 		// TODO: support multiple
 		if (selectedFiles[0].size > this.uploadOptions.maxFileSizeInBytes) {
 			onUpdateRequest({
 				type: 'upload',
-				error: labels.upload.fileSizeTooLargeMessage
+				error: uploadErrorMessages.fileSizeTooLargeMessage
 			});
 			return;
 		}
@@ -42,14 +44,14 @@ class ModalBrowserUploadButton extends PureComponent {
 
 				onUpdateRequest({
 					type: 'upload',
-					error: labels.upload.serverErrorMessage
+					error: uploadErrorMessages.serverErrorMessage
 				});
 			}
 		);
 	};
 
 	render() {
-		const { breadcrumbItems, labels, request } = this.props;
+		const { breadcrumbItems, request } = this.props;
 
 		const isUploading = request.type === 'upload' && request.busy;
 		const isLoading = isUploading || (request.type === 'browse' && request.busy);
@@ -59,7 +61,7 @@ class ModalBrowserUploadButton extends PureComponent {
 
 		return (
 			<SelectFileButton
-				label={labels.upload.buttonLabel}
+				label={t('Upload')}
 				isDisabled={isLoading || lastLoadedFolder === null || lastLoadedFolder.id === null}
 				mimeTypesToAccept={this.uploadOptions.mimeTypesToAccept}
 				icon="upload"

@@ -13,24 +13,32 @@ class ModalBrowserFileAndFolderResultList extends Component {
 	render() {
 		const {
 			items,
-			labels,
 			onItemSelect,
 			onSubmit,
 			renderGridItem,
 			renderListItem,
 			request,
 			selectedItem,
+			stateLabels,
 			viewMode
 		} = this.props;
 
 		if ((request.type === 'browse' || request.type === 'upload') && request.busy) {
+			return <StateMessage visual={<SpinnerIcon />} {...stateLabels.loading} />;
+		}
+
+		if (request.type === 'browse' && request.error) {
 			return (
 				<StateMessage
-					visual={<SpinnerIcon />}
-					title={labels.states.loading.title}
-					message={labels.states.loading.message}
+					connotation="warning"
+					visual="exclamation-triangle"
+					{...stateLabels.browseError}
 				/>
 			);
+		}
+
+		if (items.length === 0) {
+			return <StateMessage visual="folder-open-o" {...stateLabels.empty} />;
 		}
 
 		if (viewMode.name === 'list') {

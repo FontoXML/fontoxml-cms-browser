@@ -28,9 +28,12 @@ export default function refreshItems(props, folderToLoad, noCache) {
 	const {
 		breadcrumbItems,
 		data: { browseContextDocumentId, dataProviderName },
+		initialSelectedFileId,
+		onItemSelect,
+		onUpdateInitialSelectedFileId,
 		onUpdateItems,
 		onUpdateRequest,
-		onItemSelect
+		selectedItem
 	} = props;
 
 	onUpdateRequest({ type: 'browse', busy: true });
@@ -57,15 +60,24 @@ export default function refreshItems(props, folderToLoad, noCache) {
 				false
 			);
 
-			onItemSelect(null);
+			let selectedFile = null;
+			if (initialSelectedFileId && selectedItem && selectedItem.type !== 'folder') {
+				// An other file was selected so the initialSelectedFileId is no longer cached
+				onUpdateInitialSelectedFileId(null);
+			} else if (initialSelectedFileId) {
+				// If the initial selected file is in this folder, it should be selected
+				selectedFile = result.items.find(item => item.id === initialSelectedFileId);
+				selectedFile = selectedFile ? { ...selectedFile, value: selectedFile.id } : null;
+			}
+			onItemSelect(selectedFile);
 		},
 		error => {
 			if (!error) {
-				// The component is unmounted or the old request was cancelled, wait for the newer one.
+				// The old request was cancelled, wait for the newer one.
 				return;
 			}
 
-			onUpdateRequest({ type: 'error', error: error });
+			onUpdateRequest({ type: 'browse', error: error });
 			// Keep using the last good state (with previous folderContents, folderHierarchy, selectedFileOrFolder and lastLoadedFolder)
 		}
 	);

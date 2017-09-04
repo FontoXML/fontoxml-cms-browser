@@ -17,6 +17,7 @@ import {
 
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
+import ImagePreview from './ImagePreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../../ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../../ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -27,46 +28,35 @@ import ModalBrowserUploadButton from '../../ModalBrowserUploadButton.jsx';
 import refreshItems, { rootFolder } from '../../refreshItems.jsx';
 import withModularBrowserCapabilities from '../../withModularBrowserCapabilities.jsx';
 
-import ImagePreview from './ImagePreview.jsx';
-
-const getLabels = isInEditFlow => ({
-	modalTitle: isInEditFlow ? t('Replace image') : t('Add image'),
-	states: {
-		loading: {
-			title: t('Loading images…'),
-			message: null
-		},
-		browseError: {
-			title: t('Can’t open this folder'),
-			message: t(
-				'FontoXML can’t open this folder. You can try again, or try a different folder.'
-			)
-		},
-		empty: {
-			title: t('No results'),
-			message: t('This folder does not contain images that can be opened with FontoXML.')
-		},
-		loadingPreview: {
-			title: t('Loading image preview…'),
-			message: null
-		},
-		previewError: {
-			title: t('Can’t open this image'),
-			message: t(
-				'FontoXML can’t open this image. You can try again, or try a different image.'
-			)
-		}
+const stateLabels = {
+	loading: {
+		title: t('Loading images…'),
+		message: null
 	},
-	cancelButtonLabel: t('Cancel'),
-	submitButtonLabel: isInEditFlow ? t('Replace') : t('Add'),
-	upload: {
-		buttonLabel: t('Upload'),
-		fileSizeTooLargeMessage: t(
-			'This image is larger than 4 megabyte, please select another image or resize it and try again.'
-		),
-		serverErrorMessage: t('FontoXML can’t upload this image, please try again.')
+	browseError: {
+		title: t('Can’t open this folder'),
+		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+	},
+	empty: {
+		title: t('No results'),
+		message: t('This folder does not contain images that can be opened with FontoXML.')
+	},
+	loadingPreview: {
+		title: t('Loading image preview…'),
+		message: null
+	},
+	previewError: {
+		title: t('Can’t open this image'),
+		message: t('FontoXML can’t open this image. You can try again, or try a different image.')
 	}
-});
+};
+
+const uploadErrorMessages = {
+	fileSizeTooLargeMessage: t(
+		'This image is larger than 4 megabyte, please select another image or resize it and try again.'
+	),
+	serverErrorMessage: t('FontoXML can’t upload this image, please try again.')
+};
 
 class FxImageBrowserModal extends Component {
 	static propTypes = {
@@ -74,12 +64,12 @@ class FxImageBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
+			modalTitle: PropTypes.string,
+			modalPrimaryButtonLabel: PropTypes.string,
 			selectedImageId: PropTypes.string
 		}).isRequired,
 		submitModal: PropTypes.func.isRequired
 	};
-
-	labels = getLabels(this.props.data.selectedImageId !== null);
 
 	onSubmit = selectedItem => {
 		this.props.submitModal({ selectedImageId: selectedItem.id });
@@ -118,11 +108,18 @@ class FxImageBrowserModal extends Component {
 	handleSubmitButtonClick = () => this.onSubmit(this.props.selectedItem);
 
 	render() {
-		const { request } = this.props;
-		const hasBreadcrumbItems = this.props.breadcrumbItems.length > 0;
+		const {
+			breadcrumbItems,
+			cancelModal,
+			data: { modalTitle, modalPrimaryButtonLabel },
+			request,
+			selectedItem
+		} = this.props;
+		const hasBreadcrumbItems = breadcrumbItems.length > 0;
+
 		return (
 			<Modal size="l" isFullHeight={true}>
-				<ModalHeader title={this.labels.modalTitle} />
+				<ModalHeader title={modalTitle || t('Select an image')} />
 
 				<ModalBody>
 					<ModalContent flexDirection="column">
@@ -134,11 +131,15 @@ class FxImageBrowserModal extends Component {
 							)}
 
 							<Flex flex="none" spaceSize="m">
-								<ModalBrowserUploadButton labels={this.labels} {...this.props} />
+								<ModalBrowserUploadButton
+									{...this.props}
+									uploadErrorMessages={uploadErrorMessages}
+								/>
 
 								<ModalBrowserListOrGridViewMode {...this.props} />
 							</Flex>
 						</ModalContentToolbar>
+
 						{request.type === 'upload' &&
 						request.error && (
 							<ModalContent flex="none" paddingSize="m">
@@ -149,22 +150,24 @@ class FxImageBrowserModal extends Component {
 								/>
 							</ModalContent>
 						)}
+
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column" isScrollContainer>
 								<ModalBrowserFileAndFolderResultList
 									{...this.props}
-									labels={this.labels}
+									onSubmit={this.onSubmit}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
-									onSubmit={this.onSubmit}
+									stateLabels={stateLabels}
 								/>
 							</ModalContent>
+
 							{this.props.selectedItem &&
 							this.props.selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column">
 									<ModalBrowserPreview
 										{...this.props}
-										labels={this.labels}
+										stateLabels={stateLabels}
 										renderPreview={this.handleRenderPreview}
 									/>
 								</ModalContent>
@@ -174,16 +177,12 @@ class FxImageBrowserModal extends Component {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button
-						type="default"
-						label={this.labels.cancelButtonLabel}
-						onClick={this.props.cancelModal}
-					/>
+					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
 
 					<Button
 						type="primary"
-						label={this.labels.submitButtonLabel}
-						isDisabled={this.props.selectedItem === null}
+						label={modalPrimaryButtonLabel || t('Insert')}
+						isDisabled={selectedItem === null}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
@@ -192,6 +191,11 @@ class FxImageBrowserModal extends Component {
 	}
 
 	componentDidMount() {
+		const { data: { selectedImageId }, onUpdateInitialSelectedFileId } = this.props;
+		if (selectedImageId) {
+			onUpdateInitialSelectedFileId(selectedImageId);
+		}
+
 		refreshItems(this.props, rootFolder);
 	}
 }

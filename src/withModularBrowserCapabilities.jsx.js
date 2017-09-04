@@ -1,13 +1,8 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default function withModularBrowserCapabilities(WrappedComponent, initialViewMode = null) {
 	return class ModularBrowser extends Component {
-		static propTypes = {
-			cancelModal: PropTypes.func.isRequired,
-			data: PropTypes.object.isRequired,
-			submitModal: PropTypes.func.isRequired
-		};
+		initialSelectedFileId = null;
 		isComponentMounted = false;
 
 		state = {
@@ -67,6 +62,12 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
+		onUpdateInitialSelectedFileId = fileId => {
+			if (this.isComponentMounted) {
+				this.initialSelectedFileId = fileId;
+			}
+		};
+
 		// Used by components that changes the visible items
 		onUpdateItems = (items, breadcrumbItems, request = this.state.request) => {
 			if (this.isComponentMounted) {
@@ -104,7 +105,9 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 				addCachedFileByRemoteId: this.addCachedFileByRemoteId,
 				deleteCachedErrorByRemoteId: this.deleteCachedErrorByRemoteId,
 				deleteCachedFileByRemoteId: this.deleteCachedFileByRemoteId,
+				initialSelectedFileId: this.initialSelectedFileId,
 				onItemSelect: this.onItemSelect,
+				onUpdateInitialSelectedFileId: this.onUpdateInitialSelectedFileId,
 				onUpdateItems: this.onUpdateItems,
 				onUpdateRequest: this.onUpdateRequest,
 				onUpdateViewMode: this.onUpdateViewMode
@@ -113,7 +116,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			return <WrappedComponent {...props} />;
 		}
 
-		componentDidMount() {
+		componentWillMount() {
 			this.isComponentMounted = true;
 		}
 
