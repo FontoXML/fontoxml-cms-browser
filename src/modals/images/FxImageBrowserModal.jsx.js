@@ -22,9 +22,12 @@ import ModalBrowserHierarchyBreadcrumbs from '../../ModalBrowserHierarchyBreadcr
 import ModalBrowserListOrGridViewMode, {
 	viewModes
 } from '../../ModalBrowserListOrGridViewMode.jsx';
+import ModalBrowserPreview from '../../ModalBrowserPreview.jsx';
 import ModalBrowserUploadButton from '../../ModalBrowserUploadButton.jsx';
 import refreshItems, { rootFolder } from '../../refreshItems.jsx';
 import withModularBrowserCapabilities from '../../withModularBrowserCapabilities.jsx';
+
+import ImagePreview from './ImagePreview.jsx';
 
 const getLabels = isInEditFlow => ({
 	modalTitle: isInEditFlow ? t('Replace image') : t('Add image'),
@@ -108,6 +111,10 @@ class FxImageBrowserModal extends Component {
 		/>
 	);
 
+	handleRenderPreview = ({ dataUrl, heading, properties }) => (
+		<ImagePreview dataUrl={dataUrl} heading={heading} properties={properties} />
+	);
+
 	handleSubmitButtonClick = () => this.onSubmit(this.props.selectedItem);
 
 	render() {
@@ -132,7 +139,6 @@ class FxImageBrowserModal extends Component {
 								<ModalBrowserListOrGridViewMode {...this.props} />
 							</Flex>
 						</ModalContentToolbar>
-
 						{request.type === 'upload' &&
 						request.error && (
 							<ModalContent flex="none" paddingSize="m">
@@ -143,9 +149,8 @@ class FxImageBrowserModal extends Component {
 								/>
 							</ModalContent>
 						)}
-
-						<ModalContent>
-							<ModalContent flexDirection="column">
+						<ModalContent flexDirection="row">
+							<ModalContent flexDirection="column" isScrollContainer>
 								<ModalBrowserFileAndFolderResultList
 									{...this.props}
 									labels={this.labels}
@@ -154,6 +159,16 @@ class FxImageBrowserModal extends Component {
 									onSubmit={this.onSubmit}
 								/>
 							</ModalContent>
+							{this.props.selectedItem &&
+							this.props.selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<ModalBrowserPreview
+										{...this.props}
+										labels={this.labels}
+										renderPreview={this.handleRenderPreview}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>

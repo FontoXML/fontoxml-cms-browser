@@ -9,8 +9,6 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			submitModal: PropTypes.func.isRequired
 		};
 		isComponentMounted = false;
-		cachedFileByRemoteId = {};
-		cachedErrorByRemoteId = {};
 
 		state = {
 			// Contains information on the current/last known request
@@ -27,16 +25,38 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			selectedItem: null,
 
 			// Contains information for the viewMode, for example list or grid
-			viewMode: initialViewMode
+			viewMode: initialViewMode,
+
+			// Contains the already loaded files
+			cachedFileByRemoteId: {},
+
+			// Contains the files which failed to load
+			cachedErrorByRemoteId: {}
 		};
 
-		addCachedFileByRemoteId = (id, file) => (this.cachedFileByRemoteId[id] = file);
+		addCachedFileByRemoteId = (id, file) => {
+			const map = this.state.cachedFileByRemoteId;
+			map[id] = file;
+			this.setState({ cachedFileByRemoteId: map });
+		};
 
-		addCachedErrorByRemoteId = (id, error) => (this.cachedErrorByRemoteId[id] = error);
+		addCachedErrorByRemoteId = (id, error) => {
+			const map = this.state.cachedErrorByRemoteId;
+			map[id] = error;
+			this.setState({ cachedErrorByRemoteId: map });
+		};
 
-		deleteCachedFileByRemoteId = id => delete this.cachedFileByRemoteId[id];
+		deleteCachedFileByRemoteId = id => {
+			const map = this.state.cachedFileByRemoteId;
+			delete map[id];
+			this.setState({ cachedFileByRemoteId: map });
+		};
 
-		deleteCachedErrorByRemoteId = id => delete this.cachedErrorByRemoteId[id];
+		deleteCachedErrorByRemoteId = id => {
+			const map = this.state.cachedErrorByRemoteId;
+			delete map[id];
+			this.setState({ cachedErrorByRemoteId: map });
+		};
 
 		// Used by any component to change the currently selected item
 		onItemSelect = item => {
@@ -84,8 +104,6 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 				addCachedFileByRemoteId: this.addCachedFileByRemoteId,
 				deleteCachedErrorByRemoteId: this.deleteCachedErrorByRemoteId,
 				deleteCachedFileByRemoteId: this.deleteCachedFileByRemoteId,
-				cachedErrorByRemoteId: this.cachedErrorByRemoteId,
-				cachedFileByRemoteId: this.cachedFileByRemoteId,
 				onItemSelect: this.onItemSelect,
 				onUpdateItems: this.onUpdateItems,
 				onUpdateRequest: this.onUpdateRequest,
