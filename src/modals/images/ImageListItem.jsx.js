@@ -45,7 +45,7 @@ class ImageListItem extends Component {
 	}
 
 	render() {
-		const { item, isSelected, isDisabled, onClick, onDoubleClick } = this.props;
+		const { item, isSelected, isDisabled, onClick, onDoubleClick, onRef } = this.props;
 
 		if (item.type === 'folder') {
 			return (
@@ -54,6 +54,7 @@ class ImageListItem extends Component {
 					isDisabled={isDisabled}
 					onClick={onClick}
 					onDoubleClick={onDoubleClick}
+					onRef={onRef}
 				>
 					<Icon icon={item.icon || 'folder-o'} size="s" />
 					<Label>{item.label}</Label>
@@ -68,6 +69,7 @@ class ImageListItem extends Component {
 					isDisabled={isDisabled}
 					onClick={onClick}
 					onDoubleClick={onDoubleClick}
+					onRef={onRef}
 				>
 					<SpinnerIcon size="s" />
 					<Label>{item.label}</Label>
@@ -82,6 +84,7 @@ class ImageListItem extends Component {
 					isDisabled={isDisabled}
 					onClick={onClick}
 					onDoubleClick={onDoubleClick}
+					onRef={onRef}
 				>
 					<Icon
 						colorName="icon-s-error-color"
@@ -99,6 +102,7 @@ class ImageListItem extends Component {
 				isDisabled={isDisabled}
 				onClick={onClick}
 				onDoubleClick={onDoubleClick}
+				onRef={onRef}
 			>
 				<Flex applyCss={{ width: '.875rem', height: '.875rem' }}>
 					<ContainedImage src={this.props.cachedFileByRemoteId[item.id].dataUrl} />

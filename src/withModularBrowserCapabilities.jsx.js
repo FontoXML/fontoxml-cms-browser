@@ -15,7 +15,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 		state = {
 			// Contains information on the current/last known request
 			// { type: initial|search|browse|upload, ?query, ?error, ?resultCount }
-			request: null,
+			request: {},
 
 			// Contains the items that the user can choose from
 			breadcrumbItems: [],

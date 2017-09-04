@@ -21,7 +21,9 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		const { request } = this.props;
 		return (
 			<Breadcrumbs
-				isDisabled={request && request.type === 'browse' && request.busy}
+				isDisabled={
+					(request.type === 'browse' || request.type === 'upload') && request.busy
+				}
 				items={this.props.breadcrumbItems}
 				renderBreadcrumbItem={this.handleRenderBreadcrumbItem}
 				truncatedItemWidth={truncatedBreadcrumbItemLinkWidth}

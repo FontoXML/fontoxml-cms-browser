@@ -1,14 +1,29 @@
 import React, { Component } from 'react';
 
-import { Grid, List, SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
+import {
+	SpinnerIcon,
+	StateMessage,
+	VirtualGrid,
+	VirtualList
+} from 'fontoxml-vendor-fds/components';
 
 import refreshItems from './refreshItems.jsx';
 
 class ModalBrowserFileAndFolderResultList extends Component {
 	render() {
-		const { labels, request, viewMode } = this.props;
+		const {
+			items,
+			labels,
+			onItemSelect,
+			onSubmit,
+			renderGridItem,
+			renderListItem,
+			request,
+			selectedItem,
+			viewMode
+		} = this.props;
 
-		if (request && request.type === 'browse' && request.busy) {
+		if ((request.type === 'browse' || request.type === 'upload') && request.busy) {
 			return (
 				<StateMessage
 					visual={<SpinnerIcon />}
@@ -18,32 +33,29 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			);
 		}
 
-		if (viewMode === 'list') {
+		if (viewMode.name === 'list') {
 			return (
-				<List
-					items={this.props.items}
-					onItemClick={this.props.onItemSelect}
-					onItemDoubleClick={item =>
-						item.type === 'folder'
-							? refreshItems(this.props, item)
-							: this.props.onSubmit(item)}
-					selectedItem={this.props.selectedItem}
-					renderItem={this.props.renderListItem}
+				<VirtualList
+					estimatedItemHeight={30}
+					items={items}
+					paddingSize="m"
+					renderItem={renderListItem}
+					selectedItems={selectedItem === null ? [] : [selectedItem]}
 				/>
 			);
 		}
 
-		// else the viewMode is 'grid'
+		// else the viewMode.name is 'grid'
 		return (
-			<Grid
-				items={this.props.items}
-				onItemClick={this.props.onItemSelect}
+			<VirtualGrid
+				estimatedRowHeight={86}
+				items={items}
+				onItemClick={onItemSelect}
 				onItemDoubleClick={item =>
-					item.type === 'folder'
-						? refreshItems(this.props, item)
-						: this.props.onSubmit(item)}
-				selectedItem={this.props.selectedItem}
-				renderItem={this.props.renderGridItem}
+					item.type === 'folder' ? refreshItems(this.props, item) : onSubmit(item)}
+				paddingSize="m"
+				renderItem={renderGridItem}
+				selectedItems={selectedItem === null ? [] : [selectedItem]}
 			/>
 		);
 	}

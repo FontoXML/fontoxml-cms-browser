@@ -1,7 +1,7 @@
 import t from 'fontoxml-localization/t';
 import dataProviders from './dataProviders';
 
-export const rootFolder = { label: t('My Drives'), type: 'folder', id: null };
+export const rootFolder = { label: t('My Drives'), type: 'folder', id: null, value: null };
 
 function updateFolderHierarchy(folderHierarchy, newLastFolderInHierarchy) {
 	const updatedFolderHierarchy = folderHierarchy.slice();
@@ -50,8 +50,10 @@ export default function refreshItems(props, folderToLoad, noCache) {
 	return getItems().then(
 		result => {
 			onUpdateItems(
-				result.items,
-				result.metadata.hierarchy || updateFolderHierarchy(breadcrumbItems, folderToLoad),
+				result.items.map(item => ({ ...item, value: item.id })),
+				(result.metadata &&
+					result.metadata.hierarchy.map(item => ({ ...item, value: item.id }))) ||
+					updateFolderHierarchy(breadcrumbItems, folderToLoad),
 				false
 			);
 
