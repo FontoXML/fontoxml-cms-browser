@@ -75,16 +75,23 @@ class FxImageBrowserModal extends Component {
 		this.props.submitModal({ selectedImageId: selectedItem.id });
 	};
 
-	handleRenderListItem = ({ key, item, isSelected, isDisabled, onRef }) => (
+	handleRenderListItem = ({
+		key,
+		item,
+		isSelected,
+		isDisabled,
+		onClick,
+		onDoubleClick,
+		onRef
+	}) => (
 		<ImageListItem
 			{...this.props}
 			key={key}
 			item={item}
 			isSelected={isSelected}
 			isDisabled={isDisabled}
-			onClick={this.props.onItemSelect}
-			onDoubleClick={item =>
-				item.type === 'folder' ? refreshItems(this.props, item) : this.onSubmit(item)}
+			onClick={onClick}
+			onDoubleClick={onDoubleClick}
 			onRef={onRef}
 		/>
 	);

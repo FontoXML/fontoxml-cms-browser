@@ -10,11 +10,13 @@ import {
 import refreshItems from './refreshItems.jsx';
 
 class ModalBrowserFileAndFolderResultList extends Component {
+	handleItemDoubleClick = item =>
+		item.type === 'folder' ? refreshItems(this.props, item) : this.props.onSubmit(item);
+
 	render() {
 		const {
 			items,
 			onItemSelect,
-			onSubmit,
 			renderGridItem,
 			renderListItem,
 			request,
@@ -46,6 +48,8 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				<VirtualList
 					estimatedItemHeight={30}
 					items={items}
+					onItemClick={onItemSelect}
+					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
 					renderItem={renderListItem}
 					selectedItems={selectedItem === null ? [] : [selectedItem]}
@@ -59,8 +63,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				estimatedRowHeight={86}
 				items={items}
 				onItemClick={onItemSelect}
-				onItemDoubleClick={item =>
-					item.type === 'folder' ? refreshItems(this.props, item) : onSubmit(item)}
+				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
 				renderItem={renderGridItem}
 				selectedItems={selectedItem === null ? [] : [selectedItem]}

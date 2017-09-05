@@ -1,7 +1,7 @@
 import t from 'fontoxml-localization/t';
 import dataProviders from './dataProviders';
 
-export const rootFolder = { label: t('My Drives'), type: 'folder', id: null, value: null };
+export const rootFolder = { label: t('My Drives'), type: 'folder', id: null };
 
 function updateFolderHierarchy(folderHierarchy, newLastFolderInHierarchy) {
 	const updatedFolderHierarchy = folderHierarchy.slice();
@@ -53,9 +53,8 @@ export default function refreshItems(props, folderToLoad, noCache) {
 	return getItems().then(
 		result => {
 			onUpdateItems(
-				result.items.map(item => ({ ...item, value: item.id })),
-				(result.metadata &&
-					result.metadata.hierarchy.map(item => ({ ...item, value: item.id }))) ||
+				result.items,
+				(result.metadata && result.metadata.hierarchy) ||
 					updateFolderHierarchy(breadcrumbItems, folderToLoad),
 				false
 			);
@@ -66,8 +65,7 @@ export default function refreshItems(props, folderToLoad, noCache) {
 				onUpdateInitialSelectedFileId(null);
 			} else if (initialSelectedFileId) {
 				// If the initial selected file is in this folder, it should be selected
-				selectedFile = result.items.find(item => item.id === initialSelectedFileId);
-				selectedFile = selectedFile ? { ...selectedFile, value: selectedFile.id } : null;
+				selectedFile = result.items.find(item => item.id === initialSelectedFileId) || null;
 			}
 			onItemSelect(selectedFile);
 		},
