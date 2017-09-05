@@ -24,18 +24,19 @@ function updateFolderHierarchy(folderHierarchy, newLastFolderInHierarchy) {
 	return updatedFolderHierarchy;
 }
 
-export default function refreshItems(props, folderToLoad, noCache) {
-	const {
-		breadcrumbItems,
-		data: { browseContextDocumentId, dataProviderName },
-		initialSelectedFileId,
-		onItemSelect,
-		onUpdateInitialSelectedFileId,
-		onUpdateItems,
-		onUpdateRequest,
-		selectedItem
-	} = props;
-
+export default function refreshItems(
+	breadcrumbItems,
+	browseContextDocumentId,
+	dataProviderName,
+	folderToLoad,
+	initialSelectedFileId,
+	onItemSelect,
+	onUpdateInitialSelectedFileId,
+	onUpdateItems,
+	onUpdateRequest,
+	prevSelectedItem,
+	noCache
+) {
 	onUpdateRequest({ type: 'browse', busy: true });
 
 	const dataProvider = dataProviders.get(dataProviderName);
@@ -60,7 +61,7 @@ export default function refreshItems(props, folderToLoad, noCache) {
 			);
 
 			let selectedFile = null;
-			if (initialSelectedFileId && selectedItem && selectedItem.type !== 'folder') {
+			if (initialSelectedFileId && prevSelectedItem && prevSelectedItem.type !== 'folder') {
 				// An other file was selected so the initialSelectedFileId is no longer cached
 				onUpdateInitialSelectedFileId(null);
 			} else if (initialSelectedFileId) {

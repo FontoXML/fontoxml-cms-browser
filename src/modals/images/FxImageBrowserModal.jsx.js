@@ -71,9 +71,9 @@ class FxImageBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
-	onSubmit = selectedItem => {
-		this.props.submitModal({ selectedImageId: selectedItem.id });
-	};
+	submitModal = itemToSubmit => this.props.submitModal({ selectedImageId: itemToSubmit.id });
+
+	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
 
 	handleRenderListItem = ({
 		key,
@@ -112,15 +112,22 @@ class FxImageBrowserModal extends Component {
 		<ImagePreview dataUrl={dataUrl} heading={heading} properties={properties} />
 	);
 
-	handleSubmitButtonClick = () => this.onSubmit(this.props.selectedItem);
+	handleSubmitButtonClick = () => this.submitModal(this.state.selectedItem);
 
 	render() {
 		const {
 			breadcrumbItems,
 			cancelModal,
-			data: { modalTitle, modalPrimaryButtonLabel },
+			data: {
+				browseContextDocumentId,
+				dataProviderName,
+				modalTitle,
+				modalPrimaryButtonLabel
+			},
+			onUpdateViewMode,
 			request,
-			selectedItem
+			selectedItem,
+			viewMode
 		} = this.props;
 		const hasBreadcrumbItems = breadcrumbItems.length > 0;
 
@@ -134,16 +141,25 @@ class FxImageBrowserModal extends Component {
 							justifyContent={hasBreadcrumbItems ? 'space-between' : 'flex-end'}
 						>
 							{hasBreadcrumbItems && (
-								<ModalBrowserHierarchyBreadcrumbs {...this.props} />
+								<ModalBrowserHierarchyBreadcrumbs
+									{...this.props}
+									browseContextDocumentId={browseContextDocumentId}
+									dataProviderName={dataProviderName}
+								/>
 							)}
 
 							<Flex flex="none" spaceSize="m">
 								<ModalBrowserUploadButton
 									{...this.props}
+									browseContextDocumentId={browseContextDocumentId}
+									dataProviderName={dataProviderName}
 									uploadErrorMessages={uploadErrorMessages}
 								/>
 
-								<ModalBrowserListOrGridViewMode {...this.props} />
+								<ModalBrowserListOrGridViewMode
+									onUpdateViewMode={onUpdateViewMode}
+									viewMode={viewMode}
+								/>
 							</Flex>
 						</ModalContentToolbar>
 
@@ -162,7 +178,9 @@ class FxImageBrowserModal extends Component {
 							<ModalContent flexDirection="column" isScrollContainer>
 								<ModalBrowserFileAndFolderResultList
 									{...this.props}
-									onSubmit={this.onSubmit}
+									browseContextDocumentId={browseContextDocumentId}
+									dataProviderName={dataProviderName}
+									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
 									stateLabels={stateLabels}
@@ -203,7 +221,18 @@ class FxImageBrowserModal extends Component {
 			onUpdateInitialSelectedFileId(selectedImageId);
 		}
 
-		refreshItems(this.props, rootFolder);
+		refreshItems(
+			this.props.breadcrumbItems,
+			this.props.data.browseContextDocumentId,
+			this.props.data.dataProviderName,
+			rootFolder,
+			selectedImageId,
+			this.props.onItemSelect,
+			onUpdateInitialSelectedFileId,
+			this.props.onUpdateItems,
+			this.props.onUpdateRequest,
+			this.props.selectedItem
+		);
 	}
 }
 

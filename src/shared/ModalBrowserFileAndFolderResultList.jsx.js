@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import {
@@ -10,8 +11,62 @@ import {
 import refreshItems from '../refreshItems.jsx';
 
 class ModalBrowserFileAndFolderResultList extends Component {
+	static defaultProps = {
+		breadcrumbItems: [],
+		browseContextDocumentId: null,
+		initialSelectedFileId: null,
+		onItemSubmit: () => {}
+	};
+
+	static propTypes = {
+		browseContextDocumentId: PropTypes.string,
+		dataProviderName: PropTypes.string.isRequired,
+		onItemSubmit: PropTypes.func,
+		renderGridItem: PropTypes.func.isRequired,
+		renderListItem: PropTypes.func.isRequired,
+		stateLabels: PropTypes.shape({
+			browseError: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired,
+			empty: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired,
+			loading: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired
+		}).isRequired,
+
+		// from withModularBrowserCapabilities
+		breadcrumbItems: PropTypes.array,
+		initialSelectedFileId: PropTypes.string,
+		items: PropTypes.array.isRequired,
+		onItemSelect: PropTypes.func.isRequired,
+		onUpdateInitialSelectedFileId: PropTypes.func.isRequired,
+		onUpdateItems: PropTypes.func.isRequired,
+		onUpdateRequest: PropTypes.func.isRequired,
+		request: PropTypes.object.isRequired,
+		selectedItem: PropTypes.object.isRequired,
+		viewMode: PropTypes.object.isRequired
+	};
+
 	handleItemDoubleClick = item =>
-		item.type === 'folder' ? refreshItems(this.props, item) : this.props.onSubmit(item);
+		item.type === 'folder'
+			? refreshItems(
+					this.props.breadcrumbItems,
+					this.props.browseContextDocumentId,
+					this.props.dataProviderName,
+					item,
+					this.props.initialSelectedFileId,
+					this.props.onItemSelect,
+					this.props.onUpdateInitialSelectedFileId,
+					this.props.onUpdateItems,
+					this.props.onUpdateRequest,
+					this.props.selectedItem
+				)
+			: this.props.onItemSubmit(item);
 
 	render() {
 		const {

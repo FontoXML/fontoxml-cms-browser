@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
 import t from 'fontoxml-localization/t';
@@ -8,7 +9,32 @@ import dataProviders from '../dataProviders';
 import refreshItems from '../refreshItems.jsx';
 
 class ModalBrowserUploadButton extends PureComponent {
-	dataProvider = dataProviders.get(this.props.data.dataProviderName);
+	static defaultProps = {
+		breadcrumbItems: [],
+		browseContextDocumentId: null,
+		initialSelectedFileId: null
+	};
+
+	static propTypes = {
+		browseContextDocumentId: PropTypes.string,
+		dataProviderName: PropTypes.string.isRequired,
+		uploadErrorMessages: PropTypes.shape({
+			fileSizeTooLargeMessage: PropTypes.string.isRequired,
+			serverErrorMessage: PropTypes.string.isRequired
+		}).isRequired,
+
+		// from withModularBrowserCapabilities
+		breadcrumbItems: PropTypes.array,
+		initialSelectedFileId: PropTypes.string,
+		onItemSelect: PropTypes.func.isRequired,
+		onUpdateInitialSelectedFileId: PropTypes.func.isRequired,
+		onUpdateItems: PropTypes.func.isRequired,
+		onUpdateRequest: PropTypes.func.isRequired,
+		request: PropTypes.object.isRequired,
+		selectedItem: PropTypes.object.isRequired
+	};
+
+	dataProvider = dataProviders.get(this.props.dataProviderName);
 	uploadOptions = this.dataProvider.getUploadOptions();
 
 	handleOnSelect = selectedFiles => {
@@ -33,9 +59,19 @@ class ModalBrowserUploadButton extends PureComponent {
 
 		this.dataProvider.upload(folderWithUploadedFile.id, selectedFiles).then(
 			uploadedItem => {
-				return refreshItems(this.props, folderWithUploadedFile, true).then(() =>
-					onItemSelect({ ...uploadedItem, value: uploadedItem.id })
-				);
+				return refreshItems(
+					breadcrumbItems,
+					this.props.browseContextDocumentId,
+					this.props.dataProviderName,
+					folderWithUploadedFile,
+					this.props.initialSelectedFileId,
+					onItemSelect,
+					this.props.onUpdateInitialSelectedFileId,
+					this.props.onUpdateItems,
+					onUpdateRequest,
+					this.props.selectedItem,
+					true
+				).then(() => onItemSelect(uploadedItem));
 			},
 			error => {
 				if (!error) {
