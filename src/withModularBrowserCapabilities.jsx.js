@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 
+import configuredAssetConnector from 'fontoxml-configuration/get!asset-connector';
+import documentsManager from 'fontoxml-documents/documentsManager';
+import getImageDataFromUrl from 'fontoxml-image-resolver/getImageDataFromUrl';
+import selectionManager from 'fontoxml-selection/selectionManager';
+
 export default function withModularBrowserCapabilities(WrappedComponent, initialViewMode = null) {
 	return class ModularBrowser extends Component {
 		initialSelectedFileId = null;
@@ -97,20 +102,40 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
+		loadImage = (remoteImageId, onImageisFinishedLoading) => {
+			const documentFile = documentsManager.getDocumentFile(
+				selectionManager.focusedDocumentId
+			);
+			return configuredAssetConnector
+				.getPreviewUrl(documentFile, 'web', remoteImageId)
+				.then(previewUrl => getImageDataFromUrl(window.document, previewUrl))
+				.then(
+					imageData => {
+						this.addCachedFileByRemoteId(remoteImageId, imageData);
+						onImageisFinishedLoading && onImageisFinishedLoading();
+					},
+					error => {
+						if (!error) {
+							return;
+						}
+						this.deleteCachedFileByRemoteId(remoteImageId);
+						this.addCachedErrorByRemoteId(remoteImageId);
+						onImageisFinishedLoading && onImageisFinishedLoading();
+					}
+				);
+		};
+
 		render() {
 			const props = {
 				...this.props,
 				...this.state,
-				addCachedErrorByRemoteId: this.addCachedErrorByRemoteId,
-				addCachedFileByRemoteId: this.addCachedFileByRemoteId,
-				deleteCachedErrorByRemoteId: this.deleteCachedErrorByRemoteId,
-				deleteCachedFileByRemoteId: this.deleteCachedFileByRemoteId,
 				initialSelectedFileId: this.initialSelectedFileId,
 				onItemSelect: this.onItemSelect,
 				onUpdateInitialSelectedFileId: this.onUpdateInitialSelectedFileId,
 				onUpdateItems: this.onUpdateItems,
 				onUpdateRequest: this.onUpdateRequest,
-				onUpdateViewMode: this.onUpdateViewMode
+				onUpdateViewMode: this.onUpdateViewMode,
+				loadImage: this.loadImage
 			};
 
 			return <WrappedComponent {...props} />;

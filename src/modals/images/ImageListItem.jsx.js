@@ -9,8 +9,6 @@ import {
 	SpinnerIcon
 } from 'fontoxml-vendor-fds/components';
 
-import imageLoader from './imageLoader.jsx';
-
 class ImageListItem extends Component {
 	isComponentMounted = false;
 
@@ -29,7 +27,7 @@ class ImageListItem extends Component {
 			if (!this.props.cachedFilesByRemoteId[item.id]) {
 				this.setState({ isLoading: true });
 
-				imageLoader(item.id, this.props, this.handleLoadingIsFinished);
+				this.props.loadImage(item.id, this.handleLoadingIsFinished);
 			}
 		}
 	}
@@ -40,7 +38,7 @@ class ImageListItem extends Component {
 		if (item.type !== 'folder' && !this.props.cachedFilesByRemoteId[item.id]) {
 			this.setState({ isLoading: true });
 
-			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
+			this.props.loadImage(item.id, this.handleLoadingIsFinished);
 		}
 	}
 
