@@ -6,7 +6,7 @@ class ModalBrowserPreview extends Component {
 	render() {
 		const { stateLabels, renderPreview, selectedItem } = this.props;
 
-		if (this.props.cachedErrorByRemoteId[selectedItem.id]) {
+		if (this.props.cachedErrorsByRemoteId[selectedItem.id]) {
 			return (
 				<StateMessage
 					connotation="warning"
@@ -16,12 +16,12 @@ class ModalBrowserPreview extends Component {
 			);
 		}
 
-		if (!this.props.cachedFileByRemoteId[selectedItem.id]) {
+		if (!this.props.cachedFilesByRemoteId[selectedItem.id]) {
 			return <StateMessage visual={<SpinnerIcon />} {...stateLabels.loadingPreview} />;
 		}
 
 		return renderPreview({
-			dataUrl: this.props.cachedFileByRemoteId[this.props.selectedItem.id].dataUrl,
+			dataUrl: this.props.cachedFilesByRemoteId[this.props.selectedItem.id].dataUrl,
 			heading: this.props.selectedItem.label,
 			properties: this.props.selectedItem.metadata.properties
 		});

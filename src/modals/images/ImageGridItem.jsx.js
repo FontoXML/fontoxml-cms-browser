@@ -26,7 +26,7 @@ class ImageGridItem extends Component {
 		const { item } = this.props;
 
 		if (item.type !== 'folder' && nextProps.item.id !== item.id) {
-			if (!this.props.cachedFileByRemoteId[item.id]) {
+			if (!this.props.cachedFilesByRemoteId[item.id]) {
 				this.setState({ isLoading: true });
 
 				imageLoader(item.id, this.props, this.handleLoadingIsFinished);
@@ -37,7 +37,7 @@ class ImageGridItem extends Component {
 	componentWillMount() {
 		const { item } = this.props;
 
-		if (item.type !== 'folder' && !this.props.cachedFileByRemoteId[item.id]) {
+		if (item.type !== 'folder' && !this.props.cachedFilesByRemoteId[item.id]) {
 			this.setState({ isLoading: true });
 
 			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
@@ -62,7 +62,7 @@ class ImageGridItem extends Component {
 					<Label>{item.label}</Label>
 				</Flex>
 			);
-		} else if (this.props.cachedErrorByRemoteId[item.id]) {
+		} else if (this.props.cachedErrorsByRemoteId[item.id]) {
 			GridItemContent = (
 				<Flex alignItems="center" flex="1" flexDirection="column">
 					<Icon
@@ -77,7 +77,7 @@ class ImageGridItem extends Component {
 			GridItemContent = (
 				<Flex alignItems="center" flex="1" flexDirection="column">
 					<Flex applyCss={{ height: '3rem' }}>
-						<ContainedImage src={this.props.cachedFileByRemoteId[item.id].dataUrl} />
+						<ContainedImage src={this.props.cachedFilesByRemoteId[item.id].dataUrl} />
 					</Flex>
 					<Label>{item.label}</Label>
 				</Flex>

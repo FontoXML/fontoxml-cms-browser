@@ -26,7 +26,7 @@ class ImageListItem extends Component {
 		const { item } = this.props;
 
 		if (item.type !== 'folder' && nextProps.item.id !== item.id) {
-			if (!this.props.cachedFileByRemoteId[item.id]) {
+			if (!this.props.cachedFilesByRemoteId[item.id]) {
 				this.setState({ isLoading: true });
 
 				imageLoader(item.id, this.props, this.handleLoadingIsFinished);
@@ -37,7 +37,7 @@ class ImageListItem extends Component {
 	componentWillMount() {
 		const { item } = this.props;
 
-		if (item.type !== 'folder' && !this.props.cachedFileByRemoteId[item.id]) {
+		if (item.type !== 'folder' && !this.props.cachedFilesByRemoteId[item.id]) {
 			this.setState({ isLoading: true });
 
 			imageLoader(item.id, this.props, this.handleLoadingIsFinished);
@@ -77,7 +77,7 @@ class ImageListItem extends Component {
 			);
 		}
 
-		if (this.props.cachedErrorByRemoteId[item.id]) {
+		if (this.props.cachedErrorsByRemoteId[item.id]) {
 			return (
 				<ListItem
 					isSelected={isSelected}
@@ -105,7 +105,7 @@ class ImageListItem extends Component {
 				onRef={onRef}
 			>
 				<Flex applyCss={{ width: '.875rem', height: '.875rem' }}>
-					<ContainedImage src={this.props.cachedFileByRemoteId[item.id].dataUrl} />
+					<ContainedImage src={this.props.cachedFilesByRemoteId[item.id].dataUrl} />
 				</Flex>
 				<Label>{item.label}</Label>
 			</ListItem>

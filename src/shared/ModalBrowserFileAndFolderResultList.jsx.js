@@ -7,7 +7,7 @@ import {
 	VirtualList
 } from 'fontoxml-vendor-fds/components';
 
-import refreshItems from './refreshItems.jsx';
+import refreshItems from '../refreshItems.jsx';
 
 class ModalBrowserFileAndFolderResultList extends Component {
 	handleItemDoubleClick = item =>

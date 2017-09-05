@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { BreadcrumbItemLink, Breadcrumbs } from 'fontoxml-vendor-fds/components';
 import { truncatedBreadcrumbItemLinkWidth } from 'fontoxml-vendor-fds/system';
 
-import refreshItems from './refreshItems.jsx';
+import refreshItems from '../refreshItems.jsx';
 
 class ModalBrowserHierarchyBreadcrumbs extends Component {
 	handleRenderBreadcrumbItem = ({ key, isDisabled, isLastItem, item, onRef }) => (

@@ -4,8 +4,8 @@ import t from 'fontoxml-localization/t';
 
 import { SelectFileButton } from 'fontoxml-vendor-fds/components';
 
-import dataProviders from './dataProviders';
-import refreshItems from './refreshItems.jsx';
+import dataProviders from '../dataProviders';
+import refreshItems from '../refreshItems.jsx';
 
 class ModalBrowserUploadButton extends PureComponent {
 	dataProvider = dataProviders.get(this.props.data.dataProviderName);

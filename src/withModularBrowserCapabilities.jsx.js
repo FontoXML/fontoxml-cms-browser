@@ -23,32 +23,32 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			viewMode: initialViewMode,
 
 			// Contains the already loaded files
-			cachedFileByRemoteId: {},
+			cachedFilesByRemoteId: {},
 
 			// Contains the files which failed to load
-			cachedErrorByRemoteId: {}
+			cachedErrorsByRemoteId: {}
 		};
 
 		addCachedFileByRemoteId = (id, file) => {
-			const map = this.state.cachedFileByRemoteId;
+			const map = this.state.cachedFilesByRemoteId;
 			map[id] = file;
 			this.setState({ cachedFileByRemoteId: map });
 		};
 
 		addCachedErrorByRemoteId = (id, error) => {
-			const map = this.state.cachedErrorByRemoteId;
+			const map = this.state.cachedErrorsByRemoteId;
 			map[id] = error;
 			this.setState({ cachedErrorByRemoteId: map });
 		};
 
 		deleteCachedFileByRemoteId = id => {
-			const map = this.state.cachedFileByRemoteId;
+			const map = this.state.cachedFilesByRemoteId;
 			delete map[id];
 			this.setState({ cachedFileByRemoteId: map });
 		};
 
 		deleteCachedErrorByRemoteId = id => {
-			const map = this.state.cachedErrorByRemoteId;
+			const map = this.state.cachedErrorsByRemoteId;
 			delete map[id];
 			this.setState({ cachedErrorByRemoteId: map });
 		};

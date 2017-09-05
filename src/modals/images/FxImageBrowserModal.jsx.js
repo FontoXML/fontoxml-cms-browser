@@ -18,13 +18,13 @@ import {
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
 import ImagePreview from './ImagePreview.jsx';
-import ModalBrowserFileAndFolderResultList from '../../ModalBrowserFileAndFolderResultList.jsx';
-import ModalBrowserHierarchyBreadcrumbs from '../../ModalBrowserHierarchyBreadcrumbs.jsx';
+import ModalBrowserFileAndFolderResultList from '../../shared/ModalBrowserFileAndFolderResultList.jsx';
+import ModalBrowserHierarchyBreadcrumbs from '../../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
 	viewModes
-} from '../../ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserPreview from '../../ModalBrowserPreview.jsx';
-import ModalBrowserUploadButton from '../../ModalBrowserUploadButton.jsx';
+} from '../../shared/ModalBrowserListOrGridViewMode.jsx';
+import ModalBrowserPreview from '../../shared/ModalBrowserPreview.jsx';
+import ModalBrowserUploadButton from '../../shared/ModalBrowserUploadButton.jsx';
 import refreshItems, { rootFolder } from '../../refreshItems.jsx';
 import withModularBrowserCapabilities from '../../withModularBrowserCapabilities.jsx';
 
