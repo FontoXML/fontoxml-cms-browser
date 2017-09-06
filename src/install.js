@@ -1,19 +1,19 @@
 define([
 	'fontoxml-modular-ui/uiManager',
 
-	'./modals/documents/FxCreateDocumentFormModalStack.jsx',
-	'./modals/documents/FxOpenDocumentBrowserModal.jsx',
-	'./modals/documents/FxOpenOrCreateDocumentModalStack.jsx',
-	'./modals/document-links/FxDocumentLinkBrowserModal.jsx',
-	'./modals/images/FxImageBrowserModal.jsx'
+	'./old/modals/documents/FxCreateDocumentFormModalStack.jsx',
+	'./old/modals/documents/FxOpenDocumentBrowserModal.jsx',
+	'./old/modals/documents/FxOpenOrCreateDocumentModalStack.jsx',
+	'./documents/DocumentWithLinkSelectorBrowserModal.jsx',
+	'./images/ImageBrowserModal.jsx'
 ], function (
 	uiManager,
 
 	FxCreateDocumentFormModalStack,
 	FxOpenDocumentBrowserModal,
 	FxOpenOrCreateDocumentModalStack,
-	FxDocumentLinkBrowserModal,
-	FxImageBrowserModal
+	DocumentWithLinkSelectorBrowserModal,
+	ImageBrowserModal
 ) {
 	'use strict';
 
@@ -21,7 +21,7 @@ define([
 		uiManager.registerReactComponent('FxCreateDocumentFormModalStack', FxCreateDocumentFormModalStack);
 		uiManager.registerReactComponent('FxOpenDocumentBrowserModal', FxOpenDocumentBrowserModal);
 		uiManager.registerReactComponent('FxOpenOrCreateDocumentModalStack', FxOpenOrCreateDocumentModalStack);
-		uiManager.registerReactComponent('FxDocumentLinkBrowserModal', FxDocumentLinkBrowserModal);
-		uiManager.registerReactComponent('FxImageBrowserModal', FxImageBrowserModal);
+		uiManager.registerReactComponent('DocumentWithLinkSelectorBrowserModal', DocumentWithLinkSelectorBrowserModal);
+		uiManager.registerReactComponent('ImageBrowserModal', ImageBrowserModal);
 	};
 });

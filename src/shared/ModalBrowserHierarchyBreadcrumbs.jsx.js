@@ -10,7 +10,8 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 	static defaultProps = {
 		breadcrumbItems: [],
 		browseContextDocumentId: null,
-		initialSelectedFileId: null
+		initialSelectedFileId: null,
+		selectedItem: null
 	};
 
 	static propTypes = {
@@ -25,7 +26,7 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		onUpdateItems: PropTypes.func.isRequired,
 		onUpdateRequest: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
-		selectedItem: PropTypes.object.isRequired
+		selectedItem: PropTypes.object
 	};
 
 	handleRenderBreadcrumbItem = ({ key, isDisabled, isLastItem, item, onRef }) => (

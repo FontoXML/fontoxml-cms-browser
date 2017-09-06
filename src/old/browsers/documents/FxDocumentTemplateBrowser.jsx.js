@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { GridItem, Icon, Label, ListItem, SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../dataProviders';
+import dataProviders from '../../../dataProviders';
 import FxDocumentLoader from '../../loaders/documents/FxDocumentLoader.jsx';
 import FxDocumentPreview from '../../previews/documents/FxDocumentPreview.jsx';
 

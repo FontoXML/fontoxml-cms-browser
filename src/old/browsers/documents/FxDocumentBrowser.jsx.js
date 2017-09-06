@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 import { GridItem, Icon, Label, ListItem, SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../dataProviders';
+import dataProviders from '../../../dataProviders';
 import FxDocumentLoader from '../../loaders/documents/FxDocumentLoader.jsx';
-import FxDocumentPreviewAndLinkSelector from '../../previews/document-links/FxDocumentPreviewAndLinkSelector.jsx';
+import FxDocumentPreview from '../../previews/documents/FxDocumentPreview.jsx';
 
-class FxDocumentLinkBrowser extends Component {
+class FxDocumentBrowser extends Component {
 	constructor (props) {
 		super(props);
 
@@ -22,7 +22,7 @@ class FxDocumentLinkBrowser extends Component {
 	}
 
 	render () {
-		const { dataProviderName, browseContextDocumentId, linkableElementsQuery, linkType, selectedLink, onLinkSelect, labels } = this.props;
+		const { dataProviderName, browseContextDocumentId, onDocumentSelect, onDocumentOpen, labels } = this.props;
 		const { cachedDocumentIdByRemoteDocumentId, cachedErrorByRemoteDocumentId, viewMode } = this.state;
 
 		const rootFolder = { label: labels.rootFolderLabel, type: 'folder', id: null };
@@ -35,6 +35,8 @@ class FxDocumentLinkBrowser extends Component {
 				getFolderContents={ (folder, noCache) => (
 					dataProvider.getFolderContents(browseContextDocumentId, rootFolder, folder.id, noCache)
 				) }
+				onFileOpen={ onDocumentOpen }
+				onFileOrFolderSelect={ () => onDocumentSelect(null) }
 				onViewModeChange={ (viewMode) => this.setState({ viewMode }) }
 				renderLoadingMessage={ () => (
 					<StateMessage visual={ <SpinnerIcon align='center' /> } { ...labels.states.loading } />
@@ -115,17 +117,17 @@ class FxDocumentLinkBrowser extends Component {
 								cachedErrorByRemoteDocumentId[selectedFile.id] = error;
 								this.setState({ cachedErrorByRemoteDocumentId });
 
-								onLinkSelect(null);
+								onDocumentSelect(null);
 							} }
 							onLoadComplete={ (documentId) => {
 								cachedDocumentIdByRemoteDocumentId[selectedFile.id] = documentId;
 								this.setState({ cachedDocumentIdByRemoteDocumentId });
 
-								onLinkSelect(selectedLink);
+								onDocumentSelect(selectedFile);
 							} }
 							renderLoadingMessage={ () => (
 								<StateMessage
-									visual='folder-open-o'
+									visual={ <SpinnerIcon align='center' /> }
 									paddingSize='l'
 									{ ...labels.states.loadingPreview }
 								/>
@@ -143,40 +145,26 @@ class FxDocumentLinkBrowser extends Component {
 									);
 								}
 
-								return <FxDocumentPreviewAndLinkSelector
-									documentId={ documentId }
-									linkType={ linkType }
-									linkableElementsQuery={ linkableElementsQuery }
-									selectedLink={ selectedLink }
-									onSelectedLinkableElementChange={ (selectedLinkableElementNodeId) => {
-										if (linkableElementsQuery) {
-											onLinkSelect({ remoteDocumentId: selectedFile.id, documentId, nodeId: selectedLinkableElementNodeId });
-										}
-										else {
-											onLinkSelect({ remoteDocumentId: selectedFile.id, documentId, nodeId: null });
-										}
-									} } />;
+								return <FxDocumentPreview documentId={ documentId } />;
 							} }
 						</FxDocumentLoader>
 					);
 				} }
-				selectedFileOrFolderId={ selectedLink.documentId !== null ? selectedLink.remoteDocumentId : null }
 				showBreadcrumbs
-				viewMode={ viewMode } />
+				viewMode={ viewMode }
+			/>
 		);
 	}
 }
 
-FxDocumentLinkBrowser.propTypes = {
-	onLinkSelect: PropTypes.func.isRequired,
-	browseContextDocumentId: PropTypes.string,
-	linkableElementsSelector: PropTypes.string,
-	linkType: PropTypes.string
+FxDocumentBrowser.propTypes = {
+	onDocumentOpen: PropTypes.func.isRequired,
+	onDocumentSelect: PropTypes.func.isRequired,
+	browseContextDocumentId: PropTypes.string
 };
 
-FxDocumentLinkBrowser.defaultProps = {
-	browseContextDocumentId: null,
-	linkableElementsQuery: '//*[@id]'
+FxDocumentBrowser.defaultProps = {
+	browseContextDocumentId: null
 };
 
-export default FxDocumentLinkBrowser;
+export default FxDocumentBrowser;

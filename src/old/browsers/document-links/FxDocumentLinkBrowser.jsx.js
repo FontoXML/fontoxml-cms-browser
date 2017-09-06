@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 import { GridItem, Icon, Label, ListItem, SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../dataProviders';
+import dataProviders from '../../../dataProviders';
 import FxDocumentLoader from '../../loaders/documents/FxDocumentLoader.jsx';
-import FxDocumentPreview from '../../previews/documents/FxDocumentPreview.jsx';
+import FxDocumentPreviewAndLinkSelector from '../../previews/document-links/FxDocumentPreviewAndLinkSelector.jsx';
 
-class FxDocumentBrowser extends Component {
+class FxDocumentLinkBrowser extends Component {
 	constructor (props) {
 		super(props);
 
@@ -22,7 +22,7 @@ class FxDocumentBrowser extends Component {
 	}
 
 	render () {
-		const { dataProviderName, browseContextDocumentId, onDocumentSelect, onDocumentOpen, labels } = this.props;
+		const { dataProviderName, browseContextDocumentId, linkableElementsQuery, linkType, selectedLink, onLinkSelect, labels } = this.props;
 		const { cachedDocumentIdByRemoteDocumentId, cachedErrorByRemoteDocumentId, viewMode } = this.state;
 
 		const rootFolder = { label: labels.rootFolderLabel, type: 'folder', id: null };
@@ -35,8 +35,6 @@ class FxDocumentBrowser extends Component {
 				getFolderContents={ (folder, noCache) => (
 					dataProvider.getFolderContents(browseContextDocumentId, rootFolder, folder.id, noCache)
 				) }
-				onFileOpen={ onDocumentOpen }
-				onFileOrFolderSelect={ () => onDocumentSelect(null) }
 				onViewModeChange={ (viewMode) => this.setState({ viewMode }) }
 				renderLoadingMessage={ () => (
 					<StateMessage visual={ <SpinnerIcon align='center' /> } { ...labels.states.loading } />
@@ -117,17 +115,17 @@ class FxDocumentBrowser extends Component {
 								cachedErrorByRemoteDocumentId[selectedFile.id] = error;
 								this.setState({ cachedErrorByRemoteDocumentId });
 
-								onDocumentSelect(null);
+								onLinkSelect(null);
 							} }
 							onLoadComplete={ (documentId) => {
 								cachedDocumentIdByRemoteDocumentId[selectedFile.id] = documentId;
 								this.setState({ cachedDocumentIdByRemoteDocumentId });
 
-								onDocumentSelect(selectedFile);
+								onLinkSelect(selectedLink);
 							} }
 							renderLoadingMessage={ () => (
 								<StateMessage
-									visual={ <SpinnerIcon align='center' /> }
+									visual='folder-open-o'
 									paddingSize='l'
 									{ ...labels.states.loadingPreview }
 								/>
@@ -145,26 +143,40 @@ class FxDocumentBrowser extends Component {
 									);
 								}
 
-								return <FxDocumentPreview documentId={ documentId } />;
+								return <FxDocumentPreviewAndLinkSelector
+									documentId={ documentId }
+									linkType={ linkType }
+									linkableElementsQuery={ linkableElementsQuery }
+									selectedLink={ selectedLink }
+									onSelectedLinkableElementChange={ (selectedLinkableElementNodeId) => {
+										if (linkableElementsQuery) {
+											onLinkSelect({ remoteDocumentId: selectedFile.id, documentId, nodeId: selectedLinkableElementNodeId });
+										}
+										else {
+											onLinkSelect({ remoteDocumentId: selectedFile.id, documentId, nodeId: null });
+										}
+									} } />;
 							} }
 						</FxDocumentLoader>
 					);
 				} }
+				selectedFileOrFolderId={ selectedLink.documentId !== null ? selectedLink.remoteDocumentId : null }
 				showBreadcrumbs
-				viewMode={ viewMode }
-			/>
+				viewMode={ viewMode } />
 		);
 	}
 }
 
-FxDocumentBrowser.propTypes = {
-	onDocumentOpen: PropTypes.func.isRequired,
-	onDocumentSelect: PropTypes.func.isRequired,
-	browseContextDocumentId: PropTypes.string
+FxDocumentLinkBrowser.propTypes = {
+	onLinkSelect: PropTypes.func.isRequired,
+	browseContextDocumentId: PropTypes.string,
+	linkableElementsSelector: PropTypes.string,
+	linkType: PropTypes.string
 };
 
-FxDocumentBrowser.defaultProps = {
-	browseContextDocumentId: null
+FxDocumentLinkBrowser.defaultProps = {
+	browseContextDocumentId: null,
+	linkableElementsQuery: '//*[@id]'
 };
 
-export default FxDocumentBrowser;
+export default FxDocumentLinkBrowser;

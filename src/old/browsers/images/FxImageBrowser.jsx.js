@@ -14,7 +14,7 @@ import {
 } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../dataProviders';
+import dataProviders from '../../../dataProviders';
 import FxImageLoader from '../../loaders/images/FxImageLoader.jsx';
 import FxImagePreview from '../../previews/images/FxImagePreview.jsx';
 

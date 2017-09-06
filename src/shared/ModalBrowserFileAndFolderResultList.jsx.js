@@ -15,7 +15,8 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		breadcrumbItems: [],
 		browseContextDocumentId: null,
 		initialSelectedFileId: null,
-		onItemSubmit: () => {}
+		onItemSubmit: () => {},
+		selectedItem: null
 	};
 
 	static propTypes = {
@@ -48,7 +49,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		onUpdateItems: PropTypes.func.isRequired,
 		onUpdateRequest: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
-		selectedItem: PropTypes.object.isRequired,
+		selectedItem: PropTypes.object,
 		viewMode: PropTypes.object.isRequired
 	};
 

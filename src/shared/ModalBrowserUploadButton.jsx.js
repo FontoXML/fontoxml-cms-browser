@@ -12,7 +12,8 @@ class ModalBrowserUploadButton extends PureComponent {
 	static defaultProps = {
 		breadcrumbItems: [],
 		browseContextDocumentId: null,
-		initialSelectedFileId: null
+		initialSelectedFileId: null,
+		selectedItem: null
 	};
 
 	static propTypes = {
@@ -31,7 +32,7 @@ class ModalBrowserUploadButton extends PureComponent {
 		onUpdateItems: PropTypes.func.isRequired,
 		onUpdateRequest: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
-		selectedItem: PropTypes.object.isRequired
+		selectedItem: PropTypes.object
 	};
 
 	dataProvider = dataProviders.get(this.props.dataProviderName);

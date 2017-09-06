@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { SpinnerIcon, StateMessage, TextLink } from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
-import dataProviders from '../../dataProviders';
+import dataProviders from '../../../dataProviders';
 
 class FxFolderBrowser extends Component {
 	constructor (props) {

@@ -53,13 +53,6 @@ export default function refreshItems(
 
 	return getItems().then(
 		result => {
-			onUpdateItems(
-				result.items,
-				(result.metadata && result.metadata.hierarchy) ||
-					updateFolderHierarchy(breadcrumbItems, folderToLoad),
-				false
-			);
-
 			let selectedFile = null;
 			if (initialSelectedFileId && prevSelectedItem && prevSelectedItem.type !== 'folder') {
 				// An other file was selected so the initialSelectedFileId is no longer cached
@@ -69,6 +62,13 @@ export default function refreshItems(
 				selectedFile = result.items.find(item => item.id === initialSelectedFileId) || null;
 			}
 			onItemSelect(selectedFile);
+
+			onUpdateItems(
+				result.items,
+				(result.metadata && result.metadata.hierarchy) ||
+					updateFolderHierarchy(breadcrumbItems, folderToLoad),
+				{}
+			);
 		},
 		error => {
 			if (!error) {
