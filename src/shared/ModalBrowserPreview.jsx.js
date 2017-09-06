@@ -3,30 +3,38 @@ import React, { Component } from 'react';
 import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
 class ModalBrowserPreview extends Component {
+	isMountedInDOM = false;
+
 	state = { isLoading: true, imageData: null };
 
-	setStateIfMounted = state => {
-		if (this.isComponentMounted) {
-			this.setState(state);
+	tryToUpdateState = (idBeingLoaded, nextState) => {
+		if (this.isMountedInDOM && idBeingLoaded === this.props.selectedItem.id) {
+			this.setState(nextState);
 		}
 	};
-	handleLoadImage = imageData => {
-		this.setStateIfMounted({ isLoading: false, imageData: imageData });
-	};
-	handleLoadError = _error => {
-		this.setStateIfMounted({ isLoading: false, imageData: null });
-	};
+
+	handleLoadImage = (imageData, idBeingLoaded) =>
+		this.tryToUpdateState(idBeingLoaded, { isLoading: false, imageData });
+	handleLoadError = (_error, idBeingLoaded) =>
+		this.tryToUpdateState(idBeingLoaded, { isLoading: false, imageData: null });
+
+	loadImage(props) {
+		this.setState({ isLoading: true });
+
+		props
+			.loadImage(props.selectedItem.id)
+			.then(
+				imageData => this.handleLoadImage(imageData, props.selectedItem.id),
+				error => this.handleLoadError(error, props.selectedItem.id)
+			);
+	}
 
 	componentWillReceiveProps(nextProps) {
 		if (this.props.selectedItem.id === nextProps.selectedItem.id) {
 			return;
 		}
 
-		this.setState({ isLoading: true });
-
-		nextProps
-			.loadImage(nextProps.selectedItem.id)
-			.then(this.handleLoadImage, this.handleLoadError);
+		this.loadImage(nextProps);
 	}
 
 	render() {
@@ -54,15 +62,13 @@ class ModalBrowserPreview extends Component {
 	}
 
 	componentDidMount() {
-		this.isComponentMounted = true;
+		this.isMountedInDOM = true;
 
-		this.props
-			.loadImage(this.props.selectedItem.id)
-			.then(this.handleLoadImage, this.handleLoadError);
+		this.loadImage(this.props);
 	}
 
 	componentWillUnmount() {
-		this.isComponentMounted = false;
+		this.isMountedInDOM = false;
 	}
 }
 

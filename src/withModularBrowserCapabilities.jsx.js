@@ -9,6 +9,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 	return class ModularBrowser extends Component {
 		initialSelectedFileId = null;
 		isComponentMounted = false;
+		loadingFilesById = {};
 		cachedFileByRemoteId = {};
 		cachedErrorByRemoteId = {};
 
@@ -79,6 +80,10 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 				return Promise.resolve(this.cachedFileByRemoteId[remoteImageId]);
 			}
 
+			if (this.loadingFilesById[remoteImageId]) {
+				return this.loadingFilesById[remoteImageId];
+			}
+
 			if (this.cachedErrorByRemoteId[remoteImageId]) {
 				return Promise.reject(this.cachedErrorByRemoteId[remoteImageId]);
 			}
@@ -86,23 +91,27 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			const documentFile = documentsManager.getDocumentFile(
 				selectionManager.focusedDocumentId
 			);
-			return configuredAssetConnector
+			const promise = configuredAssetConnector
 				.getPreviewUrl(documentFile, 'web', remoteImageId)
-				.then(previewUrl => getImageDataFromUrl(window.document, previewUrl))
-				.then(
-					imageData => {
-						this.cachedFileByRemoteId[remoteImageId] = imageData;
-						return imageData;
-					},
-					error => {
-						if (!error) {
-							return;
-						}
-						delete this.cachedFileByRemoteId[remoteImageId];
-						this.cachedErrorByRemoteId[remoteImageId] = error;
-						throw error;
+				.then(previewUrl => getImageDataFromUrl(window.document, previewUrl));
+
+			this.loadingFilesById[remoteImageId] = promise;
+			promise.then(
+				imageData => {
+					delete this.loadingFilesById[remoteImageId];
+					this.cachedFileByRemoteId[remoteImageId] = imageData;
+					return imageData;
+				},
+				error => {
+					if (!error) {
+						return;
 					}
-				);
+					delete this.loadingFilesById[remoteImageId];
+					this.cachedErrorByRemoteId[remoteImageId] = error;
+					throw error;
+				}
+			);
+			return promise;
 		};
 
 		render() {
@@ -115,6 +124,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 				onUpdateItems: this.onUpdateItems,
 				onUpdateRequest: this.onUpdateRequest,
 				onUpdateViewMode: this.onUpdateViewMode,
+				loadOnlyLastImage: this.loadOnlyLastImage,
 				loadImage: this.loadImage
 			};
 
