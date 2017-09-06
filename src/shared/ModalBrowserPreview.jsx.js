@@ -3,10 +3,36 @@ import React, { Component } from 'react';
 import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
 class ModalBrowserPreview extends Component {
+	state = { isLoading: true, imageData: null };
+
+	setStateIfMounted = state => {
+		if (this.isComponentMounted) {
+			this.setState(state);
+		}
+	};
+	handleLoadImage = imageData => {
+		this.setStateIfMounted({ isLoading: false, imageData: imageData });
+	};
+	handleLoadError = _error => {
+		this.setStateIfMounted({ isLoading: false, imageData: null });
+	};
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.selectedItem.id === nextProps.selectedItem.id) {
+			return;
+		}
+
+		this.setState({ isLoading: true });
+
+		nextProps
+			.loadImage(nextProps.selectedItem.id)
+			.then(this.handleLoadImage, this.handleLoadError);
+	}
+
 	render() {
 		const { stateLabels, renderPreview, selectedItem } = this.props;
 
-		if (this.props.cachedErrorsByRemoteId[selectedItem.id]) {
+		if (this.state.imageData === null) {
 			return (
 				<StateMessage
 					connotation="warning"
@@ -16,15 +42,27 @@ class ModalBrowserPreview extends Component {
 			);
 		}
 
-		if (!this.props.cachedFilesByRemoteId[selectedItem.id]) {
+		if (this.state.isLoading) {
 			return <StateMessage visual={<SpinnerIcon />} {...stateLabels.loadingPreview} />;
 		}
 
 		return renderPreview({
-			dataUrl: this.props.cachedFilesByRemoteId[this.props.selectedItem.id].dataUrl,
-			heading: this.props.selectedItem.label,
-			properties: this.props.selectedItem.metadata.properties
+			dataUrl: this.state.imageData.dataUrl,
+			heading: selectedItem.label,
+			properties: selectedItem.metadata.properties
 		});
+	}
+
+	componentDidMount() {
+		this.isComponentMounted = true;
+
+		this.props
+			.loadImage(this.props.selectedItem.id)
+			.then(this.handleLoadImage, this.handleLoadError);
+	}
+
+	componentWillUnmount() {
+		this.isComponentMounted = false;
 	}
 }
 

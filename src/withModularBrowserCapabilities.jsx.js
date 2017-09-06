@@ -9,6 +9,8 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 	return class ModularBrowser extends Component {
 		initialSelectedFileId = null;
 		isComponentMounted = false;
+		cachedFileByRemoteId = {};
+		cachedErrorByRemoteId = {};
 
 		state = {
 			// Contains information on the current/last known request
@@ -25,37 +27,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			selectedItem: null,
 
 			// Contains information for the viewMode, for example list or grid
-			viewMode: initialViewMode,
-
-			// Contains the already loaded files
-			cachedFilesByRemoteId: {},
-
-			// Contains the files which failed to load
-			cachedErrorsByRemoteId: {}
-		};
-
-		addCachedFileByRemoteId = (id, file) => {
-			const map = this.state.cachedFilesByRemoteId;
-			map[id] = file;
-			this.setState({ cachedFileByRemoteId: map });
-		};
-
-		addCachedErrorByRemoteId = (id, error) => {
-			const map = this.state.cachedErrorsByRemoteId;
-			map[id] = error;
-			this.setState({ cachedErrorByRemoteId: map });
-		};
-
-		deleteCachedFileByRemoteId = id => {
-			const map = this.state.cachedFilesByRemoteId;
-			delete map[id];
-			this.setState({ cachedFileByRemoteId: map });
-		};
-
-		deleteCachedErrorByRemoteId = id => {
-			const map = this.state.cachedErrorsByRemoteId;
-			delete map[id];
-			this.setState({ cachedErrorByRemoteId: map });
+			viewMode: initialViewMode
 		};
 
 		// Used by any component to change the currently selected item
@@ -102,7 +74,15 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
-		loadImage = (remoteImageId, onImageisFinishedLoading) => {
+		loadImage = remoteImageId => {
+			if (this.cachedFileByRemoteId[remoteImageId]) {
+				return Promise.resolve(this.cachedFileByRemoteId[remoteImageId]);
+			}
+
+			if (this.cachedErrorByRemoteId[remoteImageId]) {
+				return Promise.reject(this.cachedErrorByRemoteId[remoteImageId]);
+			}
+
 			const documentFile = documentsManager.getDocumentFile(
 				selectionManager.focusedDocumentId
 			);
@@ -111,16 +91,16 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 				.then(previewUrl => getImageDataFromUrl(window.document, previewUrl))
 				.then(
 					imageData => {
-						this.addCachedFileByRemoteId(remoteImageId, imageData);
-						onImageisFinishedLoading && onImageisFinishedLoading();
+						this.cachedFileByRemoteId[remoteImageId] = imageData;
+						return imageData;
 					},
 					error => {
 						if (!error) {
 							return;
 						}
-						this.deleteCachedFileByRemoteId(remoteImageId);
-						this.addCachedErrorByRemoteId(remoteImageId);
-						onImageisFinishedLoading && onImageisFinishedLoading();
+						delete this.cachedFileByRemoteId[remoteImageId];
+						this.cachedErrorByRemoteId[remoteImageId] = error;
+						throw error;
 					}
 				);
 		};
