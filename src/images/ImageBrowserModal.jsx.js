@@ -25,7 +25,7 @@ import ModalBrowserListOrGridViewMode, {
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
 import ModalBrowserPreview from '../shared/ModalBrowserPreview.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
-import refreshItems, { rootFolder } from '../refreshItems.jsx';
+import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -225,7 +225,7 @@ class ImageBrowserModal extends Component {
 			this.props.breadcrumbItems,
 			this.props.data.browseContextDocumentId,
 			this.props.data.dataProviderName,
-			rootFolder,
+			{ id: null },
 			selectedImageId || null,
 			this.props.onItemSelect,
 			onUpdateInitialSelectedFileId,

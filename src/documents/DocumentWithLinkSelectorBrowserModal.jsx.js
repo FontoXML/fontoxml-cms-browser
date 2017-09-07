@@ -23,7 +23,7 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	viewModes
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import refreshItems, { rootFolder } from '../refreshItems.jsx';
+import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -217,7 +217,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			this.props.breadcrumbItems,
 			this.props.data.browseContextDocumentId,
 			this.props.data.dataProviderName,
-			rootFolder,
+			{ id: null },
 			remoteDocumentId,
 			this.props.onItemSelect,
 			onUpdateInitialSelectedFileId,
