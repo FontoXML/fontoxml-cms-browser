@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import documentsManager from 'fontoxml-documents/documentsManager';
-import getNodeId from 'fontoxml-dom-identification/getNodeId';
 import t from 'fontoxml-localization/t';
 
 import {
@@ -17,7 +16,7 @@ import {
 
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
-import DocumentWithLinkSelectorPreview from './DocumentWithLinkSelectorPreview.jsx';
+import DocumentModalPreview from './DocumentModalPreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -51,17 +50,15 @@ const stateLabels = {
 	}
 };
 
-class DocumentWithLinkSelectorBrowserModal extends Component {
+class DocumentBrowserModal extends Component {
 	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
-			linkableElementsQuery: PropTypes.string.isRequired,
 			modalTitle: PropTypes.string,
-			modalPrimaryButtonLabel: PropTypes.string,
-			nodeId: PropTypes.string
+			modalPrimaryButtonLabel: PropTypes.string
 		}).isRequired,
 		submitModal: PropTypes.func.isRequired
 	};
@@ -101,17 +98,13 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 	submitModal = itemToSubmit =>
 		this.props.submitModal({
-			documentId: itemToSubmit.documentId,
-			nodeId: itemToSubmit.nodeId
+			documentRemoteId: itemToSubmit.id,
+			documentId: itemToSubmit.documentId
 		});
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.loadDocument(selectedItem.id).then(
-			documentId =>
-				this.submitModal({
-					documentId,
-					nodeId: getNodeId(documentsManager.getDocumentNode(documentId).documentElement)
-				}),
+			documentId => this.submitModal({ ...selectedItem, documentId }),
 			_error => {
 				return;
 			}
@@ -127,10 +120,8 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			data: {
 				browseContextDocumentId,
 				dataProviderName,
-				linkableElementsQuery,
 				modalPrimaryButtonLabel,
-				modalTitle,
-				nodeId
+				modalTitle
 			},
 			onUpdateViewMode,
 			selectedItem,
@@ -140,7 +131,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 		return (
 			<Modal size="m" isFullHeight={true}>
-				<ModalHeader title={modalTitle || t('Select a link')} />
+				<ModalHeader title={modalTitle || t('Select a document')} />
 
 				<ModalBody>
 					<ModalContent flexDirection="column">
@@ -176,11 +167,9 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 							{selectedItem &&
 							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<DocumentWithLinkSelectorPreview
+								<ModalContent flexDirection="column" isScrollContainer>
+									<DocumentModalPreview
 										{...this.props}
-										initialNodeId={nodeId}
-										linkableElementsQuery={linkableElementsQuery}
 										stateLabels={stateLabels}
 									/>
 								</ModalContent>
@@ -195,9 +184,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 					<Button
 						type="primary"
 						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={
-							!selectedItem || !selectedItem.documentId || !selectedItem.nodeId
-						}
+						isDisabled={!selectedItem || !selectedItem.documentId}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
@@ -228,9 +215,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 	}
 }
 
-DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(
-	DocumentWithLinkSelectorBrowserModal,
-	viewModes[0] /* list*/
-);
+DocumentBrowserModal = withModularBrowserCapabilities(DocumentBrowserModal, viewModes[0] /* list*/);
 
-export default DocumentWithLinkSelectorBrowserModal;
+export default DocumentBrowserModal;

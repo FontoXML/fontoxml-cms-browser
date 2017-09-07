@@ -2,16 +2,16 @@ define([
 	'fontoxml-modular-ui/uiManager',
 
 	'./old/modals/documents/FxCreateDocumentFormModalStack.jsx',
-	'./old/modals/documents/FxOpenDocumentBrowserModal.jsx',
 	'./old/modals/documents/FxOpenOrCreateDocumentModalStack.jsx',
+	'./documents/DocumentBrowserModal.jsx',
 	'./documents/DocumentWithLinkSelectorBrowserModal.jsx',
 	'./images/ImageBrowserModal.jsx'
 ], function (
 	uiManager,
 
 	FxCreateDocumentFormModalStack,
-	FxOpenDocumentBrowserModal,
 	FxOpenOrCreateDocumentModalStack,
+	DocumentBrowserModal,
 	DocumentWithLinkSelectorBrowserModal,
 	ImageBrowserModal
 ) {
@@ -19,7 +19,7 @@ define([
 
 	return function install () {
 		uiManager.registerReactComponent('FxCreateDocumentFormModalStack', FxCreateDocumentFormModalStack);
-		uiManager.registerReactComponent('FxOpenDocumentBrowserModal', FxOpenDocumentBrowserModal);
+		uiManager.registerReactComponent('DocumentBrowserModal', DocumentBrowserModal);
 		uiManager.registerReactComponent('FxOpenOrCreateDocumentModalStack', FxOpenOrCreateDocumentModalStack);
 		uiManager.registerReactComponent('DocumentWithLinkSelectorBrowserModal', DocumentWithLinkSelectorBrowserModal);
 		uiManager.registerReactComponent('ImageBrowserModal', ImageBrowserModal);

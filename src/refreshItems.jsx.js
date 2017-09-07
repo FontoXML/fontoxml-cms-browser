@@ -41,43 +41,40 @@ export default function refreshItems(
 
 	const dataProvider = dataProviders.get(dataProviderName);
 
-	const getItems = () =>
-		browseContextDocumentId
-			? dataProvider.getFolderContents(
-					browseContextDocumentId,
-					rootFolder,
-					folderToLoad.id,
-					noCache
-				)
-			: dataProvider.getFolderContents(rootFolder, folderToLoad.id, noCache);
+	return dataProvider
+		.getFolderContents(browseContextDocumentId, rootFolder, folderToLoad.id, noCache)
+		.then(
+			result => {
+				let selectedFile = null;
+				if (
+					initialSelectedFileId &&
+					prevSelectedItem &&
+					prevSelectedItem.type !== 'folder'
+				) {
+					// An other file was selected so the initialSelectedFileId is no longer cached
+					onUpdateInitialSelectedFileId(null);
+				} else if (initialSelectedFileId) {
+					// If the initial selected file is in this folder, it should be selected
+					selectedFile =
+						result.items.find(item => item.id === initialSelectedFileId) || null;
+				}
+				onItemSelect(selectedFile);
 
-	return getItems().then(
-		result => {
-			let selectedFile = null;
-			if (initialSelectedFileId && prevSelectedItem && prevSelectedItem.type !== 'folder') {
-				// An other file was selected so the initialSelectedFileId is no longer cached
-				onUpdateInitialSelectedFileId(null);
-			} else if (initialSelectedFileId) {
-				// If the initial selected file is in this folder, it should be selected
-				selectedFile = result.items.find(item => item.id === initialSelectedFileId) || null;
+				onUpdateItems(
+					result.items,
+					(result.metadata && result.metadata.hierarchy) ||
+						updateFolderHierarchy(breadcrumbItems, folderToLoad),
+					{}
+				);
+			},
+			error => {
+				if (!error) {
+					// The old request was cancelled, wait for the newer one.
+					return;
+				}
+
+				onUpdateRequest({ type: 'browse', error: error });
+				// Keep using the last good state (with previous folderContents, folderHierarchy, selectedFileOrFolder and lastLoadedFolder)
 			}
-			onItemSelect(selectedFile);
-
-			onUpdateItems(
-				result.items,
-				(result.metadata && result.metadata.hierarchy) ||
-					updateFolderHierarchy(breadcrumbItems, folderToLoad),
-				{}
-			);
-		},
-		error => {
-			if (!error) {
-				// The old request was cancelled, wait for the newer one.
-				return;
-			}
-
-			onUpdateRequest({ type: 'browse', error: error });
-			// Keep using the last good state (with previous folderContents, folderHierarchy, selectedFileOrFolder and lastLoadedFolder)
-		}
-	);
+		);
 }
