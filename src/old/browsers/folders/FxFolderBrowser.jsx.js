@@ -7,13 +7,13 @@ import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrow
 import dataProviders from '../../../dataProviders';
 
 class FxFolderBrowser extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 
 		this.state = { viewMode: 'list' };
 	}
 
-	render () {
+	render() {
 		const { browseContextDocumentId, onFolderSelect, labels, dataProviderName } = this.props;
 		const { viewMode } = this.state;
 
@@ -23,27 +23,43 @@ class FxFolderBrowser extends Component {
 
 		return (
 			<FileOrFolderBrowser
-				rootFolder={ rootFolder }
-				getFolderContents={ (folder, noCache) => (
-					dataProvider.getFolderContents(browseContextDocumentId, rootFolder, folder.id, noCache)
-				) }
-				onFileOrFolderSelect={ onFolderSelect }
-				onViewModeChange={ (viewMode) => this.setState({ viewMode }) }
-				renderLoadingMessage={ () => (
-					<StateMessage visual={ <SpinnerIcon align='center' /> } { ...labels.states.loading } />
-				) }
-				renderBrowseErrorMessage={ () => (
-					<StateMessage connotation='warning' visual='exclamation-triangle' { ...labels.states.browseError } />
-				) }
-				renderEmptyMessage={ () => <StateMessage visual='folder-open-o' { ...labels.states.empty } /> }
-				renderGoToFolderLink={ (folder) => {
-					return folder.externalUrl ?
-						<TextLink icon='external-link' onClick={ () => window.open(folder.externalUrl) } /> :
-						null;
-				} }
-				renderPreview={ () => null }
+				rootFolder={rootFolder}
+				getFolderContents={(folder, noCache) =>
+					dataProvider.getFolderContents(
+						browseContextDocumentId,
+						rootFolder,
+						folder.id,
+						noCache
+					)}
+				onFileOrFolderSelect={onFolderSelect}
+				onViewModeChange={viewMode => this.setState({ viewMode })}
+				renderLoadingMessage={() => (
+					<StateMessage
+						visual={<SpinnerIcon align="center" />}
+						{...labels.states.loading}
+					/>
+				)}
+				renderBrowseErrorMessage={() => (
+					<StateMessage
+						connotation="warning"
+						visual="exclamation-triangle"
+						{...labels.states.browseError}
+					/>
+				)}
+				renderEmptyMessage={() => (
+					<StateMessage visual="folder-open-o" {...labels.states.empty} />
+				)}
+				renderGoToFolderLink={folder => {
+					return folder.externalUrl ? (
+						<TextLink
+							icon="external-link"
+							onClick={() => window.open(folder.externalUrl)}
+						/>
+					) : null;
+				}}
+				renderPreview={() => null}
 				showBreadcrumbs
-				viewMode={ viewMode }
+				viewMode={viewMode}
 			/>
 		);
 	}

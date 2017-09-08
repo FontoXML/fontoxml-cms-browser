@@ -7,7 +7,7 @@ import { ModalStack } from 'fontoxml-vendor-fds/components';
 
 import CreateDocumentFormModal from '../createDocumentFormModal/CreateDocumentFormModal.jsx';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
-// import SelectDocumentTemplateBrowserModal from '../templates/TemplateBrowserModal.jsx';
+import FolderBrowserModal from '../documents/FolderBrowserModal.jsx';
 
 class CreateDocumentFormModalStack extends Component {
 	static propTypes = {
@@ -38,17 +38,20 @@ class CreateDocumentFormModalStack extends Component {
 			activeModal: null,
 			selectedDocumentTemplate: submittedItem
 		});
-
-	dataForTemplateBrowser = {
-		browseContextDocumentId: this.props.data.browseContextDocumentId,
-		dataProviderName: this.props.data.selectDocumentTemplateDataProviderName,
-		modalPrimaryButtonLabel: this.labels.selectTemplate.submitButtonLabel,
-		modalTitle: this.labels.selectTemplate.modalTitle
-	};
+	handleFolderSubmit = submittedItem =>
+		this.setState({
+			activeModal: null,
+			selectedFolder: submittedItem
+		});
 
 	render() {
 		const {
-			data: { modalTitle, selectDocumentTemplateDataProviderName },
+			data: {
+				browseContextDocumentId,
+				modalTitle,
+				selectDocumentTemplateDataProviderName,
+				selectFolderDataProviderName
+			},
 			cancelModal,
 			submitModal
 		} = this.props;
@@ -77,25 +80,21 @@ class CreateDocumentFormModalStack extends Component {
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
 				)}
+
+				{activeModal === 'FolderBrowser' && (
+					<FolderBrowserModal
+						cancelModal={this.handleCancelModal}
+						data={{
+							browseContextDocumentId: browseContextDocumentId,
+							dataProviderName: selectFolderDataProviderName,
+							folderId: selectedFolder.id,
+							modalTitle: t('Select a folder to save your documents in')
+						}}
+						submitModal={this.handleFolderSubmit}
+					/>
+				)}
 			</ModalStack>
 		);
-		// data: {
-		// 	browseContextDocumentId,
-		// 	dataProviderName,
-		// 	modalPrimaryButtonLabel,
-		// 	modalTitle
-		// },
-
-		//
-		// {this.state.isSelectFolderModalOpen && (
-		// 	<SelectFolderBrowserModal
-		// 		dataProviderName={this.props.data.selectFolderDataProviderName}
-		// 		labels={this.labels.selectFolder}
-		// 		closeModal={this.handleSelectFolderCloseModal}
-		// 		onModalSubmit={this.handleSelectFolderSubmitModal}
-		// 		browseContextDocumentId={this.props.data.browseContextDocumentId}
-		// 	/>
-		// )}
 	}
 }
 
