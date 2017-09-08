@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { GridItem, Icon, Label, ListItem, SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
+import {
+	GridItem,
+	Icon,
+	Label,
+	ListItem,
+	SpinnerIcon,
+	StateMessage
+} from 'fontoxml-vendor-fds/components';
 
 import FileOrFolderBrowser from '../../browsers/file-or-folders/FileOrFolderBrowser.jsx';
 import dataProviders from '../../../dataProviders';
@@ -9,7 +16,7 @@ import FxDocumentLoader from '../../loaders/documents/FxDocumentLoader.jsx';
 import FxDocumentPreview from '../../previews/documents/FxDocumentPreview.jsx';
 
 class FxDocumentTemplateBrowser extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
@@ -21,9 +28,19 @@ class FxDocumentTemplateBrowser extends Component {
 		};
 	}
 
-	render () {
-		const { browseContextDocumentId, onDocumentTemplateOpen, onDocumentTemplateSelect, labels, dataProviderName } = this.props;
-		const { cachedDocumentIdByRemoteDocumentId, cachedErrorByRemoteDocumentId, viewMode } = this.state;
+	render() {
+		const {
+			browseContextDocumentId,
+			onDocumentTemplateOpen,
+			onDocumentTemplateSelect,
+			labels,
+			dataProviderName
+		} = this.props;
+		const {
+			cachedDocumentIdByRemoteDocumentId,
+			cachedErrorByRemoteDocumentId,
+			viewMode
+		} = this.state;
 
 		const rootFolder = { label: labels.rootFolderLabel, type: 'folder', id: null };
 
@@ -31,77 +48,131 @@ class FxDocumentTemplateBrowser extends Component {
 
 		return (
 			<FileOrFolderBrowser
-				rootFolder={ rootFolder }
-				getFolderContents={ (folder, noCache) => (
-					dataProvider.getFolderContents(browseContextDocumentId, rootFolder, folder.id, noCache)
-				) }
-				onFileOpen={ onDocumentTemplateOpen }
-				onFileOrFolderSelect={ (fileOrFolder) => {
-					onDocumentTemplateSelect(fileOrFolder && fileOrFolder.type !== 'folder' ? fileOrFolder : null);
-				} }
-				onViewModeChange={ (viewMode) => this.setState({ viewMode }) }
-				renderLoadingMessage={ () => (
-					<StateMessage visual={ <SpinnerIcon align='center' /> } { ...labels.states.loading } />
-				) }
-				renderBrowseErrorMessage={ () => (
-					<StateMessage connotation='warning' visual='exclamation-triangle' { ...labels.states.browseError } />
-				) }
-				renderEmptyMessage={ () => <StateMessage visual='folder-open-o' { ...labels.states.empty } /> }
-				renderListItem={ ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
+				rootFolder={rootFolder}
+				getFolderContents={(folder, noCache) =>
+					dataProvider.getFolderContents(
+						browseContextDocumentId,
+						rootFolder,
+						folder.id,
+						noCache
+					)}
+				onFileOpen={onDocumentTemplateOpen}
+				onFileOrFolderSelect={fileOrFolder => {
+					onDocumentTemplateSelect(
+						fileOrFolder && fileOrFolder.type !== 'folder' ? fileOrFolder : null
+					);
+				}}
+				onViewModeChange={viewMode => this.setState({ viewMode })}
+				renderLoadingMessage={() => (
+					<StateMessage
+						visual={<SpinnerIcon align="center" />}
+						{...labels.states.loading}
+					/>
+				)}
+				renderBrowseErrorMessage={() => (
+					<StateMessage
+						connotation="warning"
+						visual="exclamation-triangle"
+						{...labels.states.browseError}
+					/>
+				)}
+				renderEmptyMessage={() => (
+					<StateMessage visual="folder-open-o" {...labels.states.empty} />
+				)}
+				renderListItem={({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
 					if (item.type !== 'folder') {
 						if (cachedErrorByRemoteDocumentId[item.id]) {
 							return (
-								<ListItem key={ key } isSelected={ isSelected } onClick={ onClick }>
-									<Icon icon={ item.icon || 'file-text-o' } colorName='icon-s-error-color' size='s' />
-									<Label colorName='text-muted-color'>{ item.label }</Label>
+								<ListItem key={key} isSelected={isSelected} onClick={onClick}>
+									<Icon
+										icon={item.icon || 'file-text-o'}
+										colorName="icon-s-error-color"
+										size="s"
+									/>
+									<Label colorName="text-muted-color">{item.label}</Label>
 								</ListItem>
 							);
-						}
-						else if (!cachedDocumentIdByRemoteDocumentId[item.id]) {
+						} else if (!cachedDocumentIdByRemoteDocumentId[item.id]) {
 							return (
-								<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick }>
-									<Icon icon={ item.icon || 'file-text-o' } size='s' />
-									<Label>{ item.label }</Label>
+								<ListItem
+									key={key}
+									isSelected={isSelected}
+									isDisabled={isDisabled}
+									onClick={onClick}
+								>
+									<Icon icon={item.icon || 'file-text-o'} size="s" />
+									<Label>{item.label}</Label>
 								</ListItem>
 							);
 						}
 					}
 
 					return (
-						<ListItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
-							<Icon icon={ item.icon } size='s' />
-							<Label>{ item.label }</Label>
+						<ListItem
+							key={key}
+							isSelected={isSelected}
+							isDisabled={isDisabled}
+							onClick={onClick}
+							onDoubleClick={onDoubleClick}
+						>
+							<Icon icon={item.icon} size="s" />
+							<Label>{item.label}</Label>
 						</ListItem>
 					);
-				} }
-				renderGridItem={ ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
+				}}
+				renderGridItem={({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => {
 					if (item.type !== 'folder') {
 						if (cachedErrorByRemoteDocumentId[item.id]) {
 							return (
-								<GridItem key={ key } isSelected={ isSelected } onClick={ onClick }>
-									<Icon icon={ item.icon || 'file-text-o' } colorName='icon-m-error-color' size='m' align='center' />
-									<Label align='center' colorName='text-muted-color' isFullWidth>{ item.label }</Label>
+								<GridItem key={key} isSelected={isSelected} onClick={onClick}>
+									<Icon
+										icon={item.icon || 'file-text-o'}
+										colorName="icon-m-error-color"
+										size="m"
+										align="center"
+									/>
+									<Label align="center" colorName="text-muted-color" isFullWidth>
+										{item.label}
+									</Label>
 								</GridItem>
 							);
-						}
-						else if (!cachedDocumentIdByRemoteDocumentId[item.id]) {
+						} else if (!cachedDocumentIdByRemoteDocumentId[item.id]) {
 							return (
-								<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick }>
-									<Icon icon={ item.icon || 'file-text-o' } size='m' align='center' />
-									<Label align='center' isFullWidth>{ item.label }</Label>
+								<GridItem
+									key={key}
+									isSelected={isSelected}
+									isDisabled={isDisabled}
+									onClick={onClick}
+								>
+									<Icon
+										icon={item.icon || 'file-text-o'}
+										size="m"
+										align="center"
+									/>
+									<Label align="center" isFullWidth>
+										{item.label}
+									</Label>
 								</GridItem>
 							);
 						}
 					}
 
 					return (
-						<GridItem key={ key } isSelected={ isSelected } isDisabled={ isDisabled } onClick={ onClick } onDoubleClick={ onDoubleClick }>
-							<Icon icon={ item.icon } size='m' align='center' />
-							<Label align='center' isFullWidth>{ item.label }</Label>
+						<GridItem
+							key={key}
+							isSelected={isSelected}
+							isDisabled={isDisabled}
+							onClick={onClick}
+							onDoubleClick={onDoubleClick}
+						>
+							<Icon icon={item.icon} size="m" align="center" />
+							<Label align="center" isFullWidth>
+								{item.label}
+							</Label>
 						</GridItem>
 					);
-				} }
-				renderPreview={ (selectedFileOrFolder) => {
+				}}
+				renderPreview={selectedFileOrFolder => {
 					if (selectedFileOrFolder.type === 'folder') {
 						return null;
 					}
@@ -110,45 +181,46 @@ class FxDocumentTemplateBrowser extends Component {
 
 					return (
 						<FxDocumentLoader
-							onError={ (error) => {
+							onError={error => {
 								cachedErrorByRemoteDocumentId[selectedFile.id] = error;
 								this.setState({ cachedErrorByRemoteDocumentId });
 
 								onDocumentTemplateSelect(null);
-							} }
-							onLoadComplete={ (documentId) => {
+							}}
+							onLoadComplete={documentId => {
 								cachedDocumentIdByRemoteDocumentId[selectedFile.id] = documentId;
 								this.setState({ cachedDocumentIdByRemoteDocumentId });
 
 								onDocumentTemplateSelect(selectedFile);
-							} }
-							renderLoadingMessage={ () => (
+							}}
+							renderLoadingMessage={() => (
 								<StateMessage
-									visual={ <SpinnerIcon align='center' /> }
-									paddingSize='l'
-									{ ...labels.states.loadingPreview }
+									visual={<SpinnerIcon align="center" />}
+									paddingSize="l"
+									{...labels.states.loadingPreview}
 								/>
-							) }
-							remoteDocumentId={ selectedFile.id } >
-							{ (documentId, error) => {
+							)}
+							remoteDocumentId={selectedFile.id}
+						>
+							{(documentId, error) => {
 								if (error) {
 									return (
 										<StateMessage
-											connotation='warning'
-											visual='exclamation-triangle'
-											paddingSize='l'
-											{ ...labels.states.previewError }
+											connotation="warning"
+											visual="exclamation-triangle"
+											paddingSize="l"
+											{...labels.states.previewError}
 										/>
 									);
 								}
 
-								return <FxDocumentPreview documentId={ documentId } />;
-							} }
+								return <FxDocumentPreview documentId={documentId} />;
+							}}
 						</FxDocumentLoader>
 					);
-				} }
+				}}
 				showBreadcrumbs
-				viewMode={ viewMode }
+				viewMode={viewMode}
 			/>
 		);
 	}
