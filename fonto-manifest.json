@@ -9,6 +9,7 @@
 		"fontoxml-localization": "^1.0.1",
 		"fontoxml-markup-documentation": "^2.0.0",
 		"fontoxml-modular-ui": "^2.0.0",
+		"fontoxml-remote-documents": "^1.0.0",
 		"fontoxml-selection": "^1.4.0",
 		"fontoxml-selectors": "^3.0.0",
 		"fontoxml-templated-views": "^4.0.0",
