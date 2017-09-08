@@ -115,6 +115,13 @@ class CreateDocumentFormModalStack extends Component {
 	handleSelectFolderSubmitModal = selectedFolder =>
 		this.setState({ isSelectFolderModalOpen: false, selectedFolder });
 
+	dataForTemplateBrowser = {
+		browseContextDocumentId: this.props.data.browseContextDocumentId,
+		dataProviderName: this.props.data.selectDocumentTemplateDataProviderName,
+		modalPrimaryButtonLabel: this.labels.selectTemplate.submitButtonLabel,
+		modalTitle: this.labels.selectTemplate.modalTitle
+	};
+
 	render() {
 		return (
 			<ModalStack>
@@ -132,13 +139,11 @@ class CreateDocumentFormModalStack extends Component {
 
 				{this.state.isSelectDocumentTemplateModalOpen && (
 					<DocumentBrowserModal
-						dataProviderName={this.props.data.selectDocumentTemplateDataProviderName}
-						labels={this.labels.selectTemplate}
 						closeModal={this.handleSelectDocumentTemplateCloseModal}
 						onDocumentTemplateSelect={this.handleDocumentTemplateSelect}
 						onModalSubmit={this.handleSelectDocumentTemplateSubmitModal}
 						selectedDocumentTemplate={this.state.selectedDocumentTemplate}
-						browseContextDocumentId={this.props.data.browseContextDocumentId}
+						data={this.dataForTemplateBrowser}
 					/>
 				)}
 			</ModalStack>
