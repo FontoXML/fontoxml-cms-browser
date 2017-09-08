@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import {
@@ -12,6 +13,27 @@ import {
 import withImagePreviewCapabilities from './withImagePreviewCapabilities.jsx';
 
 class ImageGridItem extends Component {
+	static defaultProps = {
+		isDisabled: false,
+		isSelected: false,
+		onClick: _item => {},
+		onDoubleClick: _item => {}
+	};
+
+	static propTypes = {
+		isDisabled: PropTypes.bool,
+		isItemErrored: PropTypes.func.isRequired,
+		isSelected: PropTypes.bool,
+		item: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			icon: PropTypes.string,
+			label: PropTypes.string.isRequired,
+			type: PropTypes.string.isRequired
+		}).isRequired,
+		onClick: PropTypes.func,
+		onDoubleClick: PropTypes.func
+	};
+
 	wrapInGridItem = content => {
 		return (
 			<GridItem

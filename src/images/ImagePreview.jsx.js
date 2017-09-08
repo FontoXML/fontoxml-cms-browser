@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { merge } from 'glamor';
@@ -24,6 +25,27 @@ const imageStyles = merge(block, {
 });
 
 class ModalBrowserPreview extends Component {
+	static defaultProps = {
+		selectedItem: null
+	};
+
+	static propTypes = {
+		stateLabels: PropTypes.shape({
+			previewError: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired,
+			loadingPreview: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired
+		}).isRequired,
+
+		// from withModularBrowserCapabilities
+		loadImage: PropTypes.func.isRequired,
+		selectedItem: PropTypes.object
+	};
+
 	isMountedInDOM = false;
 
 	state = { isErrored: false, isLoading: true, imageData: null };
