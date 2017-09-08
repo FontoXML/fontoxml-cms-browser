@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import documentsManager from 'fontoxml-documents/documentsManager';
 import t from 'fontoxml-localization/t';
 
 import {
@@ -26,7 +25,7 @@ import withModularBrowserCapabilities from '../withModularBrowserCapabilities.js
 
 const stateLabels = {
 	loading: {
-		title: t('Loading documents…'),
+		title: t('Loading folders…'),
 		message: null
 	},
 	browseError: {
@@ -35,17 +34,7 @@ const stateLabels = {
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain files that can be opened with FontoXML.')
-	},
-	loadingPreview: {
-		title: t('Loading document preview…'),
 		message: null
-	},
-	previewError: {
-		title: t('Can’t open this document'),
-		message: t(
-			'FontoXML can’t open this document. You can try again, or try a different document.'
-		)
 	}
 };
 
@@ -114,8 +103,8 @@ class FolderBrowserModal extends Component {
 		const hasBreadcrumbItems = breadcrumbItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight={true}>
-				<ModalHeader title={modalTitle || t('Select a document')} />
+			<Modal size="s">
+				<ModalHeader title={modalTitle || t('Select a folder')} />
 
 				<ModalBody>
 					<ModalContent flexDirection="column">
@@ -154,7 +143,7 @@ class FolderBrowserModal extends Component {
 
 					<Button
 						type="primary"
-						label={modalPrimaryButtonLabel || t('Insert')}
+						label={modalPrimaryButtonLabel || t('Select')}
 						isDisabled={!selectedItem || !selectedItem.id}
 						onClick={this.handleSubmitButtonClick}
 					/>

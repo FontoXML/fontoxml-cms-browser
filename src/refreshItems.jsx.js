@@ -47,8 +47,8 @@ export default function refreshItems(
 					return;
 				}
 
+				onItemSelect(null);
 				onUpdateRequest({ type: 'browse', error: error });
-				// Keep using the last good state (with previous folderContents, folderHierarchy, selectedFileOrFolder and lastLoadedFolder)
 			}
 		);
 }

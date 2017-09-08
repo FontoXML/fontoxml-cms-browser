@@ -91,6 +91,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 			return (
 				<StateMessage
 					connotation="warning"
+					paddingSize="m"
 					visual="exclamation-triangle"
 					{...stateLabels.previewError}
 				/>
@@ -98,7 +99,13 @@ class DocumentWithLinkSelectorPreview extends Component {
 		}
 
 		if (this.state.isLoading) {
-			return <StateMessage visual={<SpinnerIcon />} {...stateLabels.loadingPreview} />;
+			return (
+				<StateMessage
+					paddingSize="m"
+					visual={<SpinnerIcon />}
+					{...stateLabels.loadingPreview}
+				/>
+			);
 		}
 
 		return (

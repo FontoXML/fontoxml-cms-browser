@@ -82,13 +82,16 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		} = this.props;
 
 		if ((request.type === 'browse' || request.type === 'upload') && request.busy) {
-			return <StateMessage visual={<SpinnerIcon />} {...stateLabels.loading} />;
+			return (
+				<StateMessage paddingSize="m" visual={<SpinnerIcon />} {...stateLabels.loading} />
+			);
 		}
 
 		if (request.type === 'browse' && request.error) {
 			return (
 				<StateMessage
 					connotation="warning"
+					paddingSize="m"
 					visual="exclamation-triangle"
 					{...stateLabels.browseError}
 				/>
@@ -96,7 +99,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		}
 
 		if (items.length === 0) {
-			return <StateMessage visual="folder-open-o" {...stateLabels.empty} />;
+			return <StateMessage paddingSize="m" visual="folder-open-o" {...stateLabels.empty} />;
 		}
 
 		if (viewMode.name === 'list') {

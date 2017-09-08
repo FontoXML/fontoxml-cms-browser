@@ -53,5 +53,9 @@ export default function withImagePreviewCapabilities(WrappedComponent) {
 				.loadImage(this.props.item.id)
 				.then(this.handleLoadImage, this.handleLoadError);
 		}
+
+		componentWillUnmount() {
+			this.isComponentMounted = false;
+		}
 	};
 }

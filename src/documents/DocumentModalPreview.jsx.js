@@ -71,6 +71,7 @@ class DocumentModalPreview extends Component {
 			return (
 				<StateMessage
 					connotation="warning"
+					paddingSize="m"
 					visual="exclamation-triangle"
 					{...stateLabels.previewError}
 				/>
@@ -78,7 +79,13 @@ class DocumentModalPreview extends Component {
 		}
 
 		if (this.state.isLoading) {
-			return <StateMessage visual={<SpinnerIcon />} {...stateLabels.loadingPreview} />;
+			return (
+				<StateMessage
+					paddingSize="m"
+					visual={<SpinnerIcon />}
+					{...stateLabels.loadingPreview}
+				/>
+			);
 		}
 
 		return <DocumentPreview documentId={selectedItem.documentId} />;

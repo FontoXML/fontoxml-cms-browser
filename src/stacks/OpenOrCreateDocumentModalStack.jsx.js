@@ -5,7 +5,7 @@ import t from 'fontoxml-localization/t';
 
 import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fontoxml-vendor-fds/components';
 
-import CreateDocumentFormModal from '../createDocumentFormModal/CreateDocumentFormModal.jsx';
+import CreateDocumentFormModal from '../documents/CreateDocumentFormModal.jsx';
 import DocumentBrowserModal from '../documents/DocumentBrowserModal.jsx';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
 
