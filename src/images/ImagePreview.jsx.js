@@ -103,7 +103,7 @@ class ModalBrowserPreview extends Component {
 				</Flex>
 
 				<KeyValueList
-					items={selectedItem.metadata.properties}
+					items={selectedItem.metadata ? selectedItem.metadata.properties || {} : {}}
 					scrollLimit={5}
 					paddingSize="l"
 				/>

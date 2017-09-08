@@ -35,12 +35,12 @@ class DocumentWithLinkSelectorPreview extends Component {
 		selectedItem: PropTypes.object
 	};
 
-	isComponentMounted = false;
+	isMountedInDOM = false;
 
 	state = { isErrored: false, isLoading: true };
 
 	handleLoadDocumentId = documentId => {
-		if (!this.isComponentMounted) {
+		if (!this.isMountedInDOM) {
 			return;
 		}
 
@@ -61,7 +61,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 			return;
 		}
 
-		if (this.isComponentMounted) {
+		if (this.isMountedInDOM) {
 			this.setState({ isErrored: true, isLoading: false });
 		}
 	};
@@ -119,7 +119,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 	}
 
 	componentDidMount() {
-		this.isComponentMounted = true;
+		this.isMountedInDOM = true;
 
 		this.props
 			.loadDocument(this.props.selectedItem.id)
@@ -127,7 +127,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 	}
 
 	componentWillUnmount() {
-		this.isComponentMounted = false;
+		this.isMountedInDOM = false;
 	}
 }
 
