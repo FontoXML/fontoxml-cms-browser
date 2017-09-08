@@ -10,7 +10,7 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 	static defaultProps = {
 		breadcrumbItems: [],
 		browseContextDocumentId: null,
-		initialSelectedFileId: null,
+		initialSelectedItemId: null,
 		selectedItem: null
 	};
 
@@ -20,9 +20,9 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 
 		// from withModularBrowserCapabilities
 		breadcrumbItems: PropTypes.array,
-		initialSelectedFileId: PropTypes.string,
+		initialSelectedItemId: PropTypes.string,
 		onItemSelect: PropTypes.func.isRequired,
-		onUpdateInitialSelectedFileId: PropTypes.func.isRequired,
+		onUpdateInitialSelectedItemId: PropTypes.func.isRequired,
 		onUpdateItems: PropTypes.func.isRequired,
 		onUpdateRequest: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
@@ -41,9 +41,9 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 					this.props.browseContextDocumentId,
 					this.props.dataProviderName,
 					item,
-					this.props.initialSelectedFileId,
+					this.props.initialSelectedItemId,
 					this.props.onItemSelect,
-					this.props.onUpdateInitialSelectedFileId,
+					this.props.onUpdateInitialSelectedItemId,
 					this.props.onUpdateItems,
 					this.props.onUpdateRequest,
 					this.props.selectedItem,

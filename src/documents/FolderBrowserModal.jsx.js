@@ -164,9 +164,9 @@ class FolderBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { folderId }, onUpdateInitialSelectedFileId } = this.props;
+		const { data: { folderId }, onUpdateInitialSelectedItemId } = this.props;
 		if (folderId) {
-			onUpdateInitialSelectedFileId(folderId);
+			onUpdateInitialSelectedItemId(folderId);
 		}
 
 		refreshItems(
@@ -176,7 +176,7 @@ class FolderBrowserModal extends Component {
 			{ id: null },
 			folderId,
 			this.props.onItemSelect,
-			onUpdateInitialSelectedFileId,
+			onUpdateInitialSelectedItemId,
 			this.props.onUpdateItems,
 			this.props.onUpdateRequest,
 			this.props.selectedItem

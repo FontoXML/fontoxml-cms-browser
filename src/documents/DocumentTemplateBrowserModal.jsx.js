@@ -185,9 +185,9 @@ class DocumentTemplateBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { onUpdateInitialSelectedFileId, remoteDocumentId } = this.props;
+		const { onUpdateInitialSelectedItemId, remoteDocumentId } = this.props;
 		if (remoteDocumentId) {
-			onUpdateInitialSelectedFileId(remoteDocumentId);
+			onUpdateInitialSelectedItemId(remoteDocumentId);
 		}
 
 		refreshItems(
@@ -197,7 +197,7 @@ class DocumentTemplateBrowserModal extends Component {
 			{ id: null },
 			remoteDocumentId,
 			this.props.onItemSelect,
-			onUpdateInitialSelectedFileId,
+			onUpdateInitialSelectedItemId,
 			this.props.onUpdateItems,
 			this.props.onUpdateRequest,
 			this.props.selectedItem

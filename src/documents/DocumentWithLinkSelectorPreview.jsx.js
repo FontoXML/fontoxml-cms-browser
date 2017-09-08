@@ -10,7 +10,7 @@ import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {
 		initialNodeId: null,
-		initialSelectedFileId: null,
+		initialSelectedItemId: null,
 		selectedItem: null
 	};
 
@@ -29,7 +29,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		}).isRequired,
 
 		// from withModularBrowserCapabilities
-		initialSelectedFileId: PropTypes.string,
+		initialSelectedItemId: PropTypes.string,
 		loadDocument: PropTypes.func.isRequired,
 		onItemSelect: PropTypes.func.isRequired,
 		selectedItem: PropTypes.object
@@ -47,7 +47,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		let nodeId = getNodeId(documentsManager.getDocumentNode(documentId).documentElement);
 		if (
 			this.props.initialNodeId !== null &&
-			this.props.initialSelectedFileId === this.props.selectedItem.id
+			this.props.initialSelectedItemId === this.props.selectedItem.id
 		) {
 			nodeId = this.props.initialNodeId;
 		}

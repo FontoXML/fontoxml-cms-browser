@@ -12,7 +12,7 @@ class ModalBrowserUploadButton extends PureComponent {
 	static defaultProps = {
 		breadcrumbItems: [],
 		browseContextDocumentId: null,
-		initialSelectedFileId: null,
+		initialSelectedItemId: null,
 		selectedItem: null
 	};
 
@@ -26,9 +26,9 @@ class ModalBrowserUploadButton extends PureComponent {
 
 		// from withModularBrowserCapabilities
 		breadcrumbItems: PropTypes.array,
-		initialSelectedFileId: PropTypes.string,
+		initialSelectedItemId: PropTypes.string,
 		onItemSelect: PropTypes.func.isRequired,
-		onUpdateInitialSelectedFileId: PropTypes.func.isRequired,
+		onUpdateInitialSelectedItemId: PropTypes.func.isRequired,
 		onUpdateItems: PropTypes.func.isRequired,
 		onUpdateRequest: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
@@ -65,9 +65,9 @@ class ModalBrowserUploadButton extends PureComponent {
 					this.props.browseContextDocumentId,
 					this.props.dataProviderName,
 					folderWithUploadedFile,
-					this.props.initialSelectedFileId,
+					this.props.initialSelectedItemId,
 					onItemSelect,
-					this.props.onUpdateInitialSelectedFileId,
+					this.props.onUpdateInitialSelectedItemId,
 					this.props.onUpdateItems,
 					onUpdateRequest,
 					this.props.selectedItem,

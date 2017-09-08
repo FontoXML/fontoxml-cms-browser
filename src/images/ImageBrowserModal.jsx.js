@@ -216,9 +216,9 @@ class ImageBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { selectedImageId }, onUpdateInitialSelectedFileId } = this.props;
+		const { data: { selectedImageId }, onUpdateInitialSelectedItemId } = this.props;
 		if (selectedImageId) {
-			onUpdateInitialSelectedFileId(selectedImageId);
+			onUpdateInitialSelectedItemId(selectedImageId);
 		}
 
 		refreshItems(
@@ -228,7 +228,7 @@ class ImageBrowserModal extends Component {
 			{ id: null },
 			selectedImageId || null,
 			this.props.onItemSelect,
-			onUpdateInitialSelectedFileId,
+			onUpdateInitialSelectedItemId,
 			this.props.onUpdateItems,
 			this.props.onUpdateRequest,
 			this.props.selectedItem

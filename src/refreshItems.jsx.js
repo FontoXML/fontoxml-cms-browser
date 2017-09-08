@@ -5,9 +5,9 @@ export default function refreshItems(
 	browseContextDocumentId,
 	dataProviderName,
 	folderToLoad,
-	initialSelectedFileId,
+	initialSelectedItemId,
 	onItemSelect,
-	onUpdateInitialSelectedFileId,
+	onUpdateInitialSelectedItemId,
 	onUpdateItems,
 	onUpdateRequest,
 	prevSelectedItem,
@@ -24,20 +24,20 @@ export default function refreshItems(
 		})
 		.then(
 			result => {
-				let selectedFile = null;
+				let initialSelectedItem = null;
 				if (
-					initialSelectedFileId &&
+					initialSelectedItemId &&
 					prevSelectedItem &&
 					prevSelectedItem.type !== 'folder'
 				) {
-					// An other file was selected so the initialSelectedFileId is no longer cached
-					onUpdateInitialSelectedFileId(null);
-				} else if (initialSelectedFileId) {
+					// An other file was selected so the initialSelectedItemId is no longer cached
+					onUpdateInitialSelectedItemId(null);
+				} else if (initialSelectedItemId) {
 					// If the initial selected file is in this folder, it should be selected
-					selectedFile =
-						result.items.find(item => item.id === initialSelectedFileId) || null;
+					initialSelectedItem =
+						result.items.find(item => item.id === initialSelectedItemId) || null;
 				}
-				onItemSelect(selectedFile);
+				onItemSelect(initialSelectedItem);
 
 				onUpdateItems(result.items, result.hierarchyItems || [], {});
 			},

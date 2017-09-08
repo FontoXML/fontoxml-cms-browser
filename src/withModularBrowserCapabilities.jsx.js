@@ -11,7 +11,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 	return class ModularBrowser extends Component {
 		cachedFileByRemoteId = {};
 		cachedErrorByRemoteId = {};
-		initialSelectedFileId = null;
+		initialSelectedItemId = null;
 		isComponentMounted = false;
 		loadingFilesById = {};
 
@@ -44,9 +44,9 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
-		onUpdateInitialSelectedFileId = fileId => {
+		onUpdateInitialSelectedItemId = fileId => {
 			if (this.isComponentMounted) {
-				this.initialSelectedFileId = fileId;
+				this.initialSelectedItemId = fileId;
 			}
 		};
 
@@ -149,10 +149,10 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			const props = {
 				...this.props,
 				...this.state,
-				initialSelectedFileId: this.initialSelectedFileId,
+				initialSelectedItemId: this.initialSelectedItemId,
 				isItemErrored: this.isItemErrored,
 				onItemSelect: this.onItemSelect,
-				onUpdateInitialSelectedFileId: this.onUpdateInitialSelectedFileId,
+				onUpdateInitialSelectedItemId: this.onUpdateInitialSelectedItemId,
 				onUpdateItems: this.onUpdateItems,
 				onUpdateRequest: this.onUpdateRequest,
 				onUpdateViewMode: this.onUpdateViewMode,

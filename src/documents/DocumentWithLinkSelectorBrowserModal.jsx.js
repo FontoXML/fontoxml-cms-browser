@@ -206,11 +206,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { documentId }, onUpdateInitialSelectedFileId } = this.props;
+		const { data: { documentId }, onUpdateInitialSelectedItemId } = this.props;
 		let remoteDocumentId = null;
 		if (documentId) {
 			remoteDocumentId = documentsManager.getDocumentFile(documentId).remoteDocumentId;
-			onUpdateInitialSelectedFileId(remoteDocumentId);
+			onUpdateInitialSelectedItemId(remoteDocumentId);
 		}
 
 		refreshItems(
@@ -220,7 +220,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			{ id: null },
 			remoteDocumentId,
 			this.props.onItemSelect,
-			onUpdateInitialSelectedFileId,
+			onUpdateInitialSelectedItemId,
 			this.props.onUpdateItems,
 			this.props.onUpdateRequest,
 			this.props.selectedItem
