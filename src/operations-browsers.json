@@ -1,0 +1,107 @@
+{
+	"open-document-with-link-selector-browser": {
+		"initialData": {
+			"browseContextDocumentId": null,
+			"dataProviderName": null,
+			"documentId": null,
+			"linkableElementsQuery": "//*[@id]",
+			"modalPrimaryButtonLabel": null,
+			"modalTitle": null,
+			"nodeId": null
+		},
+		"steps": {
+			"type": "modal/DocumentWithLinkSelectorBrowserModal",
+			"data": {
+				"browseContextDocumentId": "{{browseContextDocumentId}}",
+				"dataProviderName": "{{dataProviderName}}",
+				"documentId": "{{documentId}}",
+				"linkableElementsQuery": "{{linkableElementsQuery}}",
+				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
+				"modalTitle": "{{modalTitle}}",
+				"nodeId": "{{nodeId}}"
+			}
+		}
+	},
+
+	"open-image-browser": {
+		"initialData": {
+			"browseContextDocumentId": null,
+			"dataProviderName": null,
+			"modalPrimaryButtonLabel": null,
+			"modalTitle": null,
+			"selectedImageId": null
+		},
+		"steps": {
+			"type": "modal/ImageBrowserModal",
+			"data": {
+				"browseContextDocumentId": "{{browseContextDocumentId}}",
+				"dataProviderName": "{{dataProviderName}}",
+				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
+				"modalTitle": "{{modalTitle}}",
+				"selectedImageId": "{{selectedImageId}}"
+			}
+		}
+	},
+
+	"open-document-browser": {
+		"initialData": {
+			"browseContextDocumentId": null,
+			"dataProviderName": null,
+			"documentId": null,
+			"modalPrimaryButtonLabel": null,
+			"modalTitle": null
+		},
+		"steps": {
+			"type": "modal/DocumentBrowserModal",
+			"data": {
+				"browseContextDocumentId": "{{browseContextDocumentId}}",
+				"dataProviderName": "{{dataProviderName}}",
+				"documentId": "{{documentId}}",
+				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
+				"modalTitle": "{{modalTitle}}"
+			}
+		}
+	},
+
+	"open-create-document-form-or-open-document-browser": {
+		"initialData": {
+			"browseContextDocumentId": null,
+			"openDocumentDataProviderName": null,
+			"modalPrimaryButtonLabel": null,
+			"modalTitle": null,
+			"selectDocumentTemplateDataProviderName": null,
+			"selectFolderDataProviderName": null
+		},
+		"steps": {
+			"type": "modal/FxOpenOrCreateDocumentModalStack",
+			"data": {
+				"browseContextDocumentId": "{{browseContextDocumentId}}",
+				"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
+				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
+				"modalTitle": "{{modalTitle}}",
+				"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
+				"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+			}
+		}
+	},
+
+	"open-create-document-form": {
+		"initialData": {
+			"browseContextDocumentId": null,
+			"modalPrimaryButtonLabel": null,
+			"modalTitle": null,
+			"selectDocumentTemplateDataProviderName": null,
+			"selectFolderDataProviderName": null
+		},
+		"steps": {
+			"type": "modal/CreateDocumentModalStack",
+			"data": {
+				"browseContextDocumentId": "{{browseContextDocumentId}}",
+				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
+				"modalTitle": "{{modalTitle}}",
+				"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
+				"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+			}
+		}
+	}
+}
