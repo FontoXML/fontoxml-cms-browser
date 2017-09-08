@@ -67,17 +67,15 @@
 		"initialData": {
 			"browseContextDocumentId": null,
 			"openDocumentDataProviderName": null,
-			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"selectDocumentTemplateDataProviderName": null,
 			"selectFolderDataProviderName": null
 		},
 		"steps": {
-			"type": "modal/FxOpenOrCreateDocumentModalStack",
+			"type": "modal/OpenOrCreateDocumentModalStack",
 			"data": {
 				"browseContextDocumentId": "{{browseContextDocumentId}}",
 				"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
-				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 				"modalTitle": "{{modalTitle}}",
 				"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
 				"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"

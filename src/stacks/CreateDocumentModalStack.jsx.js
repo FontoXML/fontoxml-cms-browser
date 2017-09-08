@@ -6,71 +6,8 @@ import t from 'fontoxml-localization/t';
 import { ModalStack } from 'fontoxml-vendor-fds/components';
 
 import CreateDocumentFormModal from '../createDocumentFormModal/CreateDocumentFormModal.jsx';
-import DocumentBrowserModal from '../documents/DocumentBrowserModal.jsx';
+import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
 // import SelectDocumentTemplateBrowserModal from '../templates/TemplateBrowserModal.jsx';
-
-const getLabels = () => ({
-	create: {
-		modalTitle: t('Create new document'),
-		selectTemplateFormRowLabel: t('Template to start with'),
-		selectTemplateButtonLabel: t('Select a template'),
-		selectFolderFormRowLabel: t('Save in'),
-		selectFolderButtonLabel: t('Select a folder'),
-		titleFormRowLabel: t('Title'),
-		cancelButtonLabel: t('Cancel'),
-		submitButtonLabel: t('Create')
-	},
-	selectFolder: {
-		modalTitle: t('Select a folder to save your documents in'),
-		rootFolderLabel: t('My Drives'),
-		states: {
-			loading: {
-				title: t('Loading folders…'),
-				message: null
-			},
-			browseError: {
-				title: t('Can’t open this folder'),
-				message: null
-			},
-			empty: {
-				title: t('No results'),
-				message: null
-			}
-		},
-		cancelButtonLabel: t('Cancel'),
-		submitButtonLabel: t('Select')
-	},
-	selectTemplate: {
-		modalTitle: t('Select a template for your document'),
-		rootFolderLabel: t('Templates'),
-		states: {
-			loading: {
-				title: t('Loading templates…'),
-				message: null
-			},
-			browseError: {
-				title: t('Can’t open this folder'),
-				message: null
-			},
-			empty: {
-				title: t('No results'),
-				message: t('This folder does not contain files that can be opened with FontoXML.')
-			},
-			loadingPreview: {
-				title: t('Loading template preview…'),
-				message: null
-			},
-			previewError: {
-				title: t('Can’t open this template'),
-				message: t(
-					'FontoXML can’t open this template. You can try again, or try a different template.'
-				)
-			}
-		},
-		cancelButtonLabel: t('Cancel'),
-		submitButtonLabel: t('Select')
-	}
-});
 
 class CreateDocumentFormModalStack extends Component {
 	static propTypes = {
@@ -79,41 +16,28 @@ class CreateDocumentFormModalStack extends Component {
 			browseContextDocumentId: PropTypes.string,
 			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
 			selectFolderDataProviderName: PropTypes.string.isRequired
-		}).isRuired,
+		}).isRequired,
 		submitModal: PropTypes.func.isRequired
 	};
 
 	state = {
-		isSelectDocumentTemplateModalOpen: false,
-		isSelectFolderModalOpen: false,
+		activeModal: null,
 
-		selectedDocumentTemplate: null,
-		selectedFolder: null
+		selectedDocumentTemplate: {},
+		selectedFolder: {}
 	};
 
-	labels = getLabels();
+	handleSelectFolderClick = () => this.setState({ activeModal: 'FolderBrowser' });
+	handleSelectDocumentTemplateClick = () =>
+		this.setState({ activeModal: 'DocumentTemplateBrowser' });
 
-	handleModalSubmit = modalData =>
-		this.props.submitModal({
-			selectedDocumentTemplateId: modalData.selectedDocumentTemplateId.id,
-			selectedFolderId: modalData.selectedFolder.id,
-			documentTitle: modalData.documentTitle
+	handleCancelModal = () => this.setState({ activeModal: null });
+
+	handleDocumentTemplateSubmit = submittedItem =>
+		this.setState({
+			activeModal: null,
+			selectedDocumentTemplate: submittedItem
 		});
-	handleOpenSelectDocumentTemplateBrowserModal = () =>
-		this.setState({ isSelectDocumentTemplateModalOpen: true });
-	handleOpenSelectFolderBrowserModal = () => this.setState({ isSelectFolderModalOpen: true });
-
-	handleSelectDocumentTemplateCloseModal = () =>
-		this.setState({ isSelectDocumentTemplateModalOpen: false, selectedDocumentTemplate: null });
-	handleDocumentTemplateSelect = selectedDocumentTemplate =>
-		this.setState({ selectedDocumentTemplate });
-	handleSelectDocumentTemplateSubmitModal = selectedDocumentTemplate =>
-		this.setState({ isSelectDocumentTemplateModalOpen: false, selectedDocumentTemplate });
-
-	handleSelectFolderCloseModal = () =>
-		this.setState({ isSelectFolderModalOpen: false, selectedFolder: null });
-	handleSelectFolderSubmitModal = selectedFolder =>
-		this.setState({ isSelectFolderModalOpen: false, selectedFolder });
 
 	dataForTemplateBrowser = {
 		browseContextDocumentId: this.props.data.browseContextDocumentId,
@@ -123,27 +47,34 @@ class CreateDocumentFormModalStack extends Component {
 	};
 
 	render() {
+		const {
+			data: { modalTitle, selectDocumentTemplateDataProviderName },
+			cancelModal,
+			submitModal
+		} = this.props;
+		const { activeModal, selectedDocumentTemplate, selectedFolder } = this.state;
 		return (
 			<ModalStack>
 				<CreateDocumentFormModal
-					labels={this.labels.create}
-					closeModal={this.props.cancelModal}
-					onModalSubmit={this.handleModalSubmit}
-					openSelectDocumentTemplateBrowserModal={
-						this.handleOpenSelectDocumentTemplateBrowserModal
-					}
-					openSelectFolderBrowserModal={this.handleOpenSelectFolderBrowserModal}
-					selectedFolder={this.state.selectedFolder}
-					selectedDocumentTemplate={this.state.selectedDocumentTemplate}
+					cancelModal={cancelModal}
+					modalTitle={modalTitle || t('Create new document')}
+					onSelectDocumentTemplateClick={this.handleSelectDocumentTemplateClick}
+					onSelectFolderClick={this.handleSelectFolderClick}
+					selectedDocumentTemplate={selectedDocumentTemplate}
+					selectedFolder={selectedFolder}
+					submitModal={submitModal}
 				/>
 
-				{this.state.isSelectDocumentTemplateModalOpen && (
-					<DocumentBrowserModal
-						closeModal={this.handleSelectDocumentTemplateCloseModal}
-						onDocumentTemplateSelect={this.handleDocumentTemplateSelect}
-						onModalSubmit={this.handleSelectDocumentTemplateSubmitModal}
-						selectedDocumentTemplate={this.state.selectedDocumentTemplate}
-						data={this.dataForTemplateBrowser}
+				{activeModal === 'DocumentTemplateBrowser' && (
+					<DocumentTemplateBrowserModal
+						cancelModal={this.handleCancelModal}
+						data={{
+							browseContextDocumentId: null,
+							dataProviderName: selectDocumentTemplateDataProviderName,
+							modalTitle: t('Select a template for your document')
+						}}
+						remoteDocumentId={selectedDocumentTemplate.id}
+						submitModal={this.handleDocumentTemplateSubmit}
 					/>
 				)}
 			</ModalStack>

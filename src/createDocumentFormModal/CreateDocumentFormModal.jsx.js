@@ -1,80 +1,108 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'fontoxml-vendor-fds/components';
+import t from 'fontoxml-localization/t';
 
-import CreateDocumentForm from './CreateDocumentForm.jsx';
+import {
+	Button,
+	ButtonWithValue,
+	Form,
+	FormRow,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	TextInput
+} from 'fontoxml-vendor-fds/components';
 
 class CreateDocumentFormModal extends Component {
-	static PropTypes = {
-		closeModal: PropTypes.func.isRequired,
-		openSelectFolderBrowserModal: PropTypes.func.isRequired,
-		openSelectDocumentTemplateBrowserModal: PropTypes.func.isRequired,
-		onModalSubmit: PropTypes.func.isRequired,
-		selectedFolder: PropTypes.object,
-		selectedDocumentTemplate: PropTypes.object
+	static defaultProps = {
+		renderModalBodyToolbar: null,
+		selectedDocumentTemplate: {},
+		selectedFolder: {}
 	};
 
-	state = {
-		documentTitle: '',
-		isSubmitting: false
+	static PropTypes = {
+		cancelModal: PropTypes.func.isRequired,
+		modalTitle: PropTypes.string.isRequired,
+		onSelectDocumentTemplateClick: PropTypes.func.isRequired,
+		onSelectFolderClick: PropTypes.func.isRequired,
+		renderModalBodyToolbar: PropTypes.func,
+		selectedDocumentTemplate: PropTypes.object,
+		selectedFolder: PropTypes.object,
+		submitModal: PropTypes.func.isRequired
 	};
+
+	state = { documentTitle: '' };
 
 	handleDocumentTitleChange = documentTitle => this.setState({ documentTitle });
 
-	isSubmitPossible = () =>
-		this.state.documentTitle.trim().length > 0 &&
-		this.props.selectedFolder !== null &&
-		this.props.selectedDocumentTemplate !== null;
-
-	handleSubmitButton = () => {
-		const { documentTitle } = this.state;
-		const { onModalSubmit, selectedFolder, selectedDocumentTemplate } = this.props;
-
-		this.setState({ isSubmitting: true }, () => {
-			onModalSubmit({
-				documentTitle,
-				selectedFolder,
-				selectedDocumentTemplate
-			});
+	handleSubmitButton = () =>
+		this.props.submitModal({
+			selectedDocumentTemplateId: this.props.selectedDocumentTemplate.id,
+			selectedFolderId: this.props.selectedFolder.id,
+			documentTitle: this.state.documentTitle
 		});
-	};
 
 	render() {
-		const { labels } = this.props;
-		const { isSubmitting } = this.state;
+		const {
+			cancelModal,
+			modalTitle,
+			onSelectDocumentTemplateClick,
+			onSelectFolderClick,
+			renderModalBodyToolbar,
+			selectedDocumentTemplate,
+			selectedFolder
+		} = this.props;
+		const { documentTitle } = this.state;
 
 		return (
 			<Modal size="s">
-				<ModalHeader title={labels.modalTitle} />
+				<ModalHeader title={modalTitle} />
 
-				<ModalBody paddingSize="l">
-					<CreateDocumentForm
-						dataProviderName={this.props.dataProviderName}
-						labels={labels}
-						documentTitle={this.state.documentTitle}
-						onDocumentTitleChange={this.handleDocumentTitleChange}
-						openSelectFolderBrowserModal={this.props.openSelectFolderBrowserModal}
-						openSelectDocumentTemplateBrowserModal={
-							this.props.openSelectDocumentTemplateBrowserModal
-						}
-						selectedFolder={this.props.selectedFolder}
-						selectedDocumentTemplate={this.props.selectedDocumentTemplate}
-					/>
+				<ModalBody>
+					{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
+
+					<ModalContent flexDirection="column" paddingSize="m">
+						<Form labelPosition="above">
+							<FormRow label={t('Template to start with')}>
+								<ButtonWithValue
+									buttonLabel={t('Select a template')}
+									onClick={onSelectDocumentTemplateClick}
+									valueLabel={selectedDocumentTemplate.label || null}
+								/>
+							</FormRow>
+
+							<FormRow label={t('Save in')}>
+								<ButtonWithValue
+									buttonLabel={t('Select a folder')}
+									onClick={onSelectFolderClick}
+									valueLabel={selectedFolder.label || null}
+								/>
+							</FormRow>
+
+							<FormRow label={t('Title')}>
+								<TextInput
+									value={documentTitle}
+									onChange={this.handleDocumentTitleChange}
+								/>
+							</FormRow>
+						</Form>
+					</ModalContent>
 				</ModalBody>
 
 				<ModalFooter>
-					<Button
-						type="default"
-						label={labels.cancelButtonLabel}
-						onClick={this.props.closeModal}
-					/>
+					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
 
 					<Button
 						type="primary"
-						label={labels.submitButtonLabel}
-						iconAfter={isSubmitting ? 'spinner' : ''}
-						isDisabled={!this.isSubmitPossible() || isSubmitting}
+						label={t('Create')}
+						isDisabled={
+							documentTitle.trim().length < 0 ||
+							!selectedFolder.id ||
+							!selectedDocumentTemplate.id
+						}
 						onClick={this.handleSubmitButton}
 					/>
 				</ModalFooter>

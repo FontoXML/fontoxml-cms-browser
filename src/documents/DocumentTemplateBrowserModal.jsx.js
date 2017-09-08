@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import documentsManager from 'fontoxml-documents/documentsManager';
 import t from 'fontoxml-localization/t';
 
 import {
@@ -27,32 +26,32 @@ import withModularBrowserCapabilities from '../withModularBrowserCapabilities.js
 
 const stateLabels = {
 	loading: {
-		title: t('Loading documents…'),
+		title: t('Loading templates…'),
 		message: null
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+		message: null
 	},
 	empty: {
 		title: t('No results'),
 		message: t('This folder does not contain files that can be opened with FontoXML.')
 	},
 	loadingPreview: {
-		title: t('Loading document preview…'),
+		title: t('Loading template preview…'),
 		message: null
 	},
 	previewError: {
-		title: t('Can’t open this document'),
+		title: t('Can’t open this template'),
 		message: t(
-			'FontoXML can’t open this document. You can try again, or try a different document.'
+			'FontoXML can’t open this template. You can try again, or try a different template.'
 		)
 	}
 };
 
-class DocumentBrowserModal extends Component {
+class DocumentTemplateBrowserModal extends Component {
 	static defaultProps = {
-		renderModalBodyToolbar: null
+		remoteDocumentId: null
 	};
 
 	static propTypes = {
@@ -60,11 +59,10 @@ class DocumentBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
-			documentId: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
 		}).isRequired,
-		renderModalBodyToolbar: PropTypes.func,
+		remoteDocumentId: PropTypes.string,
 		submitModal: PropTypes.func.isRequired
 	};
 
@@ -80,7 +78,7 @@ class DocumentBrowserModal extends Component {
 		<DocumentListItem
 			{...this.props}
 			key={key}
-			item={item}
+			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			isSelected={isSelected}
 			isDisabled={isDisabled}
 			onClick={onClick}
@@ -93,7 +91,7 @@ class DocumentBrowserModal extends Component {
 		<DocumentGridItem
 			{...this.props}
 			key={key}
-			item={item}
+			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			isSelected={isSelected}
 			isDisabled={isDisabled}
 			onClick={onClick}
@@ -101,20 +99,9 @@ class DocumentBrowserModal extends Component {
 		/>
 	);
 
-	submitModal = itemToSubmit =>
-		this.props.submitModal({
-			documentRemoteId: itemToSubmit.id,
-			documentId: itemToSubmit.documentId
-		});
+	submitModal = itemToSubmit => this.props.submitModal(itemToSubmit);
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => {
-		this.props.loadDocument(selectedItem.id).then(
-			documentId => this.submitModal({ ...selectedItem, documentId }),
-			_error => {
-				return;
-			}
-		);
-	};
+	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
 
 	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
 
@@ -129,19 +116,16 @@ class DocumentBrowserModal extends Component {
 				modalTitle
 			},
 			onUpdateViewMode,
-			renderModalBodyToolbar,
 			selectedItem,
 			viewMode
 		} = this.props;
 		const hasBreadcrumbItems = breadcrumbItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight>
-				<ModalHeader title={modalTitle || t('Select a document')} />
+			<Modal size="m">
+				<ModalHeader title={modalTitle || t('Select a template')} />
 
 				<ModalBody>
-					{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
-
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
 							justifyContent={hasBreadcrumbItems ? 'space-between' : 'flex-end'}
@@ -191,8 +175,8 @@ class DocumentBrowserModal extends Component {
 
 					<Button
 						type="primary"
-						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={!selectedItem || !selectedItem.documentId}
+						label={modalPrimaryButtonLabel || t('Select')}
+						isDisabled={!selectedItem}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
@@ -201,10 +185,8 @@ class DocumentBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { documentId }, onUpdateInitialSelectedFileId } = this.props;
-		let remoteDocumentId = null;
-		if (documentId) {
-			remoteDocumentId = documentsManager.getDocumentFile(documentId).remoteDocumentId;
+		const { onUpdateInitialSelectedFileId, remoteDocumentId } = this.props;
+		if (remoteDocumentId) {
 			onUpdateInitialSelectedFileId(remoteDocumentId);
 		}
 
@@ -223,6 +205,6 @@ class DocumentBrowserModal extends Component {
 	}
 }
 
-DocumentBrowserModal = withModularBrowserCapabilities(DocumentBrowserModal, viewModes[0] /* list*/);
+DocumentTemplateBrowserModal = withModularBrowserCapabilities(DocumentTemplateBrowserModal, viewModes[0] /* list*/);
 
-export default DocumentBrowserModal;
+export default DocumentTemplateBrowserModal;

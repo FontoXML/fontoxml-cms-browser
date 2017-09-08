@@ -4,9 +4,9 @@ import { Flex, GridItem, Icon, Label } from 'fontoxml-vendor-fds/components';
 
 class DocumentListItem extends Component {
 	render() {
-		const { item, isSelected, isDisabled, onClick, onDoubleClick } = this.props;
+		const { item, isDisabled, isItemErrored, isSelected, onClick, onDoubleClick } = this.props;
 
-		if (this.props.cachedErrorsByRemoteId[item.id]) {
+		if (isItemErrored(item)) {
 			return (
 				<GridItem
 					isSelected={isSelected}
@@ -20,6 +20,7 @@ class DocumentListItem extends Component {
 							icon={item.icon || 'file-text-o'}
 							size="m"
 						/>
+
 						<Label colorName="text-muted-color">{item.label}</Label>
 					</Flex>
 				</GridItem>
@@ -38,6 +39,7 @@ class DocumentListItem extends Component {
 						icon={item.icon || (item.type === 'folder' ? 'folder-o' : 'file-text-o')}
 						size="m"
 					/>
+
 					<Label>{item.label}</Label>
 				</Flex>
 			</GridItem>

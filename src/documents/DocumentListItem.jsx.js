@@ -4,9 +4,17 @@ import { Icon, Label, ListItem } from 'fontoxml-vendor-fds/components';
 
 class DocumentListItem extends Component {
 	render() {
-		const { item, isSelected, isDisabled, onClick, onDoubleClick, onRef } = this.props;
+		const {
+			item,
+			isDisabled,
+			isItemErrored,
+			isSelected,
+			onClick,
+			onDoubleClick,
+			onRef
+		} = this.props;
 
-		if (this.props.isItemErrored(item)) {
+		if (isItemErrored(item)) {
 			return (
 				<ListItem
 					isSelected={isSelected}
@@ -20,6 +28,7 @@ class DocumentListItem extends Component {
 						icon={item.icon || 'file-text-o'}
 						size="s"
 					/>
+
 					<Label colorName="text-muted-color">{item.label}</Label>
 				</ListItem>
 			);
@@ -37,6 +46,7 @@ class DocumentListItem extends Component {
 					icon={item.icon || (item.type === 'folder' ? 'folder-o' : 'file-text-o')}
 					size="s"
 				/>
+
 				<Label>{item.label}</Label>
 			</ListItem>
 		);
