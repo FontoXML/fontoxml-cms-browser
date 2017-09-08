@@ -3,7 +3,12 @@ import React, { PureComponent } from 'react';
 
 import { ButtonGroup } from 'fontoxml-vendor-fds/components';
 
-export const viewModes = [{ name: 'list', icon: 'list' }, { name: 'grid', icon: 'th' }];
+const viewModes = [{ name: 'list', icon: 'list' }, { name: 'grid', icon: 'th' }];
+
+export const VIEWMODES = {
+	LIST: viewModes[0],
+	GRID: viewModes[1]
+};
 
 class ModalBrowserListOrGridViewMode extends PureComponent {
 	static propTypes = {

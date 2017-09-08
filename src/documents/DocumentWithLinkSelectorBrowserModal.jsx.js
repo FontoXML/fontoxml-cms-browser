@@ -21,7 +21,7 @@ import DocumentWithLinkSelectorPreview from './DocumentWithLinkSelectorPreview.j
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
-	viewModes
+	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
 import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
@@ -230,7 +230,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(
 	DocumentWithLinkSelectorBrowserModal,
-	viewModes[0] /* list*/
+	VIEWMODES.LIST
 );
 
 export default DocumentWithLinkSelectorBrowserModal;

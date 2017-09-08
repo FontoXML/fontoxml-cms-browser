@@ -21,9 +21,8 @@ import ImagePreview from './ImagePreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
-	viewModes
+	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserPreview from '../shared/ModalBrowserPreview.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
 import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
@@ -190,7 +189,7 @@ class ImageBrowserModal extends Component {
 							{this.props.selectedItem &&
 							this.props.selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column">
-									<ModalBrowserPreview
+									<ImagePreview
 										{...this.props}
 										stateLabels={stateLabels}
 										renderPreview={this.handleRenderPreview}
@@ -236,6 +235,6 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, viewModes[1] /* grid*/);
+ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, VIEWMODES.GRID);
 
 export default ImageBrowserModal;

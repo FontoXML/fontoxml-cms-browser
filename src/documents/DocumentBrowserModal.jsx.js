@@ -20,7 +20,7 @@ import DocumentModalPreview from './DocumentModalPreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
-	viewModes
+	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
 import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
@@ -223,6 +223,6 @@ class DocumentBrowserModal extends Component {
 	}
 }
 
-DocumentBrowserModal = withModularBrowserCapabilities(DocumentBrowserModal, viewModes[0] /* list*/);
+DocumentBrowserModal = withModularBrowserCapabilities(DocumentBrowserModal, VIEWMODES.LIST);
 
 export default DocumentBrowserModal;
