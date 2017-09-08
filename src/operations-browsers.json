@@ -63,7 +63,7 @@
 		}
 	},
 
-	"open-create-document-form-or-open-document-browser": {
+	"open-open-or-create-document-browser": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"openDocumentDataProviderName": null,
@@ -86,7 +86,6 @@
 	"open-create-document-form": {
 		"initialData": {
 			"browseContextDocumentId": null,
-			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"selectDocumentTemplateDataProviderName": null,
 			"selectFolderDataProviderName": null
@@ -95,7 +94,6 @@
 			"type": "modal/CreateDocumentModalStack",
 			"data": {
 				"browseContextDocumentId": "{{browseContextDocumentId}}",
-				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 				"modalTitle": "{{modalTitle}}",
 				"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
 				"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"

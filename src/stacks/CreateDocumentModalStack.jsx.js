@@ -14,6 +14,7 @@ class CreateDocumentFormModalStack extends Component {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
+			modalTitle: PropTypes.string,
 			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
 			selectFolderDataProviderName: PropTypes.string.isRequired
 		}).isRequired,

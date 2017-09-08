@@ -1,7 +1,0 @@
-@import './old/previews/document-links/link-selector-overlay-view';
-@import './old/browsers/file-or-folders/browser';
-
-// TODO: this can be removed when the modal service is no longer implemented in Angular
-ui-modal-renderer .modal[window-class='fds-modal-fullscreen'] {
-	padding: 0;
-}

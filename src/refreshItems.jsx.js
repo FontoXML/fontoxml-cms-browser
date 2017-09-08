@@ -30,10 +30,10 @@ export default function refreshItems(
 					prevSelectedItem &&
 					prevSelectedItem.type !== 'folder'
 				) {
-					// An other file was selected so the initialSelectedItemId is no longer cached
+					// An other item (that is not a folder) was selected so the initialSelectedItemId is no longer cached
 					onUpdateInitialSelectedItemId(null);
 				} else if (initialSelectedItemId) {
-					// If the initial selected file is in this folder, it should be selected
+					// If the initial selected item is in this folder, it should be selected
 					initialSelectedItem =
 						result.items.find(item => item.id === initialSelectedItemId) || null;
 				}
