@@ -40,6 +40,7 @@ export default function refreshItems(
 				onItemSelect(initialSelectedItem);
 
 				onUpdateItems(result.items, result.hierarchyItems || [], {});
+				return result.items;
 			},
 			error => {
 				if (!error) {

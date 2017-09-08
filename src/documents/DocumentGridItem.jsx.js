@@ -1,10 +1,32 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Flex, GridItem, Icon, Label } from 'fontoxml-vendor-fds/components';
 
-class DocumentListItem extends Component {
+class DocumentGridItem extends Component {
+	static defaultProps = {
+		isDisabled: false,
+		isSelected: false,
+		onClick: _item => {},
+		onDoubleClick: _item => {}
+	};
+
+	static propTypes = {
+		isDisabled: PropTypes.bool,
+		isItemErrored: PropTypes.func.isRequired,
+		isSelected: PropTypes.bool,
+		item: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			icon: PropTypes.string,
+			label: PropTypes.string.isRequired,
+			type: PropTypes.string.isRequired
+		}).isRequired,
+		onClick: PropTypes.func,
+		onDoubleClick: PropTypes.func
+	};
+
 	render() {
-		const { item, isDisabled, isItemErrored, isSelected, onClick, onDoubleClick } = this.props;
+		const { isDisabled, isItemErrored, isSelected, item, onClick, onDoubleClick } = this.props;
 
 		if (isItemErrored(item)) {
 			return (
@@ -47,4 +69,4 @@ class DocumentListItem extends Component {
 	}
 }
 
-export default DocumentListItem;
+export default DocumentGridItem;

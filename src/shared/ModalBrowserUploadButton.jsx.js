@@ -72,7 +72,9 @@ class ModalBrowserUploadButton extends PureComponent {
 					onUpdateRequest,
 					this.props.selectedItem,
 					true
-				).then(() => onItemSelect(uploadedItem));
+				).then((items = []) =>
+					onItemSelect(items.find(item => item.id === uploadedItem.id) || null)
+				);
 			},
 			error => {
 				if (!error) {

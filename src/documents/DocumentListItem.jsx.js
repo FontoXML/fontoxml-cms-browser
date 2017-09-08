@@ -1,14 +1,38 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Icon, Label, ListItem } from 'fontoxml-vendor-fds/components';
 
 class DocumentListItem extends Component {
+	static defaultProps = {
+		isDisabled: false,
+		isSelected: false,
+		onClick: _item => {},
+		onDoubleClick: _item => {},
+		onRef: _domNode => {}
+	};
+
+	static propTypes = {
+		isDisabled: PropTypes.bool,
+		isItemErrored: PropTypes.func.isRequired,
+		isSelected: PropTypes.bool,
+		item: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			icon: PropTypes.string,
+			label: PropTypes.string.isRequired,
+			type: PropTypes.string.isRequired
+		}).isRequired,
+		onClick: PropTypes.func,
+		onDoubleClick: PropTypes.func,
+		onRef: PropTypes.func
+	};
+
 	render() {
 		const {
-			item,
 			isDisabled,
 			isItemErrored,
 			isSelected,
+			item,
 			onClick,
 			onDoubleClick,
 			onRef
