@@ -8,6 +8,8 @@ import { SelectFileButton } from 'fontoxml-vendor-fds/components';
 import dataProviders from '../dataProviders';
 import refreshItems from '../refreshItems.jsx';
 
+// TODO: inline the actual upload inside withModularBrowserCapabilities
+// make this stateless (possibly even obsolete, FDS selectFileButton might be enough)
 class ModalBrowserUploadButton extends PureComponent {
 	static defaultProps = {
 		breadcrumbItems: [],

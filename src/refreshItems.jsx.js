@@ -1,15 +1,21 @@
 import dataProviders from './dataProviders';
 
+// TODO: inline this in withModularBrowserCapabilities
 export default function refreshItems(
+	// TODO: rename to hierarchyItems
 	breadcrumbItems,
 	browseContextDocumentId,
 	dataProviderName,
 	folderToLoad,
 	initialSelectedItemId,
 	onItemSelect,
+	// TODO: unused, remove this
 	onUpdateInitialSelectedItemId,
+	// TODO: rename to onItemsChange
 	onUpdateItems,
+	// TODO: check if this should be implemented as a callback, rename to onRequestStateChange if it does
 	onUpdateRequest,
+	// TODO: unused, remove this
 	prevSelectedItem,
 	noCache
 ) {

@@ -9,10 +9,15 @@ import selectionManager from 'fontoxml-selection/selectionManager';
 
 export default function withModularBrowserCapabilities(WrappedComponent, initialViewMode = null) {
 	return class ModularBrowser extends Component {
+		// TODO: refactored by Thomas G.
 		cachedFileByRemoteId = {};
 		cachedErrorByRemoteId = {};
+
 		initialSelectedItemId = null;
+		// TODO: rename to isMountedInDOM / refactored by Thomas G.
 		isComponentMounted = false;
+
+		// TODO: delete / refactored by Thomas G.
 		loadingFilesById = {};
 
 		state = {
@@ -36,13 +41,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 		isItemErrored = item => !!this.cachedErrorByRemoteId[item.id];
 
 		// Used by any component to change the currently selected item
-		onItemSelect = item => {
-			if (this.isComponentMounted) {
-				this.setState({
-					selectedItem: item
-				});
-			}
-		};
+		onItemSelect = item => this.isComponentMounted && this.setState({ selectedItem: item });
 
 		onUpdateInitialSelectedItemId = itemId => {
 			if (this.isComponentMounted) {
@@ -148,14 +147,22 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 		render() {
 			const props = {
 				...this.props,
+				// TODO: make this explicit (only 5 state properties anyway)
 				...this.state,
+				// Is this needed? What for?
 				initialSelectedItemId: this.initialSelectedItemId,
 				isItemErrored: this.isItemErrored,
 				onItemSelect: this.onItemSelect,
+				// TODO: rename to onInitialSelectedItemIdChange
 				onUpdateInitialSelectedItemId: this.onUpdateInitialSelectedItemId,
+				// TODO: rename to onItemsChange
 				onUpdateItems: this.onUpdateItems,
+				// TODO: rename to onRequestStateChange
 				onUpdateRequest: this.onUpdateRequest,
+				// TODO: rename to onViewModeChange
 				onUpdateViewMode: this.onUpdateViewMode,
+
+				// TODO: refactored by Thomas G.
 				loadDocument: this.loadDocument,
 				loadImage: this.loadImage
 			};
@@ -163,6 +170,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			return <WrappedComponent {...props} />;
 		}
 
+		// TODO: shouldn't this be componentDidMount() ?
 		componentWillMount() {
 			this.isComponentMounted = true;
 		}
