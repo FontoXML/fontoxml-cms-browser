@@ -99,7 +99,7 @@ class CreateDocumentFormModal extends Component {
 						type="primary"
 						label={t('Create')}
 						isDisabled={
-							documentTitle.trim().length < 0 ||
+							documentTitle.trim().length === 0 ||
 							!selectedFolder.id ||
 							!selectedDocumentTemplate.id
 						}

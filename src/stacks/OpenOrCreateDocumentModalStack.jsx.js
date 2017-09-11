@@ -8,6 +8,7 @@ import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fontoxml-vendor-fds/c
 import CreateDocumentFormModal from '../documents/CreateDocumentFormModal.jsx';
 import DocumentBrowserModal from '../documents/DocumentBrowserModal.jsx';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
+import FolderBrowserModal from '../documents/FolderBrowserModal.jsx';
 
 const tabs = [
 	{
@@ -68,13 +69,20 @@ class OpenOrCreateDocumentModalStack extends Component {
 			selectedDocumentTemplate: submittedItem
 		});
 
+	handleFolderSubmit = submittedItem =>
+		this.setState({
+			activeModal: null,
+			selectedFolder: submittedItem
+		});
+
 	render() {
 		const {
 			data: {
 				browseContextDocumentId,
 				modalTitle,
 				openDocumentDataProviderName,
-				selectDocumentTemplateDataProviderName
+				selectDocumentTemplateDataProviderName,
+				selectFolderDataProviderName
 			},
 			cancelModal,
 			submitModal
@@ -121,6 +129,18 @@ class OpenOrCreateDocumentModalStack extends Component {
 						}}
 						remoteDocumentId={selectedDocumentTemplate.id}
 						submitModal={this.handleDocumentTemplateSubmit}
+					/>
+				)}
+
+				{activeModal === 'FolderBrowser' && (
+					<FolderBrowserModal
+						cancelModal={this.handleCancelModal}
+						data={{
+							browseContextDocumentId,
+							dataProviderName: selectFolderDataProviderName,
+							modalTitle: t('Select a folder to save your documents in')
+						}}
+						submitModal={this.handleFolderSubmit}
 					/>
 				)}
 			</ModalStack>

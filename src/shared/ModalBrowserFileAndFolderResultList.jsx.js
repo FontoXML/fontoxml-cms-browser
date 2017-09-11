@@ -10,6 +10,9 @@ import {
 
 import refreshItems from '../refreshItems.jsx';
 
+const getSelectedItems = (items, selectedItem) =>
+	items.some(item => selectedItem && item.id === selectedItem.id) ? [selectedItem] : [];
+
 class ModalBrowserFileAndFolderResultList extends Component {
 	static defaultProps = {
 		breadcrumbItems: [],
@@ -111,7 +114,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
 					renderItem={renderListItem}
-					selectedItems={selectedItem === null ? [] : [selectedItem]}
+					selectedItems={getSelectedItems(items, selectedItem)}
 				/>
 			);
 		}
@@ -125,7 +128,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
 				renderItem={renderGridItem}
-				selectedItems={selectedItem === null ? [] : [selectedItem]}
+				selectedItems={getSelectedItems(items, selectedItem)}
 			/>
 		);
 	}

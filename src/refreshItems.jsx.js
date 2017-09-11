@@ -24,7 +24,14 @@ export default function refreshItems(
 		})
 		.then(
 			result => {
-				let initialSelectedItem = null;
+				// Because of jump in the tree with browse context document id,
+				// the folder that is actually loaded could be different from the folderToLoad.
+				let newSelectedItem =
+					result.hierarchyItems[result.hierarchyItems.length - 1] || folderToLoad;
+
+				// If the rootFolder is the folder to load, the newSelectedItem is null
+				newSelectedItem = newSelectedItem.id === null ? null : newSelectedItem;
+
 				if (
 					initialSelectedItemId &&
 					prevSelectedItem &&
@@ -34,10 +41,10 @@ export default function refreshItems(
 					onUpdateInitialSelectedItemId(null);
 				} else if (initialSelectedItemId) {
 					// If the initial selected item is in this folder, it should be selected
-					initialSelectedItem =
+					newSelectedItem =
 						result.items.find(item => item.id === initialSelectedItemId) || null;
 				}
-				onItemSelect(initialSelectedItem);
+				onItemSelect(newSelectedItem);
 
 				onUpdateItems(result.items, result.hierarchyItems || [], {});
 				return result.items;

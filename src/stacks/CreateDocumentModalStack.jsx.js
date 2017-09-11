@@ -39,6 +39,7 @@ class CreateDocumentFormModalStack extends Component {
 			activeModal: null,
 			selectedDocumentTemplate: submittedItem
 		});
+
 	handleFolderSubmit = submittedItem =>
 		this.setState({
 			activeModal: null,
@@ -86,9 +87,8 @@ class CreateDocumentFormModalStack extends Component {
 					<FolderBrowserModal
 						cancelModal={this.handleCancelModal}
 						data={{
-							browseContextDocumentId: browseContextDocumentId,
+							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
-							folderId: selectedFolder.id,
 							modalTitle: t('Select a folder to save your documents in')
 						}}
 						submitModal={this.handleFolderSubmit}

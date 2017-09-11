@@ -44,9 +44,9 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
-		onUpdateInitialSelectedItemId = fileId => {
+		onUpdateInitialSelectedItemId = itemId => {
 			if (this.isComponentMounted) {
-				this.initialSelectedItemId = fileId;
+				this.initialSelectedItemId = itemId;
 			}
 		};
 

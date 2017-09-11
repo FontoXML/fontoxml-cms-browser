@@ -24,7 +24,7 @@ const imageStyles = merge(block, {
 	transform: 'translateX(-50%) translateY(-50%)'
 });
 
-class ModalBrowserPreview extends Component {
+class ImagePreview extends Component {
 	static defaultProps = {
 		selectedItem: null
 	};
@@ -65,23 +65,23 @@ class ModalBrowserPreview extends Component {
 			imageData: null
 		});
 
-	loadImage(props) {
+	loadImage = selectedItem => {
 		this.setState({ isLoading: true });
 
-		props
-			.loadImage(props.selectedItem.id)
+		this.props
+			.loadImage(selectedItem.id)
 			.then(
-				imageData => this.handleLoadImage(imageData, props.selectedItem.id),
-				error => this.handleLoadError(error, props.selectedItem.id)
+				imageData => this.handleLoadImage(imageData, selectedItem.id),
+				error => this.handleLoadError(error, selectedItem.id)
 			);
-	}
+	};
 
 	componentWillReceiveProps(nextProps) {
 		if (this.props.selectedItem.id === nextProps.selectedItem.id) {
 			return;
 		}
 
-		this.loadImage(nextProps);
+		this.loadImage(nextProps.selectedItem);
 	}
 
 	render() {
@@ -110,25 +110,28 @@ class ModalBrowserPreview extends Component {
 
 		return (
 			<Flex flex="auto" flexDirection="column">
-				<Flex
-					flex="auto"
-					flexDirection="column"
-					paddingSize={{ horizontal: 'l', top: 'l' }}
-				>
+				<Flex flex="auto" flexDirection="column" paddingSize="l" spaceSize="m">
 					<Heading level="4">{selectedItem.label}</Heading>
 
 					<Flex flex="auto">
 						<img src={this.state.imageData.dataUrl} {...imageStyles} />
 					</Flex>
-
-					<HorizontalSeparationLine marginSizeTop="l" />
 				</Flex>
 
-				<KeyValueList
-					items={selectedItem.metadata ? selectedItem.metadata.properties || {} : {}}
-					scrollLimit={5}
-					paddingSize="l"
-				/>
+				{selectedItem.metadata &&
+				selectedItem.metadata.properties && (
+					<Flex flex="none" flexDirection="column">
+						<Flex paddingSize={{ horizontal: 'l' }}>
+							<HorizontalSeparationLine />
+						</Flex>
+
+						<KeyValueList
+							items={selectedItem.metadata.properties}
+							scrollLimit={5}
+							paddingSize="l"
+						/>
+					</Flex>
+				)}
 			</Flex>
 		);
 	}
@@ -136,7 +139,7 @@ class ModalBrowserPreview extends Component {
 	componentDidMount() {
 		this.isMountedInDOM = true;
 
-		this.loadImage(this.props);
+		this.loadImage(this.props.selectedItem);
 	}
 
 	componentWillUnmount() {
@@ -144,4 +147,4 @@ class ModalBrowserPreview extends Component {
 	}
 }
 
-export default ModalBrowserPreview;
+export default ImagePreview;

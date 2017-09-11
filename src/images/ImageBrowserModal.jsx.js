@@ -206,7 +206,7 @@ class ImageBrowserModal extends Component {
 					<Button
 						type="primary"
 						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={selectedItem === null || selectedItem.type === 'folder'}
+						isDisabled={!selectedItem || selectedItem.type === 'folder'}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>

@@ -44,7 +44,6 @@ class FolderBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
-			folderId: PropTypes.string,
 			modalTitle: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string
 		}).isRequired,
@@ -153,19 +152,14 @@ class FolderBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { folderId }, onUpdateInitialSelectedItemId } = this.props;
-		if (folderId) {
-			onUpdateInitialSelectedItemId(folderId);
-		}
-
 		refreshItems(
 			this.props.breadcrumbItems,
 			this.props.data.browseContextDocumentId,
 			this.props.data.dataProviderName,
 			{ id: null },
-			folderId,
+			this.props.initialSelectedItemId,
 			this.props.onItemSelect,
-			onUpdateInitialSelectedItemId,
+			this.props.onUpdateInitialSelectedItemId,
 			this.props.onUpdateItems,
 			this.props.onUpdateRequest,
 			this.props.selectedItem
