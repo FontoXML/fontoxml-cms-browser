@@ -56,6 +56,15 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		viewMode: PropTypes.object.isRequired
 	};
 
+	handleItemClick = item => {
+		this.props.onItemSelect(item);
+
+		if (this.props.initialSelectedItemId && item && item.type !== 'folder') {
+			// An other item (that is not a folder) was selected so the initialSelectedItemId is no longer cached
+			this.props.onUpdateInitialSelectedItemId(null);
+		}
+	};
+
 	handleItemDoubleClick = item =>
 		item.type === 'folder'
 			? refreshItems(
@@ -75,7 +84,6 @@ class ModalBrowserFileAndFolderResultList extends Component {
 	render() {
 		const {
 			items,
-			onItemSelect,
 			renderGridItem,
 			renderListItem,
 			request,
@@ -110,7 +118,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				<VirtualList
 					estimatedItemHeight={30}
 					items={items}
-					onItemClick={onItemSelect}
+					onItemClick={this.handleItemClick}
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
 					renderItem={renderListItem}
@@ -124,7 +132,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			<VirtualGrid
 				estimatedRowHeight={86}
 				items={items}
-				onItemClick={onItemSelect}
+				onItemClick={this.handleItemClick}
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
 				renderItem={renderGridItem}

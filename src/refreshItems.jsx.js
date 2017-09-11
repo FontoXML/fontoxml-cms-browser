@@ -32,14 +32,7 @@ export default function refreshItems(
 				// If the rootFolder is the folder to load, the newSelectedItem is null
 				newSelectedItem = newSelectedItem.id === null ? null : newSelectedItem;
 
-				if (
-					initialSelectedItemId &&
-					prevSelectedItem &&
-					prevSelectedItem.type !== 'folder'
-				) {
-					// An other item (that is not a folder) was selected so the initialSelectedItemId is no longer cached
-					onUpdateInitialSelectedItemId(null);
-				} else if (initialSelectedItemId) {
+				if (initialSelectedItemId) {
 					// If the initial selected item is in this folder, it should be selected
 					newSelectedItem =
 						result.items.find(item => item.id === initialSelectedItemId) || null;

@@ -38,9 +38,14 @@ class ModalBrowserUploadButton extends PureComponent {
 	dataProvider = dataProviders.get(this.props.dataProviderName);
 	uploadOptions = this.dataProvider.getUploadOptions();
 
-	handleOnSelect = selectedFiles => {
-		const { breadcrumbItems, onItemSelect, onUpdateRequest, uploadErrorMessages } = this.props;
-		const lastLoadedFolder = breadcrumbItems[breadcrumbItems.length - 1];
+	handleSelect = selectedFiles => {
+		const {
+			breadcrumbItems,
+			onItemSelect,
+			onUpdateInitialSelectedItemId,
+			onUpdateRequest,
+			uploadErrorMessages
+		} = this.props;
 
 		// TODO: support multiple
 		if (selectedFiles[0].size > this.uploadOptions.maxFileSizeInBytes) {
@@ -56,7 +61,7 @@ class ModalBrowserUploadButton extends PureComponent {
 			busy: true
 		});
 
-		const folderWithUploadedFile = { ...lastLoadedFolder };
+		const folderWithUploadedFile = breadcrumbItems[breadcrumbItems.length - 1];
 
 		this.dataProvider.upload(folderWithUploadedFile.id, selectedFiles).then(
 			uploadedItem => {
@@ -67,14 +72,17 @@ class ModalBrowserUploadButton extends PureComponent {
 					folderWithUploadedFile,
 					this.props.initialSelectedItemId,
 					onItemSelect,
-					this.props.onUpdateInitialSelectedItemId,
+					onUpdateInitialSelectedItemId,
 					this.props.onUpdateItems,
 					onUpdateRequest,
 					this.props.selectedItem,
 					true
-				).then((items = []) =>
-					onItemSelect(items.find(item => item.id === uploadedItem.id) || null)
-				);
+				).then((items = []) => {
+					onItemSelect(items.find(item => item.id === uploadedItem.id) || null);
+
+					// An other item (that is not a folder) was selected so the initialSelectedItemId is no longer cached
+					onUpdateInitialSelectedItemId(null);
+				});
 			},
 			error => {
 				if (!error) {
@@ -105,7 +113,7 @@ class ModalBrowserUploadButton extends PureComponent {
 				mimeTypesToAccept={this.uploadOptions.mimeTypesToAccept}
 				icon="upload"
 				iconAfter={isUploading ? 'spinner' : null}
-				onSelect={this.handleOnSelect}
+				onSelect={this.handleSelect}
 			/>
 		);
 	}
