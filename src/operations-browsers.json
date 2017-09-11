@@ -1,5 +1,5 @@
 {
-	"open-document-with-link-selector-browser": {
+	"open-document-with-link-selector-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"dataProviderName": null,
@@ -23,7 +23,7 @@
 		}
 	},
 
-	"open-image-browser": {
+	"open-image-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"dataProviderName": null,
@@ -43,7 +43,7 @@
 		}
 	},
 
-	"open-document-browser": {
+	"open-document-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"dataProviderName": null,
@@ -63,7 +63,7 @@
 		}
 	},
 
-	"open-open-or-create-document-browser": {
+	"open-open-or-create-document-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"openDocumentDataProviderName": null,
@@ -83,7 +83,7 @@
 		}
 	},
 
-	"open-create-document-form": {
+	"open-create-document-form-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"modalTitle": null,
