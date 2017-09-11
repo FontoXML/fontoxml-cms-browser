@@ -17,5 +17,8 @@
 		"fontoxml-utils": "^1.2.1",
 		"fontoxml-vendor-fds": "^4.0.0",
 		"fontoxml-vendors": "^2.1.0"
+	},
+	"devDependencies": {
+		"fontoxml-connectors-standard": "^2.3.0"
 	}
 }
