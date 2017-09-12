@@ -13,7 +13,7 @@ export const VIEWMODES = {
 class ModalBrowserListOrGridViewMode extends PureComponent {
 	static propTypes = {
 		// from withModularBrowserCapabilities
-		onUpdateViewMode: PropTypes.func.isRequired,
+		onViewModeChange: PropTypes.func.isRequired,
 		viewMode: PropTypes.object.isRequired
 	};
 
@@ -22,7 +22,7 @@ class ModalBrowserListOrGridViewMode extends PureComponent {
 			<ButtonGroup
 				items={viewModes}
 				selectedItem={this.props.viewMode}
-				onItemClick={this.props.onUpdateViewMode}
+				onItemClick={this.props.onViewModeChange}
 			/>
 		);
 	}

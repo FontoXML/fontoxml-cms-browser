@@ -98,7 +98,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: openDocumentDataProviderName,
-							modalPrimaryButtonLabel: t('open'),
+							modalPrimaryButtonLabel: t('Open'),
 							modalTitle: openOrCreateModalTitle
 						}}
 						renderModalBodyToolbar={this.handleRenderModalBodyToolbar}

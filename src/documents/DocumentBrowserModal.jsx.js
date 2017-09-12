@@ -23,7 +23,6 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -71,32 +70,32 @@ class DocumentBrowserModal extends Component {
 
 	handleRenderListItem = ({
 		key,
-		item,
-		isSelected,
 		isDisabled,
+		isSelected,
+		item,
 		onClick,
 		onDoubleClick,
 		onRef
 	}) => (
 		<DocumentListItem
-			{...this.props}
 			key={key}
-			item={item}
-			isSelected={isSelected}
 			isDisabled={isDisabled}
+			isItemErrored={this.props.isItemErrored}
+			isSelected={isSelected}
+			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 			onRef={onRef}
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
-			{...this.props}
 			key={key}
-			item={item}
-			isSelected={isSelected}
 			isDisabled={isDisabled}
+			isItemErrored={this.props.isItemErrored}
+			isSelected={isSelected}
+			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
@@ -109,7 +108,7 @@ class DocumentBrowserModal extends Component {
 		});
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
-		this.props.loadDocument(selectedItem.id).then(
+		this.props.loadItem(selectedItem.id).then(
 			documentId => this.submitModal({ ...selectedItem, documentId }),
 			_error => {
 				return;
@@ -121,20 +120,20 @@ class DocumentBrowserModal extends Component {
 
 	render() {
 		const {
-			breadcrumbItems,
 			cancelModal,
-			data: {
-				browseContextDocumentId,
-				dataProviderName,
-				modalPrimaryButtonLabel,
-				modalTitle
-			},
-			onUpdateViewMode,
+			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
+			hierarchyItems,
+			items,
+			loadItem,
+			onItemSelect,
+			onViewModeChange,
+			refreshItems,
 			renderModalBodyToolbar,
+			request,
 			selectedItem,
 			viewMode
 		} = this.props;
-		const hasBreadcrumbItems = breadcrumbItems.length > 0;
+		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
 			<Modal size="m" isFullHeight>
@@ -145,18 +144,19 @@ class DocumentBrowserModal extends Component {
 
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
-							justifyContent={hasBreadcrumbItems ? 'space-between' : 'flex-end'}
+							justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
 						>
-							{hasBreadcrumbItems && (
+							{hasHierarchyItems && (
 								<ModalBrowserHierarchyBreadcrumbs
-									{...this.props}
 									browseContextDocumentId={browseContextDocumentId}
-									dataProviderName={dataProviderName}
+									hierarchyItems={hierarchyItems}
+									refreshItems={refreshItems}
+									request={request}
 								/>
 							)}
 
 							<ModalBrowserListOrGridViewMode
-								onUpdateViewMode={onUpdateViewMode}
+								onViewModeChange={onViewModeChange}
 								viewMode={viewMode}
 							/>
 						</ModalContentToolbar>
@@ -164,13 +164,17 @@ class DocumentBrowserModal extends Component {
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
 								<ModalBrowserFileAndFolderResultList
-									{...this.props}
 									browseContextDocumentId={browseContextDocumentId}
-									dataProviderName={dataProviderName}
+									items={items}
+									onItemSelect={onItemSelect}
 									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
+									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
+									request={request}
+									selectedItem={selectedItem}
 									stateLabels={stateLabels}
+									viewMode={viewMode}
 								/>
 							</ModalContent>
 
@@ -178,7 +182,9 @@ class DocumentBrowserModal extends Component {
 							selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column" isScrollContainer>
 									<DocumentModalPreview
-										{...this.props}
+										loadItem={loadItem}
+										onItemSelect={onItemSelect}
+										selectedItem={selectedItem}
 										stateLabels={stateLabels}
 									/>
 								</ModalContent>
@@ -202,25 +208,19 @@ class DocumentBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { documentId }, onUpdateInitialSelectedItemId } = this.props;
-		let remoteDocumentId = null;
+		const {
+			data: { browseContextDocumentId, documentId },
+			onInitialSelectedItemIdChange,
+			refreshItems
+		} = this.props;
+
 		if (documentId) {
-			remoteDocumentId = documentsManager.getDocumentFile(documentId).remoteDocumentId;
-			onUpdateInitialSelectedItemId(remoteDocumentId);
+			onInitialSelectedItemIdChange(
+				documentsManager.getDocumentFile(documentId).remoteDocumentId
+			);
 		}
 
-		refreshItems(
-			this.props.breadcrumbItems,
-			this.props.data.browseContextDocumentId,
-			this.props.data.dataProviderName,
-			{ id: null },
-			remoteDocumentId,
-			this.props.onItemSelect,
-			onUpdateInitialSelectedItemId,
-			this.props.onUpdateItems,
-			this.props.onUpdateRequest,
-			this.props.selectedItem
-		);
+		refreshItems(browseContextDocumentId, { id: null });
 	}
 }
 

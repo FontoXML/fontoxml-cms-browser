@@ -22,7 +22,6 @@ class ImageGridItem extends Component {
 
 	static propTypes = {
 		isDisabled: PropTypes.bool,
-		isItemErrored: PropTypes.func.isRequired,
 		isSelected: PropTypes.bool,
 		item: PropTypes.shape({
 			id: PropTypes.string.isRequired,
@@ -31,7 +30,10 @@ class ImageGridItem extends Component {
 			type: PropTypes.string.isRequired
 		}).isRequired,
 		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func
+		onDoubleClick: PropTypes.func,
+
+		// from withModularBrowserCapabilities for withImagePreviewCapabilities
+		loadItem: PropTypes.func.isRequired
 	};
 
 	wrapInGridItem = content => {

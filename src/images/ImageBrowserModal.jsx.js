@@ -25,7 +25,6 @@ import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
-import refreshItems from '../refreshItems.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -77,46 +76,41 @@ class ImageBrowserModal extends Component {
 
 	handleRenderListItem = ({
 		key,
-		item,
-		isSelected,
 		isDisabled,
+		isSelected,
+		item,
 		onClick,
 		onDoubleClick,
 		onRef
 	}) => (
 		<ImageListItem
-			{...this.props}
 			key={key}
-			item={item}
-			isSelected={isSelected}
 			isDisabled={isDisabled}
+			isSelected={isSelected}
+			item={item}
+			loadItem={this.props.loadItem}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 			onRef={onRef}
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, isSelected, isDisabled, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
 		<ImageGridItem
-			{...this.props}
 			key={key}
-			item={item}
-			isSelected={isSelected}
 			isDisabled={isDisabled}
+			isSelected={isSelected}
+			item={item}
+			loadItem={this.props.loadItem}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
 	);
 
-	handleRenderPreview = ({ dataUrl, heading, properties }) => (
-		<ImagePreview dataUrl={dataUrl} heading={heading} properties={properties} />
-	);
-
-	handleSubmitButtonClick = () => this.submitModal(this.state.selectedItem);
+	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
 
 	render() {
 		const {
-			breadcrumbItems,
 			cancelModal,
 			data: {
 				browseContextDocumentId,
@@ -124,12 +118,18 @@ class ImageBrowserModal extends Component {
 				modalTitle,
 				modalPrimaryButtonLabel
 			},
-			onUpdateViewMode,
+			hierarchyItems,
+			items,
+			loadItem,
+			onItemSelect,
+			onUploadFileSelect,
+			onViewModeChange,
+			refreshItems,
 			request,
 			selectedItem,
 			viewMode
 		} = this.props;
-		const hasBreadcrumbItems = breadcrumbItems.length > 0;
+		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
 			<Modal size="l" isFullHeight={true}>
@@ -138,26 +138,29 @@ class ImageBrowserModal extends Component {
 				<ModalBody>
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
-							justifyContent={hasBreadcrumbItems ? 'space-between' : 'flex-end'}
+							justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
 						>
-							{hasBreadcrumbItems && (
+							{hasHierarchyItems && (
 								<ModalBrowserHierarchyBreadcrumbs
-									{...this.props}
 									browseContextDocumentId={browseContextDocumentId}
-									dataProviderName={dataProviderName}
+									hierarchyItems={hierarchyItems}
+									refreshItems={refreshItems}
+									request={request}
 								/>
 							)}
 
 							<Flex flex="none" spaceSize="m">
 								<ModalBrowserUploadButton
-									{...this.props}
 									browseContextDocumentId={browseContextDocumentId}
 									dataProviderName={dataProviderName}
+									hierarchyItems={hierarchyItems}
+									request={request}
 									uploadErrorMessages={uploadErrorMessages}
+									onUploadFileSelect={onUploadFileSelect}
 								/>
 
 								<ModalBrowserListOrGridViewMode
-									onUpdateViewMode={onUpdateViewMode}
+									onViewModeChange={onViewModeChange}
 									viewMode={viewMode}
 								/>
 							</Flex>
@@ -177,13 +180,17 @@ class ImageBrowserModal extends Component {
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
 								<ModalBrowserFileAndFolderResultList
-									{...this.props}
 									browseContextDocumentId={browseContextDocumentId}
-									dataProviderName={dataProviderName}
+									items={items}
+									onItemSelect={onItemSelect}
 									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
+									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
+									request={request}
+									selectedItem={selectedItem}
 									stateLabels={stateLabels}
+									viewMode={viewMode}
 								/>
 							</ModalContent>
 
@@ -191,9 +198,9 @@ class ImageBrowserModal extends Component {
 							this.props.selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column">
 									<ImagePreview
-										{...this.props}
+										loadItem={loadItem}
+										selectedItem={selectedItem}
 										stateLabels={stateLabels}
-										renderPreview={this.handleRenderPreview}
 									/>
 								</ModalContent>
 							)}
@@ -216,23 +223,17 @@ class ImageBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		const { data: { selectedImageId }, onUpdateInitialSelectedItemId } = this.props;
+		const {
+			data: { browseContextDocumentId, selectedImageId },
+			onInitialSelectedItemIdChange,
+			refreshItems
+		} = this.props;
+
 		if (selectedImageId) {
-			onUpdateInitialSelectedItemId(selectedImageId);
+			onInitialSelectedItemIdChange(selectedImageId);
 		}
 
-		refreshItems(
-			this.props.breadcrumbItems,
-			this.props.data.browseContextDocumentId,
-			this.props.data.dataProviderName,
-			{ id: null },
-			selectedImageId || null,
-			this.props.onItemSelect,
-			onUpdateInitialSelectedItemId,
-			this.props.onUpdateItems,
-			this.props.onUpdateRequest,
-			this.props.selectedItem
-		);
+		refreshItems(browseContextDocumentId, { id: null });
 	}
 }
 

@@ -23,7 +23,6 @@ class ImageListItem extends Component {
 
 	static propTypes = {
 		isDisabled: PropTypes.bool,
-		isItemErrored: PropTypes.func.isRequired,
 		isSelected: PropTypes.bool,
 		item: PropTypes.shape({
 			id: PropTypes.string.isRequired,
@@ -33,7 +32,10 @@ class ImageListItem extends Component {
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
-		onRef: PropTypes.func
+		onRef: PropTypes.func,
+
+		// from withModularBrowserCapabilities for withImagePreviewCapabilities
+		loadItem: PropTypes.func.isRequired
 	};
 
 	wrapInListItem = (content, label) => {

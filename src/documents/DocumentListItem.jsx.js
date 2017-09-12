@@ -14,7 +14,6 @@ class DocumentListItem extends Component {
 
 	static propTypes = {
 		isDisabled: PropTypes.bool,
-		isItemErrored: PropTypes.func.isRequired,
 		isSelected: PropTypes.bool,
 		item: PropTypes.shape({
 			id: PropTypes.string.isRequired,
@@ -24,7 +23,10 @@ class DocumentListItem extends Component {
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
-		onRef: PropTypes.func
+		onRef: PropTypes.func,
+
+		// from withModularBrowserCapabilities
+		isItemErrored: PropTypes.func.isRequired
 	};
 
 	render() {

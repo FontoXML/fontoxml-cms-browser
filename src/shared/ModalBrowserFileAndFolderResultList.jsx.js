@@ -8,23 +8,18 @@ import {
 	VirtualList
 } from 'fontoxml-vendor-fds/components';
 
-import refreshItems from '../refreshItems.jsx';
-
 const getSelectedItems = (items, selectedItem) =>
 	items.some(item => selectedItem && item.id === selectedItem.id) ? [selectedItem] : [];
 
 class ModalBrowserFileAndFolderResultList extends Component {
 	static defaultProps = {
-		breadcrumbItems: [],
 		browseContextDocumentId: null,
-		initialSelectedItemId: null,
 		onItemSubmit: () => {},
 		selectedItem: null
 	};
 
 	static propTypes = {
 		browseContextDocumentId: PropTypes.string,
-		dataProviderName: PropTypes.string.isRequired,
 		onItemSubmit: PropTypes.func,
 		renderGridItem: PropTypes.func.isRequired,
 		renderListItem: PropTypes.func.isRequired,
@@ -44,46 +39,23 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		}).isRequired,
 
 		// from withModularBrowserCapabilities
-		breadcrumbItems: PropTypes.array,
-		initialSelectedItemId: PropTypes.string,
 		items: PropTypes.array.isRequired,
 		onItemSelect: PropTypes.func.isRequired,
-		onUpdateInitialSelectedItemId: PropTypes.func.isRequired,
-		onUpdateItems: PropTypes.func.isRequired,
-		onUpdateRequest: PropTypes.func.isRequired,
+		refreshItems: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
 		selectedItem: PropTypes.object,
 		viewMode: PropTypes.object.isRequired
 	};
 
-	handleItemClick = item => {
-		this.props.onItemSelect(item);
-
-		if (this.props.initialSelectedItemId && item && item.type !== 'folder') {
-			// An other item (that is not a folder) was selected so the initialSelectedItemId is no longer cached
-			this.props.onUpdateInitialSelectedItemId(null);
-		}
-	};
-
 	handleItemDoubleClick = item =>
 		item.type === 'folder'
-			? refreshItems(
-					this.props.breadcrumbItems,
-					this.props.browseContextDocumentId,
-					this.props.dataProviderName,
-					item,
-					this.props.initialSelectedItemId,
-					this.props.onItemSelect,
-					this.props.onUpdateInitialSelectedItemId,
-					this.props.onUpdateItems,
-					this.props.onUpdateRequest,
-					this.props.selectedItem
-				)
+			? this.props.refreshItems(this.props.browseContextDocumentId, item)
 			: this.props.onItemSubmit(item);
 
 	render() {
 		const {
 			items,
+			onItemSelect,
 			renderGridItem,
 			renderListItem,
 			request,
@@ -118,7 +90,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				<VirtualList
 					estimatedItemHeight={30}
 					items={items}
-					onItemClick={this.handleItemClick}
+					onItemClick={onItemSelect}
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
 					renderItem={renderListItem}
@@ -132,7 +104,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			<VirtualGrid
 				estimatedRowHeight={86}
 				items={items}
-				onItemClick={this.handleItemClick}
+				onItemClick={onItemSelect}
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
 				renderItem={renderGridItem}
