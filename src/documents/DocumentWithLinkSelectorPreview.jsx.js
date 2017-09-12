@@ -39,8 +39,8 @@ class DocumentWithLinkSelectorPreview extends Component {
 
 	state = { isErrored: false, isLoading: true };
 
-	handleLoadDocumentId = documentId => {
-		if (!this.isMountedInDOM) {
+	handleLoadDocumentId = (documentId, idBeingLoaded) => {
+		if (!this.isMountedInDOM || idBeingLoaded !== this.props.selectedItem.id) {
 			return;
 		}
 
@@ -56,12 +56,12 @@ class DocumentWithLinkSelectorPreview extends Component {
 		this.setState({ isErrored: false, isLoading: false });
 	};
 
-	handleLoadError = error => {
+	handleLoadError = (error, idBeingLoaded) => {
 		if (!error) {
 			return;
 		}
 
-		if (this.isMountedInDOM) {
+		if (this.isMountedInDOM && idBeingLoaded === this.props.selectedItem.id) {
 			this.setState({ isErrored: true, isLoading: false });
 		}
 	};
@@ -78,7 +78,10 @@ class DocumentWithLinkSelectorPreview extends Component {
 
 		this.props
 			.loadItem(nextProps.selectedItem.id)
-			.then(this.handleLoadDocumentId, this.handleLoadError);
+			.then(
+				documentId => this.handleLoadDocumentId(documentId, nextProps.selectedItem.id),
+				error => this.handleLoadError(error, nextProps.selectedItem.id)
+			);
 	}
 
 	handleSelectedNodeChange = nodeId =>
@@ -123,7 +126,10 @@ class DocumentWithLinkSelectorPreview extends Component {
 
 		this.props
 			.loadItem(this.props.selectedItem.id)
-			.then(this.handleLoadDocumentId, this.handleLoadError);
+			.then(
+				documentId => this.handleLoadDocumentId(documentId, this.props.selectedItem.id),
+				error => this.handleLoadError(error, this.props.selectedItem.id)
+			);
 	}
 
 	componentWillUnmount() {

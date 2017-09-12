@@ -109,7 +109,9 @@ class DocumentBrowserModal extends Component {
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.loadItem(selectedItem.id).then(
-			documentId => this.submitModal({ ...selectedItem, documentId }),
+			documentId =>
+				this.props.selectedItem.id === selectedItem.id &&
+				this.submitModal({ ...selectedItem, documentId }),
 			_error => {
 				return;
 			}

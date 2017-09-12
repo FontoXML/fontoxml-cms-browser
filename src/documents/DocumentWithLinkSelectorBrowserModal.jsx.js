@@ -108,6 +108,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.loadItem(selectedItem.id).then(
 			documentId =>
+				this.props.selectedItem.id === selectedItem.id &&
 				this.submitModal({
 					documentId,
 					nodeId: getNodeId(documentsManager.getDocumentNode(documentId).documentElement)
