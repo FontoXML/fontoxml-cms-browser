@@ -30,7 +30,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 
 		// from withModularBrowserCapabilities
 		initialSelectedItemId: PropTypes.string,
-		loadDocument: PropTypes.func.isRequired,
+		loadItem: PropTypes.func.isRequired,
 		onItemSelect: PropTypes.func.isRequired,
 		selectedItem: PropTypes.object
 	};
@@ -77,7 +77,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		this.setState({ isErrored: false, isLoading: true });
 
 		this.props
-			.loadDocument(nextProps.selectedItem.id)
+			.loadItem(nextProps.selectedItem.id)
 			.then(this.handleLoadDocumentId, this.handleLoadError);
 	}
 
@@ -122,7 +122,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		this.isMountedInDOM = true;
 
 		this.props
-			.loadDocument(this.props.selectedItem.id)
+			.loadItem(this.props.selectedItem.id)
 			.then(this.handleLoadDocumentId, this.handleLoadError);
 	}
 

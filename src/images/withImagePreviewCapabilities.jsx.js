@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export default function withImagePreviewCapabilities(WrappedComponent) {
 	return class ImageItem extends Component {
-		isComponentMounted = false;
+		isMountedInDOM = false;
 
 		state = {
 			isErrored: false,
@@ -11,12 +11,12 @@ export default function withImagePreviewCapabilities(WrappedComponent) {
 		};
 
 		handleLoadImage = imageData => {
-			if (this.isComponentMounted) {
+			if (this.isMountedInDOM) {
 				this.setState({ isErrored: false, isLoading: false, imageData: imageData });
 			}
 		};
 		handleLoadError = _error => {
-			if (this.isComponentMounted) {
+			if (this.isMountedInDOM) {
 				this.setState({ isErrored: true, isLoading: false, imageData: null });
 			}
 		};
@@ -30,7 +30,7 @@ export default function withImagePreviewCapabilities(WrappedComponent) {
 
 			this.setState({ isLoading: true });
 
-			this.props.loadImage(item.id).then(this.handleLoadImage, this.handleLoadError);
+			this.props.loadItem(item.id).then(this.handleLoadImage, this.handleLoadError);
 		}
 
 		render() {
@@ -43,19 +43,19 @@ export default function withImagePreviewCapabilities(WrappedComponent) {
 		}
 
 		componentDidMount() {
-			this.isComponentMounted = true;
+			this.isMountedInDOM = true;
 
 			if (this.props.item.type === 'folder') {
 				return;
 			}
 
 			this.props
-				.loadImage(this.props.item.id)
+				.loadItem(this.props.item.id)
 				.then(this.handleLoadImage, this.handleLoadError);
 		}
 
 		componentWillUnmount() {
-			this.isComponentMounted = false;
+			this.isMountedInDOM = false;
 		}
 	};
 }

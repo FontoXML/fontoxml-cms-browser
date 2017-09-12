@@ -42,7 +42,7 @@ class ImagePreview extends Component {
 		}).isRequired,
 
 		// from withModularBrowserCapabilities
-		loadImage: PropTypes.func.isRequired,
+		loadItem: PropTypes.func.isRequired,
 		selectedItem: PropTypes.object
 	};
 
@@ -69,7 +69,7 @@ class ImagePreview extends Component {
 		this.setState({ isLoading: true });
 
 		this.props
-			.loadImage(selectedItem.id)
+			.loadItem(selectedItem.id)
 			.then(
 				imageData => this.handleLoadImage(imageData, selectedItem.id),
 				error => this.handleLoadError(error, selectedItem.id)

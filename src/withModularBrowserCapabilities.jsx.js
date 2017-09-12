@@ -1,24 +1,14 @@
 import React, { Component } from 'react';
 
-import configuredAssetConnector from 'fontoxml-configuration/get!asset-connector';
-import documentLoader from 'fontoxml-remote-documents/documentLoader';
-import documentsManager from 'fontoxml-documents/documentsManager';
-import getImageDataFromUrl from 'fontoxml-image-resolver/getImageDataFromUrl';
-import onlyResolveLastPromise from 'fontoxml-utils/onlyResolveLastPromise';
-import selectionManager from 'fontoxml-selection/selectionManager';
-
-export default function withModularBrowserCapabilities(WrappedComponent, initialViewMode = null) {
+export default function withModularBrowserCapabilities(
+	WrappedComponent,
+	loader,
+	initialViewMode = null
+) {
 	return class ModularBrowser extends Component {
-		// TODO: refactored by Thomas G.
-		cachedFileByRemoteId = {};
-		cachedErrorByRemoteId = {};
-
 		initialSelectedItemId = null;
 		// TODO: rename to isMountedInDOM / refactored by Thomas G.
 		isComponentMounted = false;
-
-		// TODO: delete / refactored by Thomas G.
-		loadingFilesById = {};
 
 		state = {
 			// Contains information on the current/last known request
@@ -38,7 +28,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			viewMode: initialViewMode
 		};
 
-		isItemErrored = item => !!this.cachedErrorByRemoteId[item.id];
+		isItemErrored = item => loader.isItemErrored(item.id);
 
 		// Used by any component to change the currently selected item
 		onItemSelect = item => this.isComponentMounted && this.setState({ selectedItem: item });
@@ -78,72 +68,6 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 			}
 		};
 
-		loadImage = remoteImageId => {
-			if (this.cachedFileByRemoteId[remoteImageId]) {
-				return Promise.resolve(this.cachedFileByRemoteId[remoteImageId]);
-			}
-
-			if (this.loadingFilesById[remoteImageId]) {
-				return this.loadingFilesById[remoteImageId];
-			}
-
-			if (this.cachedErrorByRemoteId[remoteImageId]) {
-				return Promise.reject(this.cachedErrorByRemoteId[remoteImageId]);
-			}
-
-			const documentFile = documentsManager.getDocumentFile(
-				selectionManager.focusedDocumentId
-			);
-			const promise = configuredAssetConnector
-				.getPreviewUrl(documentFile, 'web', remoteImageId)
-				.then(previewUrl => getImageDataFromUrl(window.document, previewUrl));
-
-			this.loadingFilesById[remoteImageId] = promise;
-			promise.then(
-				imageData => {
-					delete this.loadingFilesById[remoteImageId];
-					this.cachedFileByRemoteId[remoteImageId] = imageData;
-					return imageData;
-				},
-				error => {
-					if (!error) {
-						return;
-					}
-					delete this.loadingFilesById[remoteImageId];
-					this.cachedErrorByRemoteId[remoteImageId] = error;
-					throw error;
-				}
-			);
-			return promise;
-		};
-
-		onlyLoadLastDocument = onlyResolveLastPromise(remoteDocumentId =>
-			documentLoader.loadDocument(remoteDocumentId)
-		);
-
-		loadDocument = remoteDocumentId => {
-			if (this.cachedFileByRemoteId[remoteDocumentId]) {
-				return Promise.resolve(this.cachedFileByRemoteId[remoteDocumentId]);
-			}
-
-			if (this.cachedErrorByRemoteId[remoteDocumentId]) {
-				return Promise.reject(this.cachedErrorByRemoteId[remoteDocumentId]);
-			}
-
-			return this.onlyLoadLastDocument(remoteDocumentId).then(
-				documentId => {
-					delete this.cachedErrorByRemoteId[remoteDocumentId];
-					this.cachedFileByRemoteId[remoteDocumentId] = documentId;
-					return documentId;
-				},
-				error => {
-					delete this.cachedFileByRemoteId[remoteDocumentId];
-					this.cachedErrorByRemoteId[remoteDocumentId] = error;
-					throw error;
-				}
-			);
-		};
-
 		render() {
 			const props = {
 				...this.props,
@@ -161,10 +85,7 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 				onUpdateRequest: this.onUpdateRequest,
 				// TODO: rename to onViewModeChange
 				onUpdateViewMode: this.onUpdateViewMode,
-
-				// TODO: refactored by Thomas G.
-				loadDocument: this.loadDocument,
-				loadImage: this.loadImage
+				loadItem: loader.load
 			};
 
 			return <WrappedComponent {...props} />;
