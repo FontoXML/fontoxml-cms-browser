@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/documentsManager';
 import getNodeId from 'fontoxml-dom-identification/getNodeId';
+import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
 import NodePreviewWithLinkSelector from 'fontoxml-fx/NodePreviewWithLinkSelector.jsx';
 
 import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
@@ -44,15 +46,35 @@ class DocumentWithLinkSelectorPreview extends Component {
 			return;
 		}
 
-		let nodeId = getNodeId(documentsManager.getDocumentNode(documentId).documentElement);
+		const node = documentsManager.getDocumentNode(documentId).documentElement;
 		if (
 			this.props.initialNodeId !== null &&
 			this.props.initialSelectedItemId === this.props.selectedItem.id
 		) {
-			nodeId = this.props.initialNodeId;
+			this.props.onItemSelect({
+				...this.props.selectedItem,
+				documentId,
+				nodeId: this.props.initialNodeId
+			});
+		} else if (
+			node &&
+			evaluateXPathToBoolean(
+				'let $selectableNodes := ' +
+					this.props.linkableElementsQuery +
+					' return . = $selectableNodes',
+				node,
+				readOnlyBlueprint
+			)
+		) {
+			this.props.onItemSelect({
+				...this.props.selectedItem,
+				documentId,
+				nodeId: getNodeId(node)
+			});
+		} else {
+			this.props.onItemSelect({ ...this.props.selectedItem, documentId });
 		}
 
-		this.props.onItemSelect({ ...this.props.selectedItem, documentId, nodeId });
 		this.setState({ isErrored: false, isLoading: false });
 	};
 
@@ -69,7 +91,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 	componentWillReceiveProps(nextProps) {
 		if (
 			nextProps.selectedItem.id === this.props.selectedItem.id &&
-			nextProps.selectedItem.nodeId
+			nextProps.selectedItem.documentId
 		) {
 			return;
 		}

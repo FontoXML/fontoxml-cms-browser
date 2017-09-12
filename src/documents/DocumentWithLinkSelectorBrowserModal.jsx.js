@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/documentsManager';
 import getNodeId from 'fontoxml-dom-identification/getNodeId';
+import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
 import t from 'fontoxml-localization/t';
 
 import {
@@ -107,12 +109,26 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.loadItem(selectedItem.id).then(
-			documentId =>
-				this.props.selectedItem.id === selectedItem.id &&
-				this.submitModal({
-					documentId,
-					nodeId: getNodeId(documentsManager.getDocumentNode(documentId).documentElement)
-				}),
+			documentId => {
+				const rootNode = documentsManager.getDocumentNode(documentId).documentElement;
+
+				if (
+					this.props.selectedItem.id === selectedItem.id &&
+					rootNode &&
+					evaluateXPathToBoolean(
+						'let $selectableNodes := ' +
+							this.props.data.linkableElementsQuery +
+							' return . = $selectableNodes',
+						rootNode,
+						readOnlyBlueprint
+					)
+				) {
+					this.submitModal({
+						documentId,
+						nodeId: getNodeId(rootNode)
+					});
+				}
+			},
 			_error => {
 				return;
 			}
