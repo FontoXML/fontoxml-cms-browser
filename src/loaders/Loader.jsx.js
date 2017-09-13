@@ -1,8 +1,11 @@
 class Loader {
-	constructor(loadItem) {
+	constructor() {
 		this.cachedItemByRemoteId = {};
-		this.loadItem = loadItem;
 	}
+
+	loadItem = () => {
+		throw new Error('Loader: loadItem not implemented.');
+	};
 
 	load = remoteId => {
 		const cachedItem = this.cachedItemByRemoteId[remoteId];

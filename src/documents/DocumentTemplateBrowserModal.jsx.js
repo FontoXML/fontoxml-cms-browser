@@ -16,7 +16,7 @@ import {
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
 import DocumentPreview from './DocumentPreview.jsx';
-import DocumentLoader from './DocumentLoader.jsx';
+import documentLoader from '../loaders/documentLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -209,7 +209,7 @@ class DocumentTemplateBrowserModal extends Component {
 
 DocumentTemplateBrowserModal = withModularBrowserCapabilities(
 	DocumentTemplateBrowserModal,
-	DocumentLoader,
+	documentLoader,
 	VIEWMODES.LIST
 );
 
