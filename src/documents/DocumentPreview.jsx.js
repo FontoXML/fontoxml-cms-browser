@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import DocumentPreview from 'fontoxml-fx/DocumentPreview.jsx';
+import NodePreview from 'fontoxml-fx/NodePreview.jsx';
 
 import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
-class DocumentModalPreview extends Component {
+class DocumentPreview extends Component {
 	static defaultProps = {
 		selectedItem: null
 	};
@@ -91,7 +91,7 @@ class DocumentModalPreview extends Component {
 			);
 		}
 
-		return <DocumentPreview documentId={selectedItem.documentId} />;
+		return <NodePreview documentId={selectedItem.documentId} />;
 	}
 
 	componentDidMount() {
@@ -110,4 +110,4 @@ class DocumentModalPreview extends Component {
 	}
 }
 
-export default DocumentModalPreview;
+export default DocumentPreview;

@@ -15,7 +15,7 @@ import {
 
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
-import DocumentModalPreview from './DocumentModalPreview.jsx';
+import DocumentPreview from './DocumentPreview.jsx';
 import DocumentLoader from './DocumentLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
@@ -165,7 +165,7 @@ class DocumentTemplateBrowserModal extends Component {
 							{selectedItem &&
 							selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column" isScrollContainer>
-									<DocumentModalPreview
+									<DocumentPreview
 										loadItem={loadItem}
 										onItemSelect={onItemSelect}
 										selectedItem={selectedItem}

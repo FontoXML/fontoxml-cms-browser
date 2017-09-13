@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import {
+	Block,
 	ContainedImage,
-	Flex,
 	Icon,
 	Label,
 	ListItem,
@@ -75,9 +75,9 @@ class ImageListItem extends Component {
 		}
 
 		return this.wrapInListItem(
-			<Flex applyCss={{ width: '.875rem', height: '.875rem' }}>
+			<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
 				<ContainedImage src={this.props.imageData.dataUrl} />
-			</Flex>,
+			</Block>,
 			<Label>{item.label}</Label>
 		);
 	}

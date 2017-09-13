@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import {
+	Block,
 	ContainedImage,
 	Flex,
 	GridItem,
@@ -85,9 +86,9 @@ class ImageGridItem extends Component {
 
 		return this.wrapInGridItem(
 			<Flex alignItems="center" flex="1" flexDirection="column">
-				<Flex applyCss={{ height: '3rem' }}>
+				<Block applyCss={{ height: '3rem' }}>
 					<ContainedImage src={this.props.imageData.dataUrl} />
-				</Flex>
+				</Block>
 				<Label>{item.label}</Label>
 			</Flex>
 		);
