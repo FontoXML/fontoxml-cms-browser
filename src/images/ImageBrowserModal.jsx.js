@@ -18,7 +18,7 @@ import {
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
 import ImagePreview from './ImagePreview.jsx';
-import imageLoader from '../loaders/imageLoader.jsx';
+import ImageLoader from '../loaders/ImageLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -237,6 +237,6 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, imageLoader, VIEWMODES.GRID);
+ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, ImageLoader, VIEWMODES.GRID);
 
 export default ImageBrowserModal;

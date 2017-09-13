@@ -14,4 +14,4 @@ class ImageLoader extends Loader {
 	};
 }
 
-export default new ImageLoader();
+export default ImageLoader;

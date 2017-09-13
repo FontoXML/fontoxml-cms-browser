@@ -8,4 +8,4 @@ class DocumentLoader extends Loader {
 	};
 }
 
-export default new DocumentLoader();
+export default DocumentLoader;

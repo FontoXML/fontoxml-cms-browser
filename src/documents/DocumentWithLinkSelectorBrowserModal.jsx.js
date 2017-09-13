@@ -20,7 +20,7 @@ import {
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
 import DocumentWithLinkSelectorPreview from './DocumentWithLinkSelectorPreview.jsx';
-import documentLoader from '../loaders/documentLoader.jsx';
+import DocumentLoader from '../loaders/DocumentLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -254,7 +254,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(
 	DocumentWithLinkSelectorBrowserModal,
-	documentLoader,
+	DocumentLoader,
 	VIEWMODES.LIST
 );
 

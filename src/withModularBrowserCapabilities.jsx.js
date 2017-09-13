@@ -4,13 +4,15 @@ import dataProviders from './dataProviders';
 
 export default function withModularBrowserCapabilities(
 	WrappedComponent,
-	loader,
+	Loader = null,
 	initialViewMode = null
 ) {
 	return class ModularBrowser extends Component {
 		dataProvider = dataProviders.get(this.props.data.dataProviderName);
 		initialSelectedItemId = null;
 		isMountedInDOM = false;
+
+		loader = Loader && new Loader();
 
 		state = {
 			// Contains the items that the user can choose from
@@ -30,7 +32,7 @@ export default function withModularBrowserCapabilities(
 			viewMode: initialViewMode
 		};
 
-		isItemErrored = item => loader && loader.isItemErrored(item.id);
+		isItemErrored = item => this.loader && this.loader.isItemErrored(item.id);
 
 		// Used by any component to change the currently selected item
 		onItemSelect = item => {
@@ -165,7 +167,7 @@ export default function withModularBrowserCapabilities(
 				initialSelectedItemId: this.initialSelectedItemId,
 				isItemErrored: this.isItemErrored,
 				items: this.state.items,
-				loadItem: loader && loader.load,
+				loadItem: this.loader ? this.loader.load : () => {},
 				onItemSelect: this.onItemSelect,
 				onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
 				onUploadFileSelect: this.onUploadFileSelect,
