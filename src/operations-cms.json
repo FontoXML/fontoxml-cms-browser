@@ -1,0 +1,87 @@
+{
+	"open-document-with-link-selector-browser-modal": {
+		"initialData": {
+			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments"
+		},
+		"steps": [
+			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "operation/open-document-with-link-selector-browser-modal-for-data-provider",
+				"data": {
+					"browseContextDocumentId": "{{referrerDocumentId}}",
+					"dataProviderName": "{{dataProviderName}}"
+				}
+			}
+		]
+	},
+
+	"open-image-browser-modal": {
+		"initialData": {
+			"dataProviderName": "dataProviderUsingConfiguredConnectorsForImages"
+		},
+		"steps": [
+			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "operation/open-image-browser-modal-for-data-provider",
+				"data": {
+					"browseContextDocumentId": "{{referrerDocumentId}}",
+					"dataProviderName": "{{dataProviderName}}"
+				}
+			}
+		]
+	},
+
+	"open-document-browser-modal": {
+		"initialData": {
+			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments"
+		},
+		"steps": [
+			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "operation/open-document-browser-modal-for-data-provider",
+				"data": {
+					"browseContextDocumentId": "{{referrerDocumentId}}",
+					"dataProviderName": "{{dataProviderName}}"
+				}
+			}
+		]
+	},
+
+	"open-open-or-create-document-browser-modal": {
+		"initialData": {
+			"openDocumentDataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
+			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
+			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
+		},
+		"steps": [
+			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "operation/open-open-or-create-document-browser-modal-for-data-provider",
+				"data": {
+					"browseContextDocumentId": "{{referrerDocumentId}}",
+					"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
+					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
+					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+				}
+			}
+		]
+	},
+
+	"open-create-document-form-modal": {
+		"initialData": {
+			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
+			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
+		},
+		"steps": [
+			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "operation/open-create-document-form-modal-for-data-provider",
+				"data": {
+					"browseContextDocumentId": "{{referrerDocumentId}}",
+					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
+					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+				}
+			}
+		]
+	}
+}
