@@ -15,7 +15,7 @@ class Loader {
 				// The item is in a loading state
 				return cachedItem;
 			}
-			// The item has been loaded succesfully
+			// The item has been loaded successfully
 			return Promise.resolve(cachedItem);
 		}
 

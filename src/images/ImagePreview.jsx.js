@@ -66,8 +66,6 @@ class ImagePreview extends Component {
 		});
 
 	loadImage = selectedItem => {
-		this.setState({ isLoading: true });
-
 		this.props
 			.loadItem(selectedItem.id)
 			.then(
@@ -80,6 +78,8 @@ class ImagePreview extends Component {
 		if (this.props.selectedItem.id === nextProps.selectedItem.id) {
 			return;
 		}
+
+		this.setState({ isLoading: true });
 
 		this.loadImage(nextProps.selectedItem);
 	}

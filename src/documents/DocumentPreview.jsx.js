@@ -49,6 +49,15 @@ class DocumentPreview extends Component {
 		}
 	};
 
+	loadDocument = selectedItem => {
+		this.props
+			.loadItem(selectedItem.id)
+			.then(
+				documentId => this.handleLoadDocumentId(documentId, selectedItem.id),
+				error => this.handleLoadError(error, selectedItem.id)
+			);
+	};
+
 	componentWillReceiveProps(nextProps) {
 		if (
 			nextProps.selectedItem.id === this.props.selectedItem.id &&
@@ -59,12 +68,7 @@ class DocumentPreview extends Component {
 
 		this.setState({ isErrored: false, isLoading: true });
 
-		this.props
-			.loadItem(nextProps.selectedItem.id)
-			.then(
-				documentId => this.handleLoadDocumentId(documentId, nextProps.selectedItem.id),
-				error => this.handleLoadError(error, nextProps.selectedItem.id)
-			);
+		this.loadDocument(nextProps.selectedItem);
 	}
 
 	render() {
@@ -97,12 +101,7 @@ class DocumentPreview extends Component {
 	componentDidMount() {
 		this.isMountedInDOM = true;
 
-		this.props
-			.loadItem(this.props.selectedItem.id)
-			.then(
-				documentId => this.handleLoadDocumentId(documentId, this.props.selectedItem.id),
-				error => this.handleLoadError(error, this.props.selectedItem.id)
-			);
+		this.loadDocument(this.props.selectedItem);
 	}
 
 	componentWillUnmount() {
