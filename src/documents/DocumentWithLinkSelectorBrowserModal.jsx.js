@@ -118,7 +118,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 					evaluateXPathToBoolean(
 						'let $selectableNodes := ' +
 							this.props.data.linkableElementsQuery +
-							' return . = $selectableNodes',
+							' return some $node in $selectableNodes satisfies . is $node',
 						rootNode,
 						readOnlyBlueprint
 					)
