@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import dataProviders from './dataProviders';
+import dataProviders from './data-providers/dataProviders';
 
 export default function withModularBrowserCapabilities(
 	WrappedComponent,

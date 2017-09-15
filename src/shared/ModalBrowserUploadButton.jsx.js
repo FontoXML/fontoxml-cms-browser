@@ -5,7 +5,7 @@ import t from 'fontoxml-localization/t';
 
 import { SelectFileButton } from 'fontoxml-vendor-fds/components';
 
-import dataProviders from '../dataProviders';
+import dataProviders from '../data-providers/dataProviders';
 
 class ModalBrowserUploadButton extends PureComponent {
 	static defaultProps = {

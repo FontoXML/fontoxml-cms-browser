@@ -1,4 +1,6 @@
-define([], function () {
+define([
+], function (
+) {
 	'use strict';
 
 	var dataProvidersByName = Object.create(null);

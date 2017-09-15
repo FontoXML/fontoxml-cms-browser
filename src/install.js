@@ -7,12 +7,12 @@ define([
 	'fontoxml-selection/selectionManager',
 
 	'./data-providers/createDataProviderUsingConfiguredConnectors',
+	'./data-providers/dataProviders',
 	'./documents/DocumentBrowserModal.jsx',
 	'./documents/DocumentWithLinkSelectorBrowserModal.jsx',
 	'./images/ImageBrowserModal.jsx',
 	'./stacks/CreateDocumentModalStack.jsx',
-	'./stacks/OpenOrCreateDocumentModalStack.jsx',
-	'./dataProviders'
+	'./stacks/OpenOrCreateDocumentModalStack.jsx'
 ], function (
 	documentsHierarchy,
 	documentsManager,
@@ -22,12 +22,12 @@ define([
 	selectionManager,
 
 	createDataProviderUsingConfiguredConnectors,
+	dataProviders,
 	DocumentBrowserModal,
 	DocumentWithLinkSelectorBrowserModal,
 	ImageBrowserModal,
 	CreateDocumentModalStack,
 	OpenOrCreateDocumentModalStack,
-	dataProviders
 ) {
 	'use strict';
 
