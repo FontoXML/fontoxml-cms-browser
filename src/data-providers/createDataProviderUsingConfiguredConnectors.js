@@ -16,18 +16,18 @@ define([
 	'use strict';
 
 	function updateFolderHierarchy (folderHierarchy, newLastFolderInHierarchy) {
-		const updatedFolderHierarchy = folderHierarchy.slice();
-		const newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(
-			folder => folder.id === newLastFolderInHierarchy.id
-		);
+		var updatedFolderHierarchy = folderHierarchy.slice();
+		var newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(function (folder) {
+			return folder.id === newLastFolderInHierarchy.id;
+		});
 		if (!newLastFolderIsInCurrentFolderHierarchy) {
 			updatedFolderHierarchy.push(newLastFolderInHierarchy);
 			return updatedFolderHierarchy;
 		}
 
-		let foundNewLastFolderInHierarchy = false;
+		var foundNewLastFolderInHierarchy = false;
 		while (!foundNewLastFolderInHierarchy) {
-			const removedFolder = updatedFolderHierarchy.pop();
+			var removedFolder = updatedFolderHierarchy.pop();
 			foundNewLastFolderInHierarchy = removedFolder.id === newLastFolderInHierarchy.id;
 		}
 
