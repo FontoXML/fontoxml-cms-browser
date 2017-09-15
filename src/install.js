@@ -27,7 +27,7 @@ define([
 	DocumentWithLinkSelectorBrowserModal,
 	ImageBrowserModal,
 	CreateDocumentModalStack,
-	OpenOrCreateDocumentModalStack,
+	OpenOrCreateDocumentModalStack
 ) {
 	'use strict';
 
