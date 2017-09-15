@@ -36,7 +36,7 @@ define([
 
 	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems) {
 		return configuredBrowseConnector.browse(
-			documentsManager.getDocumentFile(browseContextDocumentId),
+			browseContextDocumentId,
 			options.assetTypes,
 			options.resultTypes,
 			targetFolder.id,

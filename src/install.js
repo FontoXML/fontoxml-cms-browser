@@ -40,12 +40,6 @@ define([
 					return stepData;
 				}
 
-				// Use the referrer document
-				if (stepData.referrerDocumentId) {
-					stepData.browseContextDocumentId = stepData.referrerDocumentId;
-					return stepData;
-				}
-
 				// Use the focused document
 				if (selectionManager.focusedDocumentId) {
 					stepData.browseContextDocumentId = documentsManager
