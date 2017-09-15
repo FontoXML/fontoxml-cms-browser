@@ -1,7 +1,6 @@
 define([
 	'fontoxml-documents/documentsHierarchy',
 	'fontoxml-documents/documentsManager',
-	'fontoxml-file-or-folder-modals/dataProviders',
 	'fontoxml-localization/t',
 	'fontoxml-modular-ui/uiManager',
 	'fontoxml-operations/addTransform',
@@ -12,11 +11,11 @@ define([
 	'./documents/DocumentWithLinkSelectorBrowserModal.jsx',
 	'./images/ImageBrowserModal.jsx',
 	'./stacks/CreateDocumentModalStack.jsx',
-	'./stacks/OpenOrCreateDocumentModalStack.jsx'
+	'./stacks/OpenOrCreateDocumentModalStack.jsx',
+	'./dataProviders'
 ], function (
 	documentsHierarchy,
 	documentsManager,
-	dataProviders,
 	t,
 	uiManager,
 	addTransform,
@@ -27,7 +26,8 @@ define([
 	DocumentWithLinkSelectorBrowserModal,
 	ImageBrowserModal,
 	CreateDocumentModalStack,
-	OpenOrCreateDocumentModalStack
+	OpenOrCreateDocumentModalStack,
+	dataProviders
 ) {
 	'use strict';
 
