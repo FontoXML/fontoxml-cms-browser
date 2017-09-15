@@ -1,14 +1,12 @@
 define([
 	'fontoxml-configuration/get!asset-connector',
 	'fontoxml-configuration/get!browse-connector',
-	'fontoxml-configuration/get!cms-browser-uses-cms-hierarchy-information',
 
 	'fontoxml-documents/documentsManager',
 	'fontoxml-selection/selectionManager'
 ], function (
 	configuredAssetConnector,
 	configuredBrowseConnector,
-	configuredUseHierarchyInformation,
 
 	documentsManager,
 	selectionManager
@@ -36,7 +34,7 @@ define([
 		return updatedFolderHierarchy;
 	}
 
-	function getFolderContents (options, browseContextDocumentId, targetFolder, additionalOptions) {
+	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems) {
 		return configuredBrowseConnector.browse(
 			documentsManager.getDocumentFile(browseContextDocumentId),
 			options.assetTypes,
@@ -45,20 +43,16 @@ define([
 			null,
 			null,
 			null,
-			// Disable cache when using hierarchy information
-			// TODO: why?
-			configuredUseHierarchyInformation
+			noCache
 		)
 			.then(function (result) {
-				var hierarchyItems = configuredUseHierarchyInformation ?
-					result.metadata.hierarchy :
-					updateFolderHierarchy(
-						additionalOptions.hierarchyItems || [],
-						Object.assign({}, targetFolder, targetFolder.id === null ? { label: options.rootFolderLabel } : {})
-					);
+				var newHierarchyItems = result.metadata.hierarchy || updateFolderHierarchy(
+					hierarchyItems || [],
+					Object.assign({}, targetFolder, targetFolder.id === null ? { label: options.rootFolderLabel } : {})
+				);
 
 				return {
-					hierarchyItems: hierarchyItems,
+					hierarchyItems: newHierarchyItems,
 					items: result.items.map(function (item) {
 						// TODO: why don't we just use item.metadata.x to access these later?
 						return Object.assign({}, item, {
@@ -106,14 +100,16 @@ define([
 			/**
 			 * @param {string} browseContextDocumentId
 			 * @param {object} targetFolder
-			 * @param {Object} additionalOptions
+			 * @param {boolean} noCache
+			 * @param {object[]} hierarchyItems
+			 *
 			 * @return {Promise<{
 			 *   hierarchyItems: string[]
 			 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
 			 * }>}
 			 */
-			getFolderContents: function (browseContextDocumentId, targetFolder, additionalOptions) {
-				return getFolderContents(options, browseContextDocumentId, targetFolder, additionalOptions);
+			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems) {
+				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems);
 			},
 
 			/**

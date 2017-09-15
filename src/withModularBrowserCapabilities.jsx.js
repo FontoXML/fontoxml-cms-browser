@@ -55,13 +55,17 @@ export default function withModularBrowserCapabilities(
 
 		// Used to update the items with a browse callback
 		refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
-			this.isMountedInDOM && this.setState({ request: { type: 'browse', busy: true } });
+			if (this.isMountedInDOM) {
+				this.setState({ request: { type: 'browse', busy: true } });
+			}
 
 			return this.dataProvider
-				.getFolderContents(browseContextDocumentId, folderToLoad, {
-					hierarchyItems: this.state.hierarchyItems,
-					noCache
-				})
+				.getFolderContents(
+					browseContextDocumentId,
+					folderToLoad,
+					noCache,
+					this.state.hierarchyItems
+				)
 				.then(
 					result => {
 						if (!this.isMountedInDOM) {
