@@ -1,5 +1,68 @@
 {
 	"open-document-with-link-selector-browser-modal": {
+		"__documentation": {
+			"fontosdk": true,
+			"summary": "Opens the document with link selector browser in which the user can select a node.",
+			"params": [
+				{
+					"name": "browseContextDocumentId",
+					"type": "RemoteDocumentId",
+					"description": [
+						"(Optional) This id is sent to the CMS when the browse call is made. If ",
+						"the CMS has support for 'jump in the tree', the folder containing the ",
+						"browseContextDocument will be opened. By default the browseContextDocument ",
+						"is set to the focusedDocument or, when the focusedDocument is not ",
+						"available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "documentId",
+					"type": "DocumentId",
+					"description": [
+						"(Optional) Can be used to open the document with link selector browser with ",
+						"a node preselected. Should only be used in combination with nodeId."
+					]
+				},
+				{
+					"name": "linkableElementsQuery",
+					"type": "XPathQuery",
+					"description": [
+						"(Optional) Selector used to find the nodes which can be selected by the user. ",
+						"Defaults to `//*[@id]`."
+					]
+				},
+				{
+					"name": "modalPrimaryButtonLabel",
+					"type": "string",
+					"description": "(Optional) The label for the primary button. Defaults to `t__Insert`."
+				},
+				{
+					"name": "modalTitle",
+					"type": "string",
+					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a link`."
+				},
+				{
+					"name": "nodeId",
+					"type": "NodeId",
+					"description": [
+						"(Optional) Can be used to open the document with link selector browser with ",
+						"a node preselected. Should only be used in combination with documentId."
+					]
+				}
+			],
+			"returns": [
+				{
+					"name": "documentId",
+					"type": "DocumentId",
+					"description": "The documentId of the document where the selected node is in."
+				},
+				{
+					"name": "nodeId",
+					"type": "NodeId",
+					"description": "The nodeId of the selected node."
+				}
+			]
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
@@ -13,6 +76,48 @@
 	},
 
 	"open-image-browser-modal": {
+		"__documentation": {
+			"fontosdk": true,
+			"summary": "Opens the image browser in which the user can select an image.",
+			"params": [
+				{
+					"name": "browseContextDocumentId",
+					"type": "RemoteDocumentId",
+					"description": [
+						"(Optional) This id is sent to the CMS when the browse call is made. If ",
+						"the CMS has support for 'jump in the tree', the folder containing the ",
+						"browseContextDocumentId will be opened. By default the browseContextDocumentId ",
+						"is set to the focusedDocument or, when the focusedDocument is not ",
+						"available, to the first document in the hierarchy. Note: the ",
+						"browseContextDocumentId may also be a remoteId of an image."
+					]
+				},
+				{
+					"name": "modalPrimaryButtonLabel",
+					"type": "string",
+					"description": "(Optional) The label for the primary button. Defaults to `t__Insert`."
+				},
+				{
+					"name": "modalTitle",
+					"type": "string",
+					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select an image`."
+				},
+				{
+					"name": "selectedImageId",
+					"type": "RemoteId",
+					"description": [
+						"(Optional) Can be used to open the image browser with an image preselected."
+					]
+				}
+			],
+			"returns": [
+				{
+					"name": "selectedImageId",
+					"type": "RemoteId",
+					"description": "The remoteId of the selected image."
+				}
+			]
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
@@ -26,6 +131,52 @@
 	},
 
 	"open-document-browser-modal": {
+		"__documentation": {
+			"fontosdk": true,
+			"summary": "Opens the document browser in which the user can select a document.",
+			"params": [
+				{
+					"name": "browseContextDocumentId",
+					"type": "RemoteDocumentId",
+					"description": [
+						"(Optional) This id is sent to the CMS when the browse call is made. If ",
+						"the CMS has support for 'jump in the tree', the folder containing the ",
+						"browseContextDocument will be opened. By default the browseContextDocument ",
+						"is set to the focusedDocument or, when the focusedDocument is not ",
+						"available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "documentId",
+					"type": "DocumentId",
+					"description": [
+						"(Optional) Can be used to open the document browser with a document preselected."
+					]
+				},
+				{
+					"name": "modalPrimaryButtonLabel",
+					"type": "string",
+					"description": "(Optional) The label for the primary button. Defaults to `t__Insert`."
+				},
+				{
+					"name": "modalTitle",
+					"type": "string",
+					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a document`."
+				}
+			],
+			"returns": [
+				{
+					"name": "documentId",
+					"type": "DocumentId",
+					"description": "The documentId of the selected document."
+				},
+				{
+					"name": "documentRemoteId",
+					"type": "RemoteDocumentId",
+					"description": "The remoteDocumentId of the selected document."
+				}
+			]
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
@@ -39,6 +190,59 @@
 	},
 
 	"open-open-or-create-document-browser-modal": {
+		"__documentation": {
+			"fontosdk": true,
+			"summary": [
+				"Opens the document browser on open in which the user can select a document. ",
+				"When the modal is open, the user can switch to the create document form, ",
+				"to create a new document by choosing a template."
+			],
+			"params": [
+				{
+					"name": "browseContextDocumentId",
+					"type": "RemoteDocumentId",
+					"description": [
+						"(Optional) This id is sent to the CMS when the browse call is made. If ",
+						"the CMS has support for 'jump in the tree', the folder containing the ",
+						"browseContextDocument will be opened. By default the browseContextDocument ",
+						"is set to the focusedDocument or, when the focusedDocument is not ",
+						"available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "modalTitle",
+					"type": "string",
+					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Open or create document`."
+				}
+			],
+			"returns": [
+				{
+					"name": "documentId",
+					"type": "DocumentId",
+					"description": "(Open document) The documentId of the selected document."
+				},
+				{
+					"name": "documentRemoteId",
+					"type": "RemoteDocumentId",
+					"description": "(Open document) The remoteDocumentId of the selected document."
+				},
+				{
+					"name": "selectedDocumentTemplateId",
+					"type": "RemoteDocumentId",
+					"description": "(create document) The remoteDocumentId of the selected document template."
+				},
+				{
+					"name": "selectedFolderId",
+					"type": "FolderId",
+					"description": "(create document) The folderId of the selected folder."
+				},
+				{
+					"name": "documentTitle",
+					"type": "string",
+					"description": "(create document) The specified document title."
+				}
+			]
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
@@ -54,6 +258,47 @@
 	},
 
 	"open-create-document-form-modal": {
+		"__documentation": {
+			"fontosdk": true,
+			"summary": [
+				"Opens the create form, for creating a new document by choosing a template."
+			],
+			"params": [
+				{
+					"name": "browseContextDocumentId",
+					"type": "RemoteDocumentId",
+					"description": [
+						"(Optional) This id is sent to the CMS when the browse call is made. If ",
+						"the CMS has support for 'jump in the tree', the folder containing the ",
+						"browseContextDocument will be opened. By default the browseContextDocument ",
+						"is set to the focusedDocument or, when the focusedDocument is not ",
+						"available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "modalTitle",
+					"type": "string",
+					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Create new document`."
+				}
+			],
+			"returns": [
+				{
+					"name": "selectedDocumentTemplateId",
+					"type": "RemoteDocumentId",
+					"description": "The remoteDocumentId of the selected document template."
+				},
+				{
+					"name": "selectedFolderId",
+					"type": "FolderId",
+					"description": "The folderId of the selected folder."
+				},
+				{
+					"name": "documentTitle",
+					"type": "string",
+					"description": "The specified document title."
+				}
+			]
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
