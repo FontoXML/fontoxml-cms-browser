@@ -5,7 +5,7 @@ import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/documentsManager';
 import getNodeId from 'fontoxml-dom-identification/getNodeId';
 import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
-import NodePreviewWithLinkSelector from 'fontoxml-fx/NodePreviewWithLinkSelector.jsx';
+import FxNodePreviewWithLinkSelector from 'fontoxml-fx/FxNodePreviewWithLinkSelector.jsx';
 
 import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
@@ -138,7 +138,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		}
 
 		return (
-			<NodePreviewWithLinkSelector
+			<FxNodePreviewWithLinkSelector
 				documentId={selectedItem.documentId}
 				onSelectedNodeChange={this.handleSelectedNodeChange}
 				selector={linkableElementsQuery}

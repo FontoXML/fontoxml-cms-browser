@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import NodePreview from 'fontoxml-fx/NodePreview.jsx';
+import FxNodePreview from 'fontoxml-fx/FxNodePreview.jsx';
 
 import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
@@ -95,7 +95,7 @@ class DocumentPreview extends Component {
 			);
 		}
 
-		return <NodePreview documentId={selectedItem.documentId} />;
+		return <FxNodePreview documentId={selectedItem.documentId} />;
 	}
 
 	componentDidMount() {
