@@ -69,7 +69,7 @@ export default function withModularBrowserCapabilities(
 				.then(
 					result => {
 						if (!this.isMountedInDOM) {
-							return;
+							return [];
 						}
 						// Because of jump in the tree with browse context document id,
 						// the folder that is actually loaded could be different from the folderToLoad.
@@ -142,7 +142,7 @@ export default function withModularBrowserCapabilities(
 						browseContextDocumentId,
 						folderWithUploadedFile,
 						true
-					).then((items = []) => {
+					).then(items => {
 						this.onItemSelect(items.find(item => item.id === uploadedItem.id) || null);
 					});
 				},

@@ -46,7 +46,7 @@ define([
 			noCache
 		)
 			.then(function (result) {
-				var newHierarchyItems = result.metadata.hierarchy || updateFolderHierarchy(
+				var newHierarchyItems = (result.metadata && result.metadata.hierarchy) || updateFolderHierarchy(
 					hierarchyItems || [],
 					Object.assign({}, targetFolder, targetFolder.id === null ? { label: options.rootFolderLabel } : {})
 				);
@@ -54,6 +54,9 @@ define([
 				return {
 					hierarchyItems: newHierarchyItems,
 					items: result.items.map(function (item) {
+						if (!item.metadata) {
+							return item;
+						}
 						// TODO: why don't we just use item.metadata.x to access these later?
 						return Object.assign({}, item, {
 							icon: item.metadata.icon,
