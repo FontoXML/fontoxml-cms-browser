@@ -9,10 +9,11 @@
 					"type": "RemoteDocumentId",
 					"description": [
 						"(Optional) This id is sent to the CMS when the browse call is made. If ",
-						"the CMS has support for 'jump in the tree', the folder containing the ",
-						"browseContextDocument will be opened. By default the browseContextDocument ",
-						"is set to the focusedDocument or, when the focusedDocument is not ",
-						"available, to the first document in the hierarchy."
+						"the CMS resolves a hierarchy for a reference in the metadata of a reference, ",
+						"the folder containing the browseContextDocument will be opened.",
+						"",
+						"By default the browseContextDocument is set to the focusedDocument or, ",
+						"when the focusedDocument is not available, to the first document in the hierarchy."
 					]
 				},
 				{
@@ -84,12 +85,12 @@
 					"name": "browseContextDocumentId",
 					"type": "RemoteDocumentId",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made. If ",
-						"the CMS has support for 'jump in the tree', the folder containing the ",
-						"browseContextDocumentId will be opened. By default the browseContextDocumentId ",
-						"is set to the focusedDocument or, when the focusedDocument is not ",
-						"available, to the first document in the hierarchy. Note: the ",
-						"browseContextDocumentId may also be a remoteId of an image."
+						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
+						"the folder containing the browseContextDocument will be opened.",
+						"",
+						"By default the browseContextDocument is set to the focusedDocument or,",
+						"when the focusedDocument is not available, to the first document in the hierarchy."
 					]
 				},
 				{
@@ -139,11 +140,13 @@
 					"name": "browseContextDocumentId",
 					"type": "RemoteDocumentId",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made. If ",
-						"the CMS has support for 'jump in the tree', the folder containing the ",
-						"browseContextDocument will be opened. By default the browseContextDocument ",
-						"is set to the focusedDocument or, when the focusedDocument is not ",
-						"available, to the first document in the hierarchy."
+						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"",
+						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
+						"the folder containing the browseContextDocument will be opened.",
+						"",
+						"By default the browseContextDocument is set to the focusedDocument or,",
+						"when the focusedDocument is not available, to the first document in the hierarchy."
 					]
 				},
 				{
@@ -202,11 +205,12 @@
 					"name": "browseContextDocumentId",
 					"type": "RemoteDocumentId",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made. If ",
-						"the CMS has support for 'jump in the tree', the folder containing the ",
-						"browseContextDocument will be opened. By default the browseContextDocument ",
-						"is set to the focusedDocument or, when the focusedDocument is not ",
-						"available, to the first document in the hierarchy."
+						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
+						"the folder containing the browseContextDocument will be opened.",
+						"",
+						"By default the browseContextDocument is set to the focusedDocument or,",
+						"when the focusedDocument is not available, to the first document in the hierarchy."
 					]
 				},
 				{
@@ -268,11 +272,12 @@
 					"name": "browseContextDocumentId",
 					"type": "RemoteDocumentId",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made. If ",
-						"the CMS has support for 'jump in the tree', the folder containing the ",
-						"browseContextDocument will be opened. By default the browseContextDocument ",
-						"is set to the focusedDocument or, when the focusedDocument is not ",
-						"available, to the first document in the hierarchy."
+						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
+						"the folder containing the browseContextDocument will be opened.",
+						"",
+						"By default the browseContextDocument is set to the focusedDocument or,",
+						"when the focusedDocument is not available, to the first document in the hierarchy."
 					]
 				},
 				{
