@@ -168,7 +168,7 @@ class DocumentTemplateBrowserModal extends Component {
 
 							{selectedItem &&
 							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column" isScrollContainer>
+								<ModalContent flexDirection="column">
 									<DocumentPreview
 										loadItem={loadItem}
 										onItemSelect={onItemSelect}

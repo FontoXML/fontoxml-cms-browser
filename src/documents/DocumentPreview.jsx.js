@@ -3,7 +3,15 @@ import React, { Component } from 'react';
 
 import FxNodePreview from 'fontoxml-fx/FxNodePreview.jsx';
 
-import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
+import {
+	Flex,
+	HorizontalSeparationLine,
+	SpinnerIcon,
+	StateMessage,
+	Text
+} from 'fontoxml-vendor-fds/components';
+
+const maxHeightStyles = { maxHeight: '50%' };
 
 class DocumentPreview extends Component {
 	static defaultProps = {
@@ -95,7 +103,26 @@ class DocumentPreview extends Component {
 			);
 		}
 
-		return <FxNodePreview documentId={selectedItem.documentId} />;
+		return (
+			<Flex flex="1" flexDirection="column">
+				<Flex flex="1" flexDirection="column" isScrollContainer>
+					<FxNodePreview documentId={selectedItem.documentId} />
+				</Flex>
+
+				{selectedItem.description &&
+				selectedItem.description.trim().length !== 0 && (
+					<Flex applyCss={maxHeightStyles} flex="none" flexDirection="column">
+						<Flex paddingSize={{ horizontal: 'l' }}>
+							<HorizontalSeparationLine />
+						</Flex>
+
+						<Flex flex="1" flexDirection="column" isScrollContainer paddingSize="l">
+							<Text>{selectedItem.description}</Text>
+						</Flex>
+					</Flex>
+				)}
+			</Flex>
+		);
 	}
 
 	componentDidMount() {

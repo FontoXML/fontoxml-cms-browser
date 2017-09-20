@@ -60,7 +60,9 @@ define([
 						// TODO: why don't we just use item.metadata.x to access these later?
 						return Object.assign({}, item, {
 							icon: item.metadata.icon,
-							isDisabled: item.metadata.isDisabled
+							isDisabled: item.metadata.isDisabled,
+							// Description for preview of document (template)
+							description: item.metadata.description
 						});
 					})
 				};
