@@ -9,6 +9,7 @@ define([
 	'./data-providers/createDataProviderUsingConfiguredConnectors',
 	'./data-providers/dataProviders',
 	'./documents/DocumentBrowserModal.jsx',
+	'./documents/DocumentTemplateBrowserModal.jsx',
 	'./documents/DocumentWithLinkSelectorBrowserModal.jsx',
 	'./images/ImageBrowserModal.jsx',
 	'./stacks/CreateDocumentModalStack.jsx',
@@ -24,6 +25,7 @@ define([
 	createDataProviderUsingConfiguredConnectors,
 	dataProviders,
 	DocumentBrowserModal,
+	DocumentTemplateBrowserModal,
 	DocumentWithLinkSelectorBrowserModal,
 	ImageBrowserModal,
 	CreateDocumentModalStack,
@@ -97,6 +99,7 @@ define([
 		);
 
 		uiManager.registerReactComponent('DocumentBrowserModal', DocumentBrowserModal);
+		uiManager.registerReactComponent('DocumentTemplateBrowserModal', DocumentTemplateBrowserModal);
 		uiManager.registerReactComponent('DocumentWithLinkSelectorBrowserModal', DocumentWithLinkSelectorBrowserModal);
 		uiManager.registerReactComponent('ImageBrowserModal', ImageBrowserModal);
 		uiManager.registerReactComponent('CreateDocumentModalStack', CreateDocumentModalStack);

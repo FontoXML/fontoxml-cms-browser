@@ -192,6 +192,52 @@
 		]
 	},
 
+	"open-document-template-browser-modal": {
+		"__documentation": {
+			"fontosdk": true,
+			"summary": "Opens the document template browser in which the user can select a document template.",
+			"params": [
+				{
+					"name": "browseContextDocumentId",
+					"type": "RemoteDocumentId",
+					"description": [
+						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"",
+						"By default the browseContextDocument is set to the focusedDocument or,",
+						"when the focusedDocument is not available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "modalPrimaryButtonLabel",
+					"type": "string",
+					"description": "(Optional) The label for the primary button. Defaults to `t__Select`."
+				},
+				{
+					"name": "modalTitle",
+					"type": "string",
+					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a template`."
+				}
+			],
+			"returns": [
+				{
+					"name": "documentRemoteId",
+					"type": "RemoteDocumentId",
+					"description": "The remoteDocumentId of the selected document template."
+				}
+			]
+		},
+		"steps": [
+			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "operation/open-document-template-browser-modal-for-data-provider",
+				"data": {
+					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates"
+				}
+			}
+		]
+	},
+
 	"open-open-or-create-document-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,

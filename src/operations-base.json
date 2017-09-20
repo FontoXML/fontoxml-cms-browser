@@ -63,6 +63,24 @@
 		}
 	},
 
+	"open-document-template-modal-for-data-provider": {
+		"initialData": {
+			"browseContextDocumentId": null,
+			"dataProviderName": null,
+			"modalPrimaryButtonLabel": null,
+			"modalTitle": null
+		},
+		"steps": {
+			"type": "modal/DocumentTemplateBrowserModal",
+			"data": {
+				"browseContextDocumentId": "{{browseContextDocumentId}}",
+				"dataProviderName": "{{dataProviderName}}",
+				"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
+				"modalTitle": "{{modalTitle}}"
+			}
+		}
+	},
+
 	"open-open-or-create-document-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,

@@ -51,7 +51,7 @@ const stateLabels = {
 
 class DocumentTemplateBrowserModal extends Component {
 	static defaultProps = {
-		remoteDocumentId: null
+		documentRemoteId: null
 	};
 
 	static propTypes = {
@@ -62,7 +62,7 @@ class DocumentTemplateBrowserModal extends Component {
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
 		}).isRequired,
-		remoteDocumentId: PropTypes.string,
+		documentRemoteId: PropTypes.string,
 		submitModal: PropTypes.func.isRequired
 	};
 
@@ -99,7 +99,11 @@ class DocumentTemplateBrowserModal extends Component {
 		/>
 	);
 
-	submitModal = itemToSubmit => this.props.submitModal(itemToSubmit);
+	submitModal = itemToSubmit =>
+		this.props.submitModal({
+			documentRemoteId: itemToSubmit.id,
+			label: itemToSubmit.label
+		});
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
 
@@ -194,13 +198,13 @@ class DocumentTemplateBrowserModal extends Component {
 	componentDidMount() {
 		const {
 			data: { browseContextDocumentId },
+			documentRemoteId,
 			onInitialSelectedItemIdChange,
-			refreshItems,
-			remoteDocumentId
+			refreshItems
 		} = this.props;
 
-		if (remoteDocumentId) {
-			onInitialSelectedItemIdChange(remoteDocumentId);
+		if (documentRemoteId) {
+			onInitialSelectedItemIdChange(documentRemoteId);
 		}
 
 		refreshItems(browseContextDocumentId, { id: null });

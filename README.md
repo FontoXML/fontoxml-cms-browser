@@ -1,6 +1,6 @@
 # Add-on fontoxml-cms-browsers
 
-This add-on exposes five operations for opening cms related browsers. These browsers allow the user to browse documents and images present on the used CMS.
+This add-on exposes operations for opening cms related browsers. These browsers allow the user to browse documents and images present on the used CMS.
 
 ## Getting started
 
@@ -61,6 +61,24 @@ This browser can be used by adding the following operation step to your operatio
 When this browser is being used to edit a reference to an existing document, the `documentId` property can be used to set the selection on the original document. In addition to this property, the browser title and primary button label can be set with the `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-document-browser-modal} operation.
+
+---
+
+## Usage of open-document-template-browser-modal
+
+The {@link operation/open-document-template-browser-modal} operation is used to open the document template browser. This browser allows the user to select a document template. This, for example, can be used to insert a new document in a map.
+
+This browser can be used by adding the following operation step to your operation:
+
+```
+{
+    "type": "operation/open-document-template-browser-modal"
+}
+```
+
+The only properties to set for this browser are the `modalTitle` and `modalPrimaryButtonLabel`.
+
+For more information, see the {@link operation/open-document-template-browser-modal} operation.
 
 ---
 

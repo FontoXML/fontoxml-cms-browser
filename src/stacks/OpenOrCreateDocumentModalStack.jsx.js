@@ -127,7 +127,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 							dataProviderName: selectDocumentTemplateDataProviderName,
 							modalTitle: t('Select a template for your document')
 						}}
-						remoteDocumentId={selectedDocumentTemplate.id}
+						documentRemoteId={selectedDocumentTemplate.documentRemoteId}
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
 				)}
