@@ -63,7 +63,7 @@
 		}
 	},
 
-	"open-document-template-modal-for-data-provider": {
+	"open-document-template-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
 			"dataProviderName": null,
