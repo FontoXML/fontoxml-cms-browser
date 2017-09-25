@@ -1,6 +1,6 @@
 # Add-on fontoxml-cms-browsers
 
-This add-on exposes operations for opening cms related browsers. These browsers allow the user to browse documents and images present on the used CMS.
+This add-on exposes operations for opening CMS related browsers. These browsers allow the user to browse documents and images present on the used CMS.
 
 ## Getting started
 
