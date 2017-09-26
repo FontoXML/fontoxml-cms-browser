@@ -68,6 +68,26 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
+	submitModal = itemToSubmit =>
+		this.props.submitModal({
+			documentId: itemToSubmit.documentId,
+			nodeId: itemToSubmit.nodeId
+		});
+
+	handleKeyDown = event => {
+		const { selectedItem } = this.props;
+		switch (event.key) {
+			case 'Escape':
+				this.props.cancelModal();
+				break;
+			case 'Enter':
+				if (selectedItem && selectedItem.documentId && selectedItem.nodeId) {
+					this.submitModal(selectedItem);
+				}
+				break;
+		}
+	};
+
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -100,12 +120,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			onDoubleClick={onDoubleClick}
 		/>
 	);
-
-	submitModal = itemToSubmit =>
-		this.props.submitModal({
-			documentId: itemToSubmit.documentId,
-			nodeId: itemToSubmit.nodeId
-		});
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.loadItem(selectedItem.id).then(
@@ -161,7 +175,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight={true}>
+			<Modal size="m" isFullHeight={true} onKeyDown={this.handleKeyDown}>
 				<ModalHeader title={modalTitle || t('Select a link')} />
 
 				<ModalBody>

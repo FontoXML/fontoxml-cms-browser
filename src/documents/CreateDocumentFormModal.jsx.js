@@ -36,14 +36,31 @@ class CreateDocumentFormModal extends Component {
 
 	state = { documentTitle: '' };
 
-	handleDocumentTitleChange = documentTitle => this.setState({ documentTitle });
-
 	handleSubmitButton = () =>
 		this.props.submitModal({
 			selectedDocumentTemplateId: this.props.selectedDocumentTemplate.remoteDocumentId,
 			selectedFolderId: this.props.selectedFolder.id,
 			documentTitle: this.state.documentTitle
 		});
+
+	handleKeyDown = event => {
+		switch (event.key) {
+			case 'Escape':
+				this.props.cancelModal();
+				break;
+			case 'Enter':
+				if (
+					this.state.documentTitle.trim().length > 0 &&
+					this.props.selectedFolder.id &&
+					this.props.selectedDocumentTemplate.remoteDocumentId
+				) {
+					this.handleSubmitButton();
+				}
+				break;
+		}
+	};
+
+	handleDocumentTitleChange = documentTitle => this.setState({ documentTitle });
 
 	render() {
 		const {
@@ -58,7 +75,7 @@ class CreateDocumentFormModal extends Component {
 		const { documentTitle } = this.state;
 
 		return (
-			<Modal size="s">
+			<Modal size="s" onKeyDown={this.handleKeyDown}>
 				<ModalHeader title={modalTitle} />
 
 				<ModalBody>

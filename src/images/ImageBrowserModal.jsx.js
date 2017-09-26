@@ -72,6 +72,20 @@ class ImageBrowserModal extends Component {
 
 	submitModal = itemToSubmit => this.props.submitModal({ selectedImageId: itemToSubmit.id });
 
+	handleKeyDown = event => {
+		const { selectedItem } = this.props;
+		switch (event.key) {
+			case 'Escape':
+				this.props.cancelModal();
+				break;
+			case 'Enter':
+				if (selectedItem && selectedItem.type !== 'folder') {
+					this.submitModal(selectedItem);
+				}
+				break;
+		}
+	};
+
 	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
 
 	handleRenderListItem = ({
@@ -132,7 +146,7 @@ class ImageBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="l" isFullHeight={true}>
+			<Modal size="l" isFullHeight={true} onKeyDown={this.handleKeyDown}>
 				<ModalHeader title={modalTitle || t('Select an image')} />
 
 				<ModalBody>

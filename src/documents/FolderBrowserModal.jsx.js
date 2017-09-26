@@ -49,6 +49,20 @@ class FolderBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
+	handleKeyDown = event => {
+		const { selectedItem } = this.props;
+		switch (event.key) {
+			case 'Escape':
+				this.props.cancelModal();
+				break;
+			case 'Enter':
+				if (selectedItem && selectedItem.id) {
+					this.props.submitModal(selectedItem);
+				}
+				break;
+		}
+	};
+
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -100,7 +114,7 @@ class FolderBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="s">
+			<Modal size="s" onKeyDown={this.handleKeyDown}>
 				<ModalHeader title={modalTitle || t('Select a folder')} />
 
 				<ModalBody>

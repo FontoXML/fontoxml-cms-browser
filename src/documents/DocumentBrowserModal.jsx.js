@@ -68,6 +68,26 @@ class DocumentBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
+	submitModal = itemToSubmit =>
+		this.props.submitModal({
+			remoteDocumentId: itemToSubmit.id,
+			documentId: itemToSubmit.documentId
+		});
+
+	handleKeyDown = event => {
+		const { selectedItem } = this.props;
+		switch (event.key) {
+			case 'Escape':
+				this.props.cancelModal();
+				break;
+			case 'Enter':
+				if (selectedItem && selectedItem.documentId) {
+					this.submitModal(selectedItem);
+				}
+				break;
+		}
+	};
+
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -101,12 +121,6 @@ class DocumentBrowserModal extends Component {
 		/>
 	);
 
-	submitModal = itemToSubmit =>
-		this.props.submitModal({
-			remoteDocumentId: itemToSubmit.id,
-			documentId: itemToSubmit.documentId
-		});
-
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.loadItem(selectedItem.id).then(
 			documentId =>
@@ -138,7 +152,7 @@ class DocumentBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight>
+			<Modal size="m" isFullHeight onKeyDown={this.handleKeyDown}>
 				<ModalHeader title={modalTitle || t('Select a document')} />
 
 				<ModalBody>
