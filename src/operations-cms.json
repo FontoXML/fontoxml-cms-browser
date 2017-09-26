@@ -174,7 +174,7 @@
 					"description": "The documentId of the selected document."
 				},
 				{
-					"name": "documentRemoteId",
+					"name": "remoteDocumentId",
 					"type": "RemoteDocumentId",
 					"description": "The remoteDocumentId of the selected document."
 				}
@@ -220,7 +220,7 @@
 			],
 			"returns": [
 				{
-					"name": "documentRemoteId",
+					"name": "remoteDocumentId",
 					"type": "RemoteDocumentId",
 					"description": "The remoteDocumentId of the selected document template."
 				}
@@ -272,7 +272,7 @@
 					"description": "(Open document) The documentId of the selected document."
 				},
 				{
-					"name": "documentRemoteId",
+					"name": "remoteDocumentId",
 					"type": "RemoteDocumentId",
 					"description": "(Open document) The remoteDocumentId of the selected document."
 				},

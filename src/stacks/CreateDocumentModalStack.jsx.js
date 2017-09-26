@@ -78,7 +78,7 @@ class CreateDocumentFormModalStack extends Component {
 							dataProviderName: selectDocumentTemplateDataProviderName,
 							modalTitle: t('Select a template for your document')
 						}}
-						documentRemoteId={selectedDocumentTemplate.documentRemoteId}
+						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
 				)}

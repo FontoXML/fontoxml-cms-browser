@@ -90,7 +90,7 @@ This browser can be used by adding the following operation step to your operatio
 
 ```
 {
-    "type": "open-open-or-create-document-browser-modal"
+    "type": "operation/open-open-or-create-document-browser-modal"
 }
 ```
 

@@ -103,7 +103,7 @@ class DocumentBrowserModal extends Component {
 
 	submitModal = itemToSubmit =>
 		this.props.submitModal({
-			documentRemoteId: itemToSubmit.id,
+			remoteDocumentId: itemToSubmit.id,
 			documentId: itemToSubmit.documentId
 		});
 

@@ -40,7 +40,7 @@ class CreateDocumentFormModal extends Component {
 
 	handleSubmitButton = () =>
 		this.props.submitModal({
-			selectedDocumentTemplateId: this.props.selectedDocumentTemplate.documentRemoteId,
+			selectedDocumentTemplateId: this.props.selectedDocumentTemplate.remoteDocumentId,
 			selectedFolderId: this.props.selectedFolder.id,
 			documentTitle: this.state.documentTitle
 		});
@@ -101,7 +101,7 @@ class CreateDocumentFormModal extends Component {
 						isDisabled={
 							documentTitle.trim().length === 0 ||
 							!selectedFolder.id ||
-							!selectedDocumentTemplate.documentRemoteId
+							!selectedDocumentTemplate.remoteDocumentId
 						}
 						onClick={this.handleSubmitButton}
 					/>
