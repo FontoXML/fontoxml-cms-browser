@@ -48,7 +48,7 @@ class ModalBrowserUploadButton extends PureComponent {
 		return (
 			<SelectFileButton
 				label={t('Upload')}
-				isDisabled={isLoading || lastLoadedFolder === null || lastLoadedFolder.id === null}
+				isDisabled={isLoading || lastLoadedFolder === null}
 				mimeTypesToAccept={this.dataProvider.getUploadOptions().mimeTypesToAccept}
 				icon="upload"
 				iconAfter={isUploading ? 'spinner' : null}
