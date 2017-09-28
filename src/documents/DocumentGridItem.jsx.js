@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Flex, GridItem, Icon, Label } from 'fontoxml-vendor-fds/components';
+import { Flex, GridItem, Icon, Label } from 'fds/components';
 
 class DocumentGridItem extends Component {
 	static defaultProps = {

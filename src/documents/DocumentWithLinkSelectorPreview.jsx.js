@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import { SpinnerIcon, StateMessage } from 'fds/components';
 import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/documentsManager';
 import getNodeId from 'fontoxml-dom-identification/getNodeId';
 import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
 import FxNodePreviewWithLinkSelector from 'fontoxml-fx/FxNodePreviewWithLinkSelector.jsx';
-
-import { SpinnerIcon, StateMessage } from 'fontoxml-vendor-fds/components';
 
 class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {

@@ -12,7 +12,6 @@
 		"fontoxml-remote-documents": "^1.0.0",
 		"fontoxml-selection": "^1.4.0",
 		"fontoxml-selectors": "^3.0.0",
-		"fontoxml-vendor-fds": "^4.0.0",
 		"fontoxml-vendors": "^2.0.0"
 	},
 	"devDependencies": {

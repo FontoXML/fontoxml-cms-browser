@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fds/components';
 import t from 'fontoxml-localization/t';
-
-import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fontoxml-vendor-fds/components';
 
 import CreateDocumentFormModal from '../documents/CreateDocumentFormModal.jsx';
 import DocumentBrowserModal from '../documents/DocumentBrowserModal.jsx';

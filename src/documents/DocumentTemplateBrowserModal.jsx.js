@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import t from 'fontoxml-localization/t';
-
 import {
 	Button,
 	Modal,
@@ -11,7 +9,8 @@ import {
 	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader
-} from 'fontoxml-vendor-fds/components';
+} from 'fds/components';
+import t from 'fontoxml-localization/t';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';

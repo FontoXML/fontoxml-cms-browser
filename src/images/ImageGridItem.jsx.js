@@ -9,7 +9,7 @@ import {
 	Icon,
 	Label,
 	SpinnerIcon
-} from 'fontoxml-vendor-fds/components';
+} from 'fds/components';
 
 import withImagePreviewCapabilities from './withImagePreviewCapabilities.jsx';
 

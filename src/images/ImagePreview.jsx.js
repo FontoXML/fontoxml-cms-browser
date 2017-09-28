@@ -10,8 +10,8 @@ import {
 	KeyValueList,
 	SpinnerIcon,
 	StateMessage
-} from 'fontoxml-vendor-fds/components';
-import { block } from 'fontoxml-vendor-fds/system';
+} from 'fds/components';
+import { block } from 'fds/system';
 
 const imageStyles = merge(block, {
 	position: 'absolute',

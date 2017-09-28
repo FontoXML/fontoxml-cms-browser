@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
-import { ButtonGroup } from 'fontoxml-vendor-fds/components';
+import { ButtonGroup } from 'fds/components';
 
 const viewModes = [{ name: 'list', icon: 'list' }, { name: 'grid', icon: 'th' }];
 

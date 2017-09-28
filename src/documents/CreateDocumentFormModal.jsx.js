@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import t from 'fontoxml-localization/t';
-
 import {
 	Button,
 	ButtonWithValue,
@@ -14,7 +12,8 @@ import {
 	ModalFooter,
 	ModalHeader,
 	TextInput
-} from 'fontoxml-vendor-fds/components';
+} from 'fds/components';
+import t from 'fontoxml-localization/t';
 
 class CreateDocumentFormModal extends Component {
 	static defaultProps = {

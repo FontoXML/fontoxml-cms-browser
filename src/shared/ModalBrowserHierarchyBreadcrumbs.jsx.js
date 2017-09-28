@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { BreadcrumbItemLink, Breadcrumbs } from 'fontoxml-vendor-fds/components';
-import { truncatedBreadcrumbItemLinkWidth } from 'fontoxml-vendor-fds/system';
+import { BreadcrumbItemLink, Breadcrumbs } from 'fds/components';
+import { truncatedBreadcrumbItemLinkWidth } from 'fds/system';
 
 class ModalBrowserHierarchyBreadcrumbs extends Component {
 	static defaultProps = {

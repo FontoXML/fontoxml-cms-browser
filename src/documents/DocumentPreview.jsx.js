@@ -1,15 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import { Flex, HorizontalSeparationLine, SpinnerIcon, StateMessage, Text } from 'fds/components';
 import FxNodePreview from 'fontoxml-fx/FxNodePreview.jsx';
-
-import {
-	Flex,
-	HorizontalSeparationLine,
-	SpinnerIcon,
-	StateMessage,
-	Text
-} from 'fontoxml-vendor-fds/components';
 
 const maxHeightStyles = { maxHeight: '50%' };
 

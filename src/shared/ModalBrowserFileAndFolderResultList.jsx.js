@@ -1,12 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import {
-	SpinnerIcon,
-	StateMessage,
-	VirtualGrid,
-	VirtualList
-} from 'fontoxml-vendor-fds/components';
+import { SpinnerIcon, StateMessage, VirtualGrid, VirtualList } from 'fds/components';
 
 const getSelectedItems = (items, selectedItem) =>
 	items.some(item => selectedItem && item.id === selectedItem.id) ? [selectedItem] : [];
