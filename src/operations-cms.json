@@ -105,7 +105,7 @@
 				},
 				{
 					"name": "selectedImageId",
-					"type": "RemoteId",
+					"type": "AssetId",
 					"description": [
 						"(Optional) Can be used to open the image browser with an image preselected."
 					]
@@ -114,7 +114,7 @@
 			"returns": [
 				{
 					"name": "selectedImageId",
-					"type": "RemoteId",
+					"type": "AssetId",
 					"description": "The remoteId of the selected image."
 				}
 			]
