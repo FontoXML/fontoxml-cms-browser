@@ -12,6 +12,7 @@ import {
 } from 'fds/components';
 import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/documentsManager';
+import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
 import getNodeId from 'fontoxml-dom-identification/getNodeId';
 import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
 import t from 'fontoxml-localization/t';
@@ -19,7 +20,6 @@ import t from 'fontoxml-localization/t';
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
 import DocumentWithLinkSelectorPreview from './DocumentWithLinkSelectorPreview.jsx';
-import DocumentLoader from '../loaders/DocumentLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -215,19 +215,19 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<DocumentWithLinkSelectorPreview
-										initialNodeId={nodeId}
-										initialSelectedItemId={initialSelectedItemId}
-										linkableElementsQuery={linkableElementsQuery}
-										loadItem={loadItem}
-										onItemSelect={onItemSelect}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<DocumentWithLinkSelectorPreview
+											initialNodeId={nodeId}
+											initialSelectedItemId={initialSelectedItemId}
+											linkableElementsQuery={linkableElementsQuery}
+											loadItem={loadItem}
+											onItemSelect={onItemSelect}
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -267,7 +267,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(
 	DocumentWithLinkSelectorBrowserModal,
-	DocumentLoader,
+	FxDocumentLoader,
 	VIEWMODES.LIST
 );
 

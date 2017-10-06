@@ -11,12 +11,12 @@ import {
 	ModalHeader
 } from 'fds/components';
 import documentsManager from 'fontoxml-documents/documentsManager';
+import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
 import t from 'fontoxml-localization/t';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
 import DocumentPreview from './DocumentPreview.jsx';
-import DocumentLoader from '../loaders/DocumentLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -194,16 +194,16 @@ class DocumentBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<DocumentPreview
-										loadItem={loadItem}
-										onItemSelect={onItemSelect}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<DocumentPreview
+											loadItem={loadItem}
+											onItemSelect={onItemSelect}
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -241,7 +241,7 @@ class DocumentBrowserModal extends Component {
 
 DocumentBrowserModal = withModularBrowserCapabilities(
 	DocumentBrowserModal,
-	DocumentLoader,
+	FxDocumentLoader,
 	VIEWMODES.LIST
 );
 

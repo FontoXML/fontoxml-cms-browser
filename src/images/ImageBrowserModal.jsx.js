@@ -12,12 +12,12 @@ import {
 	ModalHeader,
 	Toast
 } from 'fds/components';
+import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 import t from 'fontoxml-localization/t';
 
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
 import ImagePreview from './ImagePreview.jsx';
-import ImageLoader from '../loaders/ImageLoader.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -180,15 +180,15 @@ class ImageBrowserModal extends Component {
 						</ModalContentToolbar>
 
 						{request.type === 'upload' &&
-						request.error && (
-							<ModalContent flex="none" paddingSize="m">
-								<Toast
-									connotation="error"
-									icon="exclamation-triangle"
-									content={request.error}
-								/>
-							</ModalContent>
-						)}
+							request.error && (
+								<ModalContent flex="none" paddingSize="m">
+									<Toast
+										connotation="error"
+										icon="exclamation-triangle"
+										content={request.error}
+									/>
+								</ModalContent>
+							)}
 
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
@@ -208,15 +208,15 @@ class ImageBrowserModal extends Component {
 							</ModalContent>
 
 							{this.props.selectedItem &&
-							this.props.selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<ImagePreview
-										loadItem={loadItem}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								this.props.selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<ImagePreview
+											loadItem={loadItem}
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -250,6 +250,10 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, ImageLoader, VIEWMODES.GRID);
+ImageBrowserModal = withModularBrowserCapabilities(
+	ImageBrowserModal,
+	FxImageLoader,
+	VIEWMODES.GRID
+);
 
 export default ImageBrowserModal;
