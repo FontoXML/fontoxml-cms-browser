@@ -58,6 +58,7 @@ class DocumentTemplateBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
+			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
 		}).isRequired,
@@ -125,7 +126,7 @@ class DocumentTemplateBrowserModal extends Component {
 	render() {
 		const {
 			cancelModal,
-			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
+			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
 			loadItem,
@@ -140,7 +141,7 @@ class DocumentTemplateBrowserModal extends Component {
 
 		return (
 			<Modal size="m" onKeyDown={this.handleKeyDown}>
-				<ModalHeader title={modalTitle || t('Select a template')} />
+				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a template')} />
 
 				<ModalBody>
 					<ModalContent flexDirection="column">

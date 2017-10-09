@@ -62,8 +62,9 @@ class ImageBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
-			modalTitle: PropTypes.string,
+			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
+			modalTitle: PropTypes.string,
 			selectedImageId: PropTypes.string
 		}).isRequired,
 		submitModal: PropTypes.func.isRequired
@@ -128,8 +129,9 @@ class ImageBrowserModal extends Component {
 			data: {
 				browseContextDocumentId,
 				dataProviderName,
-				modalTitle,
-				modalPrimaryButtonLabel
+				modalIcon,
+				modalPrimaryButtonLabel,
+				modalTitle
 			},
 			hierarchyItems,
 			items,
@@ -146,7 +148,7 @@ class ImageBrowserModal extends Component {
 
 		return (
 			<Modal size="l" isFullHeight={true} onKeyDown={this.handleKeyDown}>
-				<ModalHeader title={modalTitle || t('Select an image')} />
+				<ModalHeader icon={modalIcon} title={modalTitle || t('Select an image')} />
 
 				<ModalBody>
 					<ModalContent flexDirection="column">

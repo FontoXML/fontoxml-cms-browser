@@ -60,8 +60,9 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
 			linkableElementsQuery: PropTypes.string.isRequired,
-			modalTitle: PropTypes.string,
+			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
+			modalTitle: PropTypes.string,
 			nodeId: PropTypes.string
 		}).isRequired,
 		submitModal: PropTypes.func.isRequired
@@ -156,6 +157,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			data: {
 				browseContextDocumentId,
 				linkableElementsQuery,
+				modalIcon,
 				modalPrimaryButtonLabel,
 				modalTitle,
 				nodeId
@@ -175,7 +177,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 		return (
 			<Modal size="m" isFullHeight={true} onKeyDown={this.handleKeyDown}>
-				<ModalHeader title={modalTitle || t('Select a link')} />
+				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a link')} />
 
 				<ModalBody>
 					<ModalContent flexDirection="column">

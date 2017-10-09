@@ -60,6 +60,7 @@ class DocumentBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
+			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
 		}).isRequired,
@@ -136,7 +137,7 @@ class DocumentBrowserModal extends Component {
 	render() {
 		const {
 			cancelModal,
-			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
+			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
 			loadItem,
@@ -152,7 +153,7 @@ class DocumentBrowserModal extends Component {
 
 		return (
 			<Modal size="m" isFullHeight onKeyDown={this.handleKeyDown}>
-				<ModalHeader title={modalTitle || t('Select a document')} />
+				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a document')} />
 
 				<ModalBody>
 					{renderModalBodyToolbar !== null && renderModalBodyToolbar()}

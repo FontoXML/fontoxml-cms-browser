@@ -22,7 +22,7 @@ This browser can be used by adding the following operation step to your operatio
 
 The elements which should be selectable by the user can be set by providing a `linkableElementsQuery`. This is an {@link XPathQuery}.
 
-When this browser is used to edit an existing link, the `documentId` and `nodeId` properties can be used to set the selection on the original document and element. In addition to these two properties, the browser title and primary button label can be set with the `modalTitle` and `modalPrimaryButtonLabel` respectively.
+When this browser is used to edit an existing link, the `documentId` and `nodeId` properties can be used to set the selection on the original document and element. In addition to these two properties, the browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-document-with-link-selector-browser-modal} operation.
 
@@ -40,7 +40,7 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-When this browser is being used to edit a reference to an existing image, the `selectedImageId` property can be used to set the selection on the original image. In addition to this property, the browser title and primary button label can be set with the `modalTitle` and `modalPrimaryButtonLabel` respectively.
+When this browser is being used to edit a reference to an existing image, the `selectedImageId` property can be used to set the selection on the original image. In addition to this property, the browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-image-browser-modal} operation.
 
@@ -58,7 +58,7 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-When this browser is being used to edit a reference to an existing document, the `documentId` property can be used to set the selection on the original document. In addition to this property, the browser title and primary button label can be set with the `modalTitle` and `modalPrimaryButtonLabel` respectively.
+When this browser is being used to edit a reference to an existing document, the `documentId` property can be used to set the selection on the original document. In addition to this property, the browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-document-browser-modal} operation.
 
@@ -76,7 +76,7 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-The only properties to set for this browser are the `modalTitle` and `modalPrimaryButtonLabel`.
+The only properties to set for this browser are the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel`.
 
 For more information, see the {@link operation/open-document-template-browser-modal} operation.
 
@@ -94,7 +94,7 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-The only property to set for this browser is the `modalTitle`.
+The only properties to set for this browser are the `modalIcon` and `modalTitle`.
 
 For more information, see the {@link operation/open-open-or-create-document-browser-modal} operation.
 
@@ -112,6 +112,6 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-The only property to set for this form is the `modalTitle`.
+The only properties to set for this browser are the `modalIcon` and `modalTitle`.
 
 For more information, see the {@link operation/open-create-document-form-modal} operation.

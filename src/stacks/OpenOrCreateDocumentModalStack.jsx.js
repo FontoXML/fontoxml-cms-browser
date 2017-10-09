@@ -27,6 +27,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
+			modalIcon: PropTypes.string,
 			modalTitle: PropTypes.string,
 			openDocumentDataProviderName: PropTypes.string.isRequired,
 			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
@@ -78,6 +79,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 		const {
 			data: {
 				browseContextDocumentId,
+				modalIcon,
 				modalTitle,
 				openDocumentDataProviderName,
 				selectDocumentTemplateDataProviderName,
@@ -97,6 +99,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: openDocumentDataProviderName,
+							modalIcon: modalIcon,
 							modalPrimaryButtonLabel: t('Open'),
 							modalTitle: openOrCreateModalTitle
 						}}
@@ -108,6 +111,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 				{activeTab.tabId === 'create' && (
 					<CreateDocumentFormModal
 						cancelModal={cancelModal}
+						modalIcon={modalIcon}
 						modalTitle={openOrCreateModalTitle}
 						onSelectDocumentTemplateClick={this.handleSelectDocumentTemplateClick}
 						onSelectFolderClick={this.handleSelectFolderClick}

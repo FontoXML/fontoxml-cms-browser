@@ -24,6 +24,7 @@ class CreateDocumentFormModal extends Component {
 
 	static PropTypes = {
 		cancelModal: PropTypes.func.isRequired,
+		modalIcon: PropTypes.string,
 		modalTitle: PropTypes.string.isRequired,
 		onSelectDocumentTemplateClick: PropTypes.func.isRequired,
 		onSelectFolderClick: PropTypes.func.isRequired,
@@ -64,6 +65,7 @@ class CreateDocumentFormModal extends Component {
 	render() {
 		const {
 			cancelModal,
+			modalIcon,
 			modalTitle,
 			onSelectDocumentTemplateClick,
 			onSelectFolderClick,
@@ -75,7 +77,7 @@ class CreateDocumentFormModal extends Component {
 
 		return (
 			<Modal size="s" onKeyDown={this.handleKeyDown}>
-				<ModalHeader title={modalTitle} />
+				<ModalHeader icon={modalIcon} title={modalTitle} />
 
 				<ModalBody>
 					{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
