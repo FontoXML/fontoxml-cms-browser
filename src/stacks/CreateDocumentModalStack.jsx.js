@@ -13,6 +13,7 @@ class CreateDocumentFormModalStack extends Component {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
+			insertOperationName: PropTypes.string,
 			modalIcon: PropTypes.string,
 			modalTitle: PropTypes.string,
 			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
@@ -50,6 +51,7 @@ class CreateDocumentFormModalStack extends Component {
 		const {
 			data: {
 				browseContextDocumentId,
+				insertOperationName,
 				modalIcon,
 				modalTitle,
 				selectDocumentTemplateDataProviderName,
@@ -63,6 +65,9 @@ class CreateDocumentFormModalStack extends Component {
 			<ModalStack>
 				<CreateDocumentFormModal
 					cancelModal={cancelModal}
+					data={{
+						insertOperationName
+					}}
 					modalIcon={modalIcon}
 					modalTitle={modalTitle || t('Create new document')}
 					onSelectDocumentTemplateClick={this.handleSelectDocumentTemplateClick}

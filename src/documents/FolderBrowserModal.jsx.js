@@ -170,6 +170,6 @@ class FolderBrowserModal extends Component {
 	}
 }
 
-FolderBrowserModal = withModularBrowserCapabilities(FolderBrowserModal, VIEWMODES.LIST);
+FolderBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(FolderBrowserModal);
 
 export default FolderBrowserModal;

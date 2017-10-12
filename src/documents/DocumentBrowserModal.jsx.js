@@ -21,6 +21,7 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -48,6 +49,17 @@ const stateLabels = {
 	}
 };
 
+function getSubmitModalData(itemToSubmit) {
+	return {
+		remoteDocumentId: itemToSubmit.id,
+		documentId: itemToSubmit.documentId
+	};
+}
+
+function canSubmitSelectedItem(selectedItem) {
+	return !!(selectedItem && selectedItem.documentId);
+}
+
 class DocumentBrowserModal extends Component {
 	static defaultProps = {
 		renderModalBodyToolbar: null
@@ -59,6 +71,7 @@ class DocumentBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
+			insertOperationName: PropTypes.string,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
@@ -67,21 +80,14 @@ class DocumentBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
-	submitModal = itemToSubmit =>
-		this.props.submitModal({
-			remoteDocumentId: itemToSubmit.id,
-			documentId: itemToSubmit.documentId
-		});
-
 	handleKeyDown = event => {
-		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
 				this.props.cancelModal();
 				break;
 			case 'Enter':
-				if (selectedItem && selectedItem.documentId) {
-					this.submitModal(selectedItem);
+				if (!this.props.isSubmitButtonDisabled) {
+					this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 				}
 				break;
 		}
@@ -92,7 +98,7 @@ class DocumentBrowserModal extends Component {
 		if (item.type === 'folder') {
 			this.props.refreshItems(this.props.browseContextDocumentId, item);
 		} else if (item.documentId) {
-			this.submitModal(item);
+			this.props.determineAndHandleItemSubmitForSelectedItem(item);
 		}
 	};
 
@@ -124,13 +130,15 @@ class DocumentBrowserModal extends Component {
 	handleLoadIsDone = documentId =>
 		this.props.onItemSelect({ ...this.props.selectedItem, documentId });
 
-	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
+	handleSubmitButtonClick = () =>
+		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 
 	render() {
 		const {
 			cancelModal,
 			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
+			isSubmitButtonDisabled,
 			items,
 			onItemSelect,
 			onViewModeChange,
@@ -140,6 +148,7 @@ class DocumentBrowserModal extends Component {
 			selectedItem,
 			viewMode
 		} = this.props;
+
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
@@ -204,7 +213,7 @@ class DocumentBrowserModal extends Component {
 					<Button
 						type="primary"
 						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={!selectedItem || !selectedItem.documentId}
+						isDisabled={isSubmitButtonDisabled}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
@@ -229,6 +238,10 @@ class DocumentBrowserModal extends Component {
 	}
 }
 
-DocumentBrowserModal = withModularBrowserCapabilities(DocumentBrowserModal, VIEWMODES.LIST);
+DocumentBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(DocumentBrowserModal);
+DocumentBrowserModal = withInsertOperationNameCapabilities(
+	getSubmitModalData,
+	canSubmitSelectedItem
+)(DocumentBrowserModal);
 
 export default DocumentBrowserModal;

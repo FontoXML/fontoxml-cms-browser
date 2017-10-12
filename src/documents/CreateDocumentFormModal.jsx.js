@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
+
 import {
 	Button,
 	ButtonWithValue,
@@ -15,6 +17,22 @@ import {
 } from 'fds/components';
 import t from 'fontoxml-localization/t';
 
+function getSubmitModalData(itemToSubmit) {
+	return {
+		selectedDocumentTemplateId: itemToSubmit.selectedDocumentTemplate.remoteDocumentId,
+		selectedFolderId: itemToSubmit.selectedFolder.id,
+		documentTitle: itemToSubmit.documentTitle
+	};
+}
+
+function canSubmitSelectedItem(selectedItem) {
+	return !!(
+		selectedItem.documentTitle.trim().length > 0 &&
+		selectedItem.selectedFolder.id &&
+		selectedItem.selectedDocumentTemplate.remoteDocumentId
+	);
+}
+
 class CreateDocumentFormModal extends Component {
 	static defaultProps = {
 		renderModalBodyToolbar: null,
@@ -24,6 +42,7 @@ class CreateDocumentFormModal extends Component {
 
 	static PropTypes = {
 		cancelModal: PropTypes.func.isRequired,
+		insertOperationName: PropTypes.string,
 		modalIcon: PropTypes.string,
 		modalTitle: PropTypes.string.isRequired,
 		onSelectDocumentTemplateClick: PropTypes.func.isRequired,
@@ -36,12 +55,28 @@ class CreateDocumentFormModal extends Component {
 
 	state = { documentTitle: '' };
 
+	componentWillReceiveProps(nextProps) {
+		if (
+			nextProps.selectedFolder.id !== this.props.selectedFolder.id ||
+			nextProps.selectedDocumentTemplate.remoteDocumentId !==
+				this.props.selectedDocumentTemplate.remoteDocumentId
+		) {
+			this.props.determineAndHandleSubmitButtonDisabledState({
+				selectedDocumentTemplate: nextProps.selectedDocumentTemplate,
+				selectedFolder: nextProps.selectedFolder,
+				documentTitle: this.state.documentTitle
+			});
+		}
+	}
+
 	handleSubmitButton = () =>
-		this.props.submitModal({
-			selectedDocumentTemplateId: this.props.selectedDocumentTemplate.remoteDocumentId,
-			selectedFolderId: this.props.selectedFolder.id,
-			documentTitle: this.state.documentTitle
-		});
+		this.props.submitModal(
+			getSubmitModalData({
+				selectedDocumentTemplate: this.props.selectedDocumentTemplate,
+				selectedFolder: this.props.selectedFolder,
+				documentTitle: this.state.documentTitle
+			})
+		);
 
 	handleKeyDown = event => {
 		switch (event.key) {
@@ -49,22 +84,27 @@ class CreateDocumentFormModal extends Component {
 				this.props.cancelModal();
 				break;
 			case 'Enter':
-				if (
-					this.state.documentTitle.trim().length > 0 &&
-					this.props.selectedFolder.id &&
-					this.props.selectedDocumentTemplate.remoteDocumentId
-				) {
+				if (!this.props.isSubmitButtonDisabled) {
 					this.handleSubmitButton();
 				}
 				break;
 		}
 	};
 
-	handleDocumentTitleChange = documentTitle => this.setState({ documentTitle });
+	handleDocumentTitleChange = documentTitle => {
+		this.setState({ documentTitle });
+
+		this.props.determineAndHandleSubmitButtonDisabledState({
+			selectedDocumentTemplate: this.props.selectedDocumentTemplate,
+			selectedFolder: this.props.selectedFolder,
+			documentTitle
+		});
+	};
 
 	render() {
 		const {
 			cancelModal,
+			isSubmitButtonDisabled,
 			modalIcon,
 			modalTitle,
 			onSelectDocumentTemplateClick,
@@ -116,11 +156,7 @@ class CreateDocumentFormModal extends Component {
 					<Button
 						type="primary"
 						label={t('Create')}
-						isDisabled={
-							documentTitle.trim().length === 0 ||
-							!selectedFolder.id ||
-							!selectedDocumentTemplate.remoteDocumentId
-						}
+						isDisabled={isSubmitButtonDisabled}
 						onClick={this.handleSubmitButton}
 					/>
 				</ModalFooter>
@@ -128,5 +164,10 @@ class CreateDocumentFormModal extends Component {
 		);
 	}
 }
+
+CreateDocumentFormModal = withInsertOperationNameCapabilities(
+	getSubmitModalData,
+	canSubmitSelectedItem
+)(CreateDocumentFormModal);
 
 export default CreateDocumentFormModal;

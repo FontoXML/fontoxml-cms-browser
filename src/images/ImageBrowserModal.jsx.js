@@ -23,6 +23,7 @@ import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -55,12 +56,23 @@ const uploadErrorMessages = {
 	serverErrorMessage: t('FontoXML can’t upload this image, please try again.')
 };
 
+function getSubmitModalData(itemToSubmit) {
+	return {
+		selectedImageId: itemToSubmit.id
+	};
+}
+
+function canSubmitSelectedItem(selectedItem) {
+	return !!(selectedItem && selectedItem.type !== 'folder');
+}
+
 class ImageBrowserModal extends Component {
 	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
+			insertOperationName: PropTypes.string,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string,
@@ -69,8 +81,6 @@ class ImageBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
-	submitModal = itemToSubmit => this.props.submitModal({ selectedImageId: itemToSubmit.id });
-
 	handleKeyDown = event => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
@@ -78,14 +88,15 @@ class ImageBrowserModal extends Component {
 				this.props.cancelModal();
 				break;
 			case 'Enter':
-				if (selectedItem && selectedItem.type !== 'folder') {
-					this.submitModal(selectedItem);
+				if (!this.props.isSubmitButtonDisabled) {
+					this.props.submitModal(getSubmitModalData(selectedItem));
 				}
 				break;
 		}
 	};
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
+	handleFileAndFolderResultListItemSubmit = selectedItem =>
+		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
 
 	handleRenderListItem = ({
 		key,
@@ -118,7 +129,8 @@ class ImageBrowserModal extends Component {
 		/>
 	);
 
-	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
+	handleSubmitButtonClick = () =>
+		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 
 	render() {
 		const {
@@ -131,6 +143,7 @@ class ImageBrowserModal extends Component {
 				modalTitle
 			},
 			hierarchyItems,
+			isSubmitButtonDisabled,
 			items,
 			onItemSelect,
 			onUploadFileSelect,
@@ -224,7 +237,7 @@ class ImageBrowserModal extends Component {
 					<Button
 						type="primary"
 						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={!selectedItem || selectedItem.type === 'folder'}
+						isDisabled={isSubmitButtonDisabled}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
@@ -247,6 +260,9 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, VIEWMODES.GRID);
+ImageBrowserModal = withModularBrowserCapabilities(VIEWMODES.GRID)(ImageBrowserModal);
+ImageBrowserModal = withInsertOperationNameCapabilities(getSubmitModalData, canSubmitSelectedItem)(
+	ImageBrowserModal
+);
 
 export default ImageBrowserModal;

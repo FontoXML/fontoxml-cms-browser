@@ -26,6 +26,17 @@
 					]
 				},
 				{
+					"name": "insertOperationName",
+					"type": "string",
+					"description": [
+						"(Optional) The primary button will be disabled if the selected node can't",
+						"be inserted with the 'insert operation'.",
+						"",
+						"The operation data collected until the current operation together with the",
+						"selected node, will be added as initial data to the 'insert operation'."
+					]
+				},
+				{
 					"name": "linkableElementsQuery",
 					"type": "XPathQuery",
 					"description": [
@@ -101,6 +112,17 @@
 					]
 				},
 				{
+					"name": "insertOperationName",
+					"type": "string",
+					"description": [
+						"(Optional) The primary button will be disabled if the selected image can't",
+						"be inserted with the 'insert operation'.",
+						"",
+						"The operation data collected until the current operation together with the",
+						"selected image, will be added as initial data to the 'insert operation'."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon being shown at the top of the modal. The value should be a valid font-awsome icon name."
@@ -170,6 +192,17 @@
 					]
 				},
 				{
+					"name": "insertOperationName",
+					"type": "string",
+					"description": [
+						"(Optional) The primary button will be disabled if the selected document can't",
+						"be inserted with the 'insert operation'.",
+						"",
+						"The operation data collected until the current operation together with the",
+						"selected document, will be added as initial data to the 'insert operation'."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon being shown at the top of the modal. The value should be a valid font-awsome icon name."
@@ -224,6 +257,17 @@
 						"",
 						"By default the browseContextDocument is set to the focusedDocument or,",
 						"when the focusedDocument is not available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "insertOperationName",
+					"type": "string",
+					"description": [
+						"(Optional) The primary button will be disabled if the selected document",
+						"template can't be inserted with the 'insert operation'.",
+						"",
+						"The operation data collected until the current operation together with the",
+						"selected document template, will be added as initial data to the 'insert operation'."
 					]
 				},
 				{
@@ -282,6 +326,18 @@
 						"",
 						"By default the browseContextDocument is set to the focusedDocument or,",
 						"when the focusedDocument is not available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "insertOperationName",
+					"type": "string",
+					"description": [
+						"(Optional) The primary button will be disabled if the selected document or document",
+						"template, folder and document title can't be inserted with the 'insert operation'.",
+						"",
+						"The operation data collected until the current operation together with the",
+						"selected document or document template, folder and document title will be",
+						"added as initial data to the 'insert operation'."
 					]
 				},
 				{
@@ -355,6 +411,18 @@
 						"",
 						"By default the browseContextDocument is set to the focusedDocument or,",
 						"when the focusedDocument is not available, to the first document in the hierarchy."
+					]
+				},
+				{
+					"name": "insertOperationName",
+					"type": "string",
+					"description": [
+						"(Optional) The primary button will be disabled if the selected document",
+						"template, folder and document title can't be inserted with the 'insert operation'.",
+						"",
+						"The operation data collected until the current operation together with the",
+						"selected document template, folder and document title will be added as",
+						"initial data to the 'insert operation'."
 					]
 				},
 				{
