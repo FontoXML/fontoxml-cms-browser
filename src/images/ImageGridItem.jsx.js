@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Block, ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 
-import ImagePreview from './ImagePreview.jsx';
+import ImageLoader from './ImagePreview.jsx';
 
 class ImageGridItem extends Component {
 	static defaultProps = {
@@ -52,7 +52,7 @@ class ImageGridItem extends Component {
 		}
 
 		return (
-			<ImagePreview remoteId={item.id} type="thumbnail">
+			<ImageLoader remoteId={item.id} type="thumbnail">
 				{({ isErrored, isLoading, imageData }) => {
 					if (isErrored) {
 						return this.wrapInGridItem(
@@ -85,7 +85,7 @@ class ImageGridItem extends Component {
 						</Flex>
 					);
 				}}
-			</ImagePreview>
+			</ImageLoader>
 		);
 	}
 }

@@ -23,58 +23,65 @@ class DocumentListItem extends Component {
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
-		onRef: PropTypes.func,
+		// @see TODO in DocumentGridItem.jsx
+		onRef: PropTypes.func
+	};
 
-		// from withModularBrowserCapabilities
-		isItemErrored: PropTypes.func.isRequired
+	wrapInListItem = (content, label) => {
+		return (
+			<ListItem
+				isSelected={this.props.isSelected}
+				isDisabled={this.props.isDisabled}
+				onClick={this.props.onClick}
+				onDoubleClick={this.props.onDoubleClick}
+				onRef={this.props.onRef}
+			>
+				{content}
+				{label}
+			</ListItem>
+		);
 	};
 
 	render() {
-		const {
-			isDisabled,
-			isItemErrored,
-			isSelected,
-			item,
-			onClick,
-			onDoubleClick,
-			onRef
-		} = this.props;
+		const { item } = this.props;
 
-		if (isItemErrored(item)) {
-			return (
-				<ListItem
-					isSelected={isSelected}
-					isDisabled={isDisabled}
-					onClick={onClick}
-					onDoubleClick={onDoubleClick}
-					onRef={onRef}
-				>
-					<Icon
-						colorName="icon-s-error-color"
-						icon={item.icon || 'file-text-o'}
-						size="s"
-					/>
-
-					<Label colorName="text-muted-color">{item.label}</Label>
-				</ListItem>
+		if (item.type === 'folder') {
+			return this.wrapInListItem(
+				<Icon icon={item.icon || 'folder-o'} size="s" />,
+				<Label>{item.label}</Label>
 			);
 		}
 
 		return (
-			<ListItem
-				isSelected={isSelected}
-				isDisabled={isDisabled}
-				onClick={onClick}
-				onDoubleClick={onDoubleClick}
-				onRef={onRef}
-			>
-				<Icon
-					icon={item.icon || (item.type === 'folder' ? 'folder-o' : 'file-text-o')}
-					size="s"
-				/>
+			<DocumentLoader remoteId={item.id}>
+				{({ isErrored, isLoading }) => {
+					if (isErrored) {
+						return this.wrapInListItem(
+							<Icon
+								colorName="icon-s-error-color"
+								icon={item.icon || 'file-text-o'}
+								size="s"
+							/>,
+							<Label colorName="text-muted-color">{item.label}</Label>
+						);
+					}
 
-				<Label>{item.label}</Label>
-			</ListItem>
+					if (isLoading) {
+						return this.wrapInListItem(
+							<SpinnerIcon size="s" />,
+							<Label>{item.label}</Label>
+						);
+					}
+
+					return this.wrapInListItem(
+						<Icon
+							icon={item.icon || 'file-text-o'}
+							size="s"
+						/>,
+						<Label>{item.label}</Label>
+					);
+				}}
+			</DocumentLoader>
 		);
 	}
 }

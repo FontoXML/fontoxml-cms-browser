@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Block, ContainedImage, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
 
-import ImagePreview from './ImagePreview.jsx';
+import ImageLoader from './ImagePreview.jsx';
 
 class ImageListItem extends Component {
 	static defaultProps = {
@@ -54,7 +54,7 @@ class ImageListItem extends Component {
 		}
 
 		return (
-			<ImagePreview remoteId={item.id} type="thumbnail">
+			<ImageLoader remoteId={item.id} type="thumbnail">
 				{({ isErrored, isLoading, imageData }) => {
 					if (isErrored) {
 						return this.wrapInListItem(
@@ -81,7 +81,7 @@ class ImageListItem extends Component {
 						<Label>{item.label}</Label>
 					);
 				}}
-			</ImagePreview>
+			</ImageLoader>
 		);
 	}
 }

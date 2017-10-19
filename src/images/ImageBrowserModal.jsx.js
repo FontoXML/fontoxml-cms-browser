@@ -16,7 +16,7 @@ import t from 'fontoxml-localization/t';
 
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
-import SelectedImagePreview from './SelectedImagePreview.jsx';
+import ImagePreview from './ImagePreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -132,7 +132,6 @@ class ImageBrowserModal extends Component {
 			},
 			hierarchyItems,
 			items,
-			loadItem,
 			onItemSelect,
 			onUploadFileSelect,
 			onViewModeChange,
@@ -144,7 +143,7 @@ class ImageBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="l" isFullHeight={true} onKeyDown={this.handleKeyDown}>
+			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select an image')} />
 
 				<ModalBody>
@@ -206,10 +205,10 @@ class ImageBrowserModal extends Component {
 								/>
 							</ModalContent>
 
-							{this.props.selectedItem &&
-								this.props.selectedItem.type !== 'folder' && (
+							{selectedItem &&
+								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
-										<SelectedImagePreview
+										<ImagePreview
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
@@ -248,6 +247,6 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, null, VIEWMODES.GRID);
+ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, VIEWMODES.GRID);
 
 export default ImageBrowserModal;

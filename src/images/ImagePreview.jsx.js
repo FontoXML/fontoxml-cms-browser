@@ -1,64 +1,87 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import React, { Component } from 'react';
 
-import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
+import {
+	ContainedImage,
+	Flex,
+	Heading,
+	HorizontalSeparationLine,
+	KeyValueList,
+	SpinnerIcon,
+	StateMessage
+} from 'fds/components';
+
+import ImageLoader from './ImageLoader.jsx';
 
 class ImagePreview extends Component {
 	static propTypes = {
-		children: PropTypes.func.isRequired,
-		remoteId: PropTypes.string.isRequired,
-		type: PropTypes.string.isRequired
+		stateLabels: PropTypes.shape({
+			previewError: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired,
+			loadingPreview: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired
+		}).isRequired,
+		selectedItem: PropTypes.object
 	};
-
-	imageLoader = new FxImageLoader();
-	isMountedInDOM = false;
-
-	state = {
-		imageData: null,
-		isErrored: false,
-		isLoading: true
-	};
-
-	handleLoadImage = imageData => {
-		if (this.isMountedInDOM) {
-			this.setState({ isErrored: false, isLoading: false, imageData: imageData });
-		}
-	};
-
-	handleLoadError = _error => {
-		if (this.isMountedInDOM) {
-			this.setState({ isErrored: true, isLoading: false, imageData: null });
-		}
-	};
-
-	componentWillReceiveProps({ remoteId, type }) {
-		if (remoteId === this.props.remoteId) {
-			return;
-		}
-
-		this.setState({ isLoading: true });
-
-		this.imageLoader.loadItem(remoteId, type).then(this.handleLoadImage, this.handleLoadError);
-	}
 
 	render() {
-		return this.props.children({
-			imageData: this.state.imageData,
-			isErrored: this.state.isErrored,
-			isLoading: this.state.isLoading
-		});
-	}
+		const { stateLabels, selectedItem } = this.props;
 
-	componentDidMount() {
-		this.isMountedInDOM = true;
+		return (
+			<ImageLoader remoteId={selectedItem.id} type="web">
+				{({ isErrored, isLoading, imageData }) => {
+					if (isErrored) {
+						return (
+							<StateMessage
+								connotation="warning"
+								paddingSize="m"
+								visual="exclamation-triangle"
+								{...stateLabels.previewError}
+							/>
+						);
+					}
 
-		this.imageLoader
-			.loadItem(this.props.remoteId, this.props.type)
-			.then(this.handleLoadImage, this.handleLoadError);
-	}
+					if (isLoading) {
+						return (
+							<StateMessage
+								paddingSize="m"
+								visual={<SpinnerIcon />}
+								{...stateLabels.loadingPreview}
+							/>
+						);
+					}
 
-	componentWillUnmount() {
-		this.isMountedInDOM = false;
+					return (
+						<Flex flex="auto" flexDirection="column">
+							<Flex flex="auto" flexDirection="column" paddingSize="l" spaceSize="m">
+								<Heading level="4">{selectedItem.label}</Heading>
+
+								<ContainedImage src={imageData.dataUrl} />
+							</Flex>
+
+							{selectedItem.metadata &&
+								selectedItem.metadata.properties && (
+									<Flex flex="none" flexDirection="column">
+										<Flex paddingSize={{ horizontal: 'l' }}>
+											<HorizontalSeparationLine />
+										</Flex>
+
+										<KeyValueList
+											items={selectedItem.metadata.properties}
+											scrollLimit={5}
+											paddingSize="l"
+										/>
+									</Flex>
+								)}
+						</Flex>
+					);
+				}}
+			</ImageLoader>
+		);
 	}
 }
 

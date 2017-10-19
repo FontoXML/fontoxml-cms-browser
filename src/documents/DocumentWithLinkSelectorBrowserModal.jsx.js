@@ -88,6 +88,37 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		}
 	};
 
+	// handleFileAndFolderResultListItemSubmit = selectedItem => {
+	// 	this.props.loadItem(selectedItem.id).then(
+	// 		documentId => {
+
+				// TODO: what does this if do exactly, do we need it?
+	// 			const rootNode = documentsManager.getDocumentNode(documentId).documentElement;
+	// 			if (
+	// 				this.props.selectedItem.id === selectedItem.id &&
+	// 				rootNode &&
+	// 				evaluateXPathToBoolean(
+	// 					'let $selectableNodes := ' +
+	// 						this.props.data.linkableElementsQuery +
+	// 						' return some $node in $selectableNodes satisfies . is $node',
+	// 					rootNode,
+	// 					readOnlyBlueprint
+	// 				)
+	// 			) {
+	// 				this.submitModal({
+	// 					documentId,
+	// 					nodeId: getNodeId(rootNode)
+	// 				});
+	// 			}
+
+	// 		},
+	// 		_error => {
+	// 			return;
+	// 		}
+	// 	);
+	// };
+	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
+
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -121,34 +152,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		/>
 	);
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => {
-		this.props.loadItem(selectedItem.id).then(
-			documentId => {
-				const rootNode = documentsManager.getDocumentNode(documentId).documentElement;
-
-				if (
-					this.props.selectedItem.id === selectedItem.id &&
-					rootNode &&
-					evaluateXPathToBoolean(
-						'let $selectableNodes := ' +
-							this.props.data.linkableElementsQuery +
-							' return some $node in $selectableNodes satisfies . is $node',
-						rootNode,
-						readOnlyBlueprint
-					)
-				) {
-					this.submitModal({
-						documentId,
-						nodeId: getNodeId(rootNode)
-					});
-				}
-			},
-			_error => {
-				return;
-			}
-		);
-	};
-
 	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
 
 	render() {
@@ -165,7 +168,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			hierarchyItems,
 			initialSelectedItemId,
 			items,
-			loadItem,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
@@ -223,7 +225,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 											initialNodeId={nodeId}
 											initialSelectedItemId={initialSelectedItemId}
 											linkableElementsQuery={linkableElementsQuery}
-											loadItem={loadItem}
 											onItemSelect={onItemSelect}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
@@ -269,7 +270,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(
 	DocumentWithLinkSelectorBrowserModal,
-	FxDocumentLoader,
 	VIEWMODES.LIST
 );
 
