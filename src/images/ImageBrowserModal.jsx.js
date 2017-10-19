@@ -12,12 +12,11 @@ import {
 	ModalHeader,
 	Toast
 } from 'fds/components';
-import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 import t from 'fontoxml-localization/t';
 
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
-import ImagePreview from './ImagePreview.jsx';
+import SelectedImagePreview from './SelectedImagePreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -102,7 +101,6 @@ class ImageBrowserModal extends Component {
 			isDisabled={isDisabled}
 			isSelected={isSelected}
 			item={item}
-			loadItem={this.props.loadItem}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 			onRef={onRef}
@@ -115,7 +113,6 @@ class ImageBrowserModal extends Component {
 			isDisabled={isDisabled}
 			isSelected={isSelected}
 			item={item}
-			loadItem={this.props.loadItem}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
@@ -212,8 +209,7 @@ class ImageBrowserModal extends Component {
 							{this.props.selectedItem &&
 								this.props.selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
-										<ImagePreview
-											loadItem={loadItem}
+										<SelectedImagePreview
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
@@ -252,10 +248,6 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(
-	ImageBrowserModal,
-	FxImageLoader,
-	VIEWMODES.GRID
-);
+ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, null, VIEWMODES.GRID);
 
 export default ImageBrowserModal;

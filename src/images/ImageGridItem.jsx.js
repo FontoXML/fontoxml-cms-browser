@@ -1,17 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import {
-	Block,
-	ContainedImage,
-	Flex,
-	GridItem,
-	Icon,
-	Label,
-	SpinnerIcon
-} from 'fds/components';
+import { Block, ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 
-import withImagePreviewCapabilities from './withImagePreviewCapabilities.jsx';
+import ImagePreview from './ImagePreview.jsx';
 
 class ImageGridItem extends Component {
 	static defaultProps = {
@@ -31,10 +23,7 @@ class ImageGridItem extends Component {
 			type: PropTypes.string.isRequired
 		}).isRequired,
 		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func,
-
-		// from withModularBrowserCapabilities for withImagePreviewCapabilities
-		loadItem: PropTypes.func.isRequired
+		onDoubleClick: PropTypes.func
 	};
 
 	wrapInGridItem = content => {
@@ -53,19 +42,6 @@ class ImageGridItem extends Component {
 	render() {
 		const { item } = this.props;
 
-		if (this.props.isErrored) {
-			return this.wrapInGridItem(
-				<Flex alignItems="center" flex="1" flexDirection="column">
-					<Icon
-						colorName="icon-m-error-color"
-						icon={item.icon || 'file-image-o'}
-						size="m"
-					/>
-					<Label colorName="text-muted-color">{item.label}</Label>
-				</Flex>
-			);
-		}
-
 		if (item.type === 'folder') {
 			return this.wrapInGridItem(
 				<Flex alignItems="center" flexDirection="column">
@@ -75,26 +51,43 @@ class ImageGridItem extends Component {
 			);
 		}
 
-		if (this.props.isLoading) {
-			return this.wrapInGridItem(
-				<Flex alignItems="center" flex="1" flexDirection="column">
-					<SpinnerIcon size="m" />
-					<Label>{item.label}</Label>
-				</Flex>
-			);
-		}
+		return (
+			<ImagePreview remoteId={item.id} type="thumbnail">
+				{({ isErrored, isLoading, imageData }) => {
+					if (isErrored) {
+						return this.wrapInGridItem(
+							<Flex alignItems="center" flex="1" flexDirection="column">
+								<Icon
+									colorName="icon-m-error-color"
+									icon={item.icon || 'file-image-o'}
+									size="m"
+								/>
+								<Label colorName="text-muted-color">{item.label}</Label>
+							</Flex>
+						);
+					}
 
-		return this.wrapInGridItem(
-			<Flex alignItems="center" flex="1" flexDirection="column">
-				<Block applyCss={{ height: '3rem' }}>
-					<ContainedImage src={this.props.imageData.dataUrl} />
-				</Block>
-				<Label>{item.label}</Label>
-			</Flex>
+					if (isLoading) {
+						return this.wrapInGridItem(
+							<Flex alignItems="center" flex="1" flexDirection="column">
+								<SpinnerIcon size="m" />
+								<Label>{item.label}</Label>
+							</Flex>
+						);
+					}
+
+					return this.wrapInGridItem(
+						<Flex alignItems="center" flex="1" flexDirection="column">
+							<Block applyCss={{ height: '3rem' }}>
+								<ContainedImage src={imageData.dataUrl} />
+							</Block>
+							<Label>{item.label}</Label>
+						</Flex>
+					);
+				}}
+			</ImagePreview>
 		);
 	}
 }
-
-ImageGridItem = withImagePreviewCapabilities(ImageGridItem);
 
 export default ImageGridItem;

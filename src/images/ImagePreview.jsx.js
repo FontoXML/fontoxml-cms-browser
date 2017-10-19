@@ -1,145 +1,60 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 
-import { merge } from 'glamor';
-
-import {
-	Flex,
-	Heading,
-	HorizontalSeparationLine,
-	KeyValueList,
-	SpinnerIcon,
-	StateMessage
-} from 'fds/components';
-import { block } from 'fds/system';
-
-const imageStyles = merge(block, {
-	position: 'absolute',
-	maxWidth: '100%',
-	maxHeight: '100%',
-	width: 'auto',
-	height: 'auto',
-	top: '50%',
-	left: '50%',
-	transform: 'translateX(-50%) translateY(-50%)'
-});
+import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 
 class ImagePreview extends Component {
-	static defaultProps = {
-		selectedItem: null
-	};
-
 	static propTypes = {
-		stateLabels: PropTypes.shape({
-			previewError: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired,
-			loadingPreview: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired
-		}).isRequired,
-
-		// from withModularBrowserCapabilities
-		loadItem: PropTypes.func.isRequired,
-		selectedItem: PropTypes.object
+		children: PropTypes.func.isRequired,
+		remoteId: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired
 	};
 
+	imageLoader = new FxImageLoader();
 	isMountedInDOM = false;
 
-	state = { isErrored: false, isLoading: true, imageData: null };
+	state = {
+		imageData: null,
+		isErrored: false,
+		isLoading: true
+	};
 
-	tryToUpdateState = (idBeingLoaded, nextState) => {
-		if (this.isMountedInDOM && idBeingLoaded === this.props.selectedItem.id) {
-			this.setState(nextState);
+	handleLoadImage = imageData => {
+		if (this.isMountedInDOM) {
+			this.setState({ isErrored: false, isLoading: false, imageData: imageData });
 		}
 	};
 
-	handleLoadImage = (imageData, idBeingLoaded) =>
-		this.tryToUpdateState(idBeingLoaded, { isLoading: false, imageData });
-	handleLoadError = (_error, idBeingLoaded) =>
-		this.tryToUpdateState(idBeingLoaded, {
-			isErrored: true,
-			isLoading: false,
-			imageData: null
-		});
-
-	loadImage = selectedItem => {
-		this.props
-			.loadItem(selectedItem.id)
-			.then(
-				imageData => this.handleLoadImage(imageData, selectedItem.id),
-				error => this.handleLoadError(error, selectedItem.id)
-			);
+	handleLoadError = _error => {
+		if (this.isMountedInDOM) {
+			this.setState({ isErrored: true, isLoading: false, imageData: null });
+		}
 	};
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.selectedItem.id === nextProps.selectedItem.id) {
+	componentWillReceiveProps({ remoteId, type }) {
+		if (remoteId === this.props.remoteId) {
 			return;
 		}
 
 		this.setState({ isLoading: true });
 
-		this.loadImage(nextProps.selectedItem);
+		this.imageLoader.loadItem(remoteId, type).then(this.handleLoadImage, this.handleLoadError);
 	}
 
 	render() {
-		const { stateLabels, selectedItem } = this.props;
-
-		if (this.state.isErrored) {
-			return (
-				<StateMessage
-					connotation="warning"
-					paddingSize="m"
-					visual="exclamation-triangle"
-					{...stateLabels.previewError}
-				/>
-			);
-		}
-
-		if (this.state.isLoading) {
-			return (
-				<StateMessage
-					paddingSize="m"
-					visual={<SpinnerIcon />}
-					{...stateLabels.loadingPreview}
-				/>
-			);
-		}
-
-		return (
-			<Flex flex="auto" flexDirection="column">
-				<Flex flex="auto" flexDirection="column" paddingSize="l" spaceSize="m">
-					<Heading level="4">{selectedItem.label}</Heading>
-
-					<Flex flex="auto">
-						<img src={this.state.imageData.dataUrl} {...imageStyles} />
-					</Flex>
-				</Flex>
-
-				{selectedItem.metadata &&
-				selectedItem.metadata.properties && (
-					<Flex flex="none" flexDirection="column">
-						<Flex paddingSize={{ horizontal: 'l' }}>
-							<HorizontalSeparationLine />
-						</Flex>
-
-						<KeyValueList
-							items={selectedItem.metadata.properties}
-							scrollLimit={5}
-							paddingSize="l"
-						/>
-					</Flex>
-				)}
-			</Flex>
-		);
+		return this.props.children({
+			imageData: this.state.imageData,
+			isErrored: this.state.isErrored,
+			isLoading: this.state.isLoading
+		});
 	}
 
 	componentDidMount() {
 		this.isMountedInDOM = true;
 
-		this.loadImage(this.props.selectedItem);
+		this.imageLoader
+			.loadItem(this.props.remoteId, this.props.type)
+			.then(this.handleLoadImage, this.handleLoadError);
 	}
 
 	componentWillUnmount() {
