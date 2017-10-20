@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Block, ContainedImage, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
 
-import ImageLoader from './ImagePreview.jsx';
+import ImageLoader from './ImageLoader.jsx';
 
 class ImageListItem extends Component {
 	static defaultProps = {

@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Flex, GridItem, Icon, Label } from 'fds/components';
+import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
+
+import DocumentLoader from './DocumentLoader.jsx';
 
 class DocumentGridItem extends Component {
 	static defaultProps = {
@@ -25,18 +27,16 @@ class DocumentGridItem extends Component {
 		// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
 	};
 
-	wrapInGridItem = content => {
-		return (
-			<GridItem
-				isSelected={this.props.isSelected}
-				isDisabled={this.props.isDisabled}
-				onClick={this.props.onClick}
-				onDoubleClick={this.props.onDoubleClick}
-			>
-				{content}
-			</GridItem>
-		);
-	};
+	wrapInGridItem = content => (
+		<GridItem
+			isSelected={this.props.isSelected}
+			isDisabled={this.props.isDisabled}
+			onClick={this.props.onClick}
+			onDoubleClick={this.props.onDoubleClick}
+		>
+			{content}
+		</GridItem>
+	);
 
 	render() {
 		const { item } = this.props;
@@ -77,10 +77,7 @@ class DocumentGridItem extends Component {
 
 					return this.wrapInGridItem(
 						<Flex alignItems="center" flexDirection="column">
-							<Icon
-								icon={item.icon || 'file-text-o'}
-								size="m"
-							/>
+							<Icon icon={item.icon || 'file-text-o'} size="m" />
 
 							<Label>{item.label}</Label>
 						</Flex>

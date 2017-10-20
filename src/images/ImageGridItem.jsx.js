@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Block, ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 
-import ImageLoader from './ImagePreview.jsx';
+import ImageLoader from './ImageLoader.jsx';
 
 class ImageGridItem extends Component {
 	static defaultProps = {

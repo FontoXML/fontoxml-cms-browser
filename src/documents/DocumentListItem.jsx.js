@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Icon, Label, ListItem } from 'fds/components';
+import { Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
+
+import DocumentLoader from './DocumentLoader.jsx';
 
 class DocumentListItem extends Component {
 	static defaultProps = {
@@ -27,20 +29,18 @@ class DocumentListItem extends Component {
 		onRef: PropTypes.func
 	};
 
-	wrapInListItem = (content, label) => {
-		return (
-			<ListItem
-				isSelected={this.props.isSelected}
-				isDisabled={this.props.isDisabled}
-				onClick={this.props.onClick}
-				onDoubleClick={this.props.onDoubleClick}
-				onRef={this.props.onRef}
-			>
-				{content}
-				{label}
-			</ListItem>
-		);
-	};
+	wrapInListItem = (content, label) => (
+		<ListItem
+			isSelected={this.props.isSelected}
+			isDisabled={this.props.isDisabled}
+			onClick={this.props.onClick}
+			onDoubleClick={this.props.onDoubleClick}
+			onRef={this.props.onRef}
+		>
+			{content}
+			{label}
+		</ListItem>
+	);
 
 	render() {
 		const { item } = this.props;
@@ -74,10 +74,7 @@ class DocumentListItem extends Component {
 					}
 
 					return this.wrapInListItem(
-						<Icon
-							icon={item.icon || 'file-text-o'}
-							size="s"
-						/>,
+						<Icon icon={item.icon || 'file-text-o'} size="s" />,
 						<Label>{item.label}</Label>
 					);
 				}}

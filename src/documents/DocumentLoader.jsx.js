@@ -3,7 +3,7 @@ import { Component } from 'react';
 
 import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
 
-class ImageLoader extends Component {
+class DocumentLoader extends Component {
 	static propTypes = {
 		children: PropTypes.func.isRequired,
 		remoteId: PropTypes.string.isRequired
@@ -18,18 +18,14 @@ class ImageLoader extends Component {
 		isLoading: true
 	};
 
-	handleLoadDocumentId = (documentId, idBeingLoaded) => {
-		if (this.isMountedInDOM && idBeingLoaded === this.props.selectedItem.id) {
+	handleLoadDocumentId = documentId => {
+		if (this.isMountedInDOM) {
 			this.setState({ isErrored: false, isLoading: false, documentId });
 		}
 	};
 
-	handleLoadError = (error, idBeingLoaded) => {
-		if (!error) {
-			return;
-		}
-
-		if (this.isMountedInDOM && idBeingLoaded === this.props.selectedItem.id) {
+	handleLoadError = _error => {
+		if (this.isMountedInDOM) {
 			this.setState({ isErrored: true, isLoading: false, documentId: null });
 		}
 	};
@@ -37,14 +33,11 @@ class ImageLoader extends Component {
 	loadDocument = () => {
 		this.documentLoader
 			.loadItem(this.props.remoteId)
-			.then(
-				documentId => this.handleLoadDocumentId(documentId, selectedItem.id),
-				error => this.handleLoadError(error, selectedItem.id)
-			);
+			.then(this.handleLoadDocumentId, this.handleLoadError);
 	};
 
-	componentWillReceiveProps({ remoteId }) {
-		if (remoteId === this.props.remoteId) {
+	componentWillReceiveProps({ remoteId, type }) {
+		if (remoteId === this.props.remoteId && type === this.props.type) {
 			return;
 		}
 
@@ -64,9 +57,7 @@ class ImageLoader extends Component {
 	componentDidMount() {
 		this.isMountedInDOM = true;
 
-		this.documentLoader
-			.loadItem(this.props.remoteId)
-			.then(this.handleLoadImage, this.handleLoadError);
+		this.loadDocument();
 	}
 
 	componentWillUnmount() {
@@ -74,4 +65,4 @@ class ImageLoader extends Component {
 	}
 }
 
-export default ImageLoader;
+export default DocumentLoader;

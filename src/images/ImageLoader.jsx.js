@@ -20,14 +20,12 @@ class ImageLoader extends Component {
 	};
 
 	handleLoadImage = imageData => {
-		// TODO: this has no idBeingLoaded check, do we need it here as well? or remove it in DocumentLoader instead
 		if (this.isMountedInDOM) {
 			this.setState({ isErrored: false, isLoading: false, imageData });
 		}
 	};
 
 	handleLoadError = _error => {
-		// TODO: this has no idBeingLoaded check, do we need it here as well? or remove it in DocumentLoader instead
 		if (this.isMountedInDOM) {
 			this.setState({ isErrored: true, isLoading: false, imageData: null });
 		}
@@ -40,7 +38,7 @@ class ImageLoader extends Component {
 	};
 
 	componentWillReceiveProps({ remoteId, type }) {
-		if (remoteId === this.props.remoteId) {
+		if (remoteId === this.props.remoteId && type === this.props.type) {
 			return;
 		}
 
@@ -60,9 +58,7 @@ class ImageLoader extends Component {
 	componentDidMount() {
 		this.isMountedInDOM = true;
 
-		this.imageLoader
-			.loadItem(this.props.remoteId, this.props.type)
-			.then(this.handleLoadImage, this.handleLoadError);
+		this.loadImage();
 	}
 
 	componentWillUnmount() {
