@@ -2,6 +2,7 @@
 	"open-document-with-link-selector-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
+			"category": "add-on/fontoxml-cms-browser",
 			"summary": "Opens the document with link selector browser in which the user can select a node.",
 			"params": [
 				{
@@ -84,6 +85,7 @@
 	"open-image-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
+			"category": "add-on/fontoxml-cms-browser",
 			"summary": "Opens the image browser in which the user can select an image.",
 			"params": [
 				{
@@ -144,6 +146,7 @@
 	"open-document-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
+			"category": "add-on/fontoxml-cms-browser",
 			"summary": "Opens the document browser in which the user can select a document.",
 			"params": [
 				{
@@ -210,6 +213,7 @@
 	"open-document-template-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
+			"category": "add-on/fontoxml-cms-browser",
 			"summary": "Opens the document template browser in which the user can select a document template.",
 			"params": [
 				{
@@ -261,6 +265,7 @@
 	"open-open-or-create-document-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
+			"category": "add-on/fontoxml-cms-browser",
 			"summary": [
 				"Opens the document browser on open in which the user can select a document. ",
 				"When the modal is open, the user can switch to the create document form, ",
@@ -335,6 +340,7 @@
 	"open-create-document-form-modal": {
 		"__documentation": {
 			"fontosdk": true,
+			"category": "add-on/fontoxml-cms-browser",
 			"summary": [
 				"Opens the create form, for creating a new document by choosing a template."
 			],
