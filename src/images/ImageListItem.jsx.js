@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Block, ContainedImage, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-
-import withImagePreviewCapabilities from './withImagePreviewCapabilities.jsx';
+import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 
 class ImageListItem extends Component {
 	static defaultProps = {
@@ -25,10 +24,7 @@ class ImageListItem extends Component {
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
-		onRef: PropTypes.func,
-
-		// from withModularBrowserCapabilities for withImagePreviewCapabilities
-		loadItem: PropTypes.func.isRequired
+		onRef: PropTypes.func
 	};
 
 	wrapInListItem = (content, label) => {
@@ -49,13 +45,6 @@ class ImageListItem extends Component {
 	render() {
 		const { item } = this.props;
 
-		if (this.props.isErrored) {
-			return this.wrapInListItem(
-				<Icon colorName="icon-s-error-color" icon={item.icon || 'file-image-o'} size="s" />,
-				<Label colorName="text-muted-color">{item.label}</Label>
-			);
-		}
-
 		if (item.type === 'folder') {
 			return this.wrapInListItem(
 				<Icon icon={item.icon || 'folder-o'} size="s" />,
@@ -63,19 +52,37 @@ class ImageListItem extends Component {
 			);
 		}
 
-		if (this.props.isLoading) {
-			return this.wrapInListItem(<SpinnerIcon size="s" />, <Label>{item.label}</Label>);
-		}
+		return (
+			<FxImageLoader remoteId={item.id} type="thumbnail">
+				{({ isErrored, isLoading, imageData }) => {
+					if (isErrored) {
+						return this.wrapInListItem(
+							<Icon
+								colorName="icon-s-error-color"
+								icon={item.icon || 'file-image-o'}
+								size="s"
+							/>,
+							<Label colorName="text-muted-color">{item.label}</Label>
+						);
+					}
 
-		return this.wrapInListItem(
-			<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
-				<ContainedImage src={this.props.imageData.dataUrl} />
-			</Block>,
-			<Label>{item.label}</Label>
+					if (isLoading) {
+						return this.wrapInListItem(
+							<SpinnerIcon size="s" />,
+							<Label>{item.label}</Label>
+						);
+					}
+
+					return this.wrapInListItem(
+						<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
+							<ContainedImage src={imageData.dataUrl} />
+						</Block>,
+						<Label>{item.label}</Label>
+					);
+				}}
+			</FxImageLoader>
 		);
 	}
 }
-
-ImageListItem = withImagePreviewCapabilities(ImageListItem);
 
 export default ImageListItem;

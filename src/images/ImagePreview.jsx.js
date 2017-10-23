@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { merge } from 'glamor';
-
 import {
+	ContainedImage,
 	Flex,
 	Heading,
 	HorizontalSeparationLine,
@@ -11,24 +10,9 @@ import {
 	SpinnerIcon,
 	StateMessage
 } from 'fds/components';
-import { block } from 'fds/system';
-
-const imageStyles = merge(block, {
-	position: 'absolute',
-	maxWidth: '100%',
-	maxHeight: '100%',
-	width: 'auto',
-	height: 'auto',
-	top: '50%',
-	left: '50%',
-	transform: 'translateX(-50%) translateY(-50%)'
-});
+import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 
 class ImagePreview extends Component {
-	static defaultProps = {
-		selectedItem: null
-	};
-
 	static propTypes = {
 		stateLabels: PropTypes.shape({
 			previewError: PropTypes.shape({
@@ -40,110 +24,63 @@ class ImagePreview extends Component {
 				message: PropTypes.string
 			}).isRequired
 		}).isRequired,
-
-		// from withModularBrowserCapabilities
-		loadItem: PropTypes.func.isRequired,
 		selectedItem: PropTypes.object
 	};
-
-	isMountedInDOM = false;
-
-	state = { isErrored: false, isLoading: true, imageData: null };
-
-	tryToUpdateState = (idBeingLoaded, nextState) => {
-		if (this.isMountedInDOM && idBeingLoaded === this.props.selectedItem.id) {
-			this.setState(nextState);
-		}
-	};
-
-	handleLoadImage = (imageData, idBeingLoaded) =>
-		this.tryToUpdateState(idBeingLoaded, { isLoading: false, imageData });
-	handleLoadError = (_error, idBeingLoaded) =>
-		this.tryToUpdateState(idBeingLoaded, {
-			isErrored: true,
-			isLoading: false,
-			imageData: null
-		});
-
-	loadImage = selectedItem => {
-		this.props
-			.loadItem(selectedItem.id)
-			.then(
-				imageData => this.handleLoadImage(imageData, selectedItem.id),
-				error => this.handleLoadError(error, selectedItem.id)
-			);
-	};
-
-	componentWillReceiveProps(nextProps) {
-		if (this.props.selectedItem.id === nextProps.selectedItem.id) {
-			return;
-		}
-
-		this.setState({ isLoading: true });
-
-		this.loadImage(nextProps.selectedItem);
-	}
 
 	render() {
 		const { stateLabels, selectedItem } = this.props;
 
-		if (this.state.isErrored) {
-			return (
-				<StateMessage
-					connotation="warning"
-					paddingSize="m"
-					visual="exclamation-triangle"
-					{...stateLabels.previewError}
-				/>
-			);
-		}
-
-		if (this.state.isLoading) {
-			return (
-				<StateMessage
-					paddingSize="m"
-					visual={<SpinnerIcon />}
-					{...stateLabels.loadingPreview}
-				/>
-			);
-		}
-
 		return (
-			<Flex flex="auto" flexDirection="column">
-				<Flex flex="auto" flexDirection="column" paddingSize="l" spaceSize="m">
-					<Heading level="4">{selectedItem.label}</Heading>
+			<FxImageLoader remoteId={selectedItem.id} type="web">
+				{({ isErrored, isLoading, imageData }) => {
+					if (isErrored) {
+						return (
+							<StateMessage
+								connotation="warning"
+								paddingSize="m"
+								visual="exclamation-triangle"
+								{...stateLabels.previewError}
+							/>
+						);
+					}
 
-					<Flex flex="auto">
-						<img src={this.state.imageData.dataUrl} {...imageStyles} />
-					</Flex>
-				</Flex>
+					if (isLoading) {
+						return (
+							<StateMessage
+								paddingSize="m"
+								visual={<SpinnerIcon />}
+								{...stateLabels.loadingPreview}
+							/>
+						);
+					}
 
-				{selectedItem.metadata &&
-				selectedItem.metadata.properties && (
-					<Flex flex="none" flexDirection="column">
-						<Flex paddingSize={{ horizontal: 'l' }}>
-							<HorizontalSeparationLine />
+					return (
+						<Flex flex="auto" flexDirection="column">
+							<Flex flex="auto" flexDirection="column" paddingSize="l" spaceSize="m">
+								<Heading level="4">{selectedItem.label}</Heading>
+
+								<ContainedImage src={imageData.dataUrl} />
+							</Flex>
+
+							{selectedItem.metadata &&
+								selectedItem.metadata.properties && (
+									<Flex flex="none" flexDirection="column">
+										<Flex paddingSize={{ horizontal: 'l' }}>
+											<HorizontalSeparationLine />
+										</Flex>
+
+										<KeyValueList
+											items={selectedItem.metadata.properties}
+											scrollLimit={5}
+											paddingSize="l"
+										/>
+									</Flex>
+								)}
 						</Flex>
-
-						<KeyValueList
-							items={selectedItem.metadata.properties}
-							scrollLimit={5}
-							paddingSize="l"
-						/>
-					</Flex>
-				)}
-			</Flex>
+					);
+				}}
+			</FxImageLoader>
 		);
-	}
-
-	componentDidMount() {
-		this.isMountedInDOM = true;
-
-		this.loadImage(this.props.selectedItem);
-	}
-
-	componentWillUnmount() {
-		this.isMountedInDOM = false;
 	}
 }
 

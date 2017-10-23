@@ -10,11 +10,7 @@ import {
 	ModalFooter,
 	ModalHeader
 } from 'fds/components';
-import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/documentsManager';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
-import getNodeId from 'fontoxml-dom-identification/getNodeId';
-import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
 import t from 'fontoxml-localization/t';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
@@ -121,34 +117,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		/>
 	);
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => {
-		this.props.loadItem(selectedItem.id).then(
-			documentId => {
-				const rootNode = documentsManager.getDocumentNode(documentId).documentElement;
-
-				if (
-					this.props.selectedItem.id === selectedItem.id &&
-					rootNode &&
-					evaluateXPathToBoolean(
-						'let $selectableNodes := ' +
-							this.props.data.linkableElementsQuery +
-							' return some $node in $selectableNodes satisfies . is $node',
-						rootNode,
-						readOnlyBlueprint
-					)
-				) {
-					this.submitModal({
-						documentId,
-						nodeId: getNodeId(rootNode)
-					});
-				}
-			},
-			_error => {
-				return;
-			}
-		);
-	};
-
 	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
 
 	render() {
@@ -159,21 +127,20 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 				linkableElementsQuery,
 				modalIcon,
 				modalPrimaryButtonLabel,
-				modalTitle,
-				nodeId
+				modalTitle
 			},
 			hierarchyItems,
-			initialSelectedItemId,
 			items,
-			loadItem,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
 			request,
-			selectedItem,
 			viewMode
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
+
+		// initialSelectedItem is set by withModularBrowserCapabilities
+		const selectedItem = { ...this.props.initialSelectedItem, ...this.props.selectedItem };
 
 		return (
 			<Modal size="m" isFullHeight={true} onKeyDown={this.handleKeyDown}>
@@ -217,13 +184,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
+								selectedItem.id &&
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentWithLinkSelectorPreview
-											initialNodeId={nodeId}
-											initialSelectedItemId={initialSelectedItemId}
 											linkableElementsQuery={linkableElementsQuery}
-											loadItem={loadItem}
 											onItemSelect={onItemSelect}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
@@ -252,15 +217,17 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 	componentDidMount() {
 		const {
-			data: { browseContextDocumentId, documentId },
+			data: { browseContextDocumentId, documentId, nodeId },
 			onInitialSelectedItemIdChange,
 			refreshItems
 		} = this.props;
 
 		if (documentId) {
-			onInitialSelectedItemIdChange(
-				documentsManager.getDocumentFile(documentId).remoteDocumentId
-			);
+			onInitialSelectedItemIdChange({
+				id: documentsManager.getDocumentFile(documentId).remoteDocumentId,
+				documentId,
+				nodeId
+			});
 		}
 
 		refreshItems(browseContextDocumentId, { id: null });
@@ -269,7 +236,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(
 	DocumentWithLinkSelectorBrowserModal,
-	FxDocumentLoader,
 	VIEWMODES.LIST
 );
 

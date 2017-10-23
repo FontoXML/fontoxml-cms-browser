@@ -62,6 +62,8 @@ class FolderBrowserModal extends Component {
 		}
 	};
 
+	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
+
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -173,6 +175,6 @@ class FolderBrowserModal extends Component {
 	}
 }
 
-FolderBrowserModal = withModularBrowserCapabilities(FolderBrowserModal, null, VIEWMODES.LIST);
+FolderBrowserModal = withModularBrowserCapabilities(FolderBrowserModal, VIEWMODES.LIST);
 
 export default FolderBrowserModal;

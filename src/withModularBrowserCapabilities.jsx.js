@@ -2,17 +2,11 @@ import React, { Component } from 'react';
 
 import dataProviders from './data-providers/dataProviders';
 
-export default function withModularBrowserCapabilities(
-	WrappedComponent,
-	Loader = null,
-	initialViewMode = null
-) {
+export default function withModularBrowserCapabilities(WrappedComponent, initialViewMode = null) {
 	return class ModularBrowser extends Component {
 		dataProvider = dataProviders.get(this.props.data.dataProviderName);
-		initialSelectedItemId = null;
+		initialSelectedItem = {};
 		isMountedInDOM = false;
-
-		loader = Loader && new Loader();
 
 		state = {
 			// Contains the items that the user can choose from
@@ -32,24 +26,22 @@ export default function withModularBrowserCapabilities(
 			viewMode: initialViewMode
 		};
 
-		isItemErrored = item => this.loader && this.loader.isItemErrored(item.id);
-
 		// Used by any component to change the currently selected item
 		onItemSelect = item => {
 			if (this.isMountedInDOM) {
 				this.setState({ selectedItem: item });
 
-				if (item && item.id !== this.initialSelectedItemId && item.type !== 'folder') {
-					// An other item (that is not a folder) was selected so the initialSelectedItemId is no longer cached
-					this.initialSelectedItemId = null;
+				if (item && item.type !== 'folder' && item.id !== this.initialSelectedItem.id) {
+					// An other item (that is not a folder) was selected so the initialSelectedItem is no longer cached
+					this.initialSelectedItem = {};
 				}
 			}
 		};
 
-		// Used to set the initialSelectedItemId
-		onInitialSelectedItemIdChange = itemId => {
+		// Used to set the initialSelectedItem
+		onInitialSelectedItemIdChange = item => {
 			if (this.isMountedInDOM) {
-				this.initialSelectedItemId = itemId;
+				this.initialSelectedItem = item;
 			}
 		};
 
@@ -79,11 +71,12 @@ export default function withModularBrowserCapabilities(
 						// If the rootFolder is the folder to load, the newSelectedItem is null
 						newSelectedItem = newSelectedItem.id === null ? null : newSelectedItem;
 
-						if (this.initialSelectedItemId) {
+						if (this.initialSelectedItem.id) {
 							// If the initial selected item is in this folder, it should be selected
 							newSelectedItem =
-								result.items.find(item => item.id === this.initialSelectedItemId) ||
-								null;
+								result.items.find(
+									item => item.id === this.initialSelectedItem.id
+								) || null;
 						}
 
 						this.setState({
@@ -168,10 +161,8 @@ export default function withModularBrowserCapabilities(
 			const props = {
 				...this.props,
 				hierarchyItems: this.state.hierarchyItems,
-				initialSelectedItemId: this.initialSelectedItemId,
-				isItemErrored: this.isItemErrored,
+				initialSelectedItem: this.initialSelectedItem,
 				items: this.state.items,
-				loadItem: this.loader ? this.loader.load : () => {},
 				onItemSelect: this.onItemSelect,
 				onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
 				onUploadFileSelect: this.onUploadFileSelect,

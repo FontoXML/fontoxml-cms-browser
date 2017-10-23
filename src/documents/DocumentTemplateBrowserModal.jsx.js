@@ -10,7 +10,6 @@ import {
 	ModalFooter,
 	ModalHeader
 } from 'fds/components';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
 import t from 'fontoxml-localization/t';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
@@ -129,7 +128,6 @@ class DocumentTemplateBrowserModal extends Component {
 			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
-			loadItem,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
@@ -184,7 +182,6 @@ class DocumentTemplateBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
-											loadItem={loadItem}
 											onItemSelect={onItemSelect}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
@@ -218,7 +215,7 @@ class DocumentTemplateBrowserModal extends Component {
 		} = this.props;
 
 		if (remoteDocumentId) {
-			onInitialSelectedItemIdChange(remoteDocumentId);
+			onInitialSelectedItemIdChange({ id: remoteDocumentId });
 		}
 
 		refreshItems(browseContextDocumentId, { id: null });
@@ -227,7 +224,6 @@ class DocumentTemplateBrowserModal extends Component {
 
 DocumentTemplateBrowserModal = withModularBrowserCapabilities(
 	DocumentTemplateBrowserModal,
-	FxDocumentLoader,
 	VIEWMODES.LIST
 );
 

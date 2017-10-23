@@ -88,6 +88,8 @@ class DocumentBrowserModal extends Component {
 		}
 	};
 
+	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
+
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -121,17 +123,6 @@ class DocumentBrowserModal extends Component {
 		/>
 	);
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => {
-		this.props.loadItem(selectedItem.id).then(
-			documentId =>
-				this.props.selectedItem.id === selectedItem.id &&
-				this.submitModal({ ...selectedItem, documentId }),
-			_error => {
-				return;
-			}
-		);
-	};
-
 	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
 
 	render() {
@@ -140,7 +131,6 @@ class DocumentBrowserModal extends Component {
 			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
-			loadItem,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
@@ -198,8 +188,6 @@ class DocumentBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
-											loadItem={loadItem}
-											onItemSelect={onItemSelect}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
@@ -215,7 +203,7 @@ class DocumentBrowserModal extends Component {
 					<Button
 						type="primary"
 						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={!selectedItem || !selectedItem.documentId}
+						isDisabled={!selectedItem || !selectedItem.id}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>
@@ -231,19 +219,15 @@ class DocumentBrowserModal extends Component {
 		} = this.props;
 
 		if (documentId) {
-			onInitialSelectedItemIdChange(
-				documentsManager.getDocumentFile(documentId).remoteDocumentId
-			);
+			onInitialSelectedItemIdChange({
+				id: documentsManager.getDocumentFile(documentId).remoteDocumentId
+			});
 		}
 
 		refreshItems(browseContextDocumentId, { id: null });
 	}
 }
 
-DocumentBrowserModal = withModularBrowserCapabilities(
-	DocumentBrowserModal,
-	FxDocumentLoader,
-	VIEWMODES.LIST
-);
+DocumentBrowserModal = withModularBrowserCapabilities(DocumentBrowserModal, VIEWMODES.LIST);
 
 export default DocumentBrowserModal;

@@ -12,7 +12,6 @@ import {
 	ModalHeader,
 	Toast
 } from 'fds/components';
-import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 import t from 'fontoxml-localization/t';
 
 import ImageGridItem from './ImageGridItem.jsx';
@@ -102,7 +101,6 @@ class ImageBrowserModal extends Component {
 			isDisabled={isDisabled}
 			isSelected={isSelected}
 			item={item}
-			loadItem={this.props.loadItem}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 			onRef={onRef}
@@ -115,7 +113,6 @@ class ImageBrowserModal extends Component {
 			isDisabled={isDisabled}
 			isSelected={isSelected}
 			item={item}
-			loadItem={this.props.loadItem}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
@@ -135,7 +132,6 @@ class ImageBrowserModal extends Component {
 			},
 			hierarchyItems,
 			items,
-			loadItem,
 			onItemSelect,
 			onUploadFileSelect,
 			onViewModeChange,
@@ -147,7 +143,7 @@ class ImageBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="l" isFullHeight={true} onKeyDown={this.handleKeyDown}>
+			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select an image')} />
 
 				<ModalBody>
@@ -209,11 +205,10 @@ class ImageBrowserModal extends Component {
 								/>
 							</ModalContent>
 
-							{this.props.selectedItem &&
-								this.props.selectedItem.type !== 'folder' && (
+							{selectedItem &&
+								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<ImagePreview
-											loadItem={loadItem}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
@@ -245,17 +240,13 @@ class ImageBrowserModal extends Component {
 		} = this.props;
 
 		if (selectedImageId) {
-			onInitialSelectedItemIdChange(selectedImageId);
+			onInitialSelectedItemIdChange({ id: selectedImageId });
 		}
 
 		refreshItems(browseContextDocumentId, { id: null });
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(
-	ImageBrowserModal,
-	FxImageLoader,
-	VIEWMODES.GRID
-);
+ImageBrowserModal = withModularBrowserCapabilities(ImageBrowserModal, VIEWMODES.GRID);
 
 export default ImageBrowserModal;
