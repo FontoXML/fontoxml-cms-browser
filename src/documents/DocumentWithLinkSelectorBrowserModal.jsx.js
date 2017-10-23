@@ -88,46 +88,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		}
 	};
 
-	// handleFileAndFolderResultListItemSubmit = selectedItem => {
-	// 	this.props.loadItem(selectedItem.id).then(
-	// 		documentId => {
-
-				// TODO: what does this if do exactly, do we need it?
-	// 			const rootNode = documentsManager.getDocumentNode(documentId).documentElement;
-	// 			if (
-	// 				this.props.selectedItem.id === selectedItem.id &&
-	// 				rootNode &&
-	// 				evaluateXPathToBoolean(
-	// 					'let $selectableNodes := ' +
-	// 						this.props.data.linkableElementsQuery +
-	// 						' return some $node in $selectableNodes satisfies . is $node',
-	// 					rootNode,
-	// 					readOnlyBlueprint
-	// 				)
-	// 			) {
-	// 				this.submitModal({
-	// 					documentId,
-	// 					nodeId: getNodeId(rootNode)
-	// 				});
-	// 			}
-
-	// 		},
-	// 		_error => {
-	// 			return;
-	// 		}
-	// 	);
-	// };
-	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
-
-	handleRenderListItem = ({
-		key,
-		isDisabled,
-		isSelected,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef
-	}) => (
+	handleRenderListItem = ({ key, isDisabled, isSelected, item, onClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={isDisabled}
@@ -135,12 +96,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
 			onRef={onRef}
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={isDisabled}
@@ -148,7 +108,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
 		/>
 	);
 
@@ -207,7 +166,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
 									onItemSelect={onItemSelect}
-									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
