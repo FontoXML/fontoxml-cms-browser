@@ -88,10 +88,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({ key, isDisabled, isSelected, item, onClick, onRef }) => (
+	handleRenderListItem = ({ key, isSelected, item, onClick, onRef }) => (
 		<DocumentListItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
 			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
@@ -100,10 +100,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick }) => (
+	handleRenderGridItem = ({ key, isSelected, item, onClick }) => (
 		<DocumentGridItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
 			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}

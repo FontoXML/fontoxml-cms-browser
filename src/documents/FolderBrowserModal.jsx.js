@@ -62,18 +62,10 @@ class FolderBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({
-		key,
-		isDisabled,
-		isSelected,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef
-	}) => (
+	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
 		<DocumentListItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
 			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
@@ -83,10 +75,10 @@ class FolderBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
 			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}

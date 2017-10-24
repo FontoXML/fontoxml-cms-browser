@@ -87,18 +87,10 @@ class ImageBrowserModal extends Component {
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
 
-	handleRenderListItem = ({
-		key,
-		isDisabled,
-		isSelected,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef
-	}) => (
+	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
 		<ImageListItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -107,10 +99,10 @@ class ImageBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
 		<ImageGridItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
