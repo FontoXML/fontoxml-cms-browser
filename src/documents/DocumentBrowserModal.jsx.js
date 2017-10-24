@@ -88,8 +88,6 @@ class DocumentBrowserModal extends Component {
 		}
 	};
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
-
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -173,7 +171,6 @@ class DocumentBrowserModal extends Component {
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
 									onItemSelect={onItemSelect}
-									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}

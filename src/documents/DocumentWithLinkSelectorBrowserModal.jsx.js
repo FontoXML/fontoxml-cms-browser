@@ -172,7 +172,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
 									onItemSelect={onItemSelect}
-									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
