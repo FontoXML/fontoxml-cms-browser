@@ -11,7 +11,6 @@ import {
 	ModalHeader
 } from 'fds/components';
 import documentsManager from 'fontoxml-documents/documentsManager';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
 import t from 'fontoxml-localization/t';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
@@ -88,38 +87,42 @@ class DocumentBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({
-		key,
-		isDisabled,
-		isSelected,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef
-	}) => (
+	// Because we need to add the documentId for submit, we override the double click functionallity
+	handleItemDoubleClick = item => {
+		if (item.type === 'folder') {
+			this.props.refreshItems(this.props.browseContextDocumentId, item);
+		} else if (item.documentId) {
+			this.submitModal(item);
+		}
+	};
+
+	handleRenderListItem = ({ key, isDisabled, isSelected, item, onClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
+			onDoubleClick={this.handleItemDoubleClick}
 			onRef={onRef}
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
+			onDoubleClick={this.handleItemDoubleClick}
 		/>
 	);
+
+	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
+	// preview is done loading
+	handleLoadIsDone = documentId =>
+		this.props.onItemSelect({ ...this.props.selectedItem, documentId });
 
 	handleSubmitButtonClick = () => this.submitModal(this.props.selectedItem);
 
@@ -185,6 +188,7 @@ class DocumentBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
+											onLoadIsDone={this.handleLoadIsDone}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
@@ -200,7 +204,7 @@ class DocumentBrowserModal extends Component {
 					<Button
 						type="primary"
 						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={!selectedItem || !selectedItem.id}
+						isDisabled={!selectedItem || !selectedItem.documentId}
 						onClick={this.handleSubmitButtonClick}
 					/>
 				</ModalFooter>

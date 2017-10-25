@@ -26,12 +26,21 @@ class DocumentGridItem extends Component {
 		// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
 	};
 
-	wrapInGridItem = content => (
+	handleDoubleClick = documentId => {
+		const newItem = this.props.item;
+		if (documentId) {
+			newItem.documentId = documentId;
+		}
+
+		this.props.onDoubleClick(newItem);
+	};
+
+	wrapInGridItem = (content, documentId) => (
 		<GridItem
 			isSelected={this.props.isSelected}
 			isDisabled={this.props.isDisabled}
 			onClick={this.props.onClick}
-			onDoubleClick={this.props.onDoubleClick}
+			onDoubleClick={() => this.handleDoubleClick(documentId)}
 		>
 			{content}
 		</GridItem>
@@ -51,7 +60,7 @@ class DocumentGridItem extends Component {
 
 		return (
 			<FxDocumentLoader remoteId={item.id}>
-				{({ isErrored, isLoading }) => {
+				{({ isErrored, isLoading, documentId }) => {
 					if (isErrored) {
 						return this.wrapInGridItem(
 							<Flex alignItems="center" flex="1" flexDirection="column">
@@ -79,7 +88,8 @@ class DocumentGridItem extends Component {
 							<Icon icon={item.icon || 'file-text-o'} size="m" />
 
 							<Label>{item.label}</Label>
-						</Flex>
+						</Flex>,
+						documentId
 					);
 				}}
 			</FxDocumentLoader>

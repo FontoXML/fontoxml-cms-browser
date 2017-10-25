@@ -47,10 +47,16 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			? this.props.refreshItems(this.props.browseContextDocumentId, item)
 			: this.props.onItemSubmit(item);
 
+	handleItemClick = item => {
+		// Check if item is already selected, so that a documentId and/or nodeId on the selectedItem aren't overwritten
+		if (!this.props.selectedItem || item.id !== this.props.selectedItem.id) {
+			this.props.onItemSelect(item);
+		}
+	};
+
 	render() {
 		const {
 			items,
-			onItemSelect,
 			renderGridItem,
 			renderListItem,
 			request,
@@ -85,7 +91,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				<VirtualList
 					estimatedItemHeight={30}
 					items={items}
-					onItemClick={onItemSelect}
+					onItemClick={this.handleItemClick}
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
 					renderItem={renderListItem}
@@ -99,7 +105,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			<VirtualGrid
 				estimatedRowHeight={86}
 				items={items}
-				onItemClick={onItemSelect}
+				onItemClick={this.handleItemClick}
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
 				renderItem={renderGridItem}

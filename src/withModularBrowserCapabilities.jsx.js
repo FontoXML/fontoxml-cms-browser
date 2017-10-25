@@ -73,10 +73,12 @@ export default function withModularBrowserCapabilities(WrappedComponent, initial
 
 						if (this.initialSelectedItem.id) {
 							// If the initial selected item is in this folder, it should be selected
-							newSelectedItem =
-								result.items.find(
-									item => item.id === this.initialSelectedItem.id
-								) || null;
+							newSelectedItem = result.items.find(
+								item => item.id === this.initialSelectedItem.id
+							);
+							newSelectedItem = newSelectedItem
+								? { ...newSelectedItem, ...this.initialSelectedItem }
+								: null;
 						}
 
 						this.setState({

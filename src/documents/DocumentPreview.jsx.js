@@ -9,10 +9,12 @@ const maxHeightStyles = { maxHeight: '50%' };
 
 class DocumentPreview extends Component {
 	static defaultProps = {
+		onLoadIsDone: _documentId => {},
 		selectedItem: null
 	};
 
 	static propTypes = {
+		onLoadIsDone: PropTypes.func,
 		stateLabels: PropTypes.shape({
 			previewError: PropTypes.shape({
 				title: PropTypes.string,
@@ -30,7 +32,7 @@ class DocumentPreview extends Component {
 		const { stateLabels, selectedItem } = this.props;
 
 		return (
-			<FxDocumentLoader remoteId={selectedItem.id}>
+			<FxDocumentLoader remoteId={selectedItem.id} onLoadIsDone={this.props.onLoadIsDone}>
 				{({ isErrored, isLoading, documentId }) => {
 					if (isErrored) {
 						return (

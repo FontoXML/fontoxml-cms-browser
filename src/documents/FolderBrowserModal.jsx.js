@@ -62,8 +62,6 @@ class FolderBrowserModal extends Component {
 		}
 	};
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => this.submitModal(selectedItem);
-
 	handleRenderListItem = ({
 		key,
 		isDisabled,
@@ -76,7 +74,6 @@ class FolderBrowserModal extends Component {
 		<DocumentListItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -89,7 +86,6 @@ class FolderBrowserModal extends Component {
 		<DocumentGridItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -143,7 +139,6 @@ class FolderBrowserModal extends Component {
 								browseContextDocumentId={browseContextDocumentId}
 								items={items}
 								onItemSelect={onItemSelect}
-								onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
 								refreshItems={refreshItems}
 								renderListItem={this.handleRenderListItem}
 								renderGridItem={this.handleRenderGridItem}

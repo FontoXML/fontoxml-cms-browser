@@ -97,7 +97,6 @@ class DocumentTemplateBrowserModal extends Component {
 		<DocumentListItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
@@ -110,7 +109,6 @@ class DocumentTemplateBrowserModal extends Component {
 		<DocumentGridItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
@@ -182,7 +180,6 @@ class DocumentTemplateBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
-											onItemSelect={onItemSelect}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>

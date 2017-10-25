@@ -96,7 +96,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		<DocumentListItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -109,7 +108,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		<DocumentGridItem
 			key={key}
 			isDisabled={isDisabled}
-			isItemErrored={this.props.isItemErrored}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -135,12 +133,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			onViewModeChange,
 			refreshItems,
 			request,
+			selectedItem,
 			viewMode
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
-
-		// initialSelectedItem is set by withModularBrowserCapabilities
-		const selectedItem = { ...this.props.initialSelectedItem, ...this.props.selectedItem };
 
 		return (
 			<Modal size="m" isFullHeight={true} onKeyDown={this.handleKeyDown}>

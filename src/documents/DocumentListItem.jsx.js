@@ -28,12 +28,21 @@ class DocumentListItem extends Component {
 		onRef: PropTypes.func
 	};
 
-	wrapInListItem = (content, label) => (
+	handleDoubleClick = documentId => {
+		const newItem = this.props.item;
+		if (documentId) {
+			newItem.documentId = documentId;
+		}
+
+		this.props.onDoubleClick(newItem);
+	};
+
+	wrapInListItem = (content, label, documentId) => (
 		<ListItem
 			isSelected={this.props.isSelected}
 			isDisabled={this.props.isDisabled}
 			onClick={this.props.onClick}
-			onDoubleClick={this.props.onDoubleClick}
+			onDoubleClick={() => this.handleDoubleClick(documentId)}
 			onRef={this.props.onRef}
 		>
 			{content}
@@ -53,7 +62,7 @@ class DocumentListItem extends Component {
 
 		return (
 			<FxDocumentLoader remoteId={item.id}>
-				{({ isErrored, isLoading }) => {
+				{({ isErrored, isLoading, documentId }) => {
 					if (isErrored) {
 						return this.wrapInListItem(
 							<Icon
@@ -74,7 +83,8 @@ class DocumentListItem extends Component {
 
 					return this.wrapInListItem(
 						<Icon icon={item.icon || 'file-text-o'} size="s" />,
-						<Label>{item.label}</Label>
+						<Label>{item.label}</Label>,
+						documentId
 					);
 				}}
 			</FxDocumentLoader>
