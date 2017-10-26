@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
+import { Icon, Label, ListItem } from 'fds/components';
 
 class DocumentListItem extends Component {
 	static defaultProps = {
 		isDisabled: false,
+		isErrored: false,
 		isSelected: false,
 		onClick: _item => {},
 		onDoubleClick: _item => {},
@@ -15,6 +15,7 @@ class DocumentListItem extends Component {
 
 	static propTypes = {
 		isDisabled: PropTypes.bool,
+		isErrored: PropTypes.bool,
 		isSelected: PropTypes.bool,
 		item: PropTypes.shape({
 			id: PropTypes.string.isRequired,
@@ -28,21 +29,12 @@ class DocumentListItem extends Component {
 		onRef: PropTypes.func
 	};
 
-	handleDoubleClick = documentId => {
-		const newItem = this.props.item;
-		if (documentId) {
-			newItem.documentId = documentId;
-		}
-
-		this.props.onDoubleClick(newItem);
-	};
-
-	wrapInListItem = (content, label, documentId) => (
+	wrapInListItem = (content, label) => (
 		<ListItem
 			isSelected={this.props.isSelected}
 			isDisabled={this.props.isDisabled}
 			onClick={this.props.onClick}
-			onDoubleClick={() => this.handleDoubleClick(documentId)}
+			onDoubleClick={this.props.onDoubleClick}
 			onRef={this.props.onRef}
 		>
 			{content}
@@ -60,34 +52,16 @@ class DocumentListItem extends Component {
 			);
 		}
 
-		return (
-			<FxDocumentLoader remoteId={item.id}>
-				{({ isErrored, isLoading, documentId }) => {
-					if (isErrored) {
-						return this.wrapInListItem(
-							<Icon
-								colorName="icon-s-error-color"
-								icon={item.icon || 'file-text-o'}
-								size="s"
-							/>,
-							<Label colorName="text-muted-color">{item.label}</Label>
-						);
-					}
+		if (this.props.isErrored) {
+			return this.wrapInListItem(
+				<Icon colorName="icon-s-error-color" icon={item.icon || 'file-text-o'} size="s" />,
+				<Label colorName="text-muted-color">{item.label}</Label>
+			);
+		}
 
-					if (isLoading) {
-						return this.wrapInListItem(
-							<SpinnerIcon size="s" />,
-							<Label>{item.label}</Label>
-						);
-					}
-
-					return this.wrapInListItem(
-						<Icon icon={item.icon || 'file-text-o'} size="s" />,
-						<Label>{item.label}</Label>,
-						documentId
-					);
-				}}
-			</FxDocumentLoader>
+		return this.wrapInListItem(
+			<Icon icon={item.icon || 'file-text-o'} size="s" />,
+			<Label>{item.label}</Label>
 		);
 	}
 }

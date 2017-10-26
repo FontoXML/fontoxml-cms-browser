@@ -90,18 +90,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({
-		key,
-		isDisabled,
-		isSelected,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef
-	}) => (
+	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
 		<DocumentListItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
+			isErrored={this.props.isItemErrored(item)}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -110,10 +103,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
+			isErrored={this.props.isItemErrored(item)}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
@@ -137,6 +131,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
+			onItemIsErrored,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
@@ -192,6 +187,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 									<ModalContent flexDirection="column">
 										<DocumentWithLinkSelectorPreview
 											linkableElementsQuery={linkableElementsQuery}
+											onItemIsErrored={onItemIsErrored}
 											onItemSelect={onItemSelect}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}

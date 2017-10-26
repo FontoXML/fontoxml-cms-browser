@@ -92,18 +92,11 @@ class DocumentTemplateBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({
-		key,
-		isDisabled,
-		isSelected,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef
-	}) => (
+	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
 		<DocumentListItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
+			isErrored={this.props.isItemErrored(item)}
 			isSelected={isSelected}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
@@ -112,10 +105,11 @@ class DocumentTemplateBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
+			isErrored={this.props.isItemErrored(item)}
 			isSelected={isSelected}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
@@ -137,6 +131,7 @@ class DocumentTemplateBrowserModal extends Component {
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
+			onItemIsErrored,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
@@ -191,6 +186,7 @@ class DocumentTemplateBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
+											onItemIsErrored={onItemIsErrored}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>

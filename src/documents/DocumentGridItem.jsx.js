@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
+import { Flex, GridItem, Icon, Label } from 'fds/components';
 
 class DocumentGridItem extends Component {
 	static defaultProps = {
 		isDisabled: false,
+		isErrored: false,
 		isSelected: false,
 		onClick: _item => {},
 		onDoubleClick: _item => {}
@@ -14,6 +14,7 @@ class DocumentGridItem extends Component {
 
 	static propTypes = {
 		isDisabled: PropTypes.bool,
+		isErrored: PropTypes.bool,
 		isSelected: PropTypes.bool,
 		item: PropTypes.shape({
 			id: PropTypes.string.isRequired,
@@ -26,21 +27,12 @@ class DocumentGridItem extends Component {
 		// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
 	};
 
-	handleDoubleClick = documentId => {
-		const newItem = this.props.item;
-		if (documentId) {
-			newItem.documentId = documentId;
-		}
-
-		this.props.onDoubleClick(newItem);
-	};
-
-	wrapInGridItem = (content, documentId) => (
+	wrapInGridItem = content => (
 		<GridItem
 			isSelected={this.props.isSelected}
 			isDisabled={this.props.isDisabled}
 			onClick={this.props.onClick}
-			onDoubleClick={() => this.handleDoubleClick(documentId)}
+			onDoubleClick={this.props.onDoubleClick}
 		>
 			{content}
 		</GridItem>
@@ -58,41 +50,25 @@ class DocumentGridItem extends Component {
 			);
 		}
 
-		return (
-			<FxDocumentLoader remoteId={item.id}>
-				{({ isErrored, isLoading, documentId }) => {
-					if (isErrored) {
-						return this.wrapInGridItem(
-							<Flex alignItems="center" flex="1" flexDirection="column">
-								<Icon
-									colorName="icon-m-error-color"
-									icon={item.icon || 'file-text-o'}
-									size="m"
-								/>
-								<Label colorName="text-muted-color">{item.label}</Label>
-							</Flex>
-						);
-					}
+		if (this.props.isErrored) {
+			return this.wrapInGridItem(
+				<Flex alignItems="center" flex="1" flexDirection="column">
+					<Icon
+						colorName="icon-m-error-color"
+						icon={item.icon || 'file-text-o'}
+						size="m"
+					/>
+					<Label colorName="text-muted-color">{item.label}</Label>
+				</Flex>
+			);
+		}
 
-					if (isLoading) {
-						return this.wrapInGridItem(
-							<Flex alignItems="center" flex="1" flexDirection="column">
-								<SpinnerIcon size="m" />
-								<Label>{item.label}</Label>
-							</Flex>
-						);
-					}
+		return this.wrapInGridItem(
+			<Flex alignItems="center" flexDirection="column">
+				<Icon icon={item.icon || 'file-text-o'} size="m" />
 
-					return this.wrapInGridItem(
-						<Flex alignItems="center" flexDirection="column">
-							<Icon icon={item.icon || 'file-text-o'} size="m" />
-
-							<Label>{item.label}</Label>
-						</Flex>,
-						documentId
-					);
-				}}
-			</FxDocumentLoader>
+				<Label>{item.label}</Label>
+			</Flex>
 		);
 	}
 }

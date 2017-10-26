@@ -80,6 +80,18 @@ class DocumentBrowserModal extends Component {
 		submitModal: PropTypes.func.isRequired
 	};
 
+	doubleClickedItemId = null;
+
+	componentWillReceiveProps(nextProps) {
+		if (
+			this.doubleClickedItemId !== null &&
+			(nextProps.selectedItem === null ||
+				this.doubleClickedItemId !== nextProps.selectedItem.id)
+		) {
+			this.doubleClickedItemId = null;
+		}
+	}
+
 	handleKeyDown = event => {
 		switch (event.key) {
 			case 'Escape':
@@ -93,42 +105,55 @@ class DocumentBrowserModal extends Component {
 		}
 	};
 
-	// Because we need to add the documentId for submit, we override the double click functionallity
+	// Because we need to override the double click, because we need to add the documentId for submit.
+	// This will be done right away if the selectedItem already has the documentId, else we have to wait
+	// until the document is loaded in the preview.
 	handleItemDoubleClick = item => {
+		const { selectedItem } = this.props;
+
 		if (item.type === 'folder') {
 			this.props.refreshItems(this.props.browseContextDocumentId, item);
-		} else if (item.documentId) {
-			this.props.determineAndHandleItemSubmitForSelectedItem(item);
+		} else if (selectedItem.id === item.id && selectedItem.documentId) {
+			this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
+		} else {
+			this.doubleClickedItemId = item.id;
 		}
 	};
 
-	handleRenderListItem = ({ key, isDisabled, isSelected, item, onClick, onRef }) => (
+	handleRenderListItem = ({ key, isSelected, item, onClick, onRef }) => (
 		<DocumentListItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
+			isErrored={this.props.isItemErrored(item)}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={this.handleItemDoubleClick}
+			onDoubleClick={() => this.handleItemDoubleClick(item)}
 			onRef={onRef}
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isDisabled, isSelected, item, onClick }) => (
+	handleRenderGridItem = ({ key, isSelected, item, onClick }) => (
 		<DocumentGridItem
 			key={key}
-			isDisabled={isDisabled}
+			isDisabled={item.isDisabled}
+			isErrored={this.props.isItemErrored(item)}
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={this.handleItemDoubleClick}
+			onDoubleClick={() => this.handleItemDoubleClick(item)}
 		/>
 	);
 
 	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
-	// preview is done loading
-	handleLoadIsDone = documentId =>
-		this.props.onItemSelect({ ...this.props.selectedItem, documentId });
+	// preview is done loading. If the item was also double clicked, we want to submit right away.
+	handleLoadIsDone = documentId => {
+		const newSelectedItem = { ...this.props.selectedItem, documentId };
+		if (newSelectedItem.id === this.doubleClickedItemId) {
+			this.props.determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
+		}
+		this.props.onItemSelect(newSelectedItem);
+	};
 
 	handleSubmitButtonClick = () =>
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
@@ -140,6 +165,7 @@ class DocumentBrowserModal extends Component {
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
+			onItemIsErrored,
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
@@ -198,6 +224,7 @@ class DocumentBrowserModal extends Component {
 									<ModalContent flexDirection="column">
 										<DocumentPreview
 											onLoadIsDone={this.handleLoadIsDone}
+											onItemIsErrored={onItemIsErrored}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>

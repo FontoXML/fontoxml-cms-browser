@@ -10,6 +10,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			isMountedInDOM = true;
 
 			state = {
+				// Errors that occured when loading a item, for if the items are only loaded in the preview.
+				cachedErrorByRemoteId: {},
+
 				// Contains the items that the user can choose from
 				hierarchyItems: [],
 
@@ -25,6 +28,16 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 				// Contains information for the viewMode, for example list or grid
 				viewMode: initialViewMode
+			};
+
+			isItemErrored = item => !!this.state.cachedErrorByRemoteId[item.id];
+
+			onItemIsErrored = (remoteId, error) => {
+				if (this.isMountedInDOM) {
+					const cachedErrorByRemoteId = this.state.cachedErrorByRemoteId;
+					cachedErrorByRemoteId[remoteId] = error;
+					this.setState({ cachedErrorByRemoteId });
+				}
 			};
 
 			// Used by any component to change the currently selected item
@@ -84,12 +97,12 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 							if (this.initialSelectedItem.id) {
 								// If the initial selected item is in this folder, it should be selected
-								newSelectedItem = result.items.find(
+								const initialSelectedResultItem = result.items.find(
 									item => item.id === this.initialSelectedItem.id
 								);
-								newSelectedItem = newSelectedItem
-									? { ...newSelectedItem, ...this.initialSelectedItem }
-									: null;
+								newSelectedItem = initialSelectedResultItem
+									? { ...initialSelectedResultItem, ...this.initialSelectedItem }
+									: newSelectedItem;
 							}
 
 							this.setState({
@@ -190,7 +203,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					...this.props,
 					hierarchyItems,
 					initialSelectedItem: this.initialSelectedItem,
+					isItemErrored: this.isItemErrored,
 					items,
+					onItemIsErrored: this.onItemIsErrored,
 					onItemSelect: this.onItemSelect,
 					onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
 					onUploadFileSelect: this.onUploadFileSelect,
