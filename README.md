@@ -1,6 +1,8 @@
+---
 category: add-on/fontoxml-cms-browser
+---
 
-# Add-on cms browser (fontoxml-cms-browser)
+# CMS browser library
 
 This add-on exposes operations for opening CMS related browsers. These browsers allow the user to browse documents and images present on the used CMS.
 
