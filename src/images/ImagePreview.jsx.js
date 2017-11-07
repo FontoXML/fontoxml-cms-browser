@@ -85,7 +85,7 @@ class ImagePreview extends Component {
 										</Flex>
 
 										<KeyValueList
-											items={selectedItem.metadata.properties}
+											valueByKey={selectedItem.metadata.properties}
 											scrollLimit={5}
 											paddingSize="l"
 										/>
