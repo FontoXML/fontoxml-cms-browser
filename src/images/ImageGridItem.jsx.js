@@ -77,9 +77,14 @@ class ImageGridItem extends Component {
 
 					return this.wrapInGridItem(
 						<Flex alignItems="center" flex="1" flexDirection="column">
-							<Block applyCss={{ height: '3rem' }}>
+							<Flex
+								alignItems="center"
+								flex="1"
+								flexDirection="row"
+								applyCss={{ height: '3rem' }}
+							>
 								<ContainedImage src={imageData.dataUrl} />
-							</Block>
+							</Flex>
 							<Label>{item.label}</Label>
 						</Flex>
 					);
