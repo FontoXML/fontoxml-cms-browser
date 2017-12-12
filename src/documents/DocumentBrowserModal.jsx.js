@@ -71,11 +71,12 @@ class DocumentBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
-			insertOperationName: PropTypes.string,
+			isCancelable: PropTypes.bool,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
 		}).isRequired,
+		insertOperationName: PropTypes.string,
 		renderModalBodyToolbar: PropTypes.func,
 		submitModal: PropTypes.func.isRequired
 	};
@@ -95,7 +96,9 @@ class DocumentBrowserModal extends Component {
 	handleKeyDown = event => {
 		switch (event.key) {
 			case 'Escape':
-				this.props.cancelModal();
+				if (this.props.data.isCancelable) {
+					this.props.cancelModal();
+				}
 				break;
 			case 'Enter':
 				if (!this.props.isSubmitButtonDisabled) {
@@ -161,7 +164,13 @@ class DocumentBrowserModal extends Component {
 	render() {
 		const {
 			cancelModal,
-			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
+			data: {
+				browseContextDocumentId,
+				isCancelable,
+				modalIcon,
+				modalPrimaryButtonLabel,
+				modalTitle
+			},
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
@@ -235,7 +244,9 @@ class DocumentBrowserModal extends Component {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					{isCancelable && (
+						<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					)}
 
 					<Button
 						type="primary"

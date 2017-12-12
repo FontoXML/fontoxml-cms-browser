@@ -84,8 +84,9 @@
 	"open-open-or-create-document-browser-modal-for-data-provider": {
 		"initialData": {
 			"browseContextDocumentId": null,
-			"openDocumentDataProviderName": null,
+			"isCancelable": true,
 			"modalTitle": null,
+			"openDocumentDataProviderName": null,
 			"selectDocumentTemplateDataProviderName": null,
 			"selectFolderDataProviderName": null
 		},
@@ -93,8 +94,9 @@
 			"type": "modal/OpenOrCreateDocumentModalStack",
 			"data": {
 				"browseContextDocumentId": "{{browseContextDocumentId}}",
-				"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
+				"isCancelable": "{{isCancelable}}",
 				"modalTitle": "{{modalTitle}}",
+				"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
 				"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
 				"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
 			}

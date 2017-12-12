@@ -43,6 +43,7 @@ class CreateDocumentFormModal extends Component {
 	static PropTypes = {
 		cancelModal: PropTypes.func.isRequired,
 		insertOperationName: PropTypes.string,
+		isCancelable: PropTypes.bool,
 		modalIcon: PropTypes.string,
 		modalTitle: PropTypes.string.isRequired,
 		onSelectDocumentTemplateClick: PropTypes.func.isRequired,
