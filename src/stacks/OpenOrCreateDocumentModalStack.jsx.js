@@ -116,6 +116,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 				{activeTab.tabId === 'create' && (
 					<CreateDocumentFormModal
 						cancelModal={cancelModal}
+						data={{}}
 						insertOperationName={insertOperationName}
 						isCancelable={isCancelable}
 						modalIcon={modalIcon}
