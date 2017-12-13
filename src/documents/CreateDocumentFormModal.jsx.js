@@ -82,7 +82,7 @@ class CreateDocumentFormModal extends Component {
 	handleKeyDown = event => {
 		switch (event.key) {
 			case 'Escape':
-				if (this.props.data.isCancelable) {
+				if (this.props.isCancelable) {
 					this.props.cancelModal();
 				}
 				break;

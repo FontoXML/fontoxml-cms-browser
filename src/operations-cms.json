@@ -236,6 +236,9 @@
 				}
 			]
 		},
+		"initialData": {
+			"isCancelable": true
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
@@ -390,6 +393,9 @@
 				}
 			]
 		},
+		"initialData": {
+			"isCancelable": true
+		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
@@ -470,6 +476,9 @@
 					"description": "The specified document title."
 				}
 			]
+		},
+		"initialData": {
+			"isCancelable": true
 		},
 		"steps": [
 			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
