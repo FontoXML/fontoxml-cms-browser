@@ -185,6 +185,11 @@
 					]
 				},
 				{
+					"name": "isCancelable",
+					"type": "boolean",
+					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
+				},
+				{
 					"name": "documentId",
 					"type": "DocumentId",
 					"description": [
@@ -237,6 +242,7 @@
 				"type": "operation/open-document-browser-modal-for-data-provider",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"isCancelable": "{{isCancelable}}",
 					"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments"
 				}
 			}
@@ -341,6 +347,11 @@
 					]
 				},
 				{
+					"name": "isCancelable",
+					"type": "boolean",
+					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon being shown at the top of the modal. The value should be a valid font-awsome icon name."
@@ -385,6 +396,7 @@
 				"type": "operation/open-open-or-create-document-browser-modal-for-data-provider",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"isCancelable": "{{isCancelable}}",
 					"openDocumentDataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 					"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
 					"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
@@ -426,6 +438,11 @@
 					]
 				},
 				{
+					"name": "isCancelable",
+					"type": "boolean",
+					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon being shown at the top of the modal. The value should be a valid font-awsome icon name."
@@ -460,6 +477,7 @@
 				"type": "operation/open-create-document-form-modal-for-data-provider",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"isCancelable": "{{isCancelable}}",
 					"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
 					"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
 				}
