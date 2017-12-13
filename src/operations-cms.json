@@ -185,11 +185,6 @@
 					]
 				},
 				{
-					"name": "isCancelable",
-					"type": "boolean",
-					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
-				},
-				{
 					"name": "documentId",
 					"type": "DocumentId",
 					"description": [
@@ -206,6 +201,11 @@
 						"The operation data collected until the current operation together with the",
 						"selected document, will be added as initial data to the 'insert operation'."
 					]
+				},
+				{
+					"name": "isCancelable",
+					"type": "boolean",
+					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
 					"name": "modalIcon",

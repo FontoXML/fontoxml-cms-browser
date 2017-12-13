@@ -71,12 +71,12 @@ class DocumentBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
+			insertOperationName: PropTypes.string,
 			isCancelable: PropTypes.bool,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
 		}).isRequired,
-		insertOperationName: PropTypes.string,
 		renderModalBodyToolbar: PropTypes.func,
 		submitModal: PropTypes.func.isRequired
 	};

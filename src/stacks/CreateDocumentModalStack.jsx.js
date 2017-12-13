@@ -67,8 +67,10 @@ class CreateDocumentFormModalStack extends Component {
 			<ModalStack>
 				<CreateDocumentFormModal
 					cancelModal={cancelModal}
-					insertOperationName={insertOperationName}
-					isCancelable={isCancelable}
+					data={{
+						insertOperationName,
+						isCancelable
+					}}
 					modalIcon={modalIcon}
 					modalTitle={modalTitle || t('Create new document')}
 					onSelectDocumentTemplateClick={this.handleSelectDocumentTemplateClick}
