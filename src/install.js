@@ -37,8 +37,8 @@ define([
 		addTransform(
 			'setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy',
 			function setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy (stepData) {
-				// Use the existing value
-				if (stepData.browseContextDocumentId) {
+				// Use the existing value if set or explicitly omitted
+				if (stepData.browseContextDocumentId || stepData.browseContextDocumentId === null) {
 					return stepData;
 				}
 
