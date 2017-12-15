@@ -19,8 +19,7 @@ class DocumentPreview extends Component {
 		onItemIsErrored: PropTypes.func,
 		stateLabels: PropTypes.shape({
 			previewError: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string
+				title: PropTypes.string
 			}).isRequired,
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
@@ -39,14 +38,15 @@ class DocumentPreview extends Component {
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.props.onLoadIsDone}
 			>
-				{({ isErrored, isLoading, documentId }) => {
+				{({ isErrored, isLoading, documentId, error }) => {
 					if (isErrored) {
 						return (
 							<StateMessage
 								connotation="warning"
 								paddingSize="m"
 								visual="exclamation-triangle"
-								{...stateLabels.previewError}
+								title={stateLabels.previewError.title}
+								message={error.message}
 							/>
 						);
 					}
@@ -68,26 +68,22 @@ class DocumentPreview extends Component {
 							</Flex>
 
 							{selectedItem.description &&
-								selectedItem.description.trim().length !== 0 && (
-									<Flex
-										applyCss={maxHeightStyles}
-										flex="none"
-										flexDirection="column"
-									>
-										<Flex paddingSize={{ horizontal: 'l' }}>
-											<HorizontalSeparationLine />
-										</Flex>
-
-										<Flex
-											flex="1"
-											flexDirection="column"
-											isScrollContainer
-											paddingSize="l"
-										>
-											<Text>{selectedItem.description}</Text>
-										</Flex>
+							selectedItem.description.trim().length !== 0 && (
+								<Flex applyCss={maxHeightStyles} flex="none" flexDirection="column">
+									<Flex paddingSize={{ horizontal: 'l' }}>
+										<HorizontalSeparationLine />
 									</Flex>
-								)}
+
+									<Flex
+										flex="1"
+										flexDirection="column"
+										isScrollContainer
+										paddingSize="l"
+									>
+										<Text>{selectedItem.description}</Text>
+									</Flex>
+								</Flex>
+							)}
 						</Flex>
 					);
 				}}

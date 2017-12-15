@@ -43,9 +43,7 @@ const stateLabels = {
 	},
 	previewError: {
 		title: t('Can’t open this document'),
-		message: t(
-			'FontoXML can’t open this document. You can try again, or try a different document.'
-		)
+		message: t('You can try again, or try a different document.')
 	}
 };
 
@@ -229,16 +227,16 @@ class DocumentBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-								selectedItem.type !== 'folder' && (
-									<ModalContent flexDirection="column">
-										<DocumentPreview
-											onLoadIsDone={this.handleLoadIsDone}
-											onItemIsErrored={onItemIsErrored}
-											selectedItem={selectedItem}
-											stateLabels={stateLabels}
-										/>
-									</ModalContent>
-								)}
+							selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<DocumentPreview
+										onLoadIsDone={this.handleLoadIsDone}
+										onItemIsErrored={onItemIsErrored}
+										selectedItem={selectedItem}
+										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
