@@ -70,9 +70,8 @@ define([
 	}
 
 	function upload (options, folderToUploadInId, filesToUpload) {
-		var documentFile = documentsManager.getDocumentFile(selectionManager.focusedDocumentId);
 		return configuredAssetConnector.upload(
-			documentFile,
+			documentsManager.getRemoteDocumentId(selectionManager.focusedDocumentId),
 			filesToUpload[0],
 			options.uploadAssetType,
 			{},

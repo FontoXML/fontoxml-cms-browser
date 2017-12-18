@@ -44,9 +44,9 @@ define([
 
 				// Use the focused document
 				if (selectionManager.focusedDocumentId) {
-					stepData.browseContextDocumentId = documentsManager
-						.getDocumentFile(selectionManager.focusedDocumentId)
-						.remoteDocumentId;
+					stepData.browseContextDocumentId = documentsManager.getRemoteDocumentId(
+						selectionManager.focusedDocumentId
+					);
 					return stepData;
 				}
 

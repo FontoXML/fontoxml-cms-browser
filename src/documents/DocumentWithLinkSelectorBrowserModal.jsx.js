@@ -182,18 +182,18 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-								selectedItem.id &&
-								selectedItem.type !== 'folder' && (
-									<ModalContent flexDirection="column">
-										<DocumentWithLinkSelectorPreview
-											linkableElementsQuery={linkableElementsQuery}
-											onItemIsErrored={onItemIsErrored}
-											onItemSelect={onItemSelect}
-											selectedItem={selectedItem}
-											stateLabels={stateLabels}
-										/>
-									</ModalContent>
-								)}
+							selectedItem.id &&
+							selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<DocumentWithLinkSelectorPreview
+										linkableElementsQuery={linkableElementsQuery}
+										onItemIsErrored={onItemIsErrored}
+										onItemSelect={onItemSelect}
+										selectedItem={selectedItem}
+										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -221,7 +221,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 		if (documentId) {
 			onInitialSelectedItemIdChange({
-				id: documentsManager.getDocumentFile(documentId).remoteDocumentId,
+				id: documentsManager.getRemoteDocumentId(documentId),
 				documentId,
 				nodeId
 			});

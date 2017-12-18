@@ -266,7 +266,7 @@ class DocumentBrowserModal extends Component {
 
 		if (documentId) {
 			onInitialSelectedItemIdChange({
-				id: documentsManager.getDocumentFile(documentId).remoteDocumentId
+				id: documentsManager.getRemoteDocumentId(documentId)
 			});
 		}
 
