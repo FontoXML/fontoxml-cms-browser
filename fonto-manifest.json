@@ -1,21 +1,6 @@
 {
 	"dependencies": {
-		"fontoxml-blueprints": "^1.4.1",
-		"fontoxml-configuration": "^2.0.3",
-		"fontoxml-documents": "^4.1.0",
-		"fontoxml-dom-identification": "^2.0.1",
-		"fontoxml-fx": "^3.0.0",
-		"fontoxml-image-resolver": "^1.1.1",
-		"fontoxml-localization": "^1.2.1",
-		"fontoxml-modular-ui": "^3.1.0",
-		"fontoxml-operations": "^2.1.0",
-		"fontoxml-remote-documents": "^1.1.0",
-		"fontoxml-selection": "^2.0.1",
-		"fontoxml-selectors": "^3.1.1",
-		"fontoxml-vendors": "^4.0.0"
+		"fontoxml-platform-base": "^3.1.0"
 	},
-	"devDependencies": {
-		"fontoxml-connectors-standard": "^3.1.0"
-	},
-	"role": "internal"
+	"role": "add-on"
 }
