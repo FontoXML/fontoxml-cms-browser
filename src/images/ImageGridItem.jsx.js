@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Block, ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
+import { ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 
 class ImageGridItem extends Component {

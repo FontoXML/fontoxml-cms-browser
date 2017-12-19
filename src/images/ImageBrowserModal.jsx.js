@@ -183,15 +183,15 @@ class ImageBrowserModal extends Component {
 						</ModalContentToolbar>
 
 						{request.type === 'upload' &&
-							request.error && (
-								<ModalContent flex="none" paddingSize="m">
-									<Toast
-										connotation="error"
-										icon="exclamation-triangle"
-										content={request.error}
-									/>
-								</ModalContent>
-							)}
+						request.error && (
+							<ModalContent flex="none" paddingSize="m">
+								<Toast
+									connotation="error"
+									icon="exclamation-triangle"
+									content={request.error}
+								/>
+							</ModalContent>
+						)}
 
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
@@ -211,14 +211,14 @@ class ImageBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-								selectedItem.type !== 'folder' && (
-									<ModalContent flexDirection="column">
-										<ImagePreview
-											selectedItem={selectedItem}
-											stateLabels={stateLabels}
-										/>
-									</ModalContent>
-								)}
+							selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<ImagePreview
+										selectedItem={selectedItem}
+										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>

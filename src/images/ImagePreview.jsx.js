@@ -78,19 +78,19 @@ class ImagePreview extends Component {
 							</Flex>
 
 							{selectedItem.metadata &&
-								selectedItem.metadata.properties && (
-									<Flex flex="none" flexDirection="column">
-										<Flex paddingSize={{ horizontal: 'l' }}>
-											<HorizontalSeparationLine />
-										</Flex>
-
-										<KeyValueList
-											valueByKey={selectedItem.metadata.properties}
-											scrollLimit={5}
-											paddingSize="l"
-										/>
+							selectedItem.metadata.properties && (
+								<Flex flex="none" flexDirection="column">
+									<Flex paddingSize={{ horizontal: 'l' }}>
+										<HorizontalSeparationLine />
 									</Flex>
-								)}
+
+									<KeyValueList
+										valueByKey={selectedItem.metadata.properties}
+										scrollLimit={5}
+										paddingSize="l"
+									/>
+								</Flex>
+							)}
 						</Flex>
 					);
 				}}

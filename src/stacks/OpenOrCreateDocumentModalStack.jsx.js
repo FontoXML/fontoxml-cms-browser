@@ -39,7 +39,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 	};
 
 	state = {
-		activeTab: tabs[1] /* open*/,
+		// Show "open" tab by default
+		activeTab: tabs[1],
 		activeModal: null,
 
 		selectedDocumentTemplate: {},
