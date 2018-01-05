@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
+import { ContainedImage, FadeIn, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 
 class ImageGridItem extends Component {
@@ -25,18 +25,16 @@ class ImageGridItem extends Component {
 		onDoubleClick: PropTypes.func
 	};
 
-	wrapInGridItem = content => {
-		return (
-			<GridItem
-				isSelected={this.props.isSelected}
-				isDisabled={this.props.isDisabled}
-				onClick={this.props.onClick}
-				onDoubleClick={this.props.onDoubleClick}
-			>
-				{content}
-			</GridItem>
-		);
-	};
+	wrapInGridItem = content => (
+		<GridItem
+			isSelected={this.props.isSelected}
+			isDisabled={this.props.isDisabled}
+			onClick={this.props.onClick}
+			onDoubleClick={this.props.onDoubleClick}
+		>
+			{content}
+		</GridItem>
+	);
 
 	render() {
 		const { item } = this.props;
@@ -68,10 +66,19 @@ class ImageGridItem extends Component {
 
 					if (isLoading) {
 						return this.wrapInGridItem(
-							<Flex alignItems="center" flex="1" flexDirection="column">
-								<SpinnerIcon size="m" />
-								<Label>{item.label}</Label>
-							</Flex>
+							<FadeIn>
+								{({ onRef }) => (
+									<Flex
+										alignItems="center"
+										flex="1"
+										flexDirection="column"
+										onRef={onRef}
+									>
+										<SpinnerIcon size="m" />
+										<Label>{item.label}</Label>
+									</Flex>
+								)}
+							</FadeIn>
 						);
 					}
 
