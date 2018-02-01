@@ -78,7 +78,12 @@ For more information, see the {@link operation/open-document-browser-modal} oper
 
 ## Usage of open-document-template-browser-modal
 
-The {@link operation/open-document-template-browser-modal} operation is used to open the document template browser. This browser allows the user to select a document template. This, for example, can be used to insert a new document in a map.
+The {@link operation/open-document-template-browser-modal} operation is used to open the document
+template browser. This browser allows the user to select a document template. This, for example, can
+be used to insert a new document in a map.
+
+Note that Ids contained in the template will be regenerated, to ensure they are unique. This means
+it is impossible to use these ids in, for instance, crossreferences
 
 This browser can be used by adding the following operation step to your operation:
 
