@@ -40,7 +40,7 @@ define([
 			options.assetTypes,
 			options.resultTypes,
 			targetFolder.id,
-			null,
+			options.query || null,
 			null,
 			null,
 			noCache
@@ -92,6 +92,7 @@ define([
 	 *   assetTypes: string[],
 	 *   resultTypes: string[],
 	 *   rootFolderLabel: string,
+	 *   query: Object,
 	 *   uploadAssetType: string,
 	 *   uploadMimeTypesToAccept: string,
 	 *   uploadMaxFileSizeInBytes: number

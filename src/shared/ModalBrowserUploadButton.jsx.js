@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { SelectFileButton } from 'fds/components';
 import t from 'fontoxml-localization/t';
 
-import dataProviders from '../data-providers/dataProviders';
+import dataProviders from '../dataProviders';
 
 class ModalBrowserUploadButton extends PureComponent {
 	static defaultProps = {
