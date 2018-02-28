@@ -6,8 +6,7 @@ define([
 	'fontoxml-operations/addTransform',
 	'fontoxml-selection/selectionManager',
 
-	'./data-providers/createDataProviderUsingConfiguredConnectors',
-	'./data-providers/dataProviders',
+	'./dataProviders',
 	'./documents/DocumentBrowserModal.jsx',
 	'./documents/DocumentTemplateBrowserModal.jsx',
 	'./documents/DocumentWithLinkSelectorBrowserModal.jsx',
@@ -22,7 +21,6 @@ define([
 	addTransform,
 	selectionManager,
 
-	createDataProviderUsingConfiguredConnectors,
 	dataProviders,
 	DocumentBrowserModal,
 	DocumentTemplateBrowserModal,
@@ -64,38 +62,38 @@ define([
 
 		dataProviders.set(
 			'dataProviderUsingConfiguredConnectorsForDocuments',
-			createDataProviderUsingConfiguredConnectors({
+			{
 				assetTypes: ['document'],
 				resultTypes: ['file', 'folder'],
 				rootFolderLabel: t('My drive')
-			})
+			}
 		);
 		dataProviders.set(
 			'dataProviderUsingConfiguredConnectorsForDocumentTemplates',
-			createDataProviderUsingConfiguredConnectors({
+			{
 				assetTypes: ['document-template'],
 				resultTypes: ['file'],
 				rootFolderLabel: t('Templates')
-			})
+			}
 		);
 		dataProviders.set(
 			'dataProviderUsingConfiguredConnectorsForDocumentFolders',
-			createDataProviderUsingConfiguredConnectors({
+			{
 				assetTypes: ['document'],
 				resultTypes: ['folder'],
 				rootFolderLabel: t('My drive')
-			})
+			}
 		);
 		dataProviders.set(
 			'dataProviderUsingConfiguredConnectorsForImages',
-			createDataProviderUsingConfiguredConnectors({
+			{
 				assetTypes: ['image'],
 				resultTypes: ['file', 'folder'],
 				rootFolderLabel: t('My drive'),
 				uploadAssetType: 'image',
 				uploadMimeTypesToAccept: 'image/*',
 				uploadMaxFileSizeInBytes: 4194304
-			})
+			}
 		);
 
 		uiManager.registerReactComponent('DocumentBrowserModal', DocumentBrowserModal);
