@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { BreadcrumbItemLink, Breadcrumbs } from 'fds/components';
+import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
 import { truncatedBreadcrumbItemLinkWidth } from 'fds/system';
 
 class ModalBrowserHierarchyBreadcrumbs extends Component {
@@ -18,15 +18,32 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		request: PropTypes.object.isRequired
 	};
 
-	handleRenderBreadcrumbItem = ({ key, isDisabled, isLastItem, item, onRef }) => (
+	renderBreadcrumbItem = ({
+		key,
+		isDisabled,
+		isDropOpened,
+		isLastItem,
+		item,
+		onClick,
+		onRef
+	}) => (
 		<BreadcrumbItemLink
 			key={key}
 			label={item.label}
 			isDisabled={isDisabled}
+			isDropOpened={isDropOpened}
 			isLastItem={isLastItem}
-			onClick={() => this.props.refreshItems(this.props.browseContextDocumentId, item, true)}
+			onClick={() => {
+				onClick();
+
+				this.props.refreshItems(this.props.browseContextDocumentId, item, true);
+			}}
 			onRef={onRef}
 		/>
+	);
+
+	renderTruncatedBreadcrumbMenuItem = ({ key, closeDrop, isDisabled, item }) => (
+		<MenuItem key={key} isDisabled={isDisabled} label={item.label} onClick={closeDrop} />
 	);
 
 	render() {
@@ -37,7 +54,8 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 					(request.type === 'browse' || request.type === 'upload') && request.busy
 				}
 				items={this.props.hierarchyItems}
-				renderBreadcrumbItem={this.handleRenderBreadcrumbItem}
+				renderBreadcrumbItem={this.renderBreadcrumbItem}
+				renderTruncatedBreadcrumbMenuItem={this.renderTruncatedBreadcrumbMenuItem}
 				truncatedItemWidth={truncatedBreadcrumbItemLinkWidth}
 			/>
 		);
