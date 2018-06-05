@@ -36,14 +36,25 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 			onClick={() => {
 				onClick();
 
-				this.props.refreshItems(this.props.browseContextDocumentId, item, true);
+				if (item.label !== '…') {
+					this.props.refreshItems(this.props.browseContextDocumentId, item, true);
+				}
 			}}
 			onRef={onRef}
 		/>
 	);
 
-	renderTruncatedBreadcrumbMenuItem = ({ key, closeDrop, isDisabled, item }) => (
-		<MenuItem key={key} isDisabled={isDisabled} label={item.label} onClick={closeDrop} />
+	renderTruncatedBreadcrumbMenuItem = ({ key, onClick, isDisabled, item }) => (
+		<MenuItem
+			key={key}
+			isDisabled={isDisabled}
+			label={item.label}
+			onClick={() => {
+				onClick();
+
+				this.props.refreshItems(this.props.browseContextDocumentId, item, true);
+			}}
+		/>
 	);
 
 	render() {
