@@ -86,7 +86,7 @@ class ImageGridItem extends Component {
 						<Flex alignItems="center" flex="1" flexDirection="column">
 							<Flex
 								alignItems="center"
-								flex="1"
+								flex="none"
 								flexDirection="row"
 								applyCss={{ height: '3rem' }}
 							>
