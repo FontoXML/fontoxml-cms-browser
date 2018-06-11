@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"fontoxml-platform-base": "^3.1.3"
+		"fontoxml-platform-base": "^3.1.4"
 	},
 	"role": "internal"
 }
