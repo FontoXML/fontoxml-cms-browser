@@ -92,12 +92,12 @@ class DocumentTemplateBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
+	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={item === this.props.selectedItem}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -105,12 +105,12 @@ class DocumentTemplateBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={item === this.props.selectedItem}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
