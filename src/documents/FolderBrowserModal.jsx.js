@@ -19,6 +19,7 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
+import ModalBrowserPagination from '../shared/ModalBrowserPagination.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -93,7 +94,9 @@ class FolderBrowserModal extends Component {
 			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
-			onItemSelect,
+            onItemSelect,
+            onPageBackward,
+            onPageForward,
 			onViewModeChange,
 			refreshItems,
 			request,
@@ -141,6 +144,12 @@ class FolderBrowserModal extends Component {
 							/>
 						</ModalContent>
 					</ModalContent>
+
+                    <ModalBrowserPagination
+                        handlePageBackward={onPageBackward}
+                        handlePageForward={onPageForward}
+                    />
+
 				</ModalBody>
 
 				<ModalFooter>
