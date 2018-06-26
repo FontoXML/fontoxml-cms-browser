@@ -22,6 +22,7 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
+import ModalBrowserPagination from '../shared/ModalBrowserPagination.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
@@ -138,12 +139,14 @@ class ImageBrowserModal extends Component {
 			isSubmitButtonDisabled,
 			items,
 			onItemSelect,
-			onUploadFileSelect,
+            onPageBackward,
+            onPageForward,
+            onUploadFileSelect,
 			onViewModeChange,
 			refreshItems,
 			request,
 			selectedItem,
-			viewMode
+            viewMode
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
@@ -221,6 +224,12 @@ class ImageBrowserModal extends Component {
 								)}
 						</ModalContent>
 					</ModalContent>
+
+                    <ModalBrowserPagination
+                        handlePageBackward={onPageBackward}
+                        handlePageForward={onPageForward}
+                    />
+
 				</ModalBody>
 
 				<ModalFooter>

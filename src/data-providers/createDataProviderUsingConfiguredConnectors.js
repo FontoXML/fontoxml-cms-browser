@@ -34,15 +34,15 @@ define([
 		return updatedFolderHierarchy;
 	}
 
-	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems) {
-		return configuredBrowseConnector.browse(
+	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset) {
+        return configuredBrowseConnector.browse(
 			browseContextDocumentId,
 			options.assetTypes,
 			options.resultTypes,
 			targetFolder.id,
-			options.query || null,
-			null,
-			null,
+            options.query || null,
+            null, 
+            offset,
 			noCache
 		)
 			.then(function (result) {
@@ -52,7 +52,8 @@ define([
 				);
 
 				return {
-					hierarchyItems: newHierarchyItems,
+                    hierarchyItems: newHierarchyItems,
+                    totalItemCount: result.totalItemCount,
 					items: result.items.map(function (item) {
 						if (!item.metadata) {
 							return item;
@@ -107,14 +108,15 @@ define([
 			 * @param {object} targetFolder
 			 * @param {boolean} noCache
 			 * @param {object[]} hierarchyItems
+             * @param {number} offset
 			 *
 			 * @return {Promise<{
 			 *   hierarchyItems: string[]
 			 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
 			 * }>}
 			 */
-			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems) {
-				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems);
+			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset) {
+				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset);
 			},
 
 			/**

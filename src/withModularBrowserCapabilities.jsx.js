@@ -7,17 +7,23 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 		return class ModularBrowser extends Component {
 			dataProvider = dataProviders.get(this.props.data.dataProviderName);
 			initialSelectedItem = {};
-			isMountedInDOM = true;
+            isMountedInDOM = true;
 
 			state = {
-				// Errors that occured when loading a item, for if the items are only loaded in the preview.
+				// Errors that occurred when loading a item, for if the items are only loaded in the preview.
 				cachedErrorByRemoteId: {},
 
-				// Contains the items that the user can choose from
+                // The currently set contextNodeId, if any.
+                currentBrowseContextNodeId: null,
+
+                // Contains the items that the user can choose from
 				hierarchyItems: [],
 
 				// Contains the items that the user can choose from
-				items: [],
+                items: [],
+
+                // Paging option; The zero-based offset from on which to get results.
+                offset: 0,
 
 				// Contains information on the current/last known request
 				// { type: fileLoad|search|browse|upload, ?query, ?error, ?resultCount }
@@ -25,6 +31,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 				// The item that is previewed and would be submitted if the user continues
 				selectedItem: null,
+
+                // the total number of items available on the CMS
+                totalItemCount: null,
 
 				// Contains information for the viewMode, for example list or grid
 				viewMode: initialViewMode
@@ -83,6 +92,24 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				}
 			};
 
+            onPageBackward = () => {
+                const { offset, items } = this.state;
+
+                const nextOffset = this.state.offset - items.length;
+
+                this.setState({
+                    offset: nextOffset > 0 ? nextOffset : 0,
+                });
+            };
+
+            onPageForward = () => {
+                const { offset, items } = this.state;
+
+                this.setState({
+                    offset: offset + items.length,
+                });
+            };
+
 			// Used to update the items with a browse callback
 			refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
 				const { determineAndHandleSubmitButtonDisabledState } = this.props;
@@ -93,13 +120,14 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				return this.dataProvider
 					.getFolderContents(
 						browseContextDocumentId,
-						folderToLoad,
+                        folderToLoad,
 						noCache,
-						this.state.hierarchyItems
+						this.state.hierarchyItems,
+                        this.state.offset
 					)
 					.then(
 						result => {
-							if (!this.isMountedInDOM) {
+                            if (!this.isMountedInDOM) {
 								return [];
 							}
 							// Because of jump in the tree with browse context document id,
@@ -122,8 +150,10 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							}
 
 							this.setState({
+                                currentBrowseContextNodeId: browseContextDocumentId,
 								selectedItem: newSelectedItem,
-								items: result.items,
+                                items: result.items,
+                                totalItemCount: result.totalItemCount,
 								hierarchyItems: result.hierarchyItems,
 								request: {}
 							});
@@ -183,13 +213,14 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 				this.dataProvider.upload(folderWithUploadedFile.id, selectedFiles).then(
 					uploadedItem => {
-						return this.refreshItems(
+                        return this.refreshItems(
 							browseContextDocumentId,
 							folderWithUploadedFile,
 							true
 						).then(items => {
 							this.onItemSelect(
-								items.find(item => item.id === uploadedItem.id) || null
+                                // ensure the newly uploaded item is always selected
+								items.find(item => item.id === uploadedItem.id) || uploadedItem || null
 							);
 						});
 					},
@@ -213,7 +244,15 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				this.isMountedInDOM && this.setState({ viewMode: viewMode });
 
 			render() {
-				const { hierarchyItems, items, request, selectedItem, viewMode } = this.state;
+				const {
+                    hierarchyItems,
+                    items,
+                    offset,
+                    request,
+                    selectedItem,
+                    totalItemCount,
+                    viewMode
+                } = this.state;
 
 				const props = {
 					...this.props,
@@ -224,17 +263,31 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					onItemIsErrored: this.onItemIsErrored,
 					onItemIsLoaded: this.onItemIsLoaded,
 					onItemSelect: this.onItemSelect,
-					onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
+                    onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
+                    onPageForward: offset + items.length < totalItemCount ? this.onPageForward : undefined,
+                    onPageBackward: offset > 0 ? this.onPageBackward : undefined,
 					onUploadFileSelect: this.onUploadFileSelect,
 					onViewModeChange: this.onViewModeChange,
 					refreshItems: this.refreshItems,
 					request,
 					selectedItem,
-					viewMode
+                    viewMode
 				};
 
 				return <WrappedComponent {...props} />;
 			}
+
+            componentDidUpdate(prevProps, prevState) {
+                if (prevState.offset != this.state.offset) {
+                    // perform paging
+
+                    const { hierarchyItems, currentBrowseContextNodeId } = this.state;
+
+                    const currentFolder = hierarchyItems[hierarchyItems.length - 1];
+
+                    this.refreshItems(currentBrowseContextNodeId, currentFolder);
+                }
+            }
 
 			componentWillUnmount() {
 				this.isMountedInDOM = false;
