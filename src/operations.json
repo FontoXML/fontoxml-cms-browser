@@ -48,6 +48,15 @@
 					]
 				},
 				{
+					"name": "limit",
+					"type": "number",
+					"description": [
+						"(Optional) Paging option; 0 by default. ",
+						"The number of items to retrieve at once, 0 means all items should be returned.",
+						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+					]
+				},
+				{
 					"name": "linkableElementsQuery",
 					"type": "XPathQuery",
 					"description": [
@@ -96,6 +105,7 @@
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
 			"linkableElementsQuery": "//*[@id]",
+			"limit": 0,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"nodeId": null
@@ -109,6 +119,7 @@
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
 					"linkableElementsQuery": "{{linkableElementsQuery}}",
+					"limit": "{{limit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
 					"nodeId": "{{nodeId}}"
@@ -158,6 +169,15 @@
 					]
 				},
 				{
+					"name": "limit",
+					"type": "number",
+					"description": [
+						"(Optional) Paging option; 0 by default. ",
+						"The number of items to retrieve at once, 0 means all items should be returned.",
+						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
@@ -190,6 +210,7 @@
 		},
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForImages",
+			"limit": 3,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"selectedImageId": null
@@ -201,6 +222,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
+					"limit": "{{limit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectedImageId": "{{selectedImageId}}"
@@ -263,6 +285,15 @@
 					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
+					"name": "limit",
+					"type": "number",
+					"description": [
+						"(Optional) Paging option; 0 by default. ",
+						"The number of items to retrieve at once, 0 means all items should be returned.",
+						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
@@ -295,6 +326,7 @@
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
 			"isCancelable": true,
+			"limit": 0,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
 		},
@@ -307,6 +339,7 @@
 					"isCancelable": "{{isCancelable}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
+					"limit": "{{limit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}"
 				}
@@ -353,6 +386,15 @@
 					]
 				},
 				{
+					"name": "limit",
+					"type": "number",
+					"description": [
+						"(Optional) Paging option; 0 by default. ",
+						"The number of items to retrieve at once, 0 means all items should be returned.",
+						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
@@ -378,6 +420,7 @@
 		},
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
+			"limit": 0,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
 		},
@@ -388,6 +431,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
+					"limit": "{{limit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}"
 				}

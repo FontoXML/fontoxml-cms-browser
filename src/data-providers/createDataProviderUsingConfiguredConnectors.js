@@ -34,15 +34,19 @@ define([
 		return updatedFolderHierarchy;
 	}
 
-	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset) {
+	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, limit, offset) {
 		return configuredBrowseConnector.browse(
 			browseContextDocumentId,
 			options.assetTypes,
 			options.resultTypes,
 			targetFolder.id,
 			options.query || null,
-			null,
-			offset,
+			// This has to be undefined, so the post parameter becomes undefined, so it is omitted
+			// by superagent; the XHR library we use.
+			limit || undefined,
+			// If there is not limit set (or limit is set to 0, which is also falsy), use undefined
+			// for the offset as well, so it is omitted from the request.
+			!limit ? undefined : offset,
 			noCache
 		)
 			.then(function (result) {
@@ -108,6 +112,7 @@ define([
 			 * @param {object} targetFolder
 			 * @param {boolean} noCache
 			 * @param {object[]} hierarchyItems
+			 * @param {number} limit
 			 * @param {number} offset
 			 *
 			 * @return {Promise<{
@@ -115,8 +120,8 @@ define([
 			 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
 			 * }>}
 			 */
-			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset) {
-				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset);
+			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems, limit, offset) {
+				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, limit, offset);
 			},
 
 			/**

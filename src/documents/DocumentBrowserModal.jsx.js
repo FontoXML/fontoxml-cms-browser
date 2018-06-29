@@ -72,6 +72,7 @@ class DocumentBrowserModal extends Component {
 			documentId: PropTypes.string,
 			insertOperationName: PropTypes.string,
 			isCancelable: PropTypes.bool,
+			limit: PropTypes.number,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string

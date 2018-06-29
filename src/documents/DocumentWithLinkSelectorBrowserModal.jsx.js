@@ -69,6 +69,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
 			insertOperationName: PropTypes.string,
+			limit: PropTypes.number,
 			linkableElementsQuery: PropTypes.string.isRequired,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,

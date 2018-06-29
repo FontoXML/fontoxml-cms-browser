@@ -22,7 +22,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				// Contains the items that the user can choose from
 				items: [],
 
-				// Paging option; The zero-based offset from on which to get results.
+				// Paging option; The zero-based offset or index from which to return the next
+				// "this.props.data.limit" amount of items. Eg. offset=0, limit=3 would return the
+				// items indexed as item 0, 1 and 2. offset=3, limit=3 would return item 3, 4 and 5.
 				offset: 0,
 
 				// Contains information on the current/last known request
@@ -123,6 +125,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 						folderToLoad,
 						noCache,
 						this.state.hierarchyItems,
+						this.props.data.limit,
 						this.state.offset
 					)
 					.then(
@@ -269,12 +272,12 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					onItemIsErrored: this.handleItemIsErrored,
 					onItemIsLoaded: this.onItemIsLoaded,
 					onItemSelect: this.handleItemSelect,
-					onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
+					onInitialSelectedItemIdChange: this.handleInitialSelectedItemIdChange,
+					onPageBackward: offset > 0 ? this.handlePageBackward : null,
 					onPageForward:
-						offset + items.length < totalItemCount ? this.onPageForward : undefined,
-					onPageBackward: offset > 0 ? this.onPageBackward : undefined,
-					onUploadFileSelect: this.onUploadFileSelect,
-					onViewModeChange: this.onViewModeChange,
+						offset + items.length < totalItemCount ? this.onPageForward : null,
+					onUploadFileSelect: this.handleUploadFileSelect,
+					onViewModeChange: this.handleViewModeChange,
 					refreshItems: this.refreshItems,
 					request,
 					selectedItem,
@@ -284,14 +287,13 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				return <WrappedComponent {...props} />;
 			}
 
-			componentDidUpdate(prevProps, prevState) {
-				if (prevState.offset != this.state.offset) {
-					// perform paging
-
+			componentDidUpdate(_prevProps, prevState) {
+				// If the offset changed (the page backward/forward button was clicked)
+				if (prevState.offset !== this.state.offset) {
 					const { hierarchyItems, currentBrowseContextNodeId } = this.state;
-
 					const currentFolder = hierarchyItems[hierarchyItems.length - 1];
 
+					// Refresh the items of the current folder (uses the new offset internally)
 					this.refreshItems(currentBrowseContextNodeId, currentFolder);
 				}
 			}

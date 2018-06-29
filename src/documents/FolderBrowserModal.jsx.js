@@ -43,6 +43,7 @@ class FolderBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
+			limit: PropTypes.number,
 			modalTitle: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string
 		}).isRequired,

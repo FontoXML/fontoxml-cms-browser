@@ -71,6 +71,7 @@ class DocumentTemplateBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			insertOperationName: PropTypes.string,
+			limit: PropTypes.number,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
