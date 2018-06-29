@@ -175,9 +175,9 @@ class DocumentBrowserModal extends Component {
 			isSubmitButtonDisabled,
 			items,
 			onItemIsErrored,
-            onItemSelect,
-            onPageBackward,
-            onPageForward,
+			onItemSelect,
+			onPageBackward,
+			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			renderModalBodyToolbar,
@@ -234,8 +234,8 @@ class DocumentBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
-											onItemIsErrored={onItemIsErrored}
 											onLoadIsDone={this.handleLoadIsDone}
+											onItemIsErrored={onItemIsErrored}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
@@ -244,11 +244,10 @@ class DocumentBrowserModal extends Component {
 						</ModalContent>
 					</ModalContent>
 
-                    <ModalBrowserPagination
-                        handlePageBackward={onPageBackward}
-                        handlePageForward={onPageForward}
-                    />
-
+					<ModalBrowserPagination
+						handlePageBackward={onPageBackward}
+						handlePageForward={onPageForward}
+					/>
 				</ModalBody>
 
 				<ModalFooter>

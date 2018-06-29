@@ -139,14 +139,14 @@ class ImageBrowserModal extends Component {
 			isSubmitButtonDisabled,
 			items,
 			onItemSelect,
-            onPageBackward,
-            onPageForward,
-            onUploadFileSelect,
+			onPageBackward,
+			onPageForward,
+			onUploadFileSelect,
 			onViewModeChange,
 			refreshItems,
 			request,
 			selectedItem,
-            viewMode
+			viewMode
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
@@ -225,11 +225,10 @@ class ImageBrowserModal extends Component {
 						</ModalContent>
 					</ModalContent>
 
-                    <ModalBrowserPagination
-                        handlePageBackward={onPageBackward}
-                        handlePageForward={onPageForward}
-                    />
-
+					<ModalBrowserPagination
+						handlePageBackward={onPageBackward}
+						handlePageForward={onPageForward}
+					/>
 				</ModalBody>
 
 				<ModalFooter>

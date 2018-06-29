@@ -94,9 +94,9 @@ class FolderBrowserModal extends Component {
 			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
-            onItemSelect,
-            onPageBackward,
-            onPageForward,
+			onItemSelect,
+			onPageBackward,
+			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			request,
@@ -145,11 +145,10 @@ class FolderBrowserModal extends Component {
 						</ModalContent>
 					</ModalContent>
 
-                    <ModalBrowserPagination
-                        handlePageBackward={onPageBackward}
-                        handlePageForward={onPageForward}
-                    />
-
+					<ModalBrowserPagination
+						handlePageBackward={onPageBackward}
+						handlePageForward={onPageForward}
+					/>
 				</ModalBody>
 
 				<ModalFooter>
