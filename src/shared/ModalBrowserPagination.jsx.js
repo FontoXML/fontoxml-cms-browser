@@ -7,37 +7,37 @@ import t from 'fontoxml-localization/t';
 
 class ModalBrowserPagination extends Component {
 	static propTypes = {
-		handlePageBackward: PropTypes.func,
-		handlePageForward: PropTypes.func
+		onPageBackward: PropTypes.func,
+		onPageForward: PropTypes.func
 	};
 
 	render() {
-		const { handlePageBackward, handlePageForward } = this.props;
+		const { onPageBackward, onPageForward } = this.props;
 
-		if (!handlePageBackward && !handlePageForward) {
+		if (!onPageBackward && !onPageForward) {
 			return null;
 		}
 
-		if (handlePageBackward && handlePageForward) {
+		if (onPageBackward && onPageForward) {
 			return (
 				<ModalBodyToolbar justifyContent="space-between">
-					<TextLink label={t('Previous')} onClick={handlePageBackward} />
-					<TextLink label={t('Next')} onClick={handlePageForward} />
+					<TextLink label={t('Previous')} onClick={onPageBackward} />
+					<TextLink label={t('Next')} onClick={onPageForward} />
 				</ModalBodyToolbar>
 			);
 		}
 
-		if (handlePageForward) {
+		if (onPageForward) {
 			return (
 				<ModalBodyToolbar justifyContent="flex-end">
-					<TextLink label={t('Next')} onClick={handlePageForward} />
+					<TextLink label={t('Next')} onClick={onPageForward} />
 				</ModalBodyToolbar>
 			);
 		}
 
 		return (
 			<ModalBodyToolbar>
-				<TextLink label={t('Previous')} onClick={handlePageBackward} />
+				<TextLink label={t('Previous')} onClick={onPageBackward} />
 			</ModalBodyToolbar>
 		);
 	}

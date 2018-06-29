@@ -226,8 +226,8 @@ class ImageBrowserModal extends Component {
 					</ModalContent>
 
 					<ModalBrowserPagination
-						handlePageBackward={onPageBackward}
-						handlePageForward={onPageForward}
+						onPageBackward={onPageBackward}
+						onPageForward={onPageForward}
 					/>
 				</ModalBody>
 

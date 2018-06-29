@@ -41,7 +41,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 			isItemErrored = item => !!this.state.cachedErrorByRemoteId[item.id];
 
-			onItemIsErrored = (remoteId, error) => {
+			handleItemIsErrored = (remoteId, error) => {
 				if (this.isMountedInDOM) {
 					const cachedErrorByRemoteId = this.state.cachedErrorByRemoteId;
 					cachedErrorByRemoteId[remoteId] = error;
@@ -66,7 +66,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used by any component to change the currently selected item
-			onItemSelect = item => {
+			handleItemSelect = item => {
 				const { determineAndHandleSubmitButtonDisabledState } = this.props;
 
 				if (this.isMountedInDOM) {
@@ -86,13 +86,13 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to set the initialSelectedItem
-			onInitialSelectedItemIdChange = item => {
+			handleInitialSelectedItemIdChange = item => {
 				if (this.isMountedInDOM) {
 					this.initialSelectedItem = item;
 				}
 			};
 
-			onPageBackward = () => {
+			handlePageBackward = () => {
 				const { offset, items } = this.state;
 
 				const nextOffset = this.state.offset - items.length;
@@ -102,7 +102,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				});
 			};
 
-			onPageForward = () => {
+			handlePageForward = () => {
 				const { offset, items } = this.state;
 
 				this.setState({
@@ -182,7 +182,11 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					);
 			};
 
-			onUploadFileSelect = (browseContextDocumentId, selectedFiles, uploadErrorMessages) => {
+			handleUploadFileSelect = (
+				browseContextDocumentId,
+				selectedFiles,
+				uploadErrorMessages
+			) => {
 				const { hierarchyItems } = this.state;
 
 				if (!this.isMountedInDOM) {
@@ -218,7 +222,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							folderWithUploadedFile,
 							true
 						).then(items => {
-							this.onItemSelect(
+							this.handleItemSelect(
 								// ensure the newly uploaded item is always selected
 								items.find(item => item.id === uploadedItem.id) ||
 									uploadedItem ||
@@ -242,7 +246,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to update the viewMode
-			onViewModeChange = viewMode =>
+			handleViewModeChange = viewMode =>
 				this.isMountedInDOM && this.setState({ viewMode: viewMode });
 
 			render() {
@@ -262,9 +266,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					initialSelectedItem: this.initialSelectedItem,
 					isItemErrored: this.isItemErrored,
 					items,
-					onItemIsErrored: this.onItemIsErrored,
+					onItemIsErrored: this.handleItemIsErrored,
 					onItemIsLoaded: this.onItemIsLoaded,
-					onItemSelect: this.onItemSelect,
+					onItemSelect: this.handleItemSelect,
 					onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
 					onPageForward:
 						offset + items.length < totalItemCount ? this.onPageForward : undefined,
