@@ -187,6 +187,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 									stateLabels={stateLabels}
 									viewMode={viewMode}
 								/>
+
+								<ModalBrowserPagination
+									onPageBackward={onPageBackward}
+									onPageForward={onPageForward}
+								/>
 							</ModalContent>
 
 							{selectedItem &&
@@ -205,11 +210,6 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 								)}
 						</ModalContent>
 					</ModalContent>
-
-					<ModalBrowserPagination
-						onPageBackward={onPageBackward}
-						onPageForward={onPageForward}
-					/>
 				</ModalBody>
 
 				<ModalFooter>

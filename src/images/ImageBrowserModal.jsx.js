@@ -212,6 +212,11 @@ class ImageBrowserModal extends Component {
 									stateLabels={stateLabels}
 									viewMode={viewMode}
 								/>
+
+								<ModalBrowserPagination
+									onPageBackward={onPageBackward}
+									onPageForward={onPageForward}
+								/>
 							</ModalContent>
 
 							{selectedItem &&
@@ -225,11 +230,6 @@ class ImageBrowserModal extends Component {
 								)}
 						</ModalContent>
 					</ModalContent>
-
-					<ModalBrowserPagination
-						onPageBackward={onPageBackward}
-						onPageForward={onPageForward}
-					/>
 				</ModalBody>
 
 				<ModalFooter>

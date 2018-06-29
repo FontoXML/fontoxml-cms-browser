@@ -229,6 +229,11 @@ class DocumentBrowserModal extends Component {
 									stateLabels={stateLabels}
 									viewMode={viewMode}
 								/>
+
+								<ModalBrowserPagination
+									onPageBackward={onPageBackward}
+									onPageForward={onPageForward}
+								/>
 							</ModalContent>
 
 							{selectedItem &&
@@ -244,11 +249,6 @@ class DocumentBrowserModal extends Component {
 								)}
 						</ModalContent>
 					</ModalContent>
-
-					<ModalBrowserPagination
-						onPageBackward={onPageBackward}
-						onPageForward={onPageForward}
-					/>
 				</ModalBody>
 
 				<ModalFooter>

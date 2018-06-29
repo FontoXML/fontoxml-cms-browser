@@ -143,13 +143,13 @@ class FolderBrowserModal extends Component {
 								stateLabels={stateLabels}
 								viewMode={viewMode}
 							/>
+
+							<ModalBrowserPagination
+								onPageBackward={onPageBackward}
+								onPageForward={onPageForward}
+							/>
 						</ModalContent>
 					</ModalContent>
-
-					<ModalBrowserPagination
-						onPageBackward={onPageBackward}
-						onPageForward={onPageForward}
-					/>
 				</ModalBody>
 
 				<ModalFooter>
