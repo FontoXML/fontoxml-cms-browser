@@ -29,11 +29,7 @@ class ModalBrowserUploadButton extends PureComponent {
 	dataProvider = dataProviders.get(this.props.dataProviderName);
 
 	handleSelect = selectedFiles =>
-		this.props.onUploadFileSelect(
-			this.props.browseContextDocumentId,
-			selectedFiles,
-			this.props.uploadErrorMessages
-		);
+		this.props.onUploadFileSelect(selectedFiles, this.props.uploadErrorMessages);
 
 	render() {
 		const { hierarchyItems, request } = this.props;

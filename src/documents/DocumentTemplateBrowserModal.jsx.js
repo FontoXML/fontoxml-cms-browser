@@ -20,7 +20,6 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserPagination from '../shared/ModalBrowserPagination.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
@@ -71,7 +70,6 @@ class DocumentTemplateBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			insertOperationName: PropTypes.string,
-			limit: PropTypes.number,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
@@ -137,10 +135,11 @@ class DocumentTemplateBrowserModal extends Component {
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			onItemIsErrored,
 			onItemSelect,
-			onPageBackward,
-			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			request,
@@ -178,6 +177,9 @@ class DocumentTemplateBrowserModal extends Component {
 								<ModalBrowserFileAndFolderResultList
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
+									loadMore={loadMore}
+									loadMoreCurrentItems={loadMoreCurrentItems}
+									loadMoreTotalItems={loadMoreTotalItems}
 									onItemSelect={onItemSelect}
 									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
 									refreshItems={refreshItems}
@@ -187,11 +189,6 @@ class DocumentTemplateBrowserModal extends Component {
 									selectedItem={selectedItem}
 									stateLabels={stateLabels}
 									viewMode={viewMode}
-								/>
-
-								<ModalBrowserPagination
-									onPageBackward={onPageBackward}
-									onPageForward={onPageForward}
 								/>
 							</ModalContent>
 

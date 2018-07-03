@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 
 import { SpinnerIcon, StateMessage, VirtualGrid, VirtualList } from 'fds/components';
 
+import ModalBrowserLoadMore from './ModalBrowserLoadMore.jsx';
+
 class ModalBrowserFileAndFolderResultList extends Component {
 	static defaultProps = {
 		browseContextDocumentId: null,
@@ -32,6 +34,9 @@ class ModalBrowserFileAndFolderResultList extends Component {
 
 		// from withModularBrowserCapabilities
 		items: PropTypes.array.isRequired,
+		loadMore: PropTypes.func,
+		loadMoreCurrentItems: PropTypes.number,
+		loadMoreTotalItems: PropTypes.number,
 		onItemSelect: PropTypes.func.isRequired,
 		refreshItems: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
@@ -51,11 +56,28 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		}
 	};
 
+	renderListItem = props =>
+		this.props.renderListItem({
+			...props,
+			isSelected: this.props.selectedItem
+				? this.props.selectedItem.id === props.item.id
+				: false
+		});
+
+	renderGridItem = props =>
+		this.props.renderGridItem({
+			...props,
+			isSelected: this.props.selectedItem
+				? this.props.selectedItem.id === props.item.id
+				: false
+		});
+
 	render() {
 		const {
 			items,
-			renderGridItem,
-			renderListItem,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			request,
 			selectedItem,
 			stateLabels,
@@ -83,32 +105,64 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			return <StateMessage paddingSize="m" visual="folder-open-o" {...stateLabels.empty} />;
 		}
 
+		const fragmentToReturn = [];
+
+		if (loadMore) {
+			fragmentToReturn.push(
+				<ModalBrowserLoadMore
+					key="pagination-top"
+					currentItems={loadMoreCurrentItems}
+					onButtonClick={loadMore}
+					paddingVertical="0.5rem"
+					showButton={false}
+					totalItems={loadMoreTotalItems}
+				/>
+			);
+		}
+
 		if (viewMode.name === 'list') {
-			return (
+			fragmentToReturn.push(
 				<VirtualList
+					key="list"
 					estimatedItemHeight={30}
+					idToScrollIntoView={selectedItem ? selectedItem.id : null}
 					items={items}
 					onItemClick={this.handleItemClick}
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
-					renderItem={renderListItem}
-					idToScrollIntoView={selectedItem ? selectedItem.id : null}
+					renderItem={this.renderListItem}
 				/>
 			);
 		}
 
 		// else the viewMode.name is 'grid'
-		return (
+		fragmentToReturn.push(
 			<VirtualGrid
+				key="grid"
 				estimatedRowHeight={86}
+				idToScrollIntoView={selectedItem ? selectedItem.id : null}
 				items={items}
 				onItemClick={this.handleItemClick}
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
-				renderItem={renderGridItem}
-				idToScrollIntoView={selectedItem ? selectedItem.id : null}
+				renderItem={this.renderGridItem}
 			/>
 		);
+
+		if (loadMore) {
+			fragmentToReturn.push(
+				<ModalBrowserLoadMore
+					key="pagination-bottom"
+					currentItems={loadMoreCurrentItems}
+					onButtonClick={loadMore}
+					paddingVertical="2rem"
+					showButton={loadMoreCurrentItems < loadMoreTotalItems}
+					totalItems={loadMoreTotalItems}
+				/>
+			);
+		}
+
+		return fragmentToReturn;
 	}
 }
 

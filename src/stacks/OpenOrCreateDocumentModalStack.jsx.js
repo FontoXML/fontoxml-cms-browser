@@ -84,6 +84,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 				browseContextDocumentId,
 				insertOperationName,
 				isCancelable,
+				loadMoreLimit,
 				modalIcon,
 				modalTitle,
 				openDocumentDataProviderName,
@@ -91,6 +92,9 @@ class OpenOrCreateDocumentModalStack extends Component {
 				selectFolderDataProviderName
 			},
 			cancelModal,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			submitModal
 		} = this.props;
 		const { activeModal, activeTab, selectedDocumentTemplate, selectedFolder } = this.state;
@@ -106,10 +110,14 @@ class OpenOrCreateDocumentModalStack extends Component {
 							dataProviderName: openDocumentDataProviderName,
 							insertOperationName,
 							isCancelable,
+							loadMoreLimit,
 							modalIcon,
 							modalPrimaryButtonLabel: t('Open'),
 							modalTitle: openOrCreateModalTitle
 						}}
+						loadMore={loadMore}
+						loadMoreCurrentItems={loadMoreCurrentItems}
+						loadMoreTotalItems={loadMoreTotalItems}
 						renderModalBodyToolbar={this.handleRenderModalBodyToolbar}
 						submitModal={submitModal}
 					/>
@@ -120,7 +128,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 						cancelModal={cancelModal}
 						data={{
 							insertOperationName,
-							isCancelable
+							isCancelable,
+							loadMoreLimit
 						}}
 						modalIcon={modalIcon}
 						modalTitle={openOrCreateModalTitle}
@@ -139,8 +148,12 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
+							loadMoreLimit,
 							modalTitle: t('Select a template for your document')
 						}}
+						loadMore={loadMore}
+						loadMoreCurrentItems={loadMoreCurrentItems}
+						loadMoreTotalItems={loadMoreTotalItems}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
@@ -154,6 +167,9 @@ class OpenOrCreateDocumentModalStack extends Component {
 							dataProviderName: selectFolderDataProviderName,
 							modalTitle: t('Select a folder to save your documents in')
 						}}
+						loadMore={loadMore}
+						loadMoreCurrentItems={loadMoreCurrentItems}
+						loadMoreTotalItems={loadMoreTotalItems}
 						submitModal={this.handleFolderSubmit}
 					/>
 				)}

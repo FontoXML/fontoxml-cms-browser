@@ -21,7 +21,6 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserPagination from '../shared/ModalBrowserPagination.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
@@ -72,7 +71,6 @@ class DocumentBrowserModal extends Component {
 			documentId: PropTypes.string,
 			insertOperationName: PropTypes.string,
 			isCancelable: PropTypes.bool,
-			limit: PropTypes.number,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string
@@ -175,10 +173,11 @@ class DocumentBrowserModal extends Component {
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			onItemIsErrored,
 			onItemSelect,
-			onPageBackward,
-			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			renderModalBodyToolbar,
@@ -220,6 +219,9 @@ class DocumentBrowserModal extends Component {
 								<ModalBrowserFileAndFolderResultList
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
+									loadMore={loadMore}
+									loadMoreCurrentItems={loadMoreCurrentItems}
+									loadMoreTotalItems={loadMoreTotalItems}
 									onItemSelect={onItemSelect}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
@@ -228,11 +230,6 @@ class DocumentBrowserModal extends Component {
 									selectedItem={selectedItem}
 									stateLabels={stateLabels}
 									viewMode={viewMode}
-								/>
-
-								<ModalBrowserPagination
-									onPageBackward={onPageBackward}
-									onPageForward={onPageForward}
 								/>
 							</ModalContent>
 

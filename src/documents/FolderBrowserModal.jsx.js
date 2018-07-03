@@ -19,7 +19,6 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserPagination from '../shared/ModalBrowserPagination.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
 const stateLabels = {
@@ -43,7 +42,6 @@ class FolderBrowserModal extends Component {
 		data: PropTypes.shape({
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
-			limit: PropTypes.number,
 			modalTitle: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string
 		}).isRequired,
@@ -95,9 +93,10 @@ class FolderBrowserModal extends Component {
 			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
 			hierarchyItems,
 			items,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			onItemSelect,
-			onPageBackward,
-			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			request,
@@ -134,6 +133,9 @@ class FolderBrowserModal extends Component {
 							<ModalBrowserFileAndFolderResultList
 								browseContextDocumentId={browseContextDocumentId}
 								items={items}
+								loadMore={loadMore}
+								loadMoreCurrentItems={loadMoreCurrentItems}
+								loadMoreTotalItems={loadMoreTotalItems}
 								onItemSelect={onItemSelect}
 								refreshItems={refreshItems}
 								renderListItem={this.handleRenderListItem}
@@ -142,11 +144,6 @@ class FolderBrowserModal extends Component {
 								selectedItem={selectedItem}
 								stateLabels={stateLabels}
 								viewMode={viewMode}
-							/>
-
-							<ModalBrowserPagination
-								onPageBackward={onPageBackward}
-								onPageForward={onPageForward}
 							/>
 						</ModalContent>
 					</ModalContent>

@@ -22,7 +22,6 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserPagination from '../shared/ModalBrowserPagination.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
@@ -74,7 +73,6 @@ class ImageBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			insertOperationName: PropTypes.string,
-			limit: PropTypes.number,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string,
@@ -139,9 +137,10 @@ class ImageBrowserModal extends Component {
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			onItemSelect,
-			onPageBackward,
-			onPageForward,
 			onUploadFileSelect,
 			onViewModeChange,
 			refreshItems,
@@ -204,6 +203,9 @@ class ImageBrowserModal extends Component {
 									items={items}
 									onItemSelect={onItemSelect}
 									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
+									loadMore={loadMore}
+									loadMoreCurrentItems={loadMoreCurrentItems}
+									loadMoreTotalItems={loadMoreTotalItems}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
@@ -211,11 +213,6 @@ class ImageBrowserModal extends Component {
 									selectedItem={selectedItem}
 									stateLabels={stateLabels}
 									viewMode={viewMode}
-								/>
-
-								<ModalBrowserPagination
-									onPageBackward={onPageBackward}
-									onPageForward={onPageForward}
 								/>
 							</ModalContent>
 

@@ -48,20 +48,20 @@
 					]
 				},
 				{
-					"name": "limit",
-					"type": "number",
-					"description": [
-						"(Optional) Paging option; 0 by default. ",
-						"The number of items to retrieve at once, 0 means all items should be returned.",
-						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
-					]
-				},
-				{
 					"name": "linkableElementsQuery",
 					"type": "XPathQuery",
 					"description": [
 						"(Optional) Selector used to find the nodes which can be selected by the user. ",
 						"Defaults to `//*[@id]`."
+					]
+				},
+				{
+					"name": "loadMoreLimit",
+					"type": "number",
+					"description": [
+						"The number of items to retrieve from the CMS in 1 request. ",
+						"0 (the default value) means all items should be returned by the CMS.",
+						"Note: if set to 0, it is omitted entirely in the request params to the CMS."
 					]
 				},
 				{
@@ -105,7 +105,7 @@
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
 			"linkableElementsQuery": "//*[@id]",
-			"limit": 0,
+			"loadMoreLimit": 0,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"nodeId": null
@@ -119,7 +119,7 @@
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
 					"linkableElementsQuery": "{{linkableElementsQuery}}",
-					"limit": "{{limit}}",
+					"loadMoreLimit": "{{loadMoreLimit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
 					"nodeId": "{{nodeId}}"
@@ -169,12 +169,12 @@
 					]
 				},
 				{
-					"name": "limit",
+					"name": "loadMoreLimit",
 					"type": "number",
 					"description": [
-						"(Optional) Paging option; 0 by default. ",
-						"The number of items to retrieve at once, 0 means all items should be returned.",
-						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+						"The number of items to retrieve from the CMS in 1 request. ",
+						"0 (the default value) means all items should be returned by the CMS.",
+						"Note: if set to 0, it is omitted entirely in the request params to the CMS."
 					]
 				},
 				{
@@ -210,7 +210,7 @@
 		},
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForImages",
-			"limit": 3,
+			"loadMoreLimit": 3,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"selectedImageId": null
@@ -222,7 +222,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
-					"limit": "{{limit}}",
+					"loadMoreLimit": "{{loadMoreLimit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectedImageId": "{{selectedImageId}}"
@@ -285,12 +285,12 @@
 					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
-					"name": "limit",
+					"name": "loadMoreLimit",
 					"type": "number",
 					"description": [
-						"(Optional) Paging option; 0 by default. ",
-						"The number of items to retrieve at once, 0 means all items should be returned.",
-						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+						"The number of items to retrieve from the CMS in 1 request. ",
+						"0 (the default value) means all items should be returned by the CMS.",
+						"Note: if set to 0, it is omitted entirely in the request params to the CMS."
 					]
 				},
 				{
@@ -326,7 +326,7 @@
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
 			"isCancelable": true,
-			"limit": 0,
+			"loadMoreLimit": 3,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
 		},
@@ -339,7 +339,7 @@
 					"isCancelable": "{{isCancelable}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
-					"limit": "{{limit}}",
+					"loadMoreLimit": "{{loadMoreLimit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}"
 				}
@@ -386,12 +386,12 @@
 					]
 				},
 				{
-					"name": "limit",
+					"name": "loadMoreLimit",
 					"type": "number",
 					"description": [
-						"(Optional) Paging option; 0 by default. ",
-						"The number of items to retrieve at once, 0 means all items should be returned.",
-						"Note: if set to 0, it is omitted entirely in the request parameters to the CMS."
+						"The number of items to retrieve from the CMS in 1 request. ",
+						"0 (the default value) means all items should be returned by the CMS.",
+						"Note: if set to 0, it is omitted entirely in the request params to the CMS."
 					]
 				},
 				{
@@ -420,7 +420,7 @@
 		},
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
-			"limit": 0,
+			"loadMoreLimit": 3,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
 		},
@@ -431,7 +431,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
-					"limit": "{{limit}}",
+					"loadMoreLimit": "{{loadMoreLimit}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}"
 				}
@@ -511,6 +511,15 @@
 					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
+					"name": "loadMoreLimit",
+					"type": "number",
+					"description": [
+						"The number of items to retrieve from the CMS in 1 request. ",
+						"0 (the default value) means all items should be returned by the CMS.",
+						"Note: if set to 0, it is omitted entirely in the request params to the CMS."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
@@ -551,6 +560,7 @@
 		},
 		"initialData": {
 			"isCancelable": true,
+			"loadMoreLimit": 3,
 			"modalTitle": null,
 			"openDocumentDataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
@@ -563,6 +573,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"isCancelable": "{{isCancelable}}",
+					"loadMoreLimit": "{{loadMoreLimit}}",
 					"modalTitle": "{{modalTitle}}",
 					"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
@@ -632,6 +643,15 @@
 					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
+					"name": "loadMoreLimit",
+					"type": "number",
+					"description": [
+						"The number of items to retrieve from the CMS in 1 request. ",
+						"0 (the default value) means all items should be returned by the CMS.",
+						"Note: if set to 0, it is omitted entirely in the request params to the CMS."
+					]
+				},
+				{
 					"name": "modalIcon",
 					"type": "string",
 					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
@@ -662,6 +682,7 @@
 		},
 		"initialData": {
 			"isCancelable": true,
+			"loadMoreLimit": 3,
 			"modalTitle": null,
 			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
 			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
@@ -673,6 +694,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"isCancelable": "{{isCancelable}}",
+					"loadMoreLimit": "{{loadMoreLimit}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
 					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"

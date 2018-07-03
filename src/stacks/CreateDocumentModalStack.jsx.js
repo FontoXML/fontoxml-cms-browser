@@ -54,12 +54,16 @@ class CreateDocumentFormModalStack extends Component {
 				browseContextDocumentId,
 				insertOperationName,
 				isCancelable,
+				loadMoreLimit,
 				modalIcon,
 				modalTitle,
 				selectDocumentTemplateDataProviderName,
 				selectFolderDataProviderName
 			},
 			cancelModal,
+			loadMore,
+			loadMoreCurrentItems,
+			loadMoreTotalItems,
 			submitModal
 		} = this.props;
 		const { activeModal, selectedDocumentTemplate, selectedFolder } = this.state;
@@ -86,8 +90,12 @@ class CreateDocumentFormModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
+							loadMoreLimit,
 							modalTitle: t('Select a template for your document')
 						}}
+						loadMore={loadMore}
+						loadMoreCurrentItems={loadMoreCurrentItems}
+						loadMoreTotalItems={loadMoreTotalItems}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
@@ -99,8 +107,12 @@ class CreateDocumentFormModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
+							loadMoreLimit,
 							modalTitle: t('Select a folder to save your documents in')
 						}}
+						loadMore={loadMore}
+						loadMoreCurrentItems={loadMoreCurrentItems}
+						loadMoreTotalItems={loadMoreTotalItems}
 						submitModal={this.handleFolderSubmit}
 					/>
 				)}

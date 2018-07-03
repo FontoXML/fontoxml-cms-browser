@@ -22,10 +22,16 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				// Contains the items that the user can choose from
 				items: [],
 
-				// Paging option; The zero-based offset or index from which to return the next
-				// "this.props.data.limit" amount of items. Eg. offset=0, limit=3 would return the
-				// items indexed as item 0, 1 and 2. offset=3, limit=3 would return item 3, 4 and 5.
-				offset: 0,
+				// The zero-based offset or index from which to return the next
+				// "this.props.data.loadMoreLimit" amount of items. Eg. offset=0, limit=3 would
+				// return the items indexed as item 0, 1 and 2. offset=3, limit=3 would return
+				// item 3, 4 and 5.
+				loadMoreOffset: 0,
+
+				// the total number of items as reported by the CMS. Used with loadMoreOffset and
+				// "this.props.data.loadMoreLimit" to determine the visibilty of the load more
+				// button when a loadMoreLimit > 0 is set (otherwise it is never rendered).
+				loadMoreTotalItems: null,
 
 				// Contains information on the current/last known request
 				// { type: fileLoad|search|browse|upload, ?query, ?error, ?resultCount }
@@ -34,14 +40,27 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				// The item that is previewed and would be submitted if the user continues
 				selectedItem: null,
 
-				// the total number of items available on the CMS
-				totalItemCount: null,
+				//
+				uploadedItems: [],
 
 				// Contains information for the viewMode, for example list or grid
 				viewMode: initialViewMode
 			};
 
 			isItemErrored = item => !!this.state.cachedErrorByRemoteId[item.id];
+
+			loadMore = () => {
+				const { hierarchyItems, currentBrowseContextNodeId } = this.state;
+				const currentFolder = hierarchyItems[hierarchyItems.length - 1];
+
+				// Refresh the items of the current folder (uses the new offset internally)
+				this.refreshItems(
+					currentBrowseContextNodeId,
+					currentFolder,
+					undefined,
+					this.state.loadMoreOffset + this.props.data.loadMoreLimit
+				);
+			};
 
 			handleItemIsErrored = (remoteId, error) => {
 				if (this.isMountedInDOM) {
@@ -94,29 +113,20 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				}
 			};
 
-			handlePageBackward = () => {
-				const { offset, items } = this.state;
-
-				const nextOffset = this.state.offset - items.length;
-
-				this.setState({
-					offset: nextOffset > 0 ? nextOffset : 0
-				});
-			};
-
-			handlePageForward = () => {
-				const { offset, items } = this.state;
-
-				this.setState({
-					offset: offset + items.length
-				});
-			};
-
 			// Used to update the items with a browse callback
+<<<<<<< HEAD
 			refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
 				const { determineAndHandleSubmitButtonDisabledState } = this.props;
+=======
+			refreshItems = (browseContextDocumentId, folderToLoad, noCache, loadMoreOffset = 0) => {
+				const { determineAndHandleSubmitButtonDisabledState } = this.props.data;
+>>>>>>> Initial implementation done. Tested only for images. TODO: check/fix other browse modals.
 				if (this.isMountedInDOM) {
-					this.setState({ request: { type: 'browse', busy: true } });
+					const newState = { request: { type: 'browse', busy: true } };
+					if (loadMoreOffset === 0) {
+						newState.uploadedItems = [];
+					}
+					this.setState(newState);
 				}
 
 				return this.dataProvider
@@ -125,14 +135,15 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 						folderToLoad,
 						noCache,
 						this.state.hierarchyItems,
-						this.props.data.limit,
-						this.state.offset
+						this.props.data.loadMoreLimit,
+						loadMoreOffset
 					)
 					.then(
 						result => {
 							if (!this.isMountedInDOM) {
 								return [];
 							}
+
 							// Because of jump in the tree with browse context document id,
 							// the folder that is actually loaded could be different from the folderToLoad.
 							let newSelectedItem =
@@ -152,13 +163,44 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 									: newSelectedItem;
 							}
 
+							// Do not change the selected item in any way if it was already set
+							// before the refresh and the results of this refresh should be appended
+							if (this.state.selectedItem && loadMoreOffset !== null) {
+								newSelectedItem = this.state.selectedItem;
+							}
+
+							let newItems = result.items;
+							if (newItems.length > 0 && loadMoreOffset > 0) {
+								newItems = newItems.filter(
+									newItem =>
+										!this.state.uploadedItems.some(
+											uploadedItem => uploadedItem.id === newItem.id
+										)
+								);
+
+								// If the last load more only returns items that were uploaded before,
+								// browse again with a higher offset and try again.
+								if (newItems.length === 0) {
+									return this.refreshItems(
+										browseContextDocumentId,
+										folderToLoad,
+										noCache,
+										loadMoreOffset + this.props.data.loadMoreLimit
+									);
+								}
+							}
+
 							this.setState({
 								currentBrowseContextNodeId: browseContextDocumentId,
-								selectedItem: newSelectedItem,
-								items: result.items,
-								totalItemCount: result.totalItemCount,
 								hierarchyItems: result.hierarchyItems,
-								request: {}
+								items:
+									loadMoreOffset > 0
+										? this.state.items.concat(newItems)
+										: newItems,
+								loadMoreOffset,
+								loadMoreTotalItems: result.totalItemCount,
+								request: {},
+								selectedItem: newSelectedItem
 							});
 
 							if (determineAndHandleSubmitButtonDisabledState) {
@@ -174,8 +216,11 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							}
 
 							this.setState({
-								selectedItem: null,
-								request: { type: 'browse', error: error }
+								// reset the loadMoreOffset to the previous offset before this
+								// request errored if it was intended as a load more (append)
+								loadMoreOffset: loadMoreOffset > 0 ? this.state.loadMoreOffset : 0,
+								request: { type: 'browse', error },
+								selectedItem: null
 							});
 
 							if (determineAndHandleSubmitButtonDisabledState) {
@@ -185,11 +230,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					);
 			};
 
-			handleUploadFileSelect = (
-				browseContextDocumentId,
-				selectedFiles,
-				uploadErrorMessages
-			) => {
+			handleUploadFileSelect = (selectedFiles, uploadErrorMessages) => {
 				const { hierarchyItems } = this.state;
 
 				if (!this.isMountedInDOM) {
@@ -220,18 +261,22 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 				this.dataProvider.upload(folderWithUploadedFile.id, selectedFiles).then(
 					uploadedItem => {
-						return this.refreshItems(
-							browseContextDocumentId,
-							folderWithUploadedFile,
-							true
-						).then(items => {
-							this.handleItemSelect(
-								// ensure the newly uploaded item is always selected
-								items.find(item => item.id === uploadedItem.id) ||
-									uploadedItem ||
-									null
-							);
-						});
+						this.setState(
+							({ items, loadMoreTotalItems, uploadedItems }) => ({
+								items: [uploadedItem, ...items],
+								loadMoreTotalItems: loadMoreTotalItems + 1,
+								request: {},
+								uploadedItems: [...uploadedItems, uploadedItem]
+							}),
+							() => {
+								this.handleItemSelect(
+									// ensure the newly uploaded item is always selected
+									this.state.items.find(item => item.id === uploadedItem.id) ||
+										uploadedItem ||
+										null
+								);
+							}
+						);
 					},
 					error => {
 						if (!this.isMountedInDOM || !error) {
@@ -256,10 +301,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				const {
 					hierarchyItems,
 					items,
-					offset,
+					loadMoreTotalItems,
 					request,
 					selectedItem,
-					totalItemCount,
 					viewMode
 				} = this.state;
 
@@ -269,13 +313,13 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					initialSelectedItem: this.initialSelectedItem,
 					isItemErrored: this.isItemErrored,
 					items,
+					loadMore: this.props.data.loadMoreLimit > 0 ? this.loadMore : null,
+					loadMoreCurrentItems: items.length,
+					loadMoreTotalItems: loadMoreTotalItems,
 					onItemIsErrored: this.handleItemIsErrored,
 					onItemIsLoaded: this.onItemIsLoaded,
 					onItemSelect: this.handleItemSelect,
 					onInitialSelectedItemIdChange: this.handleInitialSelectedItemIdChange,
-					onPageBackward: offset > 0 ? this.handlePageBackward : null,
-					onPageForward:
-						offset + items.length < totalItemCount ? this.onPageForward : null,
 					onUploadFileSelect: this.handleUploadFileSelect,
 					onViewModeChange: this.handleViewModeChange,
 					refreshItems: this.refreshItems,
@@ -285,17 +329,6 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				};
 
 				return <WrappedComponent {...props} />;
-			}
-
-			componentDidUpdate(_prevProps, prevState) {
-				// If the offset changed (the page backward/forward button was clicked)
-				if (prevState.offset !== this.state.offset) {
-					const { hierarchyItems, currentBrowseContextNodeId } = this.state;
-					const currentFolder = hierarchyItems[hierarchyItems.length - 1];
-
-					// Refresh the items of the current folder (uses the new offset internally)
-					this.refreshItems(currentBrowseContextNodeId, currentFolder);
-				}
 			}
 
 			componentWillUnmount() {
