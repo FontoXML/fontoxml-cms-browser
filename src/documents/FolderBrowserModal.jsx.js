@@ -30,6 +30,10 @@ const stateLabels = {
 		title: t('Can’t open this folder'),
 		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
 	},
+	searchError: {
+		title: t('Could not perform search'),
+		message: t('FontoXML can’t complete your search query. You can try a different query.')
+	},
 	empty: {
 		title: t('No results'),
 		message: null

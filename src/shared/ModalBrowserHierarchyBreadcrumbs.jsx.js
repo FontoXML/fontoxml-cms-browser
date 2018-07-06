@@ -62,7 +62,10 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		return (
 			<Breadcrumbs
 				isDisabled={
-					(request.type === 'browse' || request.type === 'upload') && request.busy
+					(request.type === 'browse' ||
+						request.type === 'search' ||
+						request.type === 'upload') &&
+					request.busy
 				}
 				items={this.props.hierarchyItems}
 				renderBreadcrumbItem={this.renderBreadcrumbItem}

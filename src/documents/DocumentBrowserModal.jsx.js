@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import {
+	Flex,
 	Button,
 	Modal,
 	ModalBody,
@@ -21,6 +22,7 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
+import ModalBrowserSearchBar from '../shared/ModalBrowserSearchBar.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
@@ -32,6 +34,10 @@ const stateLabels = {
 	browseError: {
 		title: t('Can’t open this folder'),
 		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+	},
+	searchError: {
+		title: t('Could not perform search'),
+		message: t('FontoXML can’t complete your search query. You can try a different query.')
 	},
 	empty: {
 		title: t('No results'),
@@ -174,10 +180,12 @@ class DocumentBrowserModal extends Component {
 			items,
 			onItemIsErrored,
 			onItemSelect,
+			onSearchRequest,
 			onViewModeChange,
 			refreshItems,
 			renderModalBodyToolbar,
 			request,
+			searchParameters,
 			selectedItem,
 			viewMode
 		} = this.props;
@@ -204,10 +212,22 @@ class DocumentBrowserModal extends Component {
 								/>
 							)}
 
-							<ModalBrowserListOrGridViewMode
-								onViewModeChange={onViewModeChange}
-								viewMode={viewMode}
-							/>
+							<Flex flex="none" spaceSize="m">
+								{!!this.props.data.enableSearch && (
+									<ModalBrowserSearchBar
+										browseContextDocumentId={browseContextDocumentId}
+										onSearchRequest={onSearchRequest}
+										refreshItems={refreshItems}
+										request={request}
+										searchParameters={searchParameters}
+									/>
+								)}
+
+								<ModalBrowserListOrGridViewMode
+									onViewModeChange={onViewModeChange}
+									viewMode={viewMode}
+								/>
+							</Flex>
 						</ModalContentToolbar>
 
 						<ModalContent flexDirection="row">
@@ -227,16 +247,16 @@ class DocumentBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<DocumentPreview
-										onLoadIsDone={this.handleLoadIsDone}
-										onItemIsErrored={onItemIsErrored}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<DocumentPreview
+											onLoadIsDone={this.handleLoadIsDone}
+											onItemIsErrored={onItemIsErrored}
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>

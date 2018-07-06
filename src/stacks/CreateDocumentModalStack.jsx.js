@@ -57,6 +57,7 @@ class CreateDocumentFormModalStack extends Component {
 				modalIcon,
 				modalTitle,
 				selectDocumentTemplateDataProviderName,
+				selectDocumentTemplateEnableSearch,
 				selectFolderDataProviderName
 			},
 			cancelModal,
@@ -86,6 +87,7 @@ class CreateDocumentFormModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
+							enableSearch: selectDocumentTemplateEnableSearch,
 							modalTitle: t('Select a template for your document')
 						}}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}

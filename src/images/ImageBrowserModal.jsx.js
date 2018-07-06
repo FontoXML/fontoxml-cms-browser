@@ -22,6 +22,7 @@ import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBre
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
+import ModalBrowserSearchBar from '../shared/ModalBrowserSearchBar.jsx';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
@@ -34,6 +35,10 @@ const stateLabels = {
 	browseError: {
 		title: t('Can’t open this folder'),
 		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+	},
+	searchError: {
+		title: t('Could not perform search'),
+		message: t('FontoXML can’t complete your search query. You can try a different query.')
 	},
 	empty: {
 		title: t('No results'),
@@ -138,10 +143,12 @@ class ImageBrowserModal extends Component {
 			isSubmitButtonDisabled,
 			items,
 			onItemSelect,
+			onSearchRequest,
 			onUploadFileSelect,
 			onViewModeChange,
 			refreshItems,
 			request,
+			searchParameters,
 			selectedItem,
 			viewMode
 		} = this.props;
@@ -170,10 +177,21 @@ class ImageBrowserModal extends Component {
 									browseContextDocumentId={browseContextDocumentId}
 									dataProviderName={dataProviderName}
 									hierarchyItems={hierarchyItems}
-									request={request}
-									uploadErrorMessages={uploadErrorMessages}
 									onUploadFileSelect={onUploadFileSelect}
+									request={request}
+									searchParameters={searchParameters}
+									uploadErrorMessages={uploadErrorMessages}
 								/>
+
+								{!!this.props.data.enableSearch && (
+									<ModalBrowserSearchBar
+										browseContextDocumentId={browseContextDocumentId}
+										onSearchRequest={onSearchRequest}
+										refreshItems={refreshItems}
+										request={request}
+										searchParameters={searchParameters}
+									/>
+								)}
 
 								<ModalBrowserListOrGridViewMode
 									onViewModeChange={onViewModeChange}
@@ -183,15 +201,15 @@ class ImageBrowserModal extends Component {
 						</ModalContentToolbar>
 
 						{request.type === 'upload' &&
-						request.error && (
-							<ModalContent flex="none" paddingSize="m">
-								<Toast
-									connotation="error"
-									icon="exclamation-triangle"
-									content={request.error}
-								/>
-							</ModalContent>
-						)}
+							request.error && (
+								<ModalContent flex="none" paddingSize="m">
+									<Toast
+										connotation="error"
+										icon="exclamation-triangle"
+										content={request.error}
+									/>
+								</ModalContent>
+							)}
 
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
@@ -211,14 +229,14 @@ class ImageBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<ImagePreview
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<ImagePreview
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>

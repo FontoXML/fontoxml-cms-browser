@@ -23,6 +23,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				// { type: fileLoad|search|browse|upload, ?query, ?error, ?resultCount }
 				request: {},
 
+				// Contains the parameters as set by search
+				searchParameters: null,
+
 				// The item that is previewed and would be submitted if the user continues
 				selectedItem: null,
 
@@ -71,7 +74,10 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
 				const { determineAndHandleSubmitButtonDisabledState } = this.props.data;
 				if (this.isMountedInDOM) {
-					this.setState({ request: { type: 'browse', busy: true } });
+					this.setState({
+						request: { type: 'browse', busy: true },
+						searchParameters: null
+					});
 				}
 
 				return this.dataProvider
@@ -86,6 +92,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							if (!this.isMountedInDOM) {
 								return [];
 							}
+
 							// Because of jump in the tree with browse context document id,
 							// the folder that is actually loaded could be different from the folderToLoad.
 							let newSelectedItem =
@@ -125,8 +132,74 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							}
 
 							this.setState({
-								selectedItem: null,
-								request: { type: 'browse', error: error }
+								items: [],
+								request: { type: 'browse', error: error },
+								selectedItem: null
+							});
+
+							if (determineAndHandleSubmitButtonDisabledState) {
+								determineAndHandleSubmitButtonDisabledState(null);
+							}
+						}
+					);
+			};
+
+			onSearchRequest = (browseContextDocumentId, searchParameters) => {
+				const { determineAndHandleSubmitButtonDisabledState } = this.props;
+				if (this.isMountedInDOM) {
+					this.setState({
+						request: { type: 'search', busy: true },
+						searchParameters: searchParameters || null
+					});
+				}
+
+				return this.dataProvider
+					.getFolderContents(
+						browseContextDocumentId,
+						{ id: null },
+						true,
+						[],
+						searchParameters
+					)
+					.then(
+						result => {
+							if (!this.isMountedInDOM) {
+								return [];
+							}
+
+							let newSelectedItem = null;
+
+							if (this.initialSelectedItem.id) {
+								// If the initial selected item is in this folder, it should be selected
+								const initialSelectedResultItem = result.items.find(
+									item => item.id === this.initialSelectedItem.id
+								);
+								newSelectedItem = initialSelectedResultItem
+									? { ...initialSelectedResultItem, ...this.initialSelectedItem }
+									: newSelectedItem;
+							}
+
+							this.setState({
+								hierarchyItems: result.hierarchyItems,
+								items: result.items,
+								request: {},
+								selectedItem: newSelectedItem
+							});
+
+							if (determineAndHandleSubmitButtonDisabledState) {
+								determineAndHandleSubmitButtonDisabledState(null);
+							}
+						},
+						error => {
+							if (!this.isMountedInDOM || !error) {
+								// Modal is already closed or the old request was cancelled, wait for the newer one.
+								return;
+							}
+
+							this.setState({
+								items: [],
+								request: { type: 'search', error: error },
+								selectedItem: null
 							});
 
 							if (determineAndHandleSubmitButtonDisabledState) {
@@ -197,7 +270,14 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				this.isMountedInDOM && this.setState({ viewMode: viewMode });
 
 			render() {
-				const { hierarchyItems, items, request, selectedItem, viewMode } = this.state;
+				const {
+					hierarchyItems,
+					items,
+					request,
+					searchParameters,
+					selectedItem,
+					viewMode
+				} = this.state;
 
 				const props = {
 					...this.props,
@@ -208,10 +288,12 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					onItemIsErrored: this.onItemIsErrored,
 					onItemSelect: this.onItemSelect,
 					onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
+					onSearchRequest: this.onSearchRequest,
 					onUploadFileSelect: this.onUploadFileSelect,
 					onViewModeChange: this.onViewModeChange,
 					refreshItems: this.refreshItems,
 					request,
+					searchParameters,
 					selectedItem,
 					viewMode
 				};
