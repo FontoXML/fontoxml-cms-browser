@@ -69,7 +69,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 			// Used to update the items with a browse callback
 			refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
-				const { determineAndHandleSubmitButtonDisabledState } = this.props.data;
+				const { determineAndHandleSubmitButtonDisabledState } = this.props;
 				if (this.isMountedInDOM) {
 					this.setState({ request: { type: 'browse', busy: true } });
 				}
