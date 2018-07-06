@@ -51,7 +51,8 @@ const stateLabels = {
 function getSubmitModalData(itemToSubmit) {
 	return {
 		remoteDocumentId: itemToSubmit.id,
-		label: itemToSubmit.label
+		label: itemToSubmit.label,
+		metadata: itemToSubmit.metadata
 	};
 }
 

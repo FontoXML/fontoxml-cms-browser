@@ -52,7 +52,9 @@ const stateLabels = {
 function getSubmitModalData(itemToSubmit) {
 	return {
 		documentId: itemToSubmit.documentId,
-		nodeId: itemToSubmit.nodeId
+		nodeId: itemToSubmit.nodeId,
+		label: itemToSubmit.label,
+		metadata: itemToSubmit.metadata
 	};
 }
 
