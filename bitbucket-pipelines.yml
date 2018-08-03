@@ -1,7 +1,10 @@
-image: liones/fontoxml-docker-pipelines-test:stable
-
 pipelines:
   default:
     - step:
+        name: Run unit-tests
+        image:
+          name: fontoxmltoolsinternal.azurecr.io/build-tools/fontoxml-pipeline-test-build:latest
+          username: $TOOLS_INTERNAL_REGISTRY_USERNAME
+          password: $TOOLS_INTERNAL_REGISTRY_PASSWORD
         script:
-          - sh /usr/bin/run-unit-tests
+          - run-unit-tests
