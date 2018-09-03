@@ -58,7 +58,9 @@ const uploadErrorMessages = {
 
 function getSubmitModalData(itemToSubmit) {
 	return {
-		selectedImageId: itemToSubmit.id
+		selectedImageId: itemToSubmit.id,
+		label: itemToSubmit.label,
+		metadata: itemToSubmit.metadata
 	};
 }
 

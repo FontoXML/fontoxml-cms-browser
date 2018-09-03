@@ -89,6 +89,16 @@
 					"name": "nodeId",
 					"type": "NodeId",
 					"description": "The nodeId of the selected node."
+				},
+				{
+					"name": "label",
+					"type": "string",
+					"description": "The label of the selected document item."
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "The metadata of the selected document item."
 				}
 			]
 		},
@@ -185,6 +195,16 @@
 					"name": "selectedImageId",
 					"type": "AssetId",
 					"description": "The remoteId of the selected image."
+				},
+				{
+					"name": "label",
+					"type": "string",
+					"description": "The label of the selected image item."
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "The metadata of the selected image item."
 				}
 			]
 		},
@@ -288,6 +308,16 @@
 					"name": "remoteDocumentId",
 					"type": "RemoteDocumentId",
 					"description": "The remoteDocumentId of the selected document."
+				},
+				{
+					"name": "label",
+					"type": "string",
+					"description": "The label of the selected document item."
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "The metadata of the selected document item."
 				}
 			]
 		},
@@ -373,6 +403,16 @@
 					"name": "remoteDocumentId",
 					"type": "RemoteDocumentId",
 					"description": "The remoteDocumentId of the selected document template."
+				},
+				{
+					"name": "label",
+					"type": "string",
+					"description": "The label of the selected document item."
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "The metadata of the selected document item."
 				}
 			]
 		},
@@ -487,6 +527,16 @@
 					"name": "remoteDocumentId",
 					"type": "RemoteDocumentId",
 					"description": "(Open document) The remoteDocumentId of the selected document."
+				},
+				{
+					"name": "label",
+					"type": "string",
+					"description": "(Open document) The label of the selected document item."
+				},
+				{
+					"name": "metadata",
+					"type": "object",
+					"description": "(Open document) The metadata of the selected document item."
 				},
 				{
 					"name": "selectedDocumentTemplateId",
