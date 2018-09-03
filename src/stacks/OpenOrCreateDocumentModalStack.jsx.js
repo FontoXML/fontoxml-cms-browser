@@ -87,7 +87,9 @@ class OpenOrCreateDocumentModalStack extends Component {
 				modalIcon,
 				modalTitle,
 				openDocumentDataProviderName,
+				openDocumentEnableSearch,
 				selectDocumentTemplateDataProviderName,
+				selectDocumentTemplateEnableSearch,
 				selectFolderDataProviderName
 			},
 			cancelModal,
@@ -104,6 +106,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: openDocumentDataProviderName,
+							enableSearch: openDocumentEnableSearch,
 							insertOperationName,
 							isCancelable,
 							modalIcon,
@@ -139,6 +142,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
+							enableSearch: selectDocumentTemplateEnableSearch,
 							modalTitle: t('Select a template for your document')
 						}}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}

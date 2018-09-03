@@ -37,6 +37,14 @@
 					]
 				},
 				{
+					"name": "enableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar. ",
+						"Defaults to false."
+					]
+				},
+				{
 					"name": "insertOperationName",
 					"type": "string",
 					"description": [
@@ -95,6 +103,7 @@
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
+			"enableSearch": false,
 			"linkableElementsQuery": "//*[@id]",
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
@@ -108,6 +117,7 @@
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
+					"enableSearch": "{{enableSearch}}",
 					"linkableElementsQuery": "{{linkableElementsQuery}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
@@ -144,6 +154,14 @@
 						"(Optional) Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
+					]
+				},
+				{
+					"name": "enableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar. ",
+						"Defaults to false."
 					]
 				},
 				{
@@ -190,6 +208,7 @@
 		},
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForImages",
+			"enableSearch": false,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"selectedImageId": null
@@ -201,6 +220,7 @@
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
+					"enableSearch": "{{enableSearch}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectedImageId": "{{selectedImageId}}"
@@ -244,6 +264,14 @@
 					"type": "DocumentId",
 					"description": [
 						"(Optional) Can be used to open the document browser with a document preselected."
+					]
+				},
+				{
+					"name": "enableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar. ",
+						"Defaults to false."
 					]
 				},
 				{
@@ -294,6 +322,7 @@
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
+			"enableSearch": false,
 			"isCancelable": true,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
@@ -307,6 +336,7 @@
 					"isCancelable": "{{isCancelable}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
+					"enableSearch": "{{enableSearch}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}"
 				}
@@ -339,6 +369,14 @@
 						"(Optional) Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
+					]
+				},
+				{
+					"name": "enableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar. ",
+						"Defaults to false."
 					]
 				},
 				{
@@ -378,6 +416,7 @@
 		},
 		"initialData": {
 			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
+			"enableSearch": false,
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
 		},
@@ -387,6 +426,7 @@
 				"type": "modal/DocumentTemplateBrowserModal",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"enableSearch": "{{enableSearch}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}"
@@ -430,6 +470,14 @@
 					]
 				},
 				{
+					"name": "openDocumentEnableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar for the",
+						"document browse modal. Defaults to false."
+					]
+				},
+				{
 					"name": "selectDocumentTemplateDataProviderName",
 					"type": "string",
 					"desription": [
@@ -437,6 +485,14 @@
 						"new document. Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
+					]
+				},
+				{
+					"name": "selectDocumentTemplateEnableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar for the",
+						"document template modal. Defaults to false."
 					]
 				},
 				{
@@ -509,7 +565,9 @@
 			"isCancelable": true,
 			"modalTitle": null,
 			"openDocumentDataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
+			"openDocumentEnableSearch": false,
 			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
+			"selectDocumentTemplateEnableSearch": false,
 			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
 		},
 		"steps": [
@@ -521,7 +579,9 @@
 					"isCancelable": "{{isCancelable}}",
 					"modalTitle": "{{modalTitle}}",
 					"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
+					"openDocumentEnableSearch": "{{openDocumentEnableSearch}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
+					"selectDocumentTemplateEnableSearch": "{{selectDocumentTemplateEnableSearch}}",
 					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
 				}
 			}
@@ -558,6 +618,14 @@
 						"new document. Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
+					]
+				},
+				{
+					"name": "selectDocumentTemplateEnableSearch",
+					"type": "boolean",
+					"description": [
+						"(Optional) Can be used to add an fulltext search field to the toolbar for the",
+						"document template modal. Defaults to false."
 					]
 				},
 				{
@@ -620,6 +688,7 @@
 			"isCancelable": true,
 			"modalTitle": null,
 			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
+			"selectDocumentTemplateEnableSearch": false,
 			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
 		},
 		"steps": [
@@ -631,6 +700,7 @@
 					"isCancelable": "{{isCancelable}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
+					"selectDocumentTemplateEnableSearch": "{{selectDocumentTemplateEnableSearch}}",
 					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
 				}
 			}

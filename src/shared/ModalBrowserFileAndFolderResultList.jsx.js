@@ -20,6 +20,10 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				title: PropTypes.string,
 				message: PropTypes.string
 			}).isRequired,
+			searchError: PropTypes.shape({
+				title: PropTypes.string,
+				message: PropTypes.string
+			}).isRequired,
 			empty: PropTypes.shape({
 				title: PropTypes.string,
 				message: PropTypes.string
@@ -62,7 +66,10 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			viewMode
 		} = this.props;
 
-		if ((request.type === 'browse' || request.type === 'upload') && request.busy) {
+		if (
+			(request.type === 'browse' || request.type === 'search' || request.type === 'upload') &&
+			request.busy
+		) {
 			return (
 				<StateMessage paddingSize="m" visual={<SpinnerIcon />} {...stateLabels.loading} />
 			);
@@ -75,6 +82,17 @@ class ModalBrowserFileAndFolderResultList extends Component {
 					paddingSize="m"
 					visual="exclamation-triangle"
 					{...stateLabels.browseError}
+				/>
+			);
+		}
+
+		if (request.type === 'search' && request.error) {
+			return (
+				<StateMessage
+					connotation="warning"
+					paddingSize="m"
+					visual="exclamation-triangle"
+					{...stateLabels.searchError}
 				/>
 			);
 		}

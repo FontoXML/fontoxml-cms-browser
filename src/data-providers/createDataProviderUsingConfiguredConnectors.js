@@ -39,7 +39,7 @@ define([
 			browseContextDocumentId,
 			options.assetTypes,
 			options.resultTypes,
-			targetFolder.id,
+			options.folderId || targetFolder.id,
 			options.query || null,
 			null,
 			null,
@@ -107,14 +107,16 @@ define([
 			 * @param {object} targetFolder
 			 * @param {boolean} noCache
 			 * @param {object[]} hierarchyItems
+			 * @param {object} [browseParameters]
 			 *
 			 * @return {Promise<{
 			 *   hierarchyItems: string[]
 			 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
 			 * }>}
 			 */
-			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems) {
-				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems);
+			getFolderContents: function (browseContextDocumentId, targetFolder, noCache, hierarchyItems, browseParameters) {
+				var optionsForRequest = Object.assign({}, options, browseParameters || {});
+				return getFolderContents(optionsForRequest, browseContextDocumentId, targetFolder, noCache, hierarchyItems);
 			},
 
 			/**
