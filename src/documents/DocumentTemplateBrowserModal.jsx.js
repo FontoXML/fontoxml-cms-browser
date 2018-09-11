@@ -121,6 +121,10 @@ class DocumentTemplateBrowserModal extends Component {
 		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
 	};
 
+	handleLoadIsDone = () => {
+		this.props.onItemIsLoaded(this.props.selectedItem.id);
+	};
+
 	handleSubmitButtonClick = () =>
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 
@@ -187,6 +191,7 @@ class DocumentTemplateBrowserModal extends Component {
 									<ModalContent flexDirection="column">
 										<DocumentPreview
 											onItemIsErrored={onItemIsErrored}
+											onLoadIsDone={this.handleLoadIsDone}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>

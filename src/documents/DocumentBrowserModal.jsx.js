@@ -153,6 +153,7 @@ class DocumentBrowserModal extends Component {
 		if (newSelectedItem.id === this.doubleClickedItemId) {
 			this.props.determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
 		}
+		this.props.onItemIsLoaded(newSelectedItem.id);
 		this.props.onItemSelect(newSelectedItem);
 	};
 
@@ -230,8 +231,8 @@ class DocumentBrowserModal extends Component {
 								selectedItem.type !== 'folder' && (
 									<ModalContent flexDirection="column">
 										<DocumentPreview
-											onLoadIsDone={this.handleLoadIsDone}
 											onItemIsErrored={onItemIsErrored}
+											onLoadIsDone={this.handleLoadIsDone}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>

@@ -12,6 +12,7 @@ import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
 class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {
 		onItemIsErrored: _item => {},
+		onLoadIsDone: _documentId => {},
 		selectedItem: null
 	};
 
@@ -19,6 +20,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		linkableElementsQuery: PropTypes.string.isRequired,
 		onItemIsErrored: PropTypes.func,
 		onItemSelect: PropTypes.func.isRequired,
+		onLoadIsDone: PropTypes.func,
 		selectedItem: PropTypes.object,
 		stateLabels: PropTypes.shape({
 			previewError: PropTypes.shape({
@@ -54,6 +56,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		}
 
 		this.props.onItemSelect(newSelectedItem);
+		this.props.onLoadIsDone(documentId);
 	};
 
 	handleSelectedNodeChange = nodeId =>

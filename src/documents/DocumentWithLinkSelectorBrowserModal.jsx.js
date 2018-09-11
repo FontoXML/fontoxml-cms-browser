@@ -115,6 +115,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		/>
 	);
 
+	handleLoadIsDone = () => {
+		this.props.onItemIsLoaded(this.props.selectedItem.id);
+	};
+
 	handleSubmitButtonClick = () =>
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 
@@ -189,6 +193,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 											linkableElementsQuery={linkableElementsQuery}
 											onItemIsErrored={onItemIsErrored}
 											onItemSelect={onItemSelect}
+											onLoadIsDone={this.handleLoadIsDone}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>
