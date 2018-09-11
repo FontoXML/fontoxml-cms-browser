@@ -102,7 +102,7 @@ class ImageBrowserModal extends Component {
 		<ImageListItem
 			key={key}
 			isDisabled={item.isDisabled}
-			isSelected={item === this.props.selectedItem}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -114,7 +114,7 @@ class ImageBrowserModal extends Component {
 		<ImageGridItem
 			key={key}
 			isDisabled={item.isDisabled}
-			isSelected={item === this.props.selectedItem}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}

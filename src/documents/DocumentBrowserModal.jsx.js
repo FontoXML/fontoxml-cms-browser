@@ -126,7 +126,7 @@ class DocumentBrowserModal extends Component {
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={item === this.props.selectedItem}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={() => this.handleItemDoubleClick(item)}
@@ -139,7 +139,7 @@ class DocumentBrowserModal extends Component {
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={item === this.props.selectedItem}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={() => this.handleItemDoubleClick(item)}

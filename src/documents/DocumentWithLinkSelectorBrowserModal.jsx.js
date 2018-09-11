@@ -95,7 +95,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={item === this.props.selectedItem}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -108,7 +108,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={item === this.props.selectedItem}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
