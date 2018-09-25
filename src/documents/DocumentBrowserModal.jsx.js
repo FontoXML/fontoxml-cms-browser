@@ -186,7 +186,7 @@ class DocumentBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight onKeyDown={this.handleKeyDown}>
+			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a document')} />
 
 				<ModalBody>
