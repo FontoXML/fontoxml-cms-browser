@@ -40,7 +40,7 @@ class CreateDocumentFormModal extends Component {
 		selectedFolder: {}
 	};
 
-	static PropTypes = {
+	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
 			insertOperationName: PropTypes.string,
