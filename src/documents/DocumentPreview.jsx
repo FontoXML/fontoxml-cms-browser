@@ -12,7 +12,8 @@ class DocumentPreview extends Component {
 	static defaultProps = {
 		onLoadIsDone: _documentId => {},
 		onItemIsErrored: _item => {},
-		selectedItem: null
+		selectedItem: null,
+		referrerDocumentId: null
 	};
 
 	static propTypes = {
@@ -24,15 +25,17 @@ class DocumentPreview extends Component {
 				message: PropTypes.string
 			}).isRequired
 		}).isRequired,
-		selectedItem: PropTypes.object
+		selectedItem: PropTypes.object,
+		referrerDocumentId: PropTypes.string
 	};
 
 	render() {
-		const { stateLabels, selectedItem } = this.props;
+		const { stateLabels, selectedItem, referrerDocumentId } = this.props;
 
 		return (
 			<FxDocumentLoader
 				remoteId={selectedItem.id}
+				referrerDocumentId={referrerDocumentId}
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.props.onLoadIsDone}
 			>

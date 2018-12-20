@@ -14,7 +14,8 @@ class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {
 		onItemIsErrored: _item => {},
 		onLoadIsDone: _documentId => {},
-		selectedItem: null
+		selectedItem: null,
+		referrerDocumentId: null
 	};
 
 	static propTypes = {
@@ -23,6 +24,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		onItemSelect: PropTypes.func.isRequired,
 		onLoadIsDone: PropTypes.func,
 		selectedItem: PropTypes.object,
+		referrerDocumentId: PropTypes.string,
 		stateLabels: PropTypes.shape({
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
@@ -60,11 +62,12 @@ class DocumentWithLinkSelectorPreview extends Component {
 		this.props.onItemSelect({ ...this.props.selectedItem, nodeId });
 
 	render() {
-		const { linkableElementsQuery, stateLabels, selectedItem } = this.props;
+		const { linkableElementsQuery, stateLabels, selectedItem, referrerDocumentId } = this.props;
 
 		return (
 			<FxDocumentLoader
 				remoteId={selectedItem.id}
+				referrerDocumentId={referrerDocumentId}
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.handleLoadIsDone}
 			>

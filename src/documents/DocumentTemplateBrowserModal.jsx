@@ -198,6 +198,7 @@ class DocumentTemplateBrowserModal extends Component {
 										onItemIsErrored={onItemIsErrored}
 										onLoadIsDone={this.handleLoadIsDone}
 										selectedItem={selectedItem}
+											referrerDocumentId={browseContextDocumentId}
 										stateLabels={stateLabels}
 									/>
 								</ModalContent>

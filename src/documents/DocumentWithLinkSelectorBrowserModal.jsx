@@ -193,6 +193,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 										onItemSelect={onItemSelect}
 										onLoadIsDone={this.handleLoadIsDone}
 										selectedItem={selectedItem}
+											referrerDocumentId={browseContextDocumentId}
 										stateLabels={stateLabels}
 									/>
 								</ModalContent>
