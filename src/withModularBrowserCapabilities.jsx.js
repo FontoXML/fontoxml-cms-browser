@@ -49,6 +49,22 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				}
 			};
 
+			onItemIsLoaded = remoteId => {
+				if (this.isMountedInDOM) {
+					this.setState(({ cachedErrorByRemoteId }) => {
+						if (!cachedErrorByRemoteId[remoteId]) {
+							return null;
+						}
+
+						const updatedCachedErrorByRemoteId = { ...cachedErrorByRemoteId };
+						delete updatedCachedErrorByRemoteId[remoteId];
+						return {
+							cachedErrorByRemoteId: updatedCachedErrorByRemoteId
+						};
+					});
+				}
+			};
+
 			// Used by any component to change the currently selected item
 			onItemSelect = item => {
 				const { determineAndHandleSubmitButtonDisabledState } = this.props;
@@ -96,7 +112,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 			// Used to update the items with a browse callback
 			refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
-				const { determineAndHandleSubmitButtonDisabledState } = this.props.data;
+				const { determineAndHandleSubmitButtonDisabledState } = this.props;
 				if (this.isMountedInDOM) {
 					this.setState({ request: { type: 'browse', busy: true } });
 				}
@@ -245,6 +261,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					isItemErrored: this.isItemErrored,
 					items,
 					onItemIsErrored: this.onItemIsErrored,
+					onItemIsLoaded: this.onItemIsLoaded,
 					onItemSelect: this.onItemSelect,
                     onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
                     onPageForward: offset + items.length < totalItemCount ? this.onPageForward : undefined,

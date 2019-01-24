@@ -122,12 +122,12 @@ class DocumentBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({ key, isSelected, item, onClick, onRef }) => (
+	handleRenderListItem = ({ key, item, onClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={() => this.handleItemDoubleClick(item)}
@@ -135,12 +135,12 @@ class DocumentBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isSelected, item, onClick }) => (
+	handleRenderGridItem = ({ key, item, onClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={() => this.handleItemDoubleClick(item)}
@@ -154,6 +154,7 @@ class DocumentBrowserModal extends Component {
 		if (newSelectedItem.id === this.doubleClickedItemId) {
 			this.props.determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
 		}
+		this.props.onItemIsLoaded(newSelectedItem.id);
 		this.props.onItemSelect(newSelectedItem);
 	};
 
@@ -188,7 +189,7 @@ class DocumentBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight onKeyDown={this.handleKeyDown}>
+			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a document')} />
 
 				<ModalBody>
@@ -230,16 +231,16 @@ class DocumentBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<DocumentPreview
-										onLoadIsDone={this.handleLoadIsDone}
-										onItemIsErrored={onItemIsErrored}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<DocumentPreview
+											onItemIsErrored={onItemIsErrored}
+											onLoadIsDone={this.handleLoadIsDone}
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 

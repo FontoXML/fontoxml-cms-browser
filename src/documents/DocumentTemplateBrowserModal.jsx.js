@@ -93,12 +93,12 @@ class DocumentTemplateBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
+	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -106,12 +106,12 @@ class DocumentTemplateBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -120,6 +120,10 @@ class DocumentTemplateBrowserModal extends Component {
 
 	handleFileAndFolderResultListItemSubmit = selectedItem => {
 		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
+	};
+
+	handleLoadIsDone = () => {
+		this.props.onItemIsLoaded(this.props.selectedItem.id);
 	};
 
 	handleSubmitButtonClick = () =>
@@ -190,6 +194,7 @@ class DocumentTemplateBrowserModal extends Component {
 									<ModalContent flexDirection="column">
 										<DocumentPreview
 											onItemIsErrored={onItemIsErrored}
+											onLoadIsDone={this.handleLoadIsDone}
 											selectedItem={selectedItem}
 											stateLabels={stateLabels}
 										/>

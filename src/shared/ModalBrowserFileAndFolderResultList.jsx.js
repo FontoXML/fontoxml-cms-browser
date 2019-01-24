@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 
 import { SpinnerIcon, StateMessage, VirtualGrid, VirtualList } from 'fds/components';
 
-const getSelectedItems = (items, selectedItem) =>
-	items.some(item => selectedItem && item.id === selectedItem.id) ? [selectedItem] : [];
-
 class ModalBrowserFileAndFolderResultList extends Component {
 	static defaultProps = {
 		browseContextDocumentId: null,
@@ -95,7 +92,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
 					renderItem={renderListItem}
-					selectedItems={getSelectedItems(items, selectedItem)}
+					idToScrollIntoView={selectedItem ? selectedItem.id : null}
 				/>
 			);
 		}
@@ -109,7 +106,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
 				renderItem={renderGridItem}
-				selectedItems={getSelectedItems(items, selectedItem)}
+				idToScrollIntoView={selectedItem ? selectedItem.id : null}
 			/>
 		);
 	}

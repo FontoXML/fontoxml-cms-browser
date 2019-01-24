@@ -91,12 +91,12 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({ key, isSelected, item, onClick, onDoubleClick, onRef }) => (
+	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -104,17 +104,21 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, isSelected, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={isSelected}
+			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
 	);
+
+	handleLoadIsDone = () => {
+		this.props.onItemIsLoaded(this.props.selectedItem.id);
+	};
 
 	handleSubmitButtonClick = () =>
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
@@ -185,18 +189,19 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem &&
-							selectedItem.id &&
-							selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<DocumentWithLinkSelectorPreview
-										linkableElementsQuery={linkableElementsQuery}
-										onItemIsErrored={onItemIsErrored}
-										onItemSelect={onItemSelect}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
+								selectedItem.id &&
+								selectedItem.type !== 'folder' && (
+									<ModalContent flexDirection="column">
+										<DocumentWithLinkSelectorPreview
+											linkableElementsQuery={linkableElementsQuery}
+											onItemIsErrored={onItemIsErrored}
+											onItemSelect={onItemSelect}
+											onLoadIsDone={this.handleLoadIsDone}
+											selectedItem={selectedItem}
+											stateLabels={stateLabels}
+										/>
+									</ModalContent>
+								)}
 						</ModalContent>
 					</ModalContent>
 
