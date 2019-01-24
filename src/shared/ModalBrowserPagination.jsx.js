@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { ModalBodyToolbar, TextLink } from 'fds/components';
+import { Button, Flex } from 'fds/components';
+import { paddingTop } from 'fds/system';
 
 import t from 'fontoxml-localization/t';
 
@@ -22,25 +23,25 @@ class ModalBrowserPagination extends Component {
 
 		if (handlePageBackward && handlePageForward) {
 			return (
-				<ModalBodyToolbar justifyContent='space-between'>
-					<TextLink label={t('Previous')} onClick={handlePageBackward} />
-					<TextLink label={t('Next')} onClick={handlePageForward} />
-				</ModalBodyToolbar>
+				<Flex justifyContent='space-between' flex='0 0 auto' applyCss={[paddingTop('m')]}>
+					<Button icon='chevron-left' label={t('Previous')} onClick={handlePageBackward} />
+					<Button iconAfter='chevron-right' label={t('Next')} onClick={handlePageForward} />
+				</Flex>
 			);
 		}
 
 		if (handlePageForward) {
 			return (
-				<ModalBodyToolbar justifyContent='flex-end'>
-					<TextLink label={t('Next')} onClick={handlePageForward} />
-				</ModalBodyToolbar>
+				<Flex justifyContent='flex-end' flex='0 0 auto' applyCss={[paddingTop('m')]}>
+					<Button iconAfter='chevron-right' label={t('Next')} onClick={handlePageForward} />
+				</Flex>
 			);
 		}
 
 		return (
-			<ModalBodyToolbar>
-				<TextLink label={t('Previous')} onClick={handlePageBackward} />
-			</ModalBodyToolbar>
+			<Flex justifyContent='flex-start' flex='0 0 auto' applyCss={[paddingTop('m')]}>
+				<Button icon='chevron-left' label={t('Previous')} onClick={handlePageBackward} />
+			</Flex>
 		);
 	}
 }
