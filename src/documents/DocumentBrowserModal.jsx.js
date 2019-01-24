@@ -175,9 +175,9 @@ class DocumentBrowserModal extends Component {
 			isSubmitButtonDisabled,
 			items,
 			onItemIsErrored,
-            onItemSelect,
-            onPageBackward,
-            onPageForward,
+			onItemSelect,
+			onPageBackward,
+			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			renderModalBodyToolbar,
@@ -244,10 +244,10 @@ class DocumentBrowserModal extends Component {
 						</ModalContent>
 					</ModalContent>
 
-                    <ModalBrowserPagination
-                        handlePageBackward={onPageBackward}
-                        handlePageForward={onPageForward}
-                    />
+					<ModalBrowserPagination
+						handlePageBackward={onPageBackward}
+						handlePageForward={onPageForward}
+					/>
 
 				</ModalBody>
 

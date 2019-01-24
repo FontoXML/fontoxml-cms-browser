@@ -137,9 +137,9 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			isSubmitButtonDisabled,
 			items,
 			onItemIsErrored,
-            onItemSelect,
-            onPageBackward,
-            onPageForward,
+			onItemSelect,
+			onPageBackward,
+			onPageForward,
 			onViewModeChange,
 			refreshItems,
 			request,
@@ -205,10 +205,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 						</ModalContent>
 					</ModalContent>
 
-                    <ModalBrowserPagination
-                        handlePageBackward={onPageBackward}
-                        handlePageForward={onPageForward}
-                    />
+					<ModalBrowserPagination
+						handlePageBackward={onPageBackward}
+						handlePageForward={onPageForward}
+					/>
 
 				</ModalBody>
 

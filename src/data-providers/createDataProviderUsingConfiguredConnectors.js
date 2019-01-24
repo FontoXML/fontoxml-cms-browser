@@ -35,14 +35,14 @@ define([
 	}
 
 	function getFolderContents (options, browseContextDocumentId, targetFolder, noCache, hierarchyItems, offset) {
-        return configuredBrowseConnector.browse(
+		return configuredBrowseConnector.browse(
 			browseContextDocumentId,
 			options.assetTypes,
 			options.resultTypes,
 			targetFolder.id,
-            options.query || null,
-            null, 
-            offset,
+			options.query || null,
+			null,
+			offset,
 			noCache
 		)
 			.then(function (result) {
@@ -52,8 +52,8 @@ define([
 				);
 
 				return {
-                    hierarchyItems: newHierarchyItems,
-                    totalItemCount: result.totalItemCount,
+					hierarchyItems: newHierarchyItems,
+					totalItemCount: result.totalItemCount,
 					items: result.items.map(function (item) {
 						if (!item.metadata) {
 							return item;
@@ -108,7 +108,7 @@ define([
 			 * @param {object} targetFolder
 			 * @param {boolean} noCache
 			 * @param {object[]} hierarchyItems
-             * @param {number} offset
+			 * @param {number} offset
 			 *
 			 * @return {Promise<{
 			 *   hierarchyItems: string[]
