@@ -185,20 +185,18 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 								/>
 							</ModalContent>
 
-							{selectedItem &&
-								selectedItem.id &&
-								selectedItem.type !== 'folder' && (
-									<ModalContent flexDirection="column">
-										<DocumentWithLinkSelectorPreview
-											linkableElementsQuery={linkableElementsQuery}
-											onItemIsErrored={onItemIsErrored}
-											onItemSelect={onItemSelect}
-											onLoadIsDone={this.handleLoadIsDone}
-											selectedItem={selectedItem}
-											stateLabels={stateLabels}
-										/>
-									</ModalContent>
-								)}
+							{selectedItem && selectedItem.id && selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<DocumentWithLinkSelectorPreview
+										linkableElementsQuery={linkableElementsQuery}
+										onItemIsErrored={onItemIsErrored}
+										onItemSelect={onItemSelect}
+										onLoadIsDone={this.handleLoadIsDone}
+										selectedItem={selectedItem}
+										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -219,20 +217,30 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 
 	componentDidMount() {
 		const {
-			data: { browseContextDocumentId, documentId, nodeId },
+			data: { browseContextDocumentId, documentId },
+			lastOpenedState,
 			onInitialSelectedItemIdChange,
 			refreshItems
 		} = this.props;
 
-		if (documentId) {
-			onInitialSelectedItemIdChange({
-				id: documentsManager.getRemoteDocumentId(documentId),
-				documentId,
-				nodeId
-			});
-		}
+		const { hierarchyItems } = lastOpenedState;
 
-		refreshItems(browseContextDocumentId, { id: null });
+		const initialSelectedItem = documentId
+			? { id: documentsManager.getRemoteDocumentId(documentId) }
+			: null;
+		if (initialSelectedItem) {
+			onInitialSelectedItemIdChange(initialSelectedItem);
+			refreshItems(browseContextDocumentId, { id: null });
+		} else if (hierarchyItems && hierarchyItems.length > 1) {
+			refreshItems(
+				browseContextDocumentId,
+				hierarchyItems[hierarchyItems.length - 1],
+				false,
+				hierarchyItems
+			);
+		} else {
+			refreshItems(browseContextDocumentId, { id: null });
+		}
 	}
 }
 

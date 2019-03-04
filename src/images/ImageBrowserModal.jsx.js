@@ -182,16 +182,15 @@ class ImageBrowserModal extends Component {
 							</Flex>
 						</ModalContentToolbar>
 
-						{request.type === 'upload' &&
-							request.error && (
-								<ModalContent flex="none" paddingSize="m">
-									<Toast
-										connotation="error"
-										icon="exclamation-triangle"
-										content={request.error}
-									/>
-								</ModalContent>
-							)}
+						{request.type === 'upload' && request.error && (
+							<ModalContent flex="none" paddingSize="m">
+								<Toast
+									connotation="error"
+									icon="exclamation-triangle"
+									content={request.error}
+								/>
+							</ModalContent>
+						)}
 
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
@@ -210,15 +209,14 @@ class ImageBrowserModal extends Component {
 								/>
 							</ModalContent>
 
-							{selectedItem &&
-								selectedItem.type !== 'folder' && (
-									<ModalContent flexDirection="column">
-										<ImagePreview
-											selectedItem={selectedItem}
-											stateLabels={stateLabels}
-										/>
-									</ModalContent>
-								)}
+							{selectedItem && selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<ImagePreview
+										selectedItem={selectedItem}
+										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -240,15 +238,30 @@ class ImageBrowserModal extends Component {
 	componentDidMount() {
 		const {
 			data: { browseContextDocumentId, selectedImageId },
+			lastOpenedState,
 			onInitialSelectedItemIdChange,
 			refreshItems
 		} = this.props;
 
-		if (selectedImageId) {
-			onInitialSelectedItemIdChange({ id: selectedImageId });
-		}
+		const { hierarchyItems } = lastOpenedState;
 
-		refreshItems(browseContextDocumentId, { id: null });
+		const initialSelectedItem = selectedImageId ? { id: selectedImageId } : null;
+		if (initialSelectedItem) {
+			onInitialSelectedItemIdChange(initialSelectedItem);
+			// Make sure images can jump in tree as well by assigning the image asset id as the
+			// browse context document id ....
+			// see https://documentation.fontoxml.com/editor/latest/browse-for-documents-and-assets-3099216.html
+			refreshItems(initialSelectedItem.id, { id: null });
+		} else if (hierarchyItems && hierarchyItems.length > 1) {
+			refreshItems(
+				browseContextDocumentId,
+				hierarchyItems[hierarchyItems.length - 1],
+				false,
+				hierarchyItems
+			);
+		} else {
+			refreshItems(browseContextDocumentId, { id: null });
+		}
 	}
 }
 

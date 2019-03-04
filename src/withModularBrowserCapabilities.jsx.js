@@ -84,7 +84,12 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to update the items with a browse callback
-			refreshItems = (browseContextDocumentId, folderToLoad, noCache) => {
+			refreshItems = (
+				browseContextDocumentId,
+				folderToLoad,
+				noCache,
+				hierarchyItems = this.state.hierarchyItems
+			) => {
 				const { determineAndHandleSubmitButtonDisabledState } = this.props;
 				if (this.isMountedInDOM) {
 					this.setState({ request: { type: 'browse', busy: true } });
@@ -95,7 +100,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 						browseContextDocumentId,
 						folderToLoad,
 						noCache,
-						this.state.hierarchyItems
+						hierarchyItems
 					)
 					.then(
 						result => {
@@ -221,6 +226,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					initialSelectedItem: this.initialSelectedItem,
 					isItemErrored: this.isItemErrored,
 					items,
+					lastOpenedState: this.dataProvider.getLastOpenedState(),
 					onItemIsErrored: this.onItemIsErrored,
 					onItemIsLoaded: this.onItemIsLoaded,
 					onItemSelect: this.onItemSelect,
@@ -238,6 +244,11 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 			componentWillUnmount() {
 				this.isMountedInDOM = false;
+
+				this.dataProvider.storeLastOpenedState(
+					this.state.hierarchyItems,
+					this.state.selectedItem
+				);
 			}
 		};
 	};

@@ -158,7 +158,24 @@ class FolderBrowserModal extends Component {
 	}
 
 	componentDidMount() {
-		this.props.refreshItems(this.props.data.browseContextDocumentId, { id: null });
+		const {
+			data: { browseContextDocumentId },
+			lastOpenedState,
+			refreshItems
+		} = this.props;
+
+		const { hierarchyItems } = lastOpenedState;
+
+		if (hierarchyItems && hierarchyItems.length > 1) {
+			refreshItems(
+				browseContextDocumentId,
+				hierarchyItems[hierarchyItems.length - 1],
+				false,
+				hierarchyItems
+			);
+		} else {
+			refreshItems(browseContextDocumentId, { id: null });
+		}
 	}
 }
 

@@ -133,6 +133,24 @@ define([
 			 */
 			getUploadOptions: function () {
 				return getUploadOptions(options);
+			},
+
+			_lastOpenedState: { hierarchyItems: null, selectedItem: null },
+			/**
+			 * Stores the last opened hierarchyItems.
+			 * Used to restore this state whenever the browse modal for this data provider is
+			 * opened again.
+			 * 
+			 * @param {object[]} hierarchyItems
+			 */
+			storeLastOpenedState: function (hierarchyItems) {
+				this._lastOpenedState = { 
+					hierarchyItems: hierarchyItems
+				};
+			},
+
+			getLastOpenedState: function () {
+				return this._lastOpenedState;
 			}
 		};
 	};

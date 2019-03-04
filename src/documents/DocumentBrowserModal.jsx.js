@@ -227,17 +227,16 @@ class DocumentBrowserModal extends Component {
 								/>
 							</ModalContent>
 
-							{selectedItem &&
-								selectedItem.type !== 'folder' && (
-									<ModalContent flexDirection="column">
-										<DocumentPreview
-											onItemIsErrored={onItemIsErrored}
-											onLoadIsDone={this.handleLoadIsDone}
-											selectedItem={selectedItem}
-											stateLabels={stateLabels}
-										/>
-									</ModalContent>
-								)}
+							{selectedItem && selectedItem.type !== 'folder' && (
+								<ModalContent flexDirection="column">
+									<DocumentPreview
+										onItemIsErrored={onItemIsErrored}
+										onLoadIsDone={this.handleLoadIsDone}
+										selectedItem={selectedItem}
+										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
 						</ModalContent>
 					</ModalContent>
 				</ModalBody>
@@ -261,17 +260,29 @@ class DocumentBrowserModal extends Component {
 	componentDidMount() {
 		const {
 			data: { browseContextDocumentId, documentId },
+			lastOpenedState,
 			onInitialSelectedItemIdChange,
 			refreshItems
 		} = this.props;
 
-		if (documentId) {
-			onInitialSelectedItemIdChange({
-				id: documentsManager.getRemoteDocumentId(documentId)
-			});
-		}
+		const { hierarchyItems } = lastOpenedState;
 
-		refreshItems(browseContextDocumentId, { id: null });
+		const initialSelectedItem = documentId
+			? { id: documentsManager.getRemoteDocumentId(documentId) }
+			: null;
+		if (initialSelectedItem) {
+			onInitialSelectedItemIdChange(initialSelectedItem);
+			refreshItems(browseContextDocumentId, { id: null });
+		} else if (hierarchyItems && hierarchyItems.length > 1) {
+			refreshItems(
+				browseContextDocumentId,
+				hierarchyItems[hierarchyItems.length - 1],
+				false,
+				hierarchyItems
+			);
+		} else {
+			refreshItems(browseContextDocumentId, { id: null });
+		}
 	}
 }
 
