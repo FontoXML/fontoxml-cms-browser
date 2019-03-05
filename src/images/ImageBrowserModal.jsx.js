@@ -12,6 +12,8 @@ import {
 	ModalHeader,
 	Toast
 } from 'fds/components';
+
+import cmsBrowserSendsHierarchyItemsInBrowseResponse from 'fontoxml-configuration/get!cms-browser-sends-hierarchy-items-in-browse-response';
 import t from 'fontoxml-localization/t';
 
 import ImageGridItem from './ImageGridItem.jsx';
@@ -246,12 +248,9 @@ class ImageBrowserModal extends Component {
 		const { hierarchyItems } = lastOpenedState;
 
 		const initialSelectedItem = selectedImageId ? { id: selectedImageId } : null;
-		if (initialSelectedItem) {
+		if (cmsBrowserSendsHierarchyItemsInBrowseResponse && initialSelectedItem) {
 			onInitialSelectedItemIdChange(initialSelectedItem);
-			// Make sure images can jump in tree as well by assigning the image asset id as the
-			// browse context document id ....
-			// see https://documentation.fontoxml.com/editor/latest/browse-for-documents-and-assets-3099216.html
-			refreshItems(initialSelectedItem.id, { id: null });
+			refreshItems(browseContextDocumentId, { id: null });
 		} else if (hierarchyItems && hierarchyItems.length > 1) {
 			refreshItems(
 				browseContextDocumentId,

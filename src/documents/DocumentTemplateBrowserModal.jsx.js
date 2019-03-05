@@ -10,6 +10,8 @@ import {
 	ModalFooter,
 	ModalHeader
 } from 'fds/components';
+
+import cmsBrowserSendsHierarchyItemsInBrowseResponse from 'fontoxml-configuration/get!cms-browser-sends-hierarchy-items-in-browse-response';
 import t from 'fontoxml-localization/t';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
@@ -226,7 +228,7 @@ class DocumentTemplateBrowserModal extends Component {
 		const { hierarchyItems } = lastOpenedState;
 
 		const initialSelectedItem = remoteDocumentId ? { id: remoteDocumentId } : null;
-		if (initialSelectedItem) {
+		if (cmsBrowserSendsHierarchyItemsInBrowseResponse && initialSelectedItem) {
 			onInitialSelectedItemIdChange(initialSelectedItem);
 			refreshItems(browseContextDocumentId, { id: null });
 		} else if (hierarchyItems && hierarchyItems.length > 1) {
