@@ -39,6 +39,10 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		viewMode: PropTypes.object.isRequired
 	};
 
+	state = {
+		windowHeight: null
+	};
+
 	handleItemDoubleClick = item =>
 		item.type === 'folder'
 			? this.props.refreshItems(this.props.browseContextDocumentId, item)
@@ -61,6 +65,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			stateLabels,
 			viewMode
 		} = this.props;
+		const { windowHeight } = this.state;
 
 		if ((request.type === 'browse' || request.type === 'upload') && request.busy) {
 			return (
@@ -88,6 +93,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				<VirtualList
 					estimatedItemHeight={30}
 					items={items}
+					maxHeight={windowHeight}
 					onItemClick={this.handleItemClick}
 					onItemDoubleClick={this.handleItemDoubleClick}
 					paddingSize="m"
@@ -102,6 +108,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			<VirtualGrid
 				estimatedRowHeight={86}
 				items={items}
+				maxHeight={windowHeight}
 				onItemClick={this.handleItemClick}
 				onItemDoubleClick={this.handleItemDoubleClick}
 				paddingSize="m"
@@ -109,6 +116,22 @@ class ModalBrowserFileAndFolderResultList extends Component {
 				idToScrollIntoView={selectedItem ? selectedItem.id : null}
 			/>
 		);
+	}
+
+	updateWindowHeight = () => {
+		// Fix for VirtualList/VirtualGrid growing inside the Modal without a fixed height.
+		// Passed to the maxHeight property of both components.
+		this.setState({ windowHeight: window.innerHeight });
+	};
+
+	componentDidMount() {
+		this.updateWindowHeight();
+
+		window.addEventListener('resize', this.updateWindowHeight);
+	}
+
+	componentWillMount() {
+		window.removeEventListener('resize', this.updateWindowHeight);
 	}
 }
 
