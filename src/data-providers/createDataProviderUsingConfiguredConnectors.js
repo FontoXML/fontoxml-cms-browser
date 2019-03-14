@@ -117,6 +117,10 @@ define([
 				return getFolderContents(options, browseContextDocumentId, targetFolder, noCache, hierarchyItems);
 			},
 
+			getRootHierarchyItem: function () {
+				return { id: null, label: options.rootFolderLabel, type: "folder" };
+			},
+
 			/**
 			 * @param {string} folderToUploadInId
 			 * @param {File[]} filesToUpload

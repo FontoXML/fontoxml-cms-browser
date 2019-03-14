@@ -146,6 +146,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							}
 
 							this.setState({
+								hierarchyItems: [this.dataProvider.getRootHierarchyItem()],
 								selectedItem: null,
 								request: { type: 'browse', error: error }
 							});
