@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { SpinnerIcon, StateMessage } from 'fds/components';
+import { Flex, SpinnerIcon, StateMessage } from 'fds/components';
 import documentsManager from 'fontoxml-documents/documentsManager';
 import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
 import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
+import FxErroredTemplatedView from 'fontoxml-fx/FxErroredTemplatedView.jsx';
 import FxNodePreviewWithLinkSelector from 'fontoxml-fx/FxNodePreviewWithLinkSelector.jsx';
 import getNodeId from 'fontoxml-dom-identification/getNodeId';
 import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
@@ -23,10 +24,6 @@ class DocumentWithLinkSelectorPreview extends Component {
 		onLoadIsDone: PropTypes.func,
 		selectedItem: PropTypes.object,
 		stateLabels: PropTypes.shape({
-			previewError: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired,
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
 				message: PropTypes.string
@@ -71,15 +68,12 @@ class DocumentWithLinkSelectorPreview extends Component {
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.handleLoadIsDone}
 			>
-				{({ isErrored, isLoading, documentId }) => {
+				{({ isErrored, isLoading, documentId, error }) => {
 					if (isErrored) {
 						return (
-							<StateMessage
-								connotation="warning"
-								paddingSize="m"
-								visual="exclamation-triangle"
-								{...stateLabels.previewError}
-							/>
+							<Flex flex="1" paddingSize="l" isScrollContainer>
+								<FxErroredTemplatedView error={error} />
+							</Flex>
 						);
 					}
 

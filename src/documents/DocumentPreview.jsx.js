@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 import { Flex, HorizontalSeparationLine, SpinnerIcon, StateMessage, Text } from 'fds/components';
 import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
+import FxErroredTemplatedView from 'fontoxml-fx/FxErroredTemplatedView.jsx';
 import FxNodePreview from 'fontoxml-fx/FxNodePreview.jsx';
 
 const maxHeightStyles = { maxHeight: '50%' };
@@ -18,9 +19,6 @@ class DocumentPreview extends Component {
 		onLoadIsDone: PropTypes.func,
 		onItemIsErrored: PropTypes.func,
 		stateLabels: PropTypes.shape({
-			previewError: PropTypes.shape({
-				title: PropTypes.string
-			}).isRequired,
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
 				message: PropTypes.string
@@ -41,13 +39,9 @@ class DocumentPreview extends Component {
 				{({ isErrored, isLoading, documentId, error }) => {
 					if (isErrored) {
 						return (
-							<StateMessage
-								connotation="warning"
-								paddingSize="m"
-								visual="exclamation-triangle"
-								title={stateLabels.previewError.title}
-								message={error.message}
-							/>
+							<Flex flex="1" paddingSize="l" isScrollContainer>
+								<FxErroredTemplatedView error={error} />
+							</Flex>
 						);
 					}
 

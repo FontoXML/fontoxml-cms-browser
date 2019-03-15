@@ -42,10 +42,6 @@ const stateLabels = {
 	loadingPreview: {
 		title: t('Loading document preview…'),
 		message: null
-	},
-	previewError: {
-		title: t('Can’t open this document'),
-		message: t('You can try again, or try a different document.')
 	}
 };
 
