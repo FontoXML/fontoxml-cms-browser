@@ -130,7 +130,7 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		window.addEventListener('resize', this.updateWindowHeight);
 	}
 
-	componentWillMount() {
+	componentWillUnmount() {
 		window.removeEventListener('resize', this.updateWindowHeight);
 	}
 }
