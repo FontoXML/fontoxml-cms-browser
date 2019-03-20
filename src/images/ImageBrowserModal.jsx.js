@@ -35,11 +35,11 @@ const stateLabels = {
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+		message: t('Fonto can’t open this folder. You can try again, or try a different folder.')
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain images that can be opened with FontoXML.')
+		message: t('This folder does not contain images that can be opened with Fonto.')
 	},
 	loadingPreview: {
 		title: t('Loading image preview…'),
@@ -47,7 +47,7 @@ const stateLabels = {
 	},
 	previewError: {
 		title: t('Can’t open this image'),
-		message: t('FontoXML can’t open this image. You can try again, or try a different image.')
+		message: t('Fonto can’t open this image. You can try again, or try a different image.')
 	}
 };
 
@@ -55,7 +55,7 @@ const uploadErrorMessages = {
 	fileSizeTooLargeMessage: t(
 		'This image is larger than 4 megabyte, please select another image or resize it and try again.'
 	),
-	serverErrorMessage: t('FontoXML can’t upload this image, please try again.')
+	serverErrorMessage: t('Fonto can’t upload this image, please try again.')
 };
 
 function getSubmitModalData(itemToSubmit) {

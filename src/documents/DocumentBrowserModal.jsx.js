@@ -33,11 +33,11 @@ const stateLabels = {
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: t('FontoXML can’t open this folder. You can try again, or try a different folder.')
+		message: t('Fonto can’t open this folder. You can try again, or try a different folder.')
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain files that can be opened with FontoXML.')
+		message: t('This folder does not contain files that can be opened with Fonto.')
 	},
 	loadingPreview: {
 		title: t('Loading document preview…'),

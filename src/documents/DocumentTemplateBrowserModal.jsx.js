@@ -36,7 +36,7 @@ const stateLabels = {
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain files that can be opened with FontoXML.')
+		message: t('This folder does not contain files that can be opened with Fonto.')
 	},
 	loadingPreview: {
 		title: t('Loading template preview…'),
@@ -45,7 +45,7 @@ const stateLabels = {
 	previewError: {
 		title: t('Can’t open this template'),
 		message: t(
-			'FontoXML can’t open this template. You can try again, or try a different template.'
+			'Fonto can’t open this template. You can try again, or try a different template.'
 		)
 	}
 };
