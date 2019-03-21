@@ -8,7 +8,7 @@ define([
 	return function setDefaultConfiguration () {
 		/**
 		 * Set whether your CMS supports 'jump in tree':
-		 * whether or not is responds with hierarchyItems in browse requests.
+		 * whether or not it responds with hierarchyItems in browse requests.
 		 * See https://documentation.fontoxml.com/editor/latest/browse-for-documents-and-assets-3099216.html
 		 * for more information.
 		 *
