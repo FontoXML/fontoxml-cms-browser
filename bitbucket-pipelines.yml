@@ -1,10 +1,27 @@
-pipelines:
-  default:
-    - step:
-        name: Run unit-tests
+definitions:
+  steps:
+    - step: &build-test
+        name: Run tests
         image:
           name: fontoxmltoolsinternal.azurecr.io/build-tools/fontoxml-pipeline-test-build:latest
           username: $TOOLS_INTERNAL_REGISTRY_USERNAME
           password: $TOOLS_INTERNAL_REGISTRY_PASSWORD
         script:
           - run-unit-tests
+    - step: &build-sync
+        name: Push to Github
+        image:
+          name: fontoxmltoolsinternal.azurecr.io/build-tools/fontoxml-pipeline-push-to-github:latest
+          username: $TOOLS_INTERNAL_REGISTRY_USERNAME
+          password: $TOOLS_INTERNAL_REGISTRY_PASSWORD
+        script:
+          - push-to-github
+
+pipelines:
+  branches:
+    develop:
+      - step: *build-test
+      - step: *build-sync
+
+  default:
+    - step: *build-test
