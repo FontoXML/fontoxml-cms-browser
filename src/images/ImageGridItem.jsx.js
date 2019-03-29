@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { ContainedImage, FadeIn, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
+import { ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
 
 class ImageGridItem extends Component {
@@ -66,19 +66,10 @@ class ImageGridItem extends Component {
 
 					if (isLoading) {
 						return this.wrapInGridItem(
-							<FadeIn>
-								{({ onRef }) => (
-									<Flex
-										alignItems="center"
-										flex="1"
-										flexDirection="column"
-										onRef={onRef}
-									>
-										<SpinnerIcon size="m" />
-										<Label>{item.label}</Label>
-									</Flex>
-								)}
-							</FadeIn>
+							<Flex alignItems="center" flex="1" flexDirection="column">
+								<SpinnerIcon size="m" />
+								<Label>{item.label}</Label>
+							</Flex>
 						);
 					}
 

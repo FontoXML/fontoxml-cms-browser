@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { merge } from 'glamor';
 
 import {
-	FadeIn,
 	Flex,
 	Heading,
 	HorizontalSeparationLine,
@@ -60,16 +59,11 @@ class ImagePreview extends Component {
 
 					if (isLoading) {
 						return (
-							<FadeIn>
-								{({ onRef }) => (
-									<StateMessage
-										onRef={onRef}
-										paddingSize="m"
-										visual={<SpinnerIcon />}
-										{...stateLabels.loadingPreview}
-									/>
-								)}
-							</FadeIn>
+							<StateMessage
+								paddingSize="m"
+								visual={<SpinnerIcon />}
+								{...stateLabels.loadingPreview}
+							/>
 						);
 					}
 
@@ -83,20 +77,19 @@ class ImagePreview extends Component {
 								</Flex>
 							</Flex>
 
-							{selectedItem.metadata &&
-								selectedItem.metadata.properties && (
-									<Flex flex="none" flexDirection="column">
-										<Flex paddingSize={{ horizontal: 'l' }}>
-											<HorizontalSeparationLine />
-										</Flex>
-
-										<KeyValueList
-											valueByKey={selectedItem.metadata.properties}
-											scrollLimit={5}
-											paddingSize="l"
-										/>
+							{selectedItem.metadata && selectedItem.metadata.properties && (
+								<Flex flex="none" flexDirection="column">
+									<Flex paddingSize={{ horizontal: 'l' }}>
+										<HorizontalSeparationLine />
 									</Flex>
-								)}
+
+									<KeyValueList
+										valueByKey={selectedItem.metadata.properties}
+										scrollLimit={5}
+										paddingSize="l"
+									/>
+								</Flex>
+							)}
 						</Flex>
 					);
 				}}
