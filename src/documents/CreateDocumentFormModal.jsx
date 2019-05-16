@@ -15,7 +15,7 @@ import {
 	ModalHeader,
 	TextInput
 } from 'fds/components';
-import t from 'fontoxml-localization/t';
+import t from 'fontoxml-localization/src/t.js';
 
 function getSubmitModalData(itemToSubmit) {
 	return {

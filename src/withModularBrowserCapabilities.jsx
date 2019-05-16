@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import dataProviders from './dataProviders';
+import dataProviders from './dataProviders.js';
 
 export default function withModularBrowserCapabilities(initialViewMode = null) {
 	return function wrapWithModularBrowserCapabilities(WrappedComponent) {

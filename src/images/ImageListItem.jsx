@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Block, ContainedImage, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
+import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
 
 class ImageListItem extends Component {
 	static defaultProps = {

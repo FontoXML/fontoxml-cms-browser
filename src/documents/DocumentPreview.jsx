@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Flex, HorizontalSeparationLine, SpinnerIcon, StateMessage, Text } from 'fds/components';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
-import FxErroredTemplatedView from 'fontoxml-fx/FxErroredTemplatedView.jsx';
-import FxNodePreview from 'fontoxml-fx/FxNodePreview.jsx';
+import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader.jsx';
+import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView.jsx';
+import FxNodePreview from 'fontoxml-fx/src/FxNodePreview.jsx';
 
 const maxHeightStyles = { maxHeight: '50%' };
 
@@ -62,22 +62,26 @@ class DocumentPreview extends Component {
 							</Flex>
 
 							{selectedItem.description &&
-							selectedItem.description.trim().length !== 0 && (
-								<Flex applyCss={maxHeightStyles} flex="none" flexDirection="column">
-									<Flex paddingSize={{ horizontal: 'l' }}>
-										<HorizontalSeparationLine />
-									</Flex>
-
+								selectedItem.description.trim().length !== 0 && (
 									<Flex
-										flex="1"
+										applyCss={maxHeightStyles}
+										flex="none"
 										flexDirection="column"
-										isScrollContainer
-										paddingSize="l"
 									>
-										<Text>{selectedItem.description}</Text>
+										<Flex paddingSize={{ horizontal: 'l' }}>
+											<HorizontalSeparationLine />
+										</Flex>
+
+										<Flex
+											flex="1"
+											flexDirection="column"
+											isScrollContainer
+											paddingSize="l"
+										>
+											<Text>{selectedItem.description}</Text>
+										</Flex>
 									</Flex>
-								</Flex>
-							)}
+								)}
 						</Flex>
 					);
 				}}

@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Flex, SpinnerIcon, StateMessage } from 'fds/components';
-import documentsManager from 'fontoxml-documents/documentsManager';
-import evaluateXPathToBoolean from 'fontoxml-selectors/evaluateXPathToBoolean';
-import FxDocumentLoader from 'fontoxml-fx/FxDocumentLoader.jsx';
-import FxErroredTemplatedView from 'fontoxml-fx/FxErroredTemplatedView.jsx';
-import FxNodePreviewWithLinkSelector from 'fontoxml-fx/FxNodePreviewWithLinkSelector.jsx';
-import getNodeId from 'fontoxml-dom-identification/getNodeId';
-import readOnlyBlueprint from 'fontoxml-blueprints/readOnlyBlueprint';
+import documentsManager from 'fontoxml-documents/src/documentsManager.js';
+import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean.js';
+import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader.jsx';
+import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView.jsx';
+import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector.jsx';
+import getNodeId from 'fontoxml-dom-identification/src/getNodeId.js';
+import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint.js';
 
 class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {

@@ -10,14 +10,14 @@ import {
 	ModalFooter,
 	ModalHeader
 } from 'fds/components';
-import documentsManager from 'fontoxml-documents/documentsManager';
+import documentsManager from 'fontoxml-documents/src/documentsManager.js';
 
-import cmsBrowserSendsHierarchyItemsInBrowseResponse from 'fontoxml-configuration/get!cms-browser-sends-hierarchy-items-in-browse-response';
-import t from 'fontoxml-localization/t';
+import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
+import t from 'fontoxml-localization/src/t.js';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';
-import DocumentWithLinkSelectorPreview from './DocumentWithLinkSelectorPreview.jsx';
+import DocumentPreview from './DocumentPreview.jsx';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
 import ModalBrowserListOrGridViewMode, {
@@ -25,6 +25,10 @@ import ModalBrowserListOrGridViewMode, {
 } from '../shared/ModalBrowserListOrGridViewMode.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
+
+let cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
+	'cms-browser-sends-hierarchy-items-in-browse-response'
+);
 
 const stateLabels = {
 	loading: {
@@ -47,16 +51,20 @@ const stateLabels = {
 
 function getSubmitModalData(itemToSubmit) {
 	return {
-		documentId: itemToSubmit.documentId,
-		nodeId: itemToSubmit.nodeId
+		remoteDocumentId: itemToSubmit.id,
+		documentId: itemToSubmit.documentId
 	};
 }
 
 function canSubmitSelectedItem(selectedItem) {
-	return !!(selectedItem && selectedItem.documentId && selectedItem.nodeId);
+	return !!(selectedItem && selectedItem.documentId);
 }
 
-class DocumentWithLinkSelectorBrowserModal extends Component {
+class DocumentBrowserModal extends Component {
+	static defaultProps = {
+		renderModalBodyToolbar: null
+	};
+
 	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
@@ -64,19 +72,33 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			dataProviderName: PropTypes.string.isRequired,
 			documentId: PropTypes.string,
 			insertOperationName: PropTypes.string,
-			linkableElementsQuery: PropTypes.string.isRequired,
+			isCancelable: PropTypes.bool,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
-			modalTitle: PropTypes.string,
-			nodeId: PropTypes.string
+			modalTitle: PropTypes.string
 		}).isRequired,
+		renderModalBodyToolbar: PropTypes.func,
 		submitModal: PropTypes.func.isRequired
 	};
+
+	doubleClickedItemId = null;
+
+	componentWillReceiveProps(nextProps) {
+		if (
+			this.doubleClickedItemId !== null &&
+			(nextProps.selectedItem === null ||
+				this.doubleClickedItemId !== nextProps.selectedItem.id)
+		) {
+			this.doubleClickedItemId = null;
+		}
+	}
 
 	handleKeyDown = event => {
 		switch (event.key) {
 			case 'Escape':
-				this.props.cancelModal();
+				if (this.props.data.isCancelable) {
+					this.props.cancelModal();
+				}
 				break;
 			case 'Enter':
 				if (!this.props.isSubmitButtonDisabled) {
@@ -86,7 +108,22 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		}
 	};
 
-	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
+	// Because we need to override the double click, because we need to add the documentId for submit.
+	// This will be done right away if the selectedItem already has the documentId, else we have to wait
+	// until the document is loaded in the preview.
+	handleItemDoubleClick = item => {
+		const { selectedItem } = this.props;
+
+		if (item.type === 'folder') {
+			this.props.refreshItems(this.props.browseContextDocumentId, item);
+		} else if (selectedItem.id === item.id && selectedItem.documentId) {
+			this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
+		} else {
+			this.doubleClickedItemId = item.id;
+		}
+	};
+
+	handleRenderListItem = ({ key, item, onClick, onRef }) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -94,12 +131,12 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
+			onDoubleClick={() => this.handleItemDoubleClick(item)}
 			onRef={onRef}
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
+	handleRenderGridItem = ({ key, item, onClick }) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -107,12 +144,19 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
+			onDoubleClick={() => this.handleItemDoubleClick(item)}
 		/>
 	);
 
-	handleLoadIsDone = () => {
-		this.props.onItemIsLoaded(this.props.selectedItem.id);
+	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
+	// preview is done loading. If the item was also double clicked, we want to submit right away.
+	handleLoadIsDone = documentId => {
+		const newSelectedItem = { ...this.props.selectedItem, documentId };
+		if (newSelectedItem.id === this.doubleClickedItemId) {
+			this.props.determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
+		}
+		this.props.onItemIsLoaded(newSelectedItem.id);
+		this.props.onItemSelect(newSelectedItem);
 	};
 
 	handleSubmitButtonClick = () =>
@@ -123,7 +167,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			cancelModal,
 			data: {
 				browseContextDocumentId,
-				linkableElementsQuery,
+				isCancelable,
 				modalIcon,
 				modalPrimaryButtonLabel,
 				modalTitle
@@ -135,17 +179,21 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 			onItemSelect,
 			onViewModeChange,
 			refreshItems,
+			renderModalBodyToolbar,
 			request,
 			selectedItem,
 			viewMode
 		} = this.props;
+
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight={true} onKeyDown={this.handleKeyDown}>
-				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a link')} />
+			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
+				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a document')} />
 
 				<ModalBody>
+					{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
+
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
 							justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
@@ -181,12 +229,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 								/>
 							</ModalContent>
 
-							{selectedItem && selectedItem.id && selectedItem.type !== 'folder' && (
+							{selectedItem && selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column">
-									<DocumentWithLinkSelectorPreview
-										linkableElementsQuery={linkableElementsQuery}
+									<DocumentPreview
 										onItemIsErrored={onItemIsErrored}
-										onItemSelect={onItemSelect}
 										onLoadIsDone={this.handleLoadIsDone}
 										selectedItem={selectedItem}
 										stateLabels={stateLabels}
@@ -198,7 +244,9 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					{isCancelable && (
+						<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					)}
 
 					<Button
 						type="primary"
@@ -240,12 +288,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 	}
 }
 
-DocumentWithLinkSelectorBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(
-	DocumentWithLinkSelectorBrowserModal
-);
-DocumentWithLinkSelectorBrowserModal = withInsertOperationNameCapabilities(
+DocumentBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(DocumentBrowserModal);
+DocumentBrowserModal = withInsertOperationNameCapabilities(
 	getSubmitModalData,
 	canSubmitSelectedItem
-)(DocumentWithLinkSelectorBrowserModal);
+)(DocumentBrowserModal);
 
-export default DocumentWithLinkSelectorBrowserModal;
+export default DocumentBrowserModal;

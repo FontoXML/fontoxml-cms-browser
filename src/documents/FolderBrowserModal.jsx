@@ -10,7 +10,7 @@ import {
 	ModalFooter,
 	ModalHeader
 } from 'fds/components';
-import t from 'fontoxml-localization/t';
+import t from 'fontoxml-localization/src/t.js';
 
 import DocumentGridItem from './DocumentGridItem.jsx';
 import DocumentListItem from './DocumentListItem.jsx';

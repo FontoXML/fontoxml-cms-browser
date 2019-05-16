@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import operationsManager from 'fontoxml-operations/operationsManager';
+import operationsManager from 'fontoxml-operations/src/operationsManager.js';
 
 export default function withInsertOperationNameCapabilities(
 	getSubmitModalData,
@@ -17,7 +17,10 @@ export default function withInsertOperationNameCapabilities(
 			// Use this to check if the selectedItem can be submitted based on the insertOperationName.
 			// When this is true, it will be submitted, else nothing happens.
 			determineAndHandleItemSubmitForSelectedItem = selectedItem => {
-				const { data: { insertOperationName }, submitModal } = this.props;
+				const {
+					data: { insertOperationName },
+					submitModal
+				} = this.props;
 
 				const submitModalData = getSubmitModalData(selectedItem);
 				if (insertOperationName) {

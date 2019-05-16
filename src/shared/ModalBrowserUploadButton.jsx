@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
 import { SelectFileButton } from 'fds/components';
-import t from 'fontoxml-localization/t';
+import t from 'fontoxml-localization/src/t.js';
 
-import dataProviders from '../dataProviders';
+import dataProviders from '../dataProviders.js';
 
 class ModalBrowserUploadButton extends PureComponent {
 	static defaultProps = {

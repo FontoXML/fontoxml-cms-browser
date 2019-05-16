@@ -13,8 +13,8 @@ import {
 	Toast
 } from 'fds/components';
 
-import cmsBrowserSendsHierarchyItemsInBrowseResponse from 'fontoxml-configuration/get!cms-browser-sends-hierarchy-items-in-browse-response';
-import t from 'fontoxml-localization/t';
+import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
+import t from 'fontoxml-localization/src/t.js';
 
 import ImageGridItem from './ImageGridItem.jsx';
 import ImageListItem from './ImageListItem.jsx';
@@ -27,6 +27,10 @@ import ModalBrowserListOrGridViewMode, {
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
+
+let cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
+	'cms-browser-sends-hierarchy-items-in-browse-response'
+);
 
 const stateLabels = {
 	loading: {

@@ -12,7 +12,7 @@ import {
 	StateMessage
 } from 'fds/components';
 import { block } from 'fds/system';
-import FxImageLoader from 'fontoxml-fx/FxImageLoader.jsx';
+import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
 
 const imageStyles = merge(block, {
 	position: 'absolute',

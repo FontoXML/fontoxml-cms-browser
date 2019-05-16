@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { ModalStack } from 'fds/components';
-import t from 'fontoxml-localization/t';
+import t from 'fontoxml-localization/src/t.js';
 
 import CreateDocumentFormModal from '../documents/CreateDocumentFormModal.jsx';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
