@@ -1,8 +1,8 @@
-import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
+import connectorsManager from 'fontoxml-configuration/src/connectorsManager.js';
 import documentsManager from 'fontoxml-documents/src/documentsManager.js';
 import selectionManager from 'fontoxml-selection/src/selectionManager.js';
-let configuredAssetConnector = configurationManager.get('asset-connector');
-let configuredBrowseConnector = configurationManager.get('browse-connector');
+const configuredAssetConnector = connectorsManager.getConnector('asset-connector');
+const configuredBrowseConnector = connectorsManager.getConnector('browse-connector');
 
 function updateFolderHierarchy(folderHierarchy, newLastFolderInHierarchy) {
 	var updatedFolderHierarchy = folderHierarchy.slice();
