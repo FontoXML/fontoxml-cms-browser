@@ -13,4 +13,24 @@ export default function setDefaultConfiguration() {
 	 * @category  add-on/fontoxml-cms-browser
 	 */
 	configurationManager.setDefault('cms-browser-sends-hierarchy-items-in-browse-response', false);
+
+	/**
+	 * Set the mime types to accept when uploading images in the browse modal.
+	 *
+	 * @fontosdk
+	 *
+	 * @const  {string}  cms-browser-upload-mime-types-to-accept
+	 * @category  add-on/fontoxml-cms-browser
+	 */
+	configurationManager.setDefault('cms-browser-upload-mime-types-to-accept', 'image/*');
+
+	/**
+	 * Set the max file size in bytes to accept when uploading images in the browse modal.
+	 *
+	 * @fontosdk
+	 *
+	 * @const  {number}  cms-browser-upload-max-file-size-in-bytes
+	 * @category  add-on/fontoxml-cms-browser
+	 */
+	configurationManager.setDefault('cms-browser-upload-max-file-size-in-bytes', 4194304);
 }

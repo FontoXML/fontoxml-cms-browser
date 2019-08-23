@@ -28,8 +28,12 @@ import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
-let cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
+const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'
+);
+
+const cmsBrowserUploadMaxFileSizeInBytes = configurationManager.get(
+	'cms-browser-upload-max-file-size-in-bytes'
 );
 
 const stateLabels = {
@@ -57,7 +61,11 @@ const stateLabels = {
 
 const uploadErrorMessages = {
 	fileSizeTooLargeMessage: t(
-		'This image is larger than 4 megabyte, please select another image or resize it and try again.'
+		'This image is larger than {MAX_IMAGE_UPLOAD_SIZE} megabyte, please select another image or resize it and try again.',
+		{
+			MAX_IMAGE_UPLOAD_SIZE:
+				Math.round((cmsBrowserUploadMaxFileSizeInBytes / 1000000) * 100) / 100
+		}
 	),
 	serverErrorMessage: t('Fonto can’t upload this image, please try again.')
 };

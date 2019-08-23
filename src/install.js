@@ -1,3 +1,4 @@
+import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
 import documentsHierarchy from 'fontoxml-documents/src/documentsHierarchy.js';
 import documentsManager from 'fontoxml-documents/src/documentsManager.js';
 import t from 'fontoxml-localization/src/t.js';
@@ -11,6 +12,14 @@ import DocumentWithLinkSelectorBrowserModal from './documents/DocumentWithLinkSe
 import ImageBrowserModal from './images/ImageBrowserModal.jsx';
 import CreateDocumentModalStack from './stacks/CreateDocumentModalStack.jsx';
 import OpenOrCreateDocumentModalStack from './stacks/OpenOrCreateDocumentModalStack.jsx';
+
+const cmsBrowserUploadMimeTypesToAccept = configurationManager.get(
+	'cms-browser-upload-mime-types-to-accept'
+);
+
+const cmsBrowserUploadMaxFileSizeInBytes = configurationManager.get(
+	'cms-browser-upload-max-file-size-in-bytes'
+);
 
 export default function install() {
 	addTransform(
@@ -64,8 +73,8 @@ export default function install() {
 		resultTypes: ['file', 'folder'],
 		rootFolderLabel: t('My drive'),
 		uploadAssetType: 'image',
-		uploadMimeTypesToAccept: 'image/*',
-		uploadMaxFileSizeInBytes: 4194304
+		uploadMimeTypesToAccept: cmsBrowserUploadMimeTypesToAccept,
+		uploadMaxFileSizeInBytes: cmsBrowserUploadMaxFileSizeInBytes
 	});
 
 	uiManager.registerReactComponent('DocumentBrowserModal', DocumentBrowserModal);
