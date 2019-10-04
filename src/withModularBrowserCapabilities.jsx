@@ -145,6 +145,16 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 								return;
 							}
 
+							if (error.status === 404) {
+								this.refreshItems(
+									browseContextDocumentId,
+									this.dataProvider.getRootHierarchyItem(),
+									false,
+									[]
+								);
+								return;
+							}
+
 							this.setState({
 								hierarchyItems: [this.dataProvider.getRootHierarchyItem()],
 								selectedItem: null,
