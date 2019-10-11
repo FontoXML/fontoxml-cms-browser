@@ -125,16 +125,11 @@
 			"params": [
 				{
 					"name": "browseContextDocumentId",
-					"type": "RemoteDocumentId|null",
+					"type": "RemoteDocumentId",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"This id is sent to the CMS when the browse call is made.",
 						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
-						"the folder containing the browseContextDocument will be opened.",
-						"",
-						"By default the browseContextDocument is set to the focusedDocument or,",
-						"when the focusedDocument is not available, to the first document in the hierarchy.",
-						"",
-						"If set to null, no reference document ID will be sent to the CMS."
+						"the folder containing the browseContextDocument will be opened."
 					]
 				},
 				{
@@ -195,7 +190,6 @@
 			"selectedImageId": null
 		},
 		"steps": [
-			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
 			{
 				"type": "modal/ImageBrowserModal",
 				"data": {

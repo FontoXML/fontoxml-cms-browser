@@ -84,7 +84,7 @@ class ImageBrowserModal extends Component {
 	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
 		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string,
+			browseContextDocumentId: PropTypes.string.isRequired,
 			dataProviderName: PropTypes.string.isRequired,
 			insertOperationName: PropTypes.string,
 			modalIcon: PropTypes.string,
@@ -115,6 +115,7 @@ class ImageBrowserModal extends Component {
 	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
 		<ImageListItem
 			key={key}
+			referrerDocumentId={this.props.data.browseContextDocumentId}
 			isDisabled={item.isDisabled}
 			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
@@ -127,6 +128,7 @@ class ImageBrowserModal extends Component {
 	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
 		<ImageGridItem
 			key={key}
+			referrerDocumentId={this.props.data.browseContextDocumentId}
 			isDisabled={item.isDisabled}
 			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
 			item={item}
@@ -226,6 +228,7 @@ class ImageBrowserModal extends Component {
 							{selectedItem && selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column">
 									<ImagePreview
+										referrerDocumentId={this.props.data.browseContextDocumentId}
 										selectedItem={selectedItem}
 										stateLabels={stateLabels}
 									/>

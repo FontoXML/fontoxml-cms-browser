@@ -24,7 +24,8 @@ class ImageListItem extends Component {
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
-		onRef: PropTypes.func
+		onRef: PropTypes.func,
+		referrerDocumentId: PropTypes.string.isRequired
 	};
 
 	wrapInListItem = (content, label) => {
@@ -53,7 +54,11 @@ class ImageListItem extends Component {
 		}
 
 		return (
-			<FxImageLoader remoteId={item.id} type="thumbnail">
+			<FxImageLoader
+				remoteId={item.id}
+				referrerDocumentId={this.props.referrerDocumentId}
+				type="thumbnail"
+			>
 				{({ isErrored, isLoading, imageData }) => {
 					if (isErrored) {
 						return this.wrapInListItem(

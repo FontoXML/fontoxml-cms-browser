@@ -22,7 +22,8 @@ class ImageGridItem extends Component {
 			type: PropTypes.string.isRequired
 		}).isRequired,
 		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func
+		onDoubleClick: PropTypes.func,
+		referrerDocumentId: PropTypes.string.isRequired
 	};
 
 	wrapInGridItem = content => (
@@ -49,7 +50,11 @@ class ImageGridItem extends Component {
 		}
 
 		return (
-			<FxImageLoader remoteId={item.id} type="thumbnail">
+			<FxImageLoader
+				remoteId={item.id}
+				referrerDocumentId={this.props.referrerDocumentId}
+				type="thumbnail"
+			>
 				{({ isErrored, isLoading, imageData }) => {
 					if (isErrored) {
 						return this.wrapInGridItem(

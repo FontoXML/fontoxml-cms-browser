@@ -37,14 +37,19 @@ class ImagePreview extends Component {
 				message: PropTypes.string
 			}).isRequired
 		}).isRequired,
-		selectedItem: PropTypes.object
+		selectedItem: PropTypes.object,
+		referrerDocumentId: PropTypes.string.isRequired
 	};
 
 	render() {
 		const { stateLabels, selectedItem } = this.props;
 
 		return (
-			<FxImageLoader remoteId={selectedItem.id} type="web">
+			<FxImageLoader
+				remoteId={selectedItem.id}
+				referrerDocumentId={this.props.referrerDocumentId}
+				type="web"
+			>
 				{({ isErrored, isLoading, imageData }) => {
 					if (isErrored) {
 						return (
