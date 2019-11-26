@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
-import { truncatedBreadcrumbItemLinkWidth } from 'fds/system';
 
 class ModalBrowserHierarchyBreadcrumbs extends Component {
 	static defaultProps = {
@@ -67,7 +66,6 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 				items={this.props.hierarchyItems}
 				renderBreadcrumbItem={this.renderBreadcrumbItem}
 				renderTruncatedBreadcrumbMenuItem={this.renderTruncatedBreadcrumbMenuItem}
-				truncatedItemWidth={truncatedBreadcrumbItemLinkWidth}
 			/>
 		);
 	}
