@@ -26,7 +26,7 @@ import ModalBrowserListOrGridViewMode, {
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
-let cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
+const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'
 );
 
@@ -146,7 +146,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" isFullHeight={true} onKeyDown={this.handleKeyDown}>
+			<Modal size="l" isFullHeight={true} onKeyDown={this.handleKeyDown}>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a link')} />
 
 				<ModalBody>
@@ -170,7 +170,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 						</ModalContentToolbar>
 
 						<ModalContent flexDirection="row">
-							<ModalContent flexDirection="column">
+							<ModalContent flexDirection="column" flex="1">
 								<ModalBrowserFileAndFolderResultList
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
@@ -186,7 +186,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem && selectedItem.id && selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
+								<ModalContent flexDirection="column" flex="2">
 									<DocumentWithLinkSelectorPreview
 										linkableElementsQuery={linkableElementsQuery}
 										onItemIsErrored={onItemIsErrored}

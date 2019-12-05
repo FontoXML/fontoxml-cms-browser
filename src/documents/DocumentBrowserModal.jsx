@@ -242,7 +242,7 @@ let DocumentBrowserModal = ({
 					</ModalContentToolbar>
 
 					<ModalContent flexDirection="row">
-						<ModalContent flexDirection="column">
+						<ModalContent flexDirection="column" flex="1">
 							<ModalBrowserFileAndFolderResultList
 								browseContextDocumentId={browseContextDocumentId}
 								items={items}
@@ -258,7 +258,7 @@ let DocumentBrowserModal = ({
 						</ModalContent>
 
 						{selectedItem && selectedItem.type !== 'folder' && (
-							<ModalContent flexDirection="column">
+							<ModalContent flexDirection="column" flex="2">
 								<DocumentPreview
 									onItemIsErrored={onItemIsErrored}
 									onLoadIsDone={handleLoadIsDone}

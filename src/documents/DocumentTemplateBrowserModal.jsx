@@ -25,7 +25,7 @@ import ModalBrowserListOrGridViewMode, {
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
 
-let cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
+const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'
 );
 
@@ -152,7 +152,7 @@ class DocumentTemplateBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="m" onKeyDown={this.handleKeyDown}>
+			<Modal size="l" onKeyDown={this.handleKeyDown}>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a template')} />
 
 				<ModalBody>
@@ -176,7 +176,7 @@ class DocumentTemplateBrowserModal extends Component {
 						</ModalContentToolbar>
 
 						<ModalContent flexDirection="row">
-							<ModalContent flexDirection="column">
+							<ModalContent flexDirection="column" flex="1">
 								<ModalBrowserFileAndFolderResultList
 									browseContextDocumentId={browseContextDocumentId}
 									items={items}
@@ -193,7 +193,7 @@ class DocumentTemplateBrowserModal extends Component {
 							</ModalContent>
 
 							{selectedItem && selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
+								<ModalContent flexDirection="column" flex="2">
 									<DocumentPreview
 										onItemIsErrored={onItemIsErrored}
 										onLoadIsDone={this.handleLoadIsDone}
