@@ -152,7 +152,7 @@ class DocumentTemplateBrowserModal extends Component {
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
-			<Modal size="l" onKeyDown={this.handleKeyDown}>
+			<Modal size="l" onKeyDown={this.handleKeyDown} isFullHeight>
 				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a template')} />
 
 				<ModalBody>
