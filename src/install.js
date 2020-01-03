@@ -56,7 +56,7 @@ export default function install() {
 	dataProviders.set('dataProviderUsingConfiguredConnectorsForDocuments', {
 		assetTypes: ['document'],
 		resultTypes: ['file', 'folder'],
-		rootFolderLabel: t('My drive')
+		rootFolderLabel: t('Document library')
 	});
 	dataProviders.set('dataProviderUsingConfiguredConnectorsForDocumentTemplates', {
 		assetTypes: ['document-template'],
@@ -66,12 +66,12 @@ export default function install() {
 	dataProviders.set('dataProviderUsingConfiguredConnectorsForDocumentFolders', {
 		assetTypes: ['document'],
 		resultTypes: ['folder'],
-		rootFolderLabel: t('My drive')
+		rootFolderLabel: t('Document library')
 	});
 	dataProviders.set('dataProviderUsingConfiguredConnectorsForImages', {
 		assetTypes: ['image'],
 		resultTypes: ['file', 'folder'],
-		rootFolderLabel: t('My drive'),
+		rootFolderLabel: t('Image library'),
 		uploadAssetType: 'image',
 		uploadMimeTypesToAccept: cmsBrowserUploadMimeTypesToAccept,
 		uploadMaxFileSizeInBytes: cmsBrowserUploadMaxFileSizeInBytes
