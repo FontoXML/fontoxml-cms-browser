@@ -39,7 +39,6 @@ let CreateDocumentFormModal = ({
 	cancelModal,
 	data,
 	determineAndHandleSubmitButtonDisabledState,
-	isCancelable,
 	isSubmitButtonDisabled,
 	modalIcon,
 	modalTitle,
@@ -145,7 +144,7 @@ let CreateDocumentFormModal = ({
 			</ModalBody>
 
 			<ModalFooter>
-				{isCancelable && (
+				{data.isCancelable && (
 					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
 				)}
 
