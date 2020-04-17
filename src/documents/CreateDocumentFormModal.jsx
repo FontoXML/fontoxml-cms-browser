@@ -15,7 +15,6 @@ import {
 	ModalHeader,
 	TextInput
 } from 'fds/components';
-import { useHasChanged } from 'fds/system';
 
 import t from 'fontoxml-localization/src/t.js';
 
@@ -51,29 +50,17 @@ let CreateDocumentFormModal = ({
 }) => {
 	const [documentTitle, setDocumentTitle] = useState('');
 
-	const documentTitleHasChanged = useHasChanged(documentTitle);
-	const selectedDocumentTemplateHasChanged = useHasChanged(selectedDocumentTemplate);
-	const selectedFolderHasChanged = useHasChanged(selectedFolder);
 	useEffect(() => {
-		if (
-			documentTitleHasChanged ||
-			selectedDocumentTemplateHasChanged ||
-			selectedFolderHasChanged
-		) {
-			determineAndHandleSubmitButtonDisabledState({
-				selectedDocumentTemplate: selectedDocumentTemplate,
-				selectedFolder: selectedFolder,
-				documentTitle
-			});
-		}
+		determineAndHandleSubmitButtonDisabledState({
+			selectedDocumentTemplate: selectedDocumentTemplate,
+			selectedFolder: selectedFolder,
+			documentTitle
+		});
 	}, [
 		determineAndHandleSubmitButtonDisabledState,
 		documentTitle,
-		documentTitleHasChanged,
 		selectedDocumentTemplate,
-		selectedDocumentTemplateHasChanged,
-		selectedFolder,
-		selectedFolderHasChanged
+		selectedFolder
 	]);
 
 	const handleSubmitButtonClick = useCallback(
