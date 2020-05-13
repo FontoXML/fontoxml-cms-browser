@@ -88,7 +88,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 				modalTitle,
 				openDocumentDataProviderName,
 				selectDocumentTemplateDataProviderName,
-				selectFolderDataProviderName
+				selectFolderDataProviderName,
+				query
 			},
 			cancelModal,
 			submitModal
@@ -108,7 +109,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 							isCancelable,
 							modalIcon,
 							modalPrimaryButtonLabel: t('Open'),
-							modalTitle: openOrCreateModalTitle
+							modalTitle: openOrCreateModalTitle,
+							query
 						}}
 						renderModalBodyToolbar={this.handleRenderModalBodyToolbar}
 						submitModal={submitModal}
@@ -120,7 +122,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 						cancelModal={cancelModal}
 						data={{
 							insertOperationName,
-							isCancelable
+							isCancelable,
+							query
 						}}
 						modalIcon={modalIcon}
 						modalTitle={openOrCreateModalTitle}
@@ -139,7 +142,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
-							modalTitle: t('Select a template for your document')
+							modalTitle: t('Select a template for your document'),
+							query
 						}}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
 						submitModal={this.handleDocumentTemplateSubmit}
@@ -152,7 +156,8 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
-							modalTitle: t('Select a folder to save your documents in')
+							modalTitle: t('Select a folder to save your documents in'),
+							query
 						}}
 						submitModal={this.handleFolderSubmit}
 					/>

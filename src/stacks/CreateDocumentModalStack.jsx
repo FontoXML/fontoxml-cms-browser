@@ -57,7 +57,8 @@ class CreateDocumentFormModalStack extends Component {
 				modalIcon,
 				modalTitle,
 				selectDocumentTemplateDataProviderName,
-				selectFolderDataProviderName
+				selectFolderDataProviderName,
+				query
 			},
 			cancelModal,
 			submitModal
@@ -69,7 +70,8 @@ class CreateDocumentFormModalStack extends Component {
 					cancelModal={cancelModal}
 					data={{
 						insertOperationName,
-						isCancelable
+						isCancelable,
+						query
 					}}
 					modalIcon={modalIcon}
 					modalTitle={modalTitle || t('Create new document')}
@@ -86,7 +88,8 @@ class CreateDocumentFormModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
-							modalTitle: t('Select a template for your document')
+							modalTitle: t('Select a template for your document'),
+							query
 						}}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
 						submitModal={this.handleDocumentTemplateSubmit}
@@ -99,7 +102,8 @@ class CreateDocumentFormModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
-							modalTitle: t('Select a folder to save your documents in')
+							modalTitle: t('Select a folder to save your documents in'),
+							query
 						}}
 						submitModal={this.handleFolderSubmit}
 					/>

@@ -77,6 +77,13 @@
 						"(Optional) Can be used to open the document with link selector browser with ",
 						"a node preselected. Should only be used in combination with documentId."
 					]
+				},
+				{
+					"name": "query",
+					"type": "object|null",
+					"description": [
+						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
+					]
 				}
 			],
 			"returns": [
@@ -101,7 +108,9 @@
 			"nodeId": null
 		},
 		"steps": [
-			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy"
+			},
 			{
 				"type": "modal/DocumentWithLinkSelectorBrowserModal",
 				"data": {
@@ -111,12 +120,12 @@
 					"linkableElementsQuery": "{{linkableElementsQuery}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
-					"nodeId": "{{nodeId}}"
+					"nodeId": "{{nodeId}}",
+					"query": "{{query}}"
 				}
 			}
 		]
 	},
-
 	"open-image-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
@@ -173,6 +182,13 @@
 					"description": [
 						"(Optional) Can be used to open the image browser with an image preselected."
 					]
+				},
+				{
+					"name": "query",
+					"type": "object|null",
+					"description": [
+						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
+					]
 				}
 			],
 			"returns": [
@@ -197,12 +213,12 @@
 					"dataProviderName": "{{dataProviderName}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
-					"selectedImageId": "{{selectedImageId}}"
+					"selectedImageId": "{{selectedImageId}}",
+					"query": "{{query}}"
 				}
 			}
 		]
 	},
-
 	"open-document-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
@@ -270,6 +286,13 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a document`."
+				},
+				{
+					"name": "query",
+					"type": "object|null",
+					"description": [
+						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
+					]
 				}
 			],
 			"returns": [
@@ -293,7 +316,9 @@
 			"modalTitle": null
 		},
 		"steps": [
-			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy"
+			},
 			{
 				"type": "modal/DocumentBrowserModal",
 				"data": {
@@ -302,12 +327,12 @@
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
-					"modalTitle": "{{modalTitle}}"
+					"modalTitle": "{{modalTitle}}",
+					"query": "{{query}}"
 				}
 			}
 		]
 	},
-
 	"open-document-template-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
@@ -360,6 +385,13 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a template`."
+				},
+				{
+					"name": "query",
+					"type": "object|null",
+					"description": [
+						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
+					]
 				}
 			],
 			"returns": [
@@ -376,19 +408,21 @@
 			"modalTitle": null
 		},
 		"steps": [
-			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy"
+			},
 			{
 				"type": "modal/DocumentTemplateBrowserModal",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
-					"modalTitle": "{{modalTitle}}"
+					"modalTitle": "{{modalTitle}}",
+					"query": "{{query}}"
 				}
 			}
 		]
 	},
-
 	"open-open-or-create-document-browser-modal": {
 		"__documentation": {
 			"fontosdk": true,
@@ -469,6 +503,13 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Open or create document`."
+				},
+				{
+					"name": "query",
+					"type": "object|null",
+					"description": [
+						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
+					]
 				}
 			],
 			"returns": [
@@ -507,7 +548,9 @@
 			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
 		},
 		"steps": [
-			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy"
+			},
 			{
 				"type": "modal/OpenOrCreateDocumentModalStack",
 				"data": {
@@ -516,12 +559,12 @@
 					"modalTitle": "{{modalTitle}}",
 					"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
-					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}",
+					"query": "{{query}}"
 				}
 			}
 		]
 	},
-
 	"open-create-document-form-modal": {
 		"__documentation": {
 			"fontosdk": true,
@@ -590,6 +633,13 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Create new document`."
+				},
+				{
+					"name": "query",
+					"type": "object|null",
+					"description": [
+						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
+					]
 				}
 			],
 			"returns": [
@@ -617,7 +667,9 @@
 			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
 		},
 		"steps": [
-			{ "type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy" },
+			{
+				"type": "transform/setBrowseContextToFocusedDocumentOrTopLevelDocumentFromHierarchy"
+			},
 			{
 				"type": "modal/CreateDocumentModalStack",
 				"data": {
@@ -625,7 +677,8 @@
 					"isCancelable": "{{isCancelable}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
-					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}",
+					"query": "{{query}}"
 				}
 			}
 		]

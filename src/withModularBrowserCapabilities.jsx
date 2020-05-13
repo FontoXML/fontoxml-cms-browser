@@ -90,7 +90,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				noCache,
 				hierarchyItems = this.state.hierarchyItems
 			) => {
-				const { determineAndHandleSubmitButtonDisabledState } = this.props;
+				const { determineAndHandleSubmitButtonDisabledState, data } = this.props;
 				if (this.isMountedInDOM) {
 					this.setState({ request: { type: 'browse', busy: true } });
 				}
@@ -100,7 +100,8 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 						browseContextDocumentId,
 						folderToLoad,
 						noCache,
-						hierarchyItems
+						hierarchyItems,
+						data.query
 					)
 					.then(
 						result => {
