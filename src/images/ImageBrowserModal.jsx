@@ -10,6 +10,7 @@ import {
 	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader,
+	StateMessage,
 	Toast
 } from 'fds/components';
 
@@ -231,6 +232,17 @@ class ImageBrowserModal extends Component {
 										referrerDocumentId={this.props.data.browseContextDocumentId}
 										selectedItem={selectedItem}
 										stateLabels={stateLabels}
+									/>
+								</ModalContent>
+							)}
+
+							{selectedItem && selectedItem.type === 'folder' && (
+								<ModalContent flexDirection="column" flex="2">
+									<StateMessage
+										message={t('Select an item in the list to the left.')}
+										paddingSize="m"
+										title={t('No item selected')}
+										visual="hand-pointer-o"
 									/>
 								</ModalContent>
 							)}
