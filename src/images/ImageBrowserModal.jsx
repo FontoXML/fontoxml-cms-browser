@@ -237,7 +237,7 @@ class ImageBrowserModal extends Component {
 							)}
 
 							{selectedItem && selectedItem.type === 'folder' && (
-								<ModalContent flexDirection="column" flex="2">
+								<ModalContent flexDirection="column">
 									<StateMessage
 										message={t('Select an item in the list to the left.')}
 										paddingSize="m"
