@@ -68,11 +68,14 @@ class DocumentWithLinkSelectorPreview extends Component {
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.handleLoadIsDone}
 			>
-				{({ isErrored, isLoading, documentId, error }) => {
+				{({ isErrored, isLoading, documentId, error, retryLoadDocument }) => {
 					if (isErrored) {
 						return (
 							<Flex flex="1" paddingSize="l" isScrollContainer>
-								<FxErroredTemplatedView error={error} />
+								<FxErroredTemplatedView
+									error={error}
+									retryLoadDocument={retryLoadDocument}
+								/>
 							</Flex>
 						);
 					}
