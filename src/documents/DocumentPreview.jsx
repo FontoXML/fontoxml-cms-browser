@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Flex, HorizontalSeparationLine, SpinnerIcon, StateMessage, Text } from 'fds/components';
+import {
+	Block,
+	Flex,
+	HorizontalSeparationLine,
+	SpinnerIcon,
+	StateMessage,
+	Text
+} from 'fds/components';
 import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader.jsx';
 import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView.jsx';
 import FxNodePreview from 'fontoxml-fx/src/FxNodePreview.jsx';
@@ -39,12 +46,12 @@ class DocumentPreview extends Component {
 				{({ isErrored, isLoading, documentId, error, retryLoadDocument }) => {
 					if (isErrored) {
 						return (
-							<Flex flex="1" paddingSize="l" isScrollContainer>
+							<Block flex="1" paddingSize="l" isScrollContainer>
 								<FxErroredTemplatedView
 									error={error}
 									retryLoadDocument={retryLoadDocument}
 								/>
-							</Flex>
+							</Block>
 						);
 					}
 
@@ -60,9 +67,9 @@ class DocumentPreview extends Component {
 
 					return (
 						<Flex flex="1" flexDirection="column">
-							<Flex flex="1" flexDirection="column" isScrollContainer>
+							<Block flex="1" isScrollContainer>
 								<FxNodePreview documentId={documentId} />
-							</Flex>
+							</Block>
 
 							{selectedItem.description &&
 								selectedItem.description.trim().length !== 0 && (

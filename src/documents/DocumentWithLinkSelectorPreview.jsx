@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Flex, SpinnerIcon, StateMessage } from 'fds/components';
+import { Block, SpinnerIcon, StateMessage } from 'fds/components';
 import documentsManager from 'fontoxml-documents/src/documentsManager.js';
 import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean.js';
 import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader.jsx';
@@ -71,12 +71,12 @@ class DocumentWithLinkSelectorPreview extends Component {
 				{({ isErrored, isLoading, documentId, error, retryLoadDocument }) => {
 					if (isErrored) {
 						return (
-							<Flex flex="1" paddingSize="l" isScrollContainer>
+							<Block flex="1" paddingSize="l" isScrollContainer>
 								<FxErroredTemplatedView
 									error={error}
 									retryLoadDocument={retryLoadDocument}
 								/>
-							</Flex>
+							</Block>
 						);
 					}
 
