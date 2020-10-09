@@ -4,7 +4,7 @@ export default function setDefaultConfiguration() {
 	/**
 	 * Set whether your CMS supports 'jump in tree':
 	 * whether or not it responds with hierarchyItems in browse requests.
-	 * See https://documentation.fontoxml.com/editor/latest/browse-for-documents-and-assets-3099216.html
+	 * See the {@link fonto-documentation/docs/editor/fontoxml-editor-documentation/api-s-and-reference/cms-connectors-api/browse-for-documents-and-assets.xml CMS connectors API documentation}
 	 * for more information.
 	 *
 	 * @fontosdk
