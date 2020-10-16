@@ -68,6 +68,7 @@ const uploadErrorMessages = {
 				Math.round((cmsBrowserUploadMaxFileSizeInBytes / 1000000) * 100) / 100
 		}
 	),
+	invalidFileTypeMessage: t('This file type is not valid.'),
 	serverErrorMessage: t('Fonto can’t upload this image, please try again.')
 };
 

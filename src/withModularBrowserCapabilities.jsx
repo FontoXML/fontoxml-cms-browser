@@ -189,6 +189,18 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					return;
 				}
 
+				if (
+					selectedFiles[0].type !== this.dataProvider.getUploadOptions().mimeTypesToAccept
+				) {
+					this.setState({
+						request: {
+							type: 'upload',
+							error: uploadErrorMessages.invalidFileTypeMessage
+						}
+					});
+					return;
+				}
+
 				this.setState({
 					request: {
 						type: 'upload',
