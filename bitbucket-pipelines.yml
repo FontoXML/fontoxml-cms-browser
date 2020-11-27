@@ -3,7 +3,7 @@ definitions:
     - step: &build-test
         name: Run tests
         image:
-          name: fontoxmltoolsinternal.azurecr.io/build-tools/fontoxml-pipeline-test-build:latest
+          name: fontoxmltoolsinternal.azurecr.io/build-tools/fdt:latest
           username: $TOOLS_INTERNAL_REGISTRY_USERNAME
           password: $TOOLS_INTERNAL_REGISTRY_PASSWORD
         script:
