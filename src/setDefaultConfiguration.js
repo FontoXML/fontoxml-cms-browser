@@ -15,7 +15,11 @@ export default function setDefaultConfiguration() {
 	configurationManager.setDefault('cms-browser-sends-hierarchy-items-in-browse-response', false);
 
 	/**
-	 * Set the mime types to accept when uploading images in the browse modal.
+	 * Set the mime type to accept when uploading images in the browse modal.
+	 *
+	 * This is set to `image/*` by default. This can be set to for example `image/png` to only allow
+	 * Portable Network Graphics to be uploaded or 'image/gif' to disallow anything but images in
+	 * the Graphics Interchange Format.
 	 *
 	 * @fontosdk
 	 *
