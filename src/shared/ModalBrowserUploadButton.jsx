@@ -18,7 +18,7 @@ class ModalBrowserUploadButton extends PureComponent {
 		uploadErrorMessages: PropTypes.shape({
 			fileSizeTooLargeMessage: PropTypes.string.isRequired,
 			serverErrorMessage: PropTypes.string.isRequired,
-			invalidFileType: PropTypes.string.isRequired
+			invalidFileTypeMessage: PropTypes.string.isRequired
 		}).isRequired,
 
 		// from withModularBrowserCapabilities
