@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 
 import dataProviders from './dataProviders.js';
 
+function isValidMimeType(selectedMimeType, mimeTypeGlob) {
+	if (mimeTypeGlob === 'image/*') {
+		return selectedMimeType.startsWith('image/');
+	}
+	// TODO: Do full mimetype checking: parse this glob and actually test
+	// Not doing that right now because the only way to select something wrong is by consciously selecting rubbish in an upload modal.
+	return true;
+}
+
 export default function withModularBrowserCapabilities(initialViewMode = null) {
 	return function wrapWithModularBrowserCapabilities(WrappedComponent) {
 		return class ModularBrowser extends Component {
@@ -189,9 +198,11 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					return;
 				}
 
-				if (
-					selectedFiles[0].type !== this.dataProvider.getUploadOptions().mimeTypesToAccept
-				) {
+				const selectedMimeType = selectedFiles[0].type;
+				// Note: this is a glob. It can be 'image/*'
+				const acceptableMimeType = this.dataProvider.getUploadOptions().mimeTypesToAccept;
+
+				if (!isValidMimeType(selectedMimeType, acceptableMimeType)) {
 					this.setState({
 						request: {
 							type: 'upload',
