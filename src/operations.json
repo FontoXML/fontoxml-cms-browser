@@ -58,7 +58,7 @@
 				{
 					"name": "modalIcon",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/editor/fontoxml-editor-documentation/concepts/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
 					"name": "modalPrimaryButtonLabel",
@@ -164,7 +164,7 @@
 				{
 					"name": "modalIcon",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/editor/fontoxml-editor-documentation/concepts/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
 					"name": "modalPrimaryButtonLabel",
@@ -275,7 +275,7 @@
 				{
 					"name": "modalIcon",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/editor/fontoxml-editor-documentation/concepts/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
 					"name": "modalPrimaryButtonLabel",
@@ -374,7 +374,7 @@
 				{
 					"name": "modalIcon",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/editor/fontoxml-editor-documentation/concepts/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
 					"name": "modalPrimaryButtonLabel",
@@ -497,7 +497,7 @@
 				{
 					"name": "modalIcon",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/editor/fontoxml-editor-documentation/concepts/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
 					"name": "modalTitle",
@@ -627,7 +627,7 @@
 				{
 					"name": "modalIcon",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Fontawesome (v4.7.0)](https://fontawesome.com/v4.7.0/icons/) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/editor/fontoxml-editor-documentation/concepts/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
 					"name": "modalTitle",
