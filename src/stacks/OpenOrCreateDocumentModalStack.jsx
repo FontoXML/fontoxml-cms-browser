@@ -21,7 +21,6 @@ const tabs = [
 		icon: 'folder-open-o'
 	}
 ];
-
 class OpenOrCreateDocumentModalStack extends Component {
 	static propTypes = {
 		cancelModal: PropTypes.func.isRequired,
@@ -88,15 +87,13 @@ class OpenOrCreateDocumentModalStack extends Component {
 				modalTitle,
 				openDocumentDataProviderName,
 				selectDocumentTemplateDataProviderName,
-				selectFolderDataProviderName,
-				query
+				selectFolderDataProviderName
 			},
 			cancelModal,
 			submitModal
 		} = this.props;
 		const { activeModal, activeTab, selectedDocumentTemplate, selectedFolder } = this.state;
 		const openOrCreateModalTitle = modalTitle || t('Open or create document');
-
 		return (
 			<ModalStack>
 				{activeTab.tabId === 'open' && (
@@ -109,8 +106,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 							isCancelable,
 							modalIcon,
 							modalPrimaryButtonLabel: t('Open'),
-							modalTitle: openOrCreateModalTitle,
-							query
+							modalTitle: openOrCreateModalTitle
 						}}
 						renderModalBodyToolbar={this.handleRenderModalBodyToolbar}
 						submitModal={submitModal}
@@ -122,8 +118,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						cancelModal={cancelModal}
 						data={{
 							insertOperationName,
-							isCancelable,
-							query
+							isCancelable
 						}}
 						modalIcon={modalIcon}
 						modalTitle={openOrCreateModalTitle}
@@ -142,8 +137,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId: null,
 							dataProviderName: selectDocumentTemplateDataProviderName,
-							modalTitle: t('Select a template for your document'),
-							query
+							modalTitle: t('Select a template for your document')
 						}}
 						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
 						submitModal={this.handleDocumentTemplateSubmit}
@@ -156,8 +150,7 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
-							modalTitle: t('Select a folder to save your documents in'),
-							query
+							modalTitle: t('Select a folder to save your documents in')
 						}}
 						submitModal={this.handleFolderSubmit}
 					/>

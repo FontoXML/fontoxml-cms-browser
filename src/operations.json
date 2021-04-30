@@ -77,13 +77,6 @@
 						"(Optional) Can be used to open the document with link selector browser with ",
 						"a node preselected. Should only be used in combination with documentId."
 					]
-				},
-				{
-					"name": "query",
-					"type": "object|null",
-					"description": [
-						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
-					]
 				}
 			],
 			"returns": [
@@ -120,8 +113,7 @@
 					"linkableElementsQuery": "{{linkableElementsQuery}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
-					"nodeId": "{{nodeId}}",
-					"query": "{{query}}"
+					"nodeId": "{{nodeId}}"
 				}
 			}
 		]
@@ -182,13 +174,6 @@
 					"description": [
 						"(Optional) Can be used to open the image browser with an image preselected."
 					]
-				},
-				{
-					"name": "query",
-					"type": "object|null",
-					"description": [
-						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
-					]
 				}
 			],
 			"returns": [
@@ -213,8 +198,7 @@
 					"dataProviderName": "{{dataProviderName}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
-					"selectedImageId": "{{selectedImageId}}",
-					"query": "{{query}}"
+					"selectedImageId": "{{selectedImageId}}"
 				}
 			}
 		]
@@ -286,13 +270,6 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a document`."
-				},
-				{
-					"name": "query",
-					"type": "object|null",
-					"description": [
-						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
-					]
 				}
 			],
 			"returns": [
@@ -327,8 +304,7 @@
 					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
-					"modalTitle": "{{modalTitle}}",
-					"query": "{{query}}"
+					"modalTitle": "{{modalTitle}}"
 				}
 			}
 		]
@@ -385,13 +361,6 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a template`."
-				},
-				{
-					"name": "query",
-					"type": "object|null",
-					"description": [
-						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
-					]
 				}
 			],
 			"returns": [
@@ -417,8 +386,7 @@
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
 					"dataProviderName": "{{dataProviderName}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
-					"modalTitle": "{{modalTitle}}",
-					"query": "{{query}}"
+					"modalTitle": "{{modalTitle}}"
 				}
 			}
 		]
@@ -503,13 +471,6 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Open or create document`."
-				},
-				{
-					"name": "query",
-					"type": "object|null",
-					"description": [
-						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
-					]
 				}
 			],
 			"returns": [
@@ -559,8 +520,7 @@
 					"modalTitle": "{{modalTitle}}",
 					"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
-					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}",
-					"query": "{{query}}"
+					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
 				}
 			}
 		]
@@ -633,13 +593,6 @@
 					"name": "modalTitle",
 					"type": "string",
 					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Create new document`."
-				},
-				{
-					"name": "query",
-					"type": "object|null",
-					"description": [
-						"(Optional) Any extra properties that should be included onto the \"query\" request parameter in CMS requests made to `POST /browse` by this component."
-					]
 				}
 			],
 			"returns": [
@@ -677,8 +630,7 @@
 					"isCancelable": "{{isCancelable}}",
 					"modalTitle": "{{modalTitle}}",
 					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
-					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}",
-					"query": "{{query}}"
+					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
 				}
 			}
 		]
