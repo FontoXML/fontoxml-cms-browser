@@ -7,7 +7,7 @@ const configuredBrowseConnector = connectorsManager.getConnector('browse-connect
 
 function updateFolderHierarchy(folderHierarchy, newLastFolderInHierarchy) {
 	var updatedFolderHierarchy = folderHierarchy.slice();
-	var newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(function (folder) {
+	var newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(function(folder) {
 		return folder.id === newLastFolderInHierarchy.id;
 	});
 	if (!newLastFolderIsInCurrentFolderHierarchy) {
@@ -46,7 +46,7 @@ function getFolderContents(
 			null,
 			noCache
 		)
-		.then(function (result) {
+		.then(function(result) {
 			var newHierarchyItems =
 				(result.metadata && result.metadata.hierarchy) ||
 				updateFolderHierarchy(
@@ -60,7 +60,7 @@ function getFolderContents(
 
 			return {
 				hierarchyItems: newHierarchyItems,
-				items: result.items.map(function (item) {
+				items: result.items.map(function(item) {
 					if (!item.metadata) {
 						return item;
 					}
@@ -69,9 +69,9 @@ function getFolderContents(
 						icon: item.metadata.icon,
 						isDisabled: item.metadata.isDisabled,
 						// Description for preview of document (template)
-						description: item.metadata.description,
+						description: item.metadata.description
 					});
-				}),
+				})
 			};
 		});
 }
@@ -89,7 +89,7 @@ function upload(options, folderToUploadInId, filesToUpload) {
 function getUploadOptions(options) {
 	return {
 		mimeTypesToAccept: options.uploadMimeTypesToAccept,
-		maxFileSizeInBytes: options.uploadMaxFileSizeInBytes,
+		maxFileSizeInBytes: options.uploadMaxFileSizeInBytes
 	};
 }
 
@@ -119,7 +119,7 @@ export default function createDataProviderUsingConfiguredConnectors(options) {
 		 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
 		 * }>}
 		 */
-		getFolderContents: function (
+		getFolderContents: function(
 			browseContextDocumentId,
 			targetFolder,
 			noCache,
@@ -136,7 +136,7 @@ export default function createDataProviderUsingConfiguredConnectors(options) {
 			);
 		},
 
-		getRootHierarchyItem: function () {
+		getRootHierarchyItem: function() {
 			return { id: null, label: options.rootFolderLabel, type: 'folder' };
 		},
 
@@ -147,14 +147,14 @@ export default function createDataProviderUsingConfiguredConnectors(options) {
 		 * TODO: what type does this resolve to?
 		 * @return {Promise}
 		 */
-		upload: function (folderToUploadInId, filesToUpload) {
+		upload: function(folderToUploadInId, filesToUpload) {
 			return upload(options, folderToUploadInId, filesToUpload);
 		},
 
 		/**
 		 * @return {{ mimeTypesToAccept: string, maxFileSizeInBytes: number }}
 		 */
-		getUploadOptions: function () {
+		getUploadOptions: function() {
 			return getUploadOptions(options);
 		},
 
@@ -166,14 +166,14 @@ export default function createDataProviderUsingConfiguredConnectors(options) {
 		 *
 		 * @param {object[]} hierarchyItems
 		 */
-		storeLastOpenedState: function (hierarchyItems) {
+		storeLastOpenedState: function(hierarchyItems) {
 			this._lastOpenedState = {
-				hierarchyItems: hierarchyItems,
+				hierarchyItems: hierarchyItems
 			};
 		},
 
-		getLastOpenedState: function () {
+		getLastOpenedState: function() {
 			return this._lastOpenedState;
-		},
+		}
 	};
 }
