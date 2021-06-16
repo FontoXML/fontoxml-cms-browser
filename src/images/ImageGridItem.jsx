@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { ContainedImage, Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
+import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
+
+import ContainedImage from './ContainedImage.jsx';
 
 class ImageGridItem extends Component {
 	static defaultProps = {
@@ -86,7 +88,10 @@ class ImageGridItem extends Component {
 								flexDirection="row"
 								applyCss={{ height: '3rem' }}
 							>
-								<ContainedImage src={imageData.dataUrl} />
+								<ContainedImage
+									src={imageData.dataUrl}
+									width={imageData.width || 150}
+								/>
 							</Flex>
 							<Label>{item.label}</Label>
 						</Flex>

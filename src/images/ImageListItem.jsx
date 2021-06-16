@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Block, ContainedImage, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
+import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
+
+import ContainedImage from './ContainedImage.jsx';
 
 class ImageListItem extends Component {
 	static defaultProps = {
@@ -80,7 +82,10 @@ class ImageListItem extends Component {
 
 					return this.wrapInListItem(
 						<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
-							<ContainedImage src={imageData.dataUrl} />
+							<ContainedImage
+								src={imageData.dataUrl}
+								width={imageData.width || 150}
+							/>
 						</Block>,
 						<Label>{item.label}</Label>
 					);

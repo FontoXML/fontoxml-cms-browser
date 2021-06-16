@@ -79,7 +79,11 @@ class ImagePreview extends Component {
 								<Heading level="4">{selectedItem.label}</Heading>
 
 								<Flex flex="auto">
-									<img src={imageData.dataUrl} {...imageStyles} />
+									<img
+										src={imageData.dataUrl}
+										{...imageStyles}
+										width={imageData.width || 150}
+									/>
 								</Flex>
 							</Flex>
 
