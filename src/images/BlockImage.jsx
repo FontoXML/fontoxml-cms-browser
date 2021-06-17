@@ -10,8 +10,8 @@ const imageStyles = applyCss([
 ]);
 
 // TODO: Use ContainedImage in fds instead of this when it accepts width and height
-function ContainedImage({ src, width, height }) {
+function BlockImage({ src, width, height }) {
 	return <img {...imageStyles} src={src} width={width} height={height} />;
 }
 
-export default ContainedImage;
+export default BlockImage;

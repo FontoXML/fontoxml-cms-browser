@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
 
-import ContainedImage from './ContainedImage.jsx';
+import BlockImage from './BlockImage.jsx';
 
 class ImageGridItem extends Component {
 	static defaultProps = {
@@ -88,7 +88,7 @@ class ImageGridItem extends Component {
 								flexDirection="row"
 								applyCss={{ height: '3rem' }}
 							>
-								<ContainedImage
+								<BlockImage
 									src={imageData.dataUrl}
 									width={imageData.width || 150}
 								/>
