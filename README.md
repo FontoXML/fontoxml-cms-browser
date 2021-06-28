@@ -24,11 +24,11 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-* The elements which should be selectable by the user can be set by providing a `linkableElementsQuery`. This is an {@link XPathQuery}.
-* Use `dataProviderName` to override the default data provider properties.
-* When this browser is used to edit an existing link, the `documentId` and `nodeId` properties can be used to set the selection on the original document and element.
-* Use `insertOperationName` to disable the primary button based on the operation state.
-* The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
+-   The elements which should be selectable by the user can be set by providing a `linkableElementsQuery`. This is an {@link XPathQuery}.
+-   Use `dataProviderName` to override the default data provider properties.
+-   When this browser is used to edit an existing link, the `documentId` and `nodeId` properties can be used to set the selection on the original document and element.
+-   Use `insertOperationName` to disable the primary button based on the operation state.
+-   The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-document-with-link-selector-browser-modal} operation.
 
@@ -46,10 +46,10 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-* When this browser is being used to edit a reference to an existing image, the `selectedImageId` property can be used to set the selection on the original image.
-* Use `dataProviderName` to override the default data provider properties.
-* Use `insertOperationName` to disable the primary button based on the operation state.
-* The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
+-   When this browser is being used to edit a reference to an existing image, the `selectedImageId` property can be used to set the selection on the original image.
+-   Use `dataProviderName` to override the default data provider properties.
+-   Use `insertOperationName` to disable the primary button based on the operation state.
+-   The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-image-browser-modal} operation.
 
@@ -67,10 +67,10 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-* When this browser is being used to edit a reference to an existing document, the `documentId` property can be used to set the selection on the original document.
-* Use `dataProviderName` to override the default data provider properties.
-* Use `insertOperationName` to disable the primary button based on the operation state.
-* The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
+-   When this browser is being used to edit a reference to an existing document, the `documentId` property can be used to set the selection on the original document.
+-   Use `dataProviderName` to override the default data provider properties.
+-   Use `insertOperationName` to disable the primary button based on the operation state.
+-   The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-document-browser-modal} operation.
 
@@ -93,9 +93,9 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-* Use `insertOperationName` to disable the primary button based on the operation state.
-* Use `dataProviderName` to override the default data provider properties.
-* The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
+-   Use `insertOperationName` to disable the primary button based on the operation state.
+-   Use `dataProviderName` to override the default data provider properties.
+-   The browser icon, title and primary button label can be set with the `modalIcon`, `modalTitle` and `modalPrimaryButtonLabel` respectively.
 
 For more information, see the {@link operation/open-document-template-browser-modal} operation.
 
@@ -112,9 +112,10 @@ This browser can be used by adding the following operation step to your operatio
     "type": "operation/open-open-or-create-document-browser-modal"
 }
 ```
-* Use `insertOperationName` to disable the primary button based on the operation state.
-* Use `openDocumentDataProviderName`, `selectDocumentTemplateDataProviderName` and `selectFolderDataProviderName` to override the default data provider properties.
-* The browser icon and title can be set with the `modalIcon` and `modalTitle` respectively.
+
+-   Use `insertOperationName` to disable the primary button based on the operation state.
+-   Use `openDocumentDataProviderName`, `selectDocumentTemplateDataProviderName` and `selectFolderDataProviderName` to override the default data provider properties.
+-   The browser icon and title can be set with the `modalIcon` and `modalTitle` respectively.
 
 For more information, see the {@link operation/open-open-or-create-document-browser-modal} operation.
 
@@ -132,9 +133,9 @@ This browser can be used by adding the following operation step to your operatio
 }
 ```
 
-* Use `insertOperationName` to disable the primary button based on the operation state.
-* Use `selectDocumentTemplateDataProviderName` and `selectFolderDataProviderName` to override the default data provider properties.
-* The browser icon and title can be set with the `modalIcon` and `modalTitle` respectively.
+-   Use `insertOperationName` to disable the primary button based on the operation state.
+-   Use `selectDocumentTemplateDataProviderName` and `selectFolderDataProviderName` to override the default data provider properties.
+-   The browser icon and title can be set with the `modalIcon` and `modalTitle` respectively.
 
 For more information, see the {@link operation/open-create-document-form-modal} operation.
 
