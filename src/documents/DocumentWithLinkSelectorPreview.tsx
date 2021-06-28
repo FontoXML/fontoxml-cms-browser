@@ -1,14 +1,14 @@
+import { Block, SpinnerIcon, StateMessage } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Block, SpinnerIcon, StateMessage } from 'fds/components';
+import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
-import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean';
+import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
 import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader';
 import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
 import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
-import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
-import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint';
+import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean';
 
 class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {
@@ -43,9 +43,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 			!newSelectedItem.nodeId &&
 			node &&
 			evaluateXPathToBoolean(
-				'let $selectableNodes := ' +
-					this.props.linkableElementsQuery +
-					' return some $node in $selectableNodes satisfies . is $node',
+				`let $selectableNodes := ${this.props.linkableElementsQuery} return some $node in $selectableNodes satisfies . is $node`,
 				node,
 				readOnlyBlueprint
 			)

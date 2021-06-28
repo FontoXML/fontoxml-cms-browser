@@ -1,7 +1,7 @@
+import { SelectFileButton } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
-import { SelectFileButton } from 'fds/components';
 import t from 'fontoxml-localization/src/t';
 
 import dataProviders from '../dataProviders';

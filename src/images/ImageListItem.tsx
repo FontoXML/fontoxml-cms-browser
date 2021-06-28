@@ -1,7 +1,7 @@
+import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
 import BlockImage from './BlockImage';

@@ -15,7 +15,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 	return function wrapWithModularBrowserCapabilities(WrappedComponent) {
 		return class ModularBrowser extends Component {
 			dataProvider = dataProviders.get(this.props.data.dataProviderName);
+
 			initialSelectedItem = {};
+
 			isMountedInDOM = true;
 
 			state = {
@@ -192,7 +194,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 									this.dataProvider.getRootHierarchyItem(),
 								],
 								selectedItem: null,
-								request: { type: 'browse', error: error },
+								request: { type: 'browse', error },
 							});
 
 							if (determineAndHandleSubmitButtonDisabledState) {
@@ -286,8 +288,9 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to update the viewMode
-			onViewModeChange = (viewMode) =>
-				this.isMountedInDOM && this.setState({ viewMode: viewMode });
+			onViewModeChange = (viewMode) => {
+				this.isMountedInDOM && this.setState({ viewMode });
+			};
 
 			render() {
 				const {

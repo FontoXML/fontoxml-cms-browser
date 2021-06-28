@@ -1,7 +1,6 @@
+import { Icon, Label, ListItem } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-
-import { Icon, Label, ListItem } from 'fds/components';
 
 class DocumentListItem extends Component {
 	static defaultProps = {

@@ -1,12 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
 import {
 	SpinnerIcon,
 	StateMessage,
 	VirtualGrid,
 	VirtualList,
 } from 'fds/components';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 class ModalBrowserFileAndFolderResultList extends Component {
 	static defaultProps = {

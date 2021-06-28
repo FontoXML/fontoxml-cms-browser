@@ -1,8 +1,8 @@
 import connectorsManager from 'fontoxml-configuration/src/connectorsManager';
-
 import documentsManager from 'fontoxml-documents/src/documentsManager';
 import selectionManager from 'fontoxml-selection/src/selectionManager';
 import type { DataProvider } from 'fontoxml-typescript-migration-debt/src/types';
+
 const configuredAssetConnector =
 	connectorsManager.getConnector('asset-connector');
 const configuredBrowseConnector =
@@ -12,8 +12,8 @@ function updateFolderHierarchy(
 	folderHierarchy: $TSFixMeAny,
 	newLastFolderInHierarchy: $TSFixMeAny
 ): $TSFixMeAny {
-	var updatedFolderHierarchy = folderHierarchy.slice();
-	var newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(
+	const updatedFolderHierarchy = folderHierarchy.slice();
+	const newLastFolderIsInCurrentFolderHierarchy = folderHierarchy.some(
 		function (folder) {
 			return folder.id === newLastFolderInHierarchy.id;
 		}
@@ -23,9 +23,9 @@ function updateFolderHierarchy(
 		return updatedFolderHierarchy;
 	}
 
-	var foundNewLastFolderInHierarchy = false;
+	let foundNewLastFolderInHierarchy = false;
 	while (!foundNewLastFolderInHierarchy) {
-		var removedFolder = updatedFolderHierarchy.pop();
+		const removedFolder = updatedFolderHierarchy.pop();
 		foundNewLastFolderInHierarchy =
 			removedFolder.id === newLastFolderInHierarchy.id;
 	}
@@ -43,7 +43,7 @@ function getFolderContents(
 	hierarchyItems: $TSFixMeAny,
 	additionalQueryProperties: $TSFixMeAny
 ): $TSFixMeAny {
-	const query = Object.assign({}, options.query, additionalQueryProperties);
+	const query = { ...options.query, ...additionalQueryProperties };
 	return configuredBrowseConnector
 		.browse(
 			browseContextDocumentId,
@@ -56,18 +56,14 @@ function getFolderContents(
 			noCache
 		)
 		.then(function (result) {
-			var newHierarchyItems =
+			const newHierarchyItems =
 				(result.metadata && result.metadata.hierarchy) ||
-				updateFolderHierarchy(
-					hierarchyItems || [],
-					Object.assign(
-						{},
-						targetFolder,
-						targetFolder.id === null
-							? { label: options.rootFolderLabel }
-							: {}
-					)
-				);
+				updateFolderHierarchy(hierarchyItems || [], {
+					...targetFolder,
+					...(targetFolder.id === null
+						? { label: options.rootFolderLabel }
+						: {}),
+				});
 
 			return {
 				hierarchyItems: newHierarchyItems,
@@ -76,12 +72,13 @@ function getFolderContents(
 						return item;
 					}
 					// TODO: why don't we just use item.metadata.x to access these later?
-					return Object.assign({}, item, {
+					return {
+						...item,
 						icon: item.metadata.icon,
 						isDisabled: item.metadata.isDisabled,
 						// Description for preview of document (template)
 						description: item.metadata.description,
-					});
+					};
 				}),
 			};
 		});
@@ -124,8 +121,8 @@ function getUploadOptions(options: $TSFixMeAny): $TSFixMeAny {
  * @return {DataProvider}
  */
 export default function createDataProviderUsingConfiguredConnectors(options: {
-	assetTypes: Array<string>;
-	resultTypes: Array<string>;
+	assetTypes: string[];
+	resultTypes: string[];
 	rootFolderLabel: string;
 	query: Object;
 	uploadAssetType: string;
@@ -144,7 +141,7 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 		 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
 		 * }>}
 		 */
-		getFolderContents: function (
+		getFolderContents(
 			browseContextDocumentId,
 			targetFolder,
 			noCache,
@@ -161,7 +158,7 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 			);
 		},
 
-		getRootHierarchyItem: function () {
+		getRootHierarchyItem() {
 			return { id: null, label: options.rootFolderLabel, type: 'folder' };
 		},
 
@@ -172,14 +169,14 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 		 * TODO: what type does this resolve to?
 		 * @return {Promise}
 		 */
-		upload: function (folderToUploadInId, filesToUpload) {
+		upload(folderToUploadInId, filesToUpload) {
 			return upload(options, folderToUploadInId, filesToUpload);
 		},
 
 		/**
 		 * @return {{ mimeTypesToAccept: string, maxFileSizeInBytes: number }}
 		 */
-		getUploadOptions: function () {
+		getUploadOptions() {
 			return getUploadOptions(options);
 		},
 
@@ -191,13 +188,13 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 		 *
 		 * @param {object[]} hierarchyItems
 		 */
-		storeLastOpenedState: function (hierarchyItems) {
+		storeLastOpenedState(hierarchyItems) {
 			this._lastOpenedState = {
-				hierarchyItems: hierarchyItems,
+				hierarchyItems,
 			};
 		},
 
-		getLastOpenedState: function () {
+		getLastOpenedState() {
 			return this._lastOpenedState;
 		},
 	};

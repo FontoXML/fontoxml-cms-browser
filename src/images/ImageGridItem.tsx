@@ -1,7 +1,7 @@
+import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
 import BlockImage from './BlockImage';

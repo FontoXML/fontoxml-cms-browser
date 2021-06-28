@@ -1,7 +1,6 @@
+import { ButtonGroup } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-
-import { ButtonGroup } from 'fds/components';
 
 const viewModes = [
 	{ name: 'list', icon: 'list' },

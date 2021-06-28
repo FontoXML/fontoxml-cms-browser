@@ -1,7 +1,7 @@
+import { ModalStack } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { ModalStack } from 'fds/components';
 import t from 'fontoxml-localization/src/t';
 
 import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
@@ -30,24 +30,31 @@ class CreateDocumentFormModalStack extends Component {
 		selectedFolder: {},
 	};
 
-	handleSelectFolderClick = () =>
+	handleSelectFolderClick = () => {
 		this.setState({ activeModal: 'FolderBrowser' });
-	handleSelectDocumentTemplateClick = () =>
+	};
+
+	handleSelectDocumentTemplateClick = () => {
 		this.setState({ activeModal: 'DocumentTemplateBrowser' });
+	};
 
-	handleCancelModal = () => this.setState({ activeModal: null });
+	handleCancelModal = () => {
+		this.setState({ activeModal: null });
+	};
 
-	handleDocumentTemplateSubmit = (submittedItem) =>
+	handleDocumentTemplateSubmit = (submittedItem) => {
 		this.setState({
 			activeModal: null,
 			selectedDocumentTemplate: submittedItem,
 		});
+	};
 
-	handleFolderSubmit = (submittedItem) =>
+	handleFolderSubmit = (submittedItem) => {
 		this.setState({
 			activeModal: null,
 			selectedFolder: submittedItem,
 		});
+	};
 
 	render() {
 		const {

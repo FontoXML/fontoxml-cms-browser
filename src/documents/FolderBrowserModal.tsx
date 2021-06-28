@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
 import {
 	Button,
 	Modal,
@@ -10,16 +7,19 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fds/components';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
 import t from 'fontoxml-localization/src/t';
 
-import DocumentGridItem from './DocumentGridItem';
-import DocumentListItem from './DocumentListItem';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
 import ModalBrowserListOrGridViewMode, {
 	VIEWMODES,
 } from '../shared/ModalBrowserListOrGridViewMode';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
+import DocumentGridItem from './DocumentGridItem';
+import DocumentListItem from './DocumentListItem';
 
 const stateLabels = {
 	loading: {

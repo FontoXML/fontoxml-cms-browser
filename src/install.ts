@@ -5,6 +5,7 @@ import t from 'fontoxml-localization/src/t';
 import uiManager from 'fontoxml-modular-ui/src/uiManager';
 import addTransform from 'fontoxml-operations/src/addTransform';
 import selectionManager from 'fontoxml-selection/src/selectionManager';
+
 import dataProviders from './dataProviders';
 import DocumentBrowserModal from './documents/DocumentBrowserModal';
 import DocumentTemplateBrowserModal from './documents/DocumentTemplateBrowserModal';
@@ -45,14 +46,14 @@ export default function install(): void {
 			}
 
 			// Use the first loaded document in the hierarchy
-			var browseContextHierarchyNode = documentsHierarchy.find(function (
-				hierarchyNode
-			) {
-				return (
-					hierarchyNode.documentReference &&
-					hierarchyNode.documentReference.remoteDocumentId
-				);
-			});
+			const browseContextHierarchyNode = documentsHierarchy.find(
+				function (hierarchyNode) {
+					return (
+						hierarchyNode.documentReference &&
+						hierarchyNode.documentReference.remoteDocumentId
+					);
+				}
+			);
 			stepData.browseContextDocumentId = browseContextHierarchyNode
 				? browseContextHierarchyNode.documentReference.remoteDocumentId
 				: null;

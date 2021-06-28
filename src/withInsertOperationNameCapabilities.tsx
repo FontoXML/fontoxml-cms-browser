@@ -37,9 +37,7 @@ export default function withInsertOperationNameCapabilities(
 								operationState.enabled &&
 								submitModal(submitModalData)
 						)
-						.catch((_error) => {
-							return;
-						});
+						.catch((_error) => {});
 				} else if (this.isMountedInDOM) {
 					submitModal(submitModalData);
 				}
@@ -71,19 +69,17 @@ export default function withInsertOperationNameCapabilities(
 							this.props.data.insertOperationName,
 							initialData
 						)
-						.then(
-							(operationState) =>
-								this.isMountedInDOM &&
+						.then((operationState) => {
+							this.isMountedInDOM &&
 								this.setState({
 									isSubmitButtonDisabled:
 										!operationState.enabled,
-								})
-						)
-						.catch(
-							(_) =>
-								this.isMountedInDOM &&
-								this.setState({ isSubmitButtonDisabled: true })
-						);
+								});
+						})
+						.catch((_) => {
+							this.isMountedInDOM &&
+								this.setState({ isSubmitButtonDisabled: true });
+						});
 				}
 			};
 

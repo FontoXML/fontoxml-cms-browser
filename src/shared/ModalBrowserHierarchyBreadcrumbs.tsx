@@ -1,7 +1,6 @@
+import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-
-import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
 
 class ModalBrowserHierarchyBreadcrumbs extends Component {
 	static defaultProps = {

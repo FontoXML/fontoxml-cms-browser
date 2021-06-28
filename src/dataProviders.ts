@@ -1,6 +1,6 @@
 import createDataProviderUsingConfiguredConnectors from './data-providers/createDataProviderUsingConfiguredConnectors';
 
-var dataProvidersByName = Object.create(null);
+const dataProvidersByName = Object.create(null);
 
 export default {
 	/**
@@ -19,26 +19,23 @@ export default {
 	 *   uploadMaxFileSizeInBytes: number
 	 * }} options
 	 */
-	set: function (name: $TSFixMeAny, options: $TSFixMeAny): void {
+	set(name: $TSFixMeAny, options: $TSFixMeAny): void {
 		dataProvidersByName[name] =
 			createDataProviderUsingConfiguredConnectors(options);
 	},
 
-	get: function (name: $TSFixMeAny): $TSFixMeAny {
-		var dataProvider = dataProvidersByName[name];
+	get(name: $TSFixMeAny): $TSFixMeAny {
+		const dataProvider = dataProvidersByName[name];
 
 		if (!dataProvider) {
-			var names = Object.keys(dataProvidersByName)
+			const names = Object.keys(dataProvidersByName)
 				.map(function (name) {
-					return '"' + name + '"';
+					return `"${name}"`;
 				})
 				.join(', ');
 
 			throw new Error(
-				'No dataProvider set with name: "' +
-					name +
-					'". Known dataProvider names are: ' +
-					names
+				`No dataProvider set with name: "${name}". Known dataProvider names are: ${names}`
 			);
 		}
 

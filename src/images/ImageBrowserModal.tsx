@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
 import {
 	Button,
 	Flex,
@@ -13,13 +10,12 @@ import {
 	StateMessage,
 	Toast,
 } from 'fds/components';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import t from 'fontoxml-localization/src/t';
 
-import ImageGridItem from './ImageGridItem';
-import ImageListItem from './ImageListItem';
-import ImagePreview from './ImagePreview';
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
 import ModalBrowserListOrGridViewMode, {
@@ -28,6 +24,9 @@ import ModalBrowserListOrGridViewMode, {
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton';
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
 import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
+import ImageGridItem from './ImageGridItem';
+import ImageListItem from './ImageListItem';
+import ImagePreview from './ImagePreview';
 
 const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'

@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
 import {
 	Block,
 	Flex,
@@ -9,6 +6,9 @@ import {
 	StateMessage,
 	Text,
 } from 'fds/components';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
 import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader';
 import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
 import FxNodePreview from 'fontoxml-fx/src/FxNodePreview';

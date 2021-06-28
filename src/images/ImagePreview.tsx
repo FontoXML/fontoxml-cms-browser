@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
 import {
 	Flex,
 	Heading,
@@ -10,6 +7,9 @@ import {
 	StateMessage,
 } from 'fds/components';
 import { applyCss, block } from 'fds/system';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
 const imageStyles = applyCss([

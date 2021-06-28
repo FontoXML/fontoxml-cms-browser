@@ -1,8 +1,3 @@
-import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
-
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
-
 import {
 	Button,
 	ButtonWithValue,
@@ -15,8 +10,12 @@ import {
 	ModalHeader,
 	TextInput,
 } from 'fds/components';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import t from 'fontoxml-localization/src/t';
+
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
 
 function getSubmitModalData(itemToSubmit) {
 	return {
@@ -53,8 +52,8 @@ let CreateDocumentFormModal = ({
 
 	useEffect(() => {
 		determineAndHandleSubmitButtonDisabledState({
-			selectedDocumentTemplate: selectedDocumentTemplate,
-			selectedFolder: selectedFolder,
+			selectedDocumentTemplate,
+			selectedFolder,
 			documentTitle,
 		});
 	}, [
@@ -68,8 +67,8 @@ let CreateDocumentFormModal = ({
 		() =>
 			submitModal(
 				getSubmitModalData({
-					selectedDocumentTemplate: selectedDocumentTemplate,
-					selectedFolder: selectedFolder,
+					selectedDocumentTemplate,
+					selectedFolder,
 					documentTitle,
 				})
 			),
@@ -99,10 +98,9 @@ let CreateDocumentFormModal = ({
 		]
 	);
 
-	const handleDocumentTitleChange = useCallback(
-		(documentTitle) => setDocumentTitle(documentTitle),
-		[]
-	);
+	const handleDocumentTitleChange = useCallback((documentTitle) => {
+		setDocumentTitle(documentTitle);
+	}, []);
 
 	return (
 		<Modal size="s" onKeyDown={handleKeyDown}>
