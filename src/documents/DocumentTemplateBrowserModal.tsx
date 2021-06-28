@@ -8,22 +8,22 @@ import {
 	ModalContent,
 	ModalContentToolbar,
 	ModalFooter,
-	ModalHeader
+	ModalHeader,
 } from 'fds/components';
 
-import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
-import t from 'fontoxml-localization/src/t.js';
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import t from 'fontoxml-localization/src/t';
 
-import DocumentGridItem from './DocumentGridItem.jsx';
-import DocumentListItem from './DocumentListItem.jsx';
-import DocumentPreview from './DocumentPreview.jsx';
-import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
-import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
+import DocumentGridItem from './DocumentGridItem';
+import DocumentListItem from './DocumentListItem';
+import DocumentPreview from './DocumentPreview';
+import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
+import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
 import ModalBrowserListOrGridViewMode, {
-	VIEWMODES
-} from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
-import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
+	VIEWMODES,
+} from '../shared/ModalBrowserListOrGridViewMode';
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
+import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
 
 const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'
@@ -32,32 +32,34 @@ const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 const stateLabels = {
 	loading: {
 		title: t('Loading templates…'),
-		message: null
+		message: null,
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: null
+		message: null,
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain files that can be opened with Fonto.')
+		message: t(
+			'This folder does not contain files that can be opened with Fonto.'
+		),
 	},
 	loadingPreview: {
 		title: t('Loading template preview…'),
-		message: null
+		message: null,
 	},
 	previewError: {
 		title: t('Can’t open this template'),
 		message: t(
 			'Fonto can’t open this template. You can try again, or try a different template.'
-		)
-	}
+		),
+	},
 };
 
 function getSubmitModalData(itemToSubmit) {
 	return {
 		remoteDocumentId: itemToSubmit.id,
-		label: itemToSubmit.label
+		label: itemToSubmit.label,
 	};
 }
 
@@ -67,7 +69,7 @@ function canSubmitSelectedItem(selectedItem) {
 
 class DocumentTemplateBrowserModal extends Component {
 	static defaultProps = {
-		remoteDocumentId: null
+		remoteDocumentId: null,
 	};
 
 	static propTypes = {
@@ -78,13 +80,13 @@ class DocumentTemplateBrowserModal extends Component {
 			insertOperationName: PropTypes.string,
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
-			modalTitle: PropTypes.string
+			modalTitle: PropTypes.string,
 		}).isRequired,
 		remoteDocumentId: PropTypes.string,
-		submitModal: PropTypes.func.isRequired
+		submitModal: PropTypes.func.isRequired,
 	};
 
-	handleKeyDown = event => {
+	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
@@ -103,8 +105,15 @@ class DocumentTemplateBrowserModal extends Component {
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
-			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
+			isSelected={
+				this.props.selectedItem &&
+				this.props.selectedItem.id === item.id
+			}
+			item={
+				item.icon || item.type === 'folder'
+					? item
+					: { ...item, icon: 'file-o' }
+			}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 			onRef={onRef}
@@ -116,14 +125,21 @@ class DocumentTemplateBrowserModal extends Component {
 			key={key}
 			isDisabled={item.isDisabled}
 			isErrored={this.props.isItemErrored(item)}
-			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
-			item={item.icon || item.type === 'folder' ? item : { ...item, icon: 'file-o' }}
+			isSelected={
+				this.props.selectedItem &&
+				this.props.selectedItem.id === item.id
+			}
+			item={
+				item.icon || item.type === 'folder'
+					? item
+					: { ...item, icon: 'file-o' }
+			}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
 	);
 
-	handleFileAndFolderResultListItemSubmit = selectedItem => {
+	handleFileAndFolderResultListItemSubmit = (selectedItem) => {
 		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
 	};
 
@@ -137,7 +153,12 @@ class DocumentTemplateBrowserModal extends Component {
 	render() {
 		const {
 			cancelModal,
-			data: { browseContextDocumentId, modalIcon, modalPrimaryButtonLabel, modalTitle },
+			data: {
+				browseContextDocumentId,
+				modalIcon,
+				modalPrimaryButtonLabel,
+				modalTitle,
+			},
 			hierarchyItems,
 			isSubmitButtonDisabled,
 			items,
@@ -147,22 +168,29 @@ class DocumentTemplateBrowserModal extends Component {
 			refreshItems,
 			request,
 			selectedItem,
-			viewMode
+			viewMode,
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
 			<Modal size="l" onKeyDown={this.handleKeyDown} isFullHeight>
-				<ModalHeader icon={modalIcon} title={modalTitle || t('Select a template')} />
+				<ModalHeader
+					icon={modalIcon}
+					title={modalTitle || t('Select a template')}
+				/>
 
 				<ModalBody>
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
-							justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
+							justifyContent={
+								hasHierarchyItems ? 'space-between' : 'flex-end'
+							}
 						>
 							{hasHierarchyItems && (
 								<ModalBrowserHierarchyBreadcrumbs
-									browseContextDocumentId={browseContextDocumentId}
+									browseContextDocumentId={
+										browseContextDocumentId
+									}
 									hierarchyItems={hierarchyItems}
 									refreshItems={refreshItems}
 									request={request}
@@ -178,10 +206,15 @@ class DocumentTemplateBrowserModal extends Component {
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column" flex="1">
 								<ModalBrowserFileAndFolderResultList
-									browseContextDocumentId={browseContextDocumentId}
+									browseContextDocumentId={
+										browseContextDocumentId
+									}
 									items={items}
 									onItemSelect={onItemSelect}
-									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
+									onItemSubmit={
+										this
+											.handleFileAndFolderResultListItemSubmit
+									}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
@@ -207,7 +240,11 @@ class DocumentTemplateBrowserModal extends Component {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					<Button
+						type="default"
+						label={t('Cancel')}
+						onClick={cancelModal}
+					/>
 
 					<Button
 						type="primary"
@@ -226,13 +263,18 @@ class DocumentTemplateBrowserModal extends Component {
 			lastOpenedState,
 			onInitialSelectedItemIdChange,
 			refreshItems,
-			remoteDocumentId
+			remoteDocumentId,
 		} = this.props;
 
 		const { hierarchyItems } = lastOpenedState;
 
-		const initialSelectedItem = remoteDocumentId ? { id: remoteDocumentId } : null;
-		if (cmsBrowserSendsHierarchyItemsInBrowseResponse && initialSelectedItem) {
+		const initialSelectedItem = remoteDocumentId
+			? { id: remoteDocumentId }
+			: null;
+		if (
+			cmsBrowserSendsHierarchyItemsInBrowseResponse &&
+			initialSelectedItem
+		) {
 			onInitialSelectedItemIdChange(initialSelectedItem);
 			refreshItems(browseContextDocumentId, { id: null });
 		} else if (hierarchyItems && hierarchyItems.length > 1) {

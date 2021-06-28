@@ -2,24 +2,24 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fds/components';
-import t from 'fontoxml-localization/src/t.js';
+import t from 'fontoxml-localization/src/t';
 
-import CreateDocumentFormModal from '../documents/CreateDocumentFormModal.jsx';
-import DocumentBrowserModal from '../documents/DocumentBrowserModal.jsx';
-import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
-import FolderBrowserModal from '../documents/FolderBrowserModal.jsx';
+import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
+import DocumentBrowserModal from '../documents/DocumentBrowserModal';
+import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal';
+import FolderBrowserModal from '../documents/FolderBrowserModal';
 
 const tabs = [
 	{
 		tabId: 'create',
 		label: t('Create new'),
-		icon: 'plus'
+		icon: 'plus',
 	},
 	{
 		tabId: 'open',
 		label: t('Open from'),
-		icon: 'folder-open-o'
-	}
+		icon: 'folder-open-o',
+	},
 ];
 class OpenOrCreateDocumentModalStack extends Component {
 	static propTypes = {
@@ -32,9 +32,9 @@ class OpenOrCreateDocumentModalStack extends Component {
 			modalTitle: PropTypes.string,
 			openDocumentDataProviderName: PropTypes.string.isRequired,
 			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
-			selectFolderDataProviderName: PropTypes.string.isRequired
+			selectFolderDataProviderName: PropTypes.string.isRequired,
 		}).isRequired,
-		submitModal: PropTypes.func.isRequired
+		submitModal: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -43,15 +43,20 @@ class OpenOrCreateDocumentModalStack extends Component {
 		activeModal: null,
 
 		selectedDocumentTemplate: {},
-		selectedFolder: {}
+		selectedFolder: {},
 	};
 
-	handleSelectFolderClick = () => this.setState({ activeModal: 'FolderBrowser' });
+	handleSelectFolderClick = () =>
+		this.setState({ activeModal: 'FolderBrowser' });
 	handleSelectDocumentTemplateClick = () =>
 		this.setState({ activeModal: 'DocumentTemplateBrowser' });
 
-	handleTabItemClick = activeTab =>
-		this.setState({ activeTab, selectedDocumentTemplate: {}, selectedFolder: {} });
+	handleTabItemClick = (activeTab) =>
+		this.setState({
+			activeTab,
+			selectedDocumentTemplate: {},
+			selectedFolder: {},
+		});
 
 	handleRenderModalBodyToolbar = () => (
 		<ModalBodyToolbar>
@@ -65,16 +70,16 @@ class OpenOrCreateDocumentModalStack extends Component {
 
 	handleCancelModal = () => this.setState({ activeModal: null });
 
-	handleDocumentTemplateSubmit = submittedItem =>
+	handleDocumentTemplateSubmit = (submittedItem) =>
 		this.setState({
 			activeModal: null,
-			selectedDocumentTemplate: submittedItem
+			selectedDocumentTemplate: submittedItem,
 		});
 
-	handleFolderSubmit = submittedItem =>
+	handleFolderSubmit = (submittedItem) =>
 		this.setState({
 			activeModal: null,
-			selectedFolder: submittedItem
+			selectedFolder: submittedItem,
 		});
 
 	render() {
@@ -87,13 +92,19 @@ class OpenOrCreateDocumentModalStack extends Component {
 				modalTitle,
 				openDocumentDataProviderName,
 				selectDocumentTemplateDataProviderName,
-				selectFolderDataProviderName
+				selectFolderDataProviderName,
 			},
 			cancelModal,
-			submitModal
+			submitModal,
 		} = this.props;
-		const { activeModal, activeTab, selectedDocumentTemplate, selectedFolder } = this.state;
-		const openOrCreateModalTitle = modalTitle || t('Open or create document');
+		const {
+			activeModal,
+			activeTab,
+			selectedDocumentTemplate,
+			selectedFolder,
+		} = this.state;
+		const openOrCreateModalTitle =
+			modalTitle || t('Open or create document');
 		return (
 			<ModalStack>
 				{activeTab.tabId === 'open' && (
@@ -106,9 +117,11 @@ class OpenOrCreateDocumentModalStack extends Component {
 							isCancelable,
 							modalIcon,
 							modalPrimaryButtonLabel: t('Open'),
-							modalTitle: openOrCreateModalTitle
+							modalTitle: openOrCreateModalTitle,
 						}}
-						renderModalBodyToolbar={this.handleRenderModalBodyToolbar}
+						renderModalBodyToolbar={
+							this.handleRenderModalBodyToolbar
+						}
 						submitModal={submitModal}
 					/>
 				)}
@@ -118,13 +131,17 @@ class OpenOrCreateDocumentModalStack extends Component {
 						cancelModal={cancelModal}
 						data={{
 							insertOperationName,
-							isCancelable
+							isCancelable,
 						}}
 						modalIcon={modalIcon}
 						modalTitle={openOrCreateModalTitle}
-						onSelectDocumentTemplateClick={this.handleSelectDocumentTemplateClick}
+						onSelectDocumentTemplateClick={
+							this.handleSelectDocumentTemplateClick
+						}
 						onSelectFolderClick={this.handleSelectFolderClick}
-						renderModalBodyToolbar={this.handleRenderModalBodyToolbar}
+						renderModalBodyToolbar={
+							this.handleRenderModalBodyToolbar
+						}
 						selectedDocumentTemplate={selectedDocumentTemplate}
 						selectedFolder={selectedFolder}
 						submitModal={submitModal}
@@ -136,10 +153,15 @@ class OpenOrCreateDocumentModalStack extends Component {
 						cancelModal={this.handleCancelModal}
 						data={{
 							browseContextDocumentId: null,
-							dataProviderName: selectDocumentTemplateDataProviderName,
-							modalTitle: t('Select a template for your document')
+							dataProviderName:
+								selectDocumentTemplateDataProviderName,
+							modalTitle: t(
+								'Select a template for your document'
+							),
 						}}
-						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
+						remoteDocumentId={
+							selectedDocumentTemplate.remoteDocumentId
+						}
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
 				)}
@@ -150,7 +172,9 @@ class OpenOrCreateDocumentModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
-							modalTitle: t('Select a folder to save your documents in')
+							modalTitle: t(
+								'Select a folder to save your documents in'
+							),
 						}}
 						submitModal={this.handleFolderSubmit}
 					/>

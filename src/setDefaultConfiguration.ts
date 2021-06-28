@@ -1,6 +1,6 @@
-import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
 
-export default function setDefaultConfiguration() {
+export default function setDefaultConfiguration(): void {
 	/**
 	 * Set whether your CMS supports 'jump in tree':
 	 * whether or not it responds with hierarchyItems in browse requests.
@@ -12,7 +12,10 @@ export default function setDefaultConfiguration() {
 	 * @const  {boolean}  cms-browser-sends-hierarchy-items-in-browse-response
 	 * @category  add-on/fontoxml-cms-browser
 	 */
-	configurationManager.setDefault('cms-browser-sends-hierarchy-items-in-browse-response', false);
+	configurationManager.setDefault(
+		'cms-browser-sends-hierarchy-items-in-browse-response',
+		false
+	);
 
 	/**
 	 * Set the mime type to accept when uploading images in the browse modal.
@@ -26,7 +29,10 @@ export default function setDefaultConfiguration() {
 	 * @const  {string}  cms-browser-upload-mime-types-to-accept
 	 * @category  add-on/fontoxml-cms-browser
 	 */
-	configurationManager.setDefault('cms-browser-upload-mime-types-to-accept', 'image/*');
+	configurationManager.setDefault(
+		'cms-browser-upload-mime-types-to-accept',
+		'image/*'
+	);
 
 	/**
 	 * Set the max file size in bytes to accept when uploading images in the browse modal.
@@ -36,5 +42,8 @@ export default function setDefaultConfiguration() {
 	 * @const  {number}  cms-browser-upload-max-file-size-in-bytes
 	 * @category  add-on/fontoxml-cms-browser
 	 */
-	configurationManager.setDefault('cms-browser-upload-max-file-size-in-bytes', 4194304);
+	configurationManager.setDefault(
+		'cms-browser-upload-max-file-size-in-bytes',
+		4194304
+	);
 }

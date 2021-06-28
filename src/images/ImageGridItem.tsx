@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
-import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
+import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
-import BlockImage from './BlockImage.jsx';
+import BlockImage from './BlockImage';
 
 class ImageGridItem extends Component {
 	static defaultProps = {
 		isDisabled: false,
 		isSelected: false,
-		onClick: _item => {},
-		onDoubleClick: _item => {}
+		onClick: (_item) => {},
+		onDoubleClick: (_item) => {},
 	};
 
 	static propTypes = {
@@ -21,14 +21,14 @@ class ImageGridItem extends Component {
 			id: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired
+			type: PropTypes.string.isRequired,
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
-		referrerDocumentId: PropTypes.string.isRequired
+		referrerDocumentId: PropTypes.string.isRequired,
 	};
 
-	wrapInGridItem = content => (
+	wrapInGridItem = (content) => (
 		<GridItem
 			isSelected={this.props.isSelected}
 			isDisabled={this.props.isDisabled}
@@ -60,20 +60,30 @@ class ImageGridItem extends Component {
 				{({ isErrored, isLoading, imageData }) => {
 					if (isErrored) {
 						return this.wrapInGridItem(
-							<Flex alignItems="center" flex="1" flexDirection="column">
+							<Flex
+								alignItems="center"
+								flex="1"
+								flexDirection="column"
+							>
 								<Icon
 									colorName="icon-m-error-color"
 									icon={item.icon || 'file-image-o'}
 									size="m"
 								/>
-								<Label colorName="text-muted-color">{item.label}</Label>
+								<Label colorName="text-muted-color">
+									{item.label}
+								</Label>
 							</Flex>
 						);
 					}
 
 					if (isLoading) {
 						return this.wrapInGridItem(
-							<Flex alignItems="center" flex="1" flexDirection="column">
+							<Flex
+								alignItems="center"
+								flex="1"
+								flexDirection="column"
+							>
 								<SpinnerIcon size="m" />
 								<Label>{item.label}</Label>
 							</Flex>
@@ -81,7 +91,11 @@ class ImageGridItem extends Component {
 					}
 
 					return this.wrapInGridItem(
-						<Flex alignItems="center" flex="1" flexDirection="column">
+						<Flex
+							alignItems="center"
+							flex="1"
+							flexDirection="column"
+						>
 							<Flex
 								alignItems="center"
 								flex="none"

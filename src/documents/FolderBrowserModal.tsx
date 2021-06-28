@@ -8,32 +8,34 @@ import {
 	ModalContent,
 	ModalContentToolbar,
 	ModalFooter,
-	ModalHeader
+	ModalHeader,
 } from 'fds/components';
-import t from 'fontoxml-localization/src/t.js';
+import t from 'fontoxml-localization/src/t';
 
-import DocumentGridItem from './DocumentGridItem.jsx';
-import DocumentListItem from './DocumentListItem.jsx';
-import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
-import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
+import DocumentGridItem from './DocumentGridItem';
+import DocumentListItem from './DocumentListItem';
+import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
+import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
 import ModalBrowserListOrGridViewMode, {
-	VIEWMODES
-} from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
+	VIEWMODES,
+} from '../shared/ModalBrowserListOrGridViewMode';
+import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
 
 const stateLabels = {
 	loading: {
 		title: t('Loading folders…'),
-		message: null
+		message: null,
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: t('Fonto can’t open this folder. You can try again, or try a different folder.')
+		message: t(
+			'Fonto can’t open this folder. You can try again, or try a different folder.'
+		),
 	},
 	empty: {
 		title: t('No results'),
-		message: null
-	}
+		message: null,
+	},
 };
 
 class FolderBrowserModal extends Component {
@@ -43,12 +45,12 @@ class FolderBrowserModal extends Component {
 			browseContextDocumentId: PropTypes.string,
 			dataProviderName: PropTypes.string.isRequired,
 			modalTitle: PropTypes.string,
-			modalPrimaryButtonLabel: PropTypes.string
+			modalPrimaryButtonLabel: PropTypes.string,
 		}).isRequired,
-		submitModal: PropTypes.func.isRequired
+		submitModal: PropTypes.func.isRequired,
 	};
 
-	handleKeyDown = event => {
+	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
@@ -66,7 +68,10 @@ class FolderBrowserModal extends Component {
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
-			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
+			isSelected={
+				this.props.selectedItem &&
+				this.props.selectedItem.id === item.id
+			}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -78,19 +83,27 @@ class FolderBrowserModal extends Component {
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
-			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
+			isSelected={
+				this.props.selectedItem &&
+				this.props.selectedItem.id === item.id
+			}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
 		/>
 	);
 
-	handleSubmitButtonClick = () => this.props.submitModal(this.props.selectedItem);
+	handleSubmitButtonClick = () =>
+		this.props.submitModal(this.props.selectedItem);
 
 	render() {
 		const {
 			cancelModal,
-			data: { browseContextDocumentId, modalPrimaryButtonLabel, modalTitle },
+			data: {
+				browseContextDocumentId,
+				modalPrimaryButtonLabel,
+				modalTitle,
+			},
 			hierarchyItems,
 			items,
 			onItemSelect,
@@ -98,7 +111,7 @@ class FolderBrowserModal extends Component {
 			refreshItems,
 			request,
 			selectedItem,
-			viewMode
+			viewMode,
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
@@ -109,11 +122,15 @@ class FolderBrowserModal extends Component {
 				<ModalBody>
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
-							justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
+							justifyContent={
+								hasHierarchyItems ? 'space-between' : 'flex-end'
+							}
 						>
 							{hasHierarchyItems && (
 								<ModalBrowserHierarchyBreadcrumbs
-									browseContextDocumentId={browseContextDocumentId}
+									browseContextDocumentId={
+										browseContextDocumentId
+									}
 									hierarchyItems={hierarchyItems}
 									refreshItems={refreshItems}
 									request={request}
@@ -128,7 +145,9 @@ class FolderBrowserModal extends Component {
 
 						<ModalContent flexDirection="column">
 							<ModalBrowserFileAndFolderResultList
-								browseContextDocumentId={browseContextDocumentId}
+								browseContextDocumentId={
+									browseContextDocumentId
+								}
 								items={items}
 								onItemSelect={onItemSelect}
 								refreshItems={refreshItems}
@@ -144,7 +163,11 @@ class FolderBrowserModal extends Component {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					<Button
+						type="default"
+						label={t('Cancel')}
+						onClick={cancelModal}
+					/>
 
 					<Button
 						type="primary"
@@ -161,7 +184,7 @@ class FolderBrowserModal extends Component {
 		const {
 			data: { browseContextDocumentId },
 			lastOpenedState,
-			refreshItems
+			refreshItems,
 		} = this.props;
 
 		const { hierarchyItems } = lastOpenedState;
@@ -179,6 +202,8 @@ class FolderBrowserModal extends Component {
 	}
 }
 
-FolderBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(FolderBrowserModal);
+FolderBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(
+	FolderBrowserModal
+);
 
 export default FolderBrowserModal;

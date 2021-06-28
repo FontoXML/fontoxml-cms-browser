@@ -11,23 +11,23 @@ import {
 	ModalFooter,
 	ModalHeader,
 	StateMessage,
-	Toast
+	Toast,
 } from 'fds/components';
 
-import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
-import t from 'fontoxml-localization/src/t.js';
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import t from 'fontoxml-localization/src/t';
 
-import ImageGridItem from './ImageGridItem.jsx';
-import ImageListItem from './ImageListItem.jsx';
-import ImagePreview from './ImagePreview.jsx';
-import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
-import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
+import ImageGridItem from './ImageGridItem';
+import ImageListItem from './ImageListItem';
+import ImagePreview from './ImagePreview';
+import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
+import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
 import ModalBrowserListOrGridViewMode, {
-	VIEWMODES
-} from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton.jsx';
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
-import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
+	VIEWMODES,
+} from '../shared/ModalBrowserListOrGridViewMode';
+import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton';
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
+import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
 
 const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'
@@ -40,24 +40,30 @@ const cmsBrowserUploadMaxFileSizeInBytes = configurationManager.get(
 const stateLabels = {
 	loading: {
 		title: t('Loading images…'),
-		message: null
+		message: null,
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: t('Fonto can’t open this folder. You can try again, or try a different folder.')
+		message: t(
+			'Fonto can’t open this folder. You can try again, or try a different folder.'
+		),
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain images that can be opened with Fonto.')
+		message: t(
+			'This folder does not contain images that can be opened with Fonto.'
+		),
 	},
 	loadingPreview: {
 		title: t('Loading image preview…'),
-		message: null
+		message: null,
 	},
 	previewError: {
 		title: t('Can’t open this image'),
-		message: t('Fonto can’t open this image. You can try again, or try a different image.')
-	}
+		message: t(
+			'Fonto can’t open this image. You can try again, or try a different image.'
+		),
+	},
 };
 
 const uploadErrorMessages = {
@@ -65,16 +71,18 @@ const uploadErrorMessages = {
 		'This image is larger than {MAX_IMAGE_UPLOAD_SIZE} megabyte, please select another image or resize it and try again.',
 		{
 			MAX_IMAGE_UPLOAD_SIZE:
-				Math.round((cmsBrowserUploadMaxFileSizeInBytes / 1000000) * 100) / 100
+				Math.round(
+					(cmsBrowserUploadMaxFileSizeInBytes / 1000000) * 100
+				) / 100,
 		}
 	),
 	invalidFileTypeMessage: t('This file type is not valid.'),
-	serverErrorMessage: t('Fonto can’t upload this image, please try again.')
+	serverErrorMessage: t('Fonto can’t upload this image, please try again.'),
 };
 
 function getSubmitModalData(itemToSubmit) {
 	return {
-		selectedImageId: itemToSubmit.id
+		selectedImageId: itemToSubmit.id,
 	};
 }
 
@@ -92,12 +100,12 @@ class ImageBrowserModal extends Component {
 			modalIcon: PropTypes.string,
 			modalPrimaryButtonLabel: PropTypes.string,
 			modalTitle: PropTypes.string,
-			selectedImageId: PropTypes.string
+			selectedImageId: PropTypes.string,
 		}).isRequired,
-		submitModal: PropTypes.func.isRequired
+		submitModal: PropTypes.func.isRequired,
 	};
 
-	handleKeyDown = event => {
+	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
@@ -111,7 +119,7 @@ class ImageBrowserModal extends Component {
 		}
 	};
 
-	handleFileAndFolderResultListItemSubmit = selectedItem =>
+	handleFileAndFolderResultListItemSubmit = (selectedItem) =>
 		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
 
 	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
@@ -119,7 +127,10 @@ class ImageBrowserModal extends Component {
 			key={key}
 			referrerDocumentId={this.props.data.browseContextDocumentId}
 			isDisabled={item.isDisabled}
-			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
+			isSelected={
+				this.props.selectedItem &&
+				this.props.selectedItem.id === item.id
+			}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -132,7 +143,10 @@ class ImageBrowserModal extends Component {
 			key={key}
 			referrerDocumentId={this.props.data.browseContextDocumentId}
 			isDisabled={item.isDisabled}
-			isSelected={this.props.selectedItem && this.props.selectedItem.id === item.id}
+			isSelected={
+				this.props.selectedItem &&
+				this.props.selectedItem.id === item.id
+			}
 			item={item}
 			onClick={onClick}
 			onDoubleClick={onDoubleClick}
@@ -150,7 +164,7 @@ class ImageBrowserModal extends Component {
 				dataProviderName,
 				modalIcon,
 				modalPrimaryButtonLabel,
-				modalTitle
+				modalTitle,
 			},
 			hierarchyItems,
 			isSubmitButtonDisabled,
@@ -161,22 +175,29 @@ class ImageBrowserModal extends Component {
 			refreshItems,
 			request,
 			selectedItem,
-			viewMode
+			viewMode,
 		} = this.props;
 		const hasHierarchyItems = hierarchyItems.length > 0;
 
 		return (
 			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
-				<ModalHeader icon={modalIcon} title={modalTitle || t('Select an image')} />
+				<ModalHeader
+					icon={modalIcon}
+					title={modalTitle || t('Select an image')}
+				/>
 
 				<ModalBody>
 					<ModalContent flexDirection="column">
 						<ModalContentToolbar
-							justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
+							justifyContent={
+								hasHierarchyItems ? 'space-between' : 'flex-end'
+							}
 						>
 							{hasHierarchyItems && (
 								<ModalBrowserHierarchyBreadcrumbs
-									browseContextDocumentId={browseContextDocumentId}
+									browseContextDocumentId={
+										browseContextDocumentId
+									}
 									hierarchyItems={hierarchyItems}
 									refreshItems={refreshItems}
 									request={request}
@@ -185,7 +206,9 @@ class ImageBrowserModal extends Component {
 
 							<Flex flex="none" spaceSize="m">
 								<ModalBrowserUploadButton
-									browseContextDocumentId={browseContextDocumentId}
+									browseContextDocumentId={
+										browseContextDocumentId
+									}
 									dataProviderName={dataProviderName}
 									hierarchyItems={hierarchyItems}
 									request={request}
@@ -213,10 +236,15 @@ class ImageBrowserModal extends Component {
 						<ModalContent flexDirection="row">
 							<ModalContent flexDirection="column">
 								<ModalBrowserFileAndFolderResultList
-									browseContextDocumentId={browseContextDocumentId}
+									browseContextDocumentId={
+										browseContextDocumentId
+									}
 									items={items}
 									onItemSelect={onItemSelect}
-									onItemSubmit={this.handleFileAndFolderResultListItemSubmit}
+									onItemSubmit={
+										this
+											.handleFileAndFolderResultListItemSubmit
+									}
 									refreshItems={refreshItems}
 									renderListItem={this.handleRenderListItem}
 									renderGridItem={this.handleRenderGridItem}
@@ -230,7 +258,10 @@ class ImageBrowserModal extends Component {
 							{selectedItem && selectedItem.type !== 'folder' && (
 								<ModalContent flexDirection="column">
 									<ImagePreview
-										referrerDocumentId={this.props.data.browseContextDocumentId}
+										referrerDocumentId={
+											this.props.data
+												.browseContextDocumentId
+										}
 										selectedItem={selectedItem}
 										stateLabels={stateLabels}
 									/>
@@ -240,7 +271,9 @@ class ImageBrowserModal extends Component {
 							{selectedItem && selectedItem.type === 'folder' && (
 								<ModalContent flexDirection="column">
 									<StateMessage
-										message={t('Select an item in the list to the left.')}
+										message={t(
+											'Select an item in the list to the left.'
+										)}
 										paddingSize="m"
 										title={t('No item selected')}
 										visual="hand-pointer-o"
@@ -252,7 +285,11 @@ class ImageBrowserModal extends Component {
 				</ModalBody>
 
 				<ModalFooter>
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					<Button
+						type="default"
+						label={t('Cancel')}
+						onClick={cancelModal}
+					/>
 
 					<Button
 						type="primary"
@@ -270,13 +307,18 @@ class ImageBrowserModal extends Component {
 			data: { browseContextDocumentId, selectedImageId },
 			lastOpenedState,
 			onInitialSelectedItemIdChange,
-			refreshItems
+			refreshItems,
 		} = this.props;
 
 		const { hierarchyItems } = lastOpenedState;
 
-		const initialSelectedItem = selectedImageId ? { id: selectedImageId } : null;
-		if (cmsBrowserSendsHierarchyItemsInBrowseResponse && initialSelectedItem) {
+		const initialSelectedItem = selectedImageId
+			? { id: selectedImageId }
+			: null;
+		if (
+			cmsBrowserSendsHierarchyItemsInBrowseResponse &&
+			initialSelectedItem
+		) {
 			onInitialSelectedItemIdChange(initialSelectedItem);
 			refreshItems(browseContextDocumentId, { id: null });
 		} else if (hierarchyItems && hierarchyItems.length > 1) {
@@ -292,9 +334,12 @@ class ImageBrowserModal extends Component {
 	}
 }
 
-ImageBrowserModal = withModularBrowserCapabilities(VIEWMODES.GRID)(ImageBrowserModal);
-ImageBrowserModal = withInsertOperationNameCapabilities(getSubmitModalData, canSubmitSelectedItem)(
+ImageBrowserModal = withModularBrowserCapabilities(VIEWMODES.GRID)(
 	ImageBrowserModal
 );
+ImageBrowserModal = withInsertOperationNameCapabilities(
+	getSubmitModalData,
+	canSubmitSelectedItem
+)(ImageBrowserModal);
 
 export default ImageBrowserModal;

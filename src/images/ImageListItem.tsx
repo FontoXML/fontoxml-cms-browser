@@ -2,17 +2,17 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
+import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
-import BlockImage from './BlockImage.jsx';
+import BlockImage from './BlockImage';
 
 class ImageListItem extends Component {
 	static defaultProps = {
 		isDisabled: false,
 		isSelected: false,
-		onClick: _item => {},
-		onDoubleClick: _item => {},
-		onRef: _domNode => {}
+		onClick: (_item) => {},
+		onDoubleClick: (_item) => {},
+		onRef: (_domNode) => {},
 	};
 
 	static propTypes = {
@@ -22,12 +22,12 @@ class ImageListItem extends Component {
 			id: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired
+			type: PropTypes.string.isRequired,
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
 		onRef: PropTypes.func,
-		referrerDocumentId: PropTypes.string.isRequired
+		referrerDocumentId: PropTypes.string.isRequired,
 	};
 
 	wrapInListItem = (content, label) => {
@@ -69,7 +69,9 @@ class ImageListItem extends Component {
 								icon={item.icon || 'file-image-o'}
 								size="s"
 							/>,
-							<Label colorName="text-muted-color">{item.label}</Label>
+							<Label colorName="text-muted-color">
+								{item.label}
+							</Label>
 						);
 					}
 
@@ -81,8 +83,13 @@ class ImageListItem extends Component {
 					}
 
 					return this.wrapInListItem(
-						<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
-							<BlockImage src={imageData.dataUrl} width={imageData.width || 150} />
+						<Block
+							applyCss={{ width: '.875rem', height: '.875rem' }}
+						>
+							<BlockImage
+								src={imageData.dataUrl}
+								width={imageData.width || 150}
+							/>
 						</Block>,
 						<Label>{item.label}</Label>
 					);

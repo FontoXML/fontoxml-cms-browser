@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import operationsManager from 'fontoxml-operations/src/operationsManager.js';
+import operationsManager from 'fontoxml-operations/src/operationsManager';
 
 export default function withInsertOperationNameCapabilities(
 	getSubmitModalData,
@@ -11,30 +11,33 @@ export default function withInsertOperationNameCapabilities(
 			isMountedInDOM = true;
 
 			state = {
-				isSubmitButtonDisabled: true
+				isSubmitButtonDisabled: true,
 			};
 
 			// Use this to check if the selectedItem can be submitted based on the insertOperationName.
 			// When this is true, it will be submitted, else nothing happens.
-			determineAndHandleItemSubmitForSelectedItem = selectedItem => {
+			determineAndHandleItemSubmitForSelectedItem = (selectedItem) => {
 				const {
 					data: { insertOperationName },
-					submitModal
+					submitModal,
 				} = this.props;
 
 				const submitModalData = getSubmitModalData(selectedItem);
 				if (insertOperationName) {
-					const initialData = { ...this.props.data, ...submitModalData };
+					const initialData = {
+						...this.props.data,
+						...submitModalData,
+					};
 
 					operationsManager
 						.getOperationState(insertOperationName, initialData)
 						.then(
-							operationState =>
+							(operationState) =>
 								this.isMountedInDOM &&
 								operationState.enabled &&
 								submitModal(submitModalData)
 						)
-						.catch(_error => {
+						.catch((_error) => {
 							return;
 						});
 				} else if (this.isMountedInDOM) {
@@ -44,27 +47,40 @@ export default function withInsertOperationNameCapabilities(
 
 			// Use this to determine if the submit button should be disabled based on the
 			// insertOperationName.
-			determineAndHandleSubmitButtonDisabledState = selectedItem => {
+			determineAndHandleSubmitButtonDisabledState = (selectedItem) => {
 				const { insertOperationName } = this.props.data;
 
 				this.setState({
 					isSubmitButtonDisabled:
-						(canSubmitSelectedItem(selectedItem) && !!insertOperationName) ||
-						!canSubmitSelectedItem(selectedItem)
+						(canSubmitSelectedItem(selectedItem) &&
+							!!insertOperationName) ||
+						!canSubmitSelectedItem(selectedItem),
 				});
 
-				if (canSubmitSelectedItem(selectedItem) && insertOperationName) {
-					const initialData = { ...this.props.data, ...getSubmitModalData(selectedItem) };
+				if (
+					canSubmitSelectedItem(selectedItem) &&
+					insertOperationName
+				) {
+					const initialData = {
+						...this.props.data,
+						...getSubmitModalData(selectedItem),
+					};
 
 					operationsManager
-						.getOperationState(this.props.data.insertOperationName, initialData)
+						.getOperationState(
+							this.props.data.insertOperationName,
+							initialData
+						)
 						.then(
-							operationState =>
+							(operationState) =>
 								this.isMountedInDOM &&
-								this.setState({ isSubmitButtonDisabled: !operationState.enabled })
+								this.setState({
+									isSubmitButtonDisabled:
+										!operationState.enabled,
+								})
 						)
 						.catch(
-							_ =>
+							(_) =>
 								this.isMountedInDOM &&
 								this.setState({ isSubmitButtonDisabled: true })
 						);
@@ -74,11 +90,11 @@ export default function withInsertOperationNameCapabilities(
 			render() {
 				const props = {
 					...this.props,
-					determineAndHandleItemSubmitForSelectedItem: this
-						.determineAndHandleItemSubmitForSelectedItem,
-					determineAndHandleSubmitButtonDisabledState: this
-						.determineAndHandleSubmitButtonDisabledState,
-					isSubmitButtonDisabled: this.state.isSubmitButtonDisabled
+					determineAndHandleItemSubmitForSelectedItem:
+						this.determineAndHandleItemSubmitForSelectedItem,
+					determineAndHandleSubmitButtonDisabledState:
+						this.determineAndHandleSubmitButtonDisabledState,
+					isSubmitButtonDisabled: this.state.isSubmitButtonDisabled,
 				};
 
 				return <WrappedComponent {...props} />;

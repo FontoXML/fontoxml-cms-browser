@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
 
 import {
 	Button,
@@ -13,16 +13,17 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	TextInput
+	TextInput,
 } from 'fds/components';
 
-import t from 'fontoxml-localization/src/t.js';
+import t from 'fontoxml-localization/src/t';
 
 function getSubmitModalData(itemToSubmit) {
 	return {
-		selectedDocumentTemplateId: itemToSubmit.selectedDocumentTemplate.remoteDocumentId,
+		selectedDocumentTemplateId:
+			itemToSubmit.selectedDocumentTemplate.remoteDocumentId,
 		selectedFolderId: itemToSubmit.selectedFolder.id,
-		documentTitle: itemToSubmit.documentTitle
+		documentTitle: itemToSubmit.documentTitle,
 	};
 }
 
@@ -46,7 +47,7 @@ let CreateDocumentFormModal = ({
 	renderModalBodyToolbar,
 	selectedDocumentTemplate,
 	selectedFolder,
-	submitModal
+	submitModal,
 }) => {
 	const [documentTitle, setDocumentTitle] = useState('');
 
@@ -54,13 +55,13 @@ let CreateDocumentFormModal = ({
 		determineAndHandleSubmitButtonDisabledState({
 			selectedDocumentTemplate: selectedDocumentTemplate,
 			selectedFolder: selectedFolder,
-			documentTitle
+			documentTitle,
 		});
 	}, [
 		determineAndHandleSubmitButtonDisabledState,
 		documentTitle,
 		selectedDocumentTemplate,
-		selectedFolder
+		selectedFolder,
 	]);
 
 	const handleSubmitButtonClick = useCallback(
@@ -69,14 +70,14 @@ let CreateDocumentFormModal = ({
 				getSubmitModalData({
 					selectedDocumentTemplate: selectedDocumentTemplate,
 					selectedFolder: selectedFolder,
-					documentTitle
+					documentTitle,
 				})
 			),
 		[documentTitle, selectedDocumentTemplate, selectedFolder, submitModal]
 	);
 
 	const handleKeyDown = useCallback(
-		event => {
+		(event) => {
 			switch (event.key) {
 				case 'Escape':
 					if (data.isCancelable) {
@@ -90,11 +91,16 @@ let CreateDocumentFormModal = ({
 					break;
 			}
 		},
-		[cancelModal, data.isCancelable, handleSubmitButtonClick, isSubmitButtonDisabled]
+		[
+			cancelModal,
+			data.isCancelable,
+			handleSubmitButtonClick,
+			isSubmitButtonDisabled,
+		]
 	);
 
 	const handleDocumentTitleChange = useCallback(
-		documentTitle => setDocumentTitle(documentTitle),
+		(documentTitle) => setDocumentTitle(documentTitle),
 		[]
 	);
 
@@ -111,7 +117,9 @@ let CreateDocumentFormModal = ({
 							<ButtonWithValue
 								buttonLabel={t('Select a template')}
 								onClick={onSelectDocumentTemplateClick}
-								valueLabel={selectedDocumentTemplate.label || null}
+								valueLabel={
+									selectedDocumentTemplate.label || null
+								}
 							/>
 						</FormRow>
 
@@ -124,7 +132,10 @@ let CreateDocumentFormModal = ({
 						</FormRow>
 
 						<FormRow label={t('Title')}>
-							<TextInput value={documentTitle} onChange={handleDocumentTitleChange} />
+							<TextInput
+								value={documentTitle}
+								onChange={handleDocumentTitleChange}
+							/>
 						</FormRow>
 					</Form>
 				</ModalContent>
@@ -132,7 +143,11 @@ let CreateDocumentFormModal = ({
 
 			<ModalFooter>
 				{data.isCancelable && (
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					<Button
+						type="default"
+						label={t('Cancel')}
+						onClick={cancelModal}
+					/>
 				)}
 
 				<Button
@@ -149,14 +164,14 @@ let CreateDocumentFormModal = ({
 CreateDocumentFormModal.defaultProps = {
 	renderModalBodyToolbar: null,
 	selectedDocumentTemplate: {},
-	selectedFolder: {}
+	selectedFolder: {},
 };
 
 CreateDocumentFormModal.propTypes = {
 	cancelModal: PropTypes.func.isRequired,
 	data: PropTypes.shape({
 		insertOperationName: PropTypes.string,
-		isCancelable: PropTypes.bool
+		isCancelable: PropTypes.bool,
 	}),
 	modalIcon: PropTypes.string,
 	modalTitle: PropTypes.string.isRequired,
@@ -165,7 +180,7 @@ CreateDocumentFormModal.propTypes = {
 	renderModalBodyToolbar: PropTypes.func,
 	selectedDocumentTemplate: PropTypes.object,
 	selectedFolder: PropTypes.object,
-	submitModal: PropTypes.func.isRequired
+	submitModal: PropTypes.func.isRequired,
 };
 
 CreateDocumentFormModal = withInsertOperationNameCapabilities(

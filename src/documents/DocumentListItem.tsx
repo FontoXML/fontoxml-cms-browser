@@ -8,9 +8,9 @@ class DocumentListItem extends Component {
 		isDisabled: false,
 		isErrored: false,
 		isSelected: false,
-		onClick: _item => {},
-		onDoubleClick: _item => {},
-		onRef: _domNode => {}
+		onClick: (_item) => {},
+		onDoubleClick: (_item) => {},
+		onRef: (_domNode) => {},
 	};
 
 	static propTypes = {
@@ -21,12 +21,12 @@ class DocumentListItem extends Component {
 			id: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired
+			type: PropTypes.string.isRequired,
 		}).isRequired,
 		onClick: PropTypes.func,
 		onDoubleClick: PropTypes.func,
 		// @see TODO in DocumentGridItem.jsx
-		onRef: PropTypes.func
+		onRef: PropTypes.func,
 	};
 
 	wrapInListItem = (content, label) => (
@@ -54,7 +54,11 @@ class DocumentListItem extends Component {
 
 		if (this.props.isErrored) {
 			return this.wrapInListItem(
-				<Icon colorName="icon-s-error-color" icon={item.icon || 'file-text-o'} size="s" />,
+				<Icon
+					colorName="icon-s-error-color"
+					icon={item.icon || 'file-text-o'}
+					size="s"
+				/>,
 				<Label colorName="text-muted-color">{item.label}</Label>
 			);
 		}

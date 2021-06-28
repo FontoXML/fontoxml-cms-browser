@@ -7,19 +7,19 @@ import {
 	HorizontalSeparationLine,
 	SpinnerIcon,
 	StateMessage,
-	Text
+	Text,
 } from 'fds/components';
-import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader.jsx';
-import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView.jsx';
-import FxNodePreview from 'fontoxml-fx/src/FxNodePreview.jsx';
+import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader';
+import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
+import FxNodePreview from 'fontoxml-fx/src/FxNodePreview';
 
 const maxHeightStyles = { maxHeight: '50%' };
 
 class DocumentPreview extends Component {
 	static defaultProps = {
-		onLoadIsDone: _documentId => {},
-		onItemIsErrored: _item => {},
-		selectedItem: null
+		onLoadIsDone: (_documentId) => {},
+		onItemIsErrored: (_item) => {},
+		selectedItem: null,
 	};
 
 	static propTypes = {
@@ -28,10 +28,10 @@ class DocumentPreview extends Component {
 		stateLabels: PropTypes.shape({
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired
+				message: PropTypes.string,
+			}).isRequired,
 		}).isRequired,
-		selectedItem: PropTypes.object
+		selectedItem: PropTypes.object,
 	};
 
 	render() {
@@ -43,7 +43,13 @@ class DocumentPreview extends Component {
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.props.onLoadIsDone}
 			>
-				{({ isErrored, isLoading, documentId, error, retryLoadDocument }) => {
+				{({
+					isErrored,
+					isLoading,
+					documentId,
+					error,
+					retryLoadDocument,
+				}) => {
 					if (isErrored) {
 						return (
 							<Block flex="1" paddingSize="l" isScrollContainer>
@@ -72,7 +78,8 @@ class DocumentPreview extends Component {
 							</Block>
 
 							{selectedItem.description &&
-								selectedItem.description.trim().length !== 0 && (
+								selectedItem.description.trim().length !==
+									0 && (
 									<Flex
 										applyCss={maxHeightStyles}
 										flex="none"
@@ -88,7 +95,9 @@ class DocumentPreview extends Component {
 											isScrollContainer
 											paddingSize="l"
 										>
-											<Text>{selectedItem.description}</Text>
+											<Text>
+												{selectedItem.description}
+											</Text>
 										</Flex>
 									</Flex>
 								)}

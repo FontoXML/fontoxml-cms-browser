@@ -5,7 +5,7 @@ import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
 
 class ModalBrowserHierarchyBreadcrumbs extends Component {
 	static defaultProps = {
-		browseContextDocumentId: null
+		browseContextDocumentId: null,
 	};
 
 	static propTypes = {
@@ -14,7 +14,7 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		// from withModularBrowserCapabilities
 		hierarchyItems: PropTypes.array,
 		refreshItems: PropTypes.func.isRequired,
-		request: PropTypes.object.isRequired
+		request: PropTypes.object.isRequired,
 	};
 
 	renderBreadcrumbItem = ({
@@ -24,7 +24,7 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		isLastItem,
 		item,
 		onClick,
-		onRef
+		onRef,
 	}) => (
 		<BreadcrumbItemLink
 			key={key}
@@ -36,14 +36,23 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 				onClick();
 
 				if (item.label !== '…') {
-					this.props.refreshItems(this.props.browseContextDocumentId, item, true);
+					this.props.refreshItems(
+						this.props.browseContextDocumentId,
+						item,
+						true
+					);
 				}
 			}}
 			onRef={onRef}
 		/>
 	);
 
-	renderTruncatedBreadcrumbMenuItem = ({ key, onClick, isDisabled, item }) => (
+	renderTruncatedBreadcrumbMenuItem = ({
+		key,
+		onClick,
+		isDisabled,
+		item,
+	}) => (
 		<MenuItem
 			key={key}
 			isDisabled={isDisabled}
@@ -51,7 +60,11 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 			onClick={() => {
 				onClick();
 
-				this.props.refreshItems(this.props.browseContextDocumentId, item, true);
+				this.props.refreshItems(
+					this.props.browseContextDocumentId,
+					item,
+					true
+				);
 			}}
 		/>
 	);
@@ -61,11 +74,14 @@ class ModalBrowserHierarchyBreadcrumbs extends Component {
 		return (
 			<Breadcrumbs
 				isDisabled={
-					(request.type === 'browse' || request.type === 'upload') && request.busy
+					(request.type === 'browse' || request.type === 'upload') &&
+					request.busy
 				}
 				items={this.props.hierarchyItems}
 				renderBreadcrumbItem={this.renderBreadcrumbItem}
-				renderTruncatedBreadcrumbMenuItem={this.renderTruncatedBreadcrumbMenuItem}
+				renderTruncatedBreadcrumbMenuItem={
+					this.renderTruncatedBreadcrumbMenuItem
+				}
 			/>
 		);
 	}

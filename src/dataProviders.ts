@@ -1,4 +1,4 @@
-import createDataProviderUsingConfiguredConnectors from './data-providers/createDataProviderUsingConfiguredConnectors.js';
+import createDataProviderUsingConfiguredConnectors from './data-providers/createDataProviderUsingConfiguredConnectors';
 
 var dataProvidersByName = Object.create(null);
 
@@ -19,16 +19,17 @@ export default {
 	 *   uploadMaxFileSizeInBytes: number
 	 * }} options
 	 */
-	set: function(name, options) {
-		dataProvidersByName[name] = createDataProviderUsingConfiguredConnectors(options);
+	set: function (name: $TSFixMeAny, options: $TSFixMeAny): void {
+		dataProvidersByName[name] =
+			createDataProviderUsingConfiguredConnectors(options);
 	},
 
-	get: function(name) {
+	get: function (name: $TSFixMeAny): $TSFixMeAny {
 		var dataProvider = dataProvidersByName[name];
 
 		if (!dataProvider) {
 			var names = Object.keys(dataProvidersByName)
-				.map(function(name) {
+				.map(function (name) {
 					return '"' + name + '"';
 				})
 				.join(', ');
@@ -42,5 +43,5 @@ export default {
 		}
 
 		return dataProvider;
-	}
+	},
 };

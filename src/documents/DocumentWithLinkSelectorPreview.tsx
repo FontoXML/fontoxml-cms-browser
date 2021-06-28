@@ -2,19 +2,19 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { Block, SpinnerIcon, StateMessage } from 'fds/components';
-import documentsManager from 'fontoxml-documents/src/documentsManager.js';
-import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean.js';
-import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader.jsx';
-import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView.jsx';
-import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector.jsx';
-import getNodeId from 'fontoxml-dom-identification/src/getNodeId.js';
-import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint.js';
+import documentsManager from 'fontoxml-documents/src/documentsManager';
+import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean';
+import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader';
+import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
+import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
+import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
+import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint';
 
 class DocumentWithLinkSelectorPreview extends Component {
 	static defaultProps = {
-		onItemIsErrored: _item => {},
-		onLoadIsDone: _documentId => {},
-		selectedItem: null
+		onItemIsErrored: (_item) => {},
+		onLoadIsDone: (_documentId) => {},
+		selectedItem: null,
 	};
 
 	static propTypes = {
@@ -26,18 +26,19 @@ class DocumentWithLinkSelectorPreview extends Component {
 		stateLabels: PropTypes.shape({
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired
-		}).isRequired
+				message: PropTypes.string,
+			}).isRequired,
+		}).isRequired,
 	};
 
 	// When a item is selected we want to initially select the root node of the document. We do this
 	// once when the preview is loaded.
-	handleLoadIsDone = documentId => {
+	handleLoadIsDone = (documentId) => {
 		const newSelectedItem = { ...this.props.selectedItem, documentId };
 
 		// Select the documentElement initially as nodeId if it validates against the linkableElementsQuery
-		const node = documentsManager.getDocumentNode(documentId).documentElement;
+		const node =
+			documentsManager.getDocumentNode(documentId).documentElement;
 		if (
 			!newSelectedItem.nodeId &&
 			node &&
@@ -56,7 +57,7 @@ class DocumentWithLinkSelectorPreview extends Component {
 		this.props.onLoadIsDone(documentId);
 	};
 
-	handleSelectedNodeChange = nodeId =>
+	handleSelectedNodeChange = (nodeId) =>
 		this.props.onItemSelect({ ...this.props.selectedItem, nodeId });
 
 	render() {
@@ -68,7 +69,13 @@ class DocumentWithLinkSelectorPreview extends Component {
 				onError={this.props.onItemIsErrored}
 				onLoadIsDone={this.handleLoadIsDone}
 			>
-				{({ isErrored, isLoading, documentId, error, retryLoadDocument }) => {
+				{({
+					isErrored,
+					isLoading,
+					documentId,
+					error,
+					retryLoadDocument,
+				}) => {
 					if (isErrored) {
 						return (
 							<Block flex="1" paddingSize="l" isScrollContainer>

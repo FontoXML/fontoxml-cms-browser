@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { ModalStack } from 'fds/components';
-import t from 'fontoxml-localization/src/t.js';
+import t from 'fontoxml-localization/src/t';
 
-import CreateDocumentFormModal from '../documents/CreateDocumentFormModal.jsx';
-import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal.jsx';
-import FolderBrowserModal from '../documents/FolderBrowserModal.jsx';
+import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
+import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal';
+import FolderBrowserModal from '../documents/FolderBrowserModal';
 
 class CreateDocumentFormModalStack extends Component {
 	static propTypes = {
@@ -18,34 +18,35 @@ class CreateDocumentFormModalStack extends Component {
 			modalIcon: PropTypes.string,
 			modalTitle: PropTypes.string,
 			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
-			selectFolderDataProviderName: PropTypes.string.isRequired
+			selectFolderDataProviderName: PropTypes.string.isRequired,
 		}).isRequired,
-		submitModal: PropTypes.func.isRequired
+		submitModal: PropTypes.func.isRequired,
 	};
 
 	state = {
 		activeModal: null,
 
 		selectedDocumentTemplate: {},
-		selectedFolder: {}
+		selectedFolder: {},
 	};
 
-	handleSelectFolderClick = () => this.setState({ activeModal: 'FolderBrowser' });
+	handleSelectFolderClick = () =>
+		this.setState({ activeModal: 'FolderBrowser' });
 	handleSelectDocumentTemplateClick = () =>
 		this.setState({ activeModal: 'DocumentTemplateBrowser' });
 
 	handleCancelModal = () => this.setState({ activeModal: null });
 
-	handleDocumentTemplateSubmit = submittedItem =>
+	handleDocumentTemplateSubmit = (submittedItem) =>
 		this.setState({
 			activeModal: null,
-			selectedDocumentTemplate: submittedItem
+			selectedDocumentTemplate: submittedItem,
 		});
 
-	handleFolderSubmit = submittedItem =>
+	handleFolderSubmit = (submittedItem) =>
 		this.setState({
 			activeModal: null,
-			selectedFolder: submittedItem
+			selectedFolder: submittedItem,
 		});
 
 	render() {
@@ -57,23 +58,26 @@ class CreateDocumentFormModalStack extends Component {
 				modalIcon,
 				modalTitle,
 				selectDocumentTemplateDataProviderName,
-				selectFolderDataProviderName
+				selectFolderDataProviderName,
 			},
 			cancelModal,
-			submitModal
+			submitModal,
 		} = this.props;
-		const { activeModal, selectedDocumentTemplate, selectedFolder } = this.state;
+		const { activeModal, selectedDocumentTemplate, selectedFolder } =
+			this.state;
 		return (
 			<ModalStack>
 				<CreateDocumentFormModal
 					cancelModal={cancelModal}
 					data={{
 						insertOperationName,
-						isCancelable
+						isCancelable,
 					}}
 					modalIcon={modalIcon}
 					modalTitle={modalTitle || t('Create new document')}
-					onSelectDocumentTemplateClick={this.handleSelectDocumentTemplateClick}
+					onSelectDocumentTemplateClick={
+						this.handleSelectDocumentTemplateClick
+					}
 					onSelectFolderClick={this.handleSelectFolderClick}
 					selectedDocumentTemplate={selectedDocumentTemplate}
 					selectedFolder={selectedFolder}
@@ -85,10 +89,15 @@ class CreateDocumentFormModalStack extends Component {
 						cancelModal={this.handleCancelModal}
 						data={{
 							browseContextDocumentId: null,
-							dataProviderName: selectDocumentTemplateDataProviderName,
-							modalTitle: t('Select a template for your document')
+							dataProviderName:
+								selectDocumentTemplateDataProviderName,
+							modalTitle: t(
+								'Select a template for your document'
+							),
 						}}
-						remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
+						remoteDocumentId={
+							selectedDocumentTemplate.remoteDocumentId
+						}
 						submitModal={this.handleDocumentTemplateSubmit}
 					/>
 				)}
@@ -99,7 +108,9 @@ class CreateDocumentFormModalStack extends Component {
 						data={{
 							browseContextDocumentId,
 							dataProviderName: selectFolderDataProviderName,
-							modalTitle: t('Select a folder to save your documents in')
+							modalTitle: t(
+								'Select a folder to save your documents in'
+							),
 						}}
 						submitModal={this.handleFolderSubmit}
 					/>

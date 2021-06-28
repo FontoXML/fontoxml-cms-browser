@@ -7,10 +7,10 @@ import {
 	HorizontalSeparationLine,
 	KeyValueList,
 	SpinnerIcon,
-	StateMessage
+	StateMessage,
 } from 'fds/components';
 import { applyCss, block } from 'fds/system';
-import FxImageLoader from 'fontoxml-fx/src/FxImageLoader.jsx';
+import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
 const imageStyles = applyCss([
 	block,
@@ -22,8 +22,8 @@ const imageStyles = applyCss([
 		height: 'auto',
 		top: '50%',
 		left: '50%',
-		transform: 'translateX(-50%) translateY(-50%)'
-	}
+		transform: 'translateX(-50%) translateY(-50%)',
+	},
 ]);
 
 class ImagePreview extends Component {
@@ -31,15 +31,15 @@ class ImagePreview extends Component {
 		stateLabels: PropTypes.shape({
 			previewError: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
+				message: PropTypes.string,
 			}).isRequired,
 			loadingPreview: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired
+				message: PropTypes.string,
+			}).isRequired,
 		}).isRequired,
 		selectedItem: PropTypes.object,
-		referrerDocumentId: PropTypes.string.isRequired
+		referrerDocumentId: PropTypes.string.isRequired,
 	};
 
 	render() {
@@ -75,8 +75,15 @@ class ImagePreview extends Component {
 
 					return (
 						<Flex flex="auto" flexDirection="column">
-							<Flex flex="auto" flexDirection="column" paddingSize="l" spaceSize="m">
-								<Heading level="4">{selectedItem.label}</Heading>
+							<Flex
+								flex="auto"
+								flexDirection="column"
+								paddingSize="l"
+								spaceSize="m"
+							>
+								<Heading level="4">
+									{selectedItem.label}
+								</Heading>
 
 								<Flex flex="auto">
 									<img
@@ -87,19 +94,22 @@ class ImagePreview extends Component {
 								</Flex>
 							</Flex>
 
-							{selectedItem.metadata && selectedItem.metadata.properties && (
-								<Flex flex="none" flexDirection="column">
-									<Flex paddingSize={{ horizontal: 'l' }}>
-										<HorizontalSeparationLine />
-									</Flex>
+							{selectedItem.metadata &&
+								selectedItem.metadata.properties && (
+									<Flex flex="none" flexDirection="column">
+										<Flex paddingSize={{ horizontal: 'l' }}>
+											<HorizontalSeparationLine />
+										</Flex>
 
-									<KeyValueList
-										valueByKey={selectedItem.metadata.properties}
-										scrollLimit={5}
-										paddingSize="l"
-									/>
-								</Flex>
-							)}
+										<KeyValueList
+											valueByKey={
+												selectedItem.metadata.properties
+											}
+											scrollLimit={5}
+											paddingSize="l"
+										/>
+									</Flex>
+								)}
 						</Flex>
 					);
 				}}

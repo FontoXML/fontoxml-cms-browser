@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import dataProviders from './dataProviders.js';
+import dataProviders from './dataProviders';
 
 function isValidMimeType(selectedMimeType, mimeTypeGlob) {
 	if (mimeTypeGlob === 'image/*') {
@@ -36,49 +36,58 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				selectedItem: null,
 
 				// Contains information for the viewMode, for example list or grid
-				viewMode: initialViewMode
+				viewMode: initialViewMode,
 			};
 
-			isItemErrored = item => !!this.state.cachedErrorByRemoteId[item.id];
+			isItemErrored = (item) =>
+				!!this.state.cachedErrorByRemoteId[item.id];
 
 			onItemIsErrored = (remoteId, error) => {
 				if (this.isMountedInDOM) {
-					const cachedErrorByRemoteId = this.state.cachedErrorByRemoteId;
+					const cachedErrorByRemoteId =
+						this.state.cachedErrorByRemoteId;
 					cachedErrorByRemoteId[remoteId] = error;
 					this.setState({ cachedErrorByRemoteId });
 				}
 			};
 
-			onItemIsLoaded = remoteId => {
+			onItemIsLoaded = (remoteId) => {
 				if (this.isMountedInDOM) {
 					this.setState(({ cachedErrorByRemoteId }) => {
 						if (!cachedErrorByRemoteId[remoteId]) {
 							return null;
 						}
 
-						const updatedCachedErrorByRemoteId = { ...cachedErrorByRemoteId };
+						const updatedCachedErrorByRemoteId = {
+							...cachedErrorByRemoteId,
+						};
 						delete updatedCachedErrorByRemoteId[remoteId];
 						return {
-							cachedErrorByRemoteId: updatedCachedErrorByRemoteId
+							cachedErrorByRemoteId: updatedCachedErrorByRemoteId,
 						};
 					});
 				}
 			};
 
 			// Used by any component to change the currently selected item
-			onItemSelect = item => {
-				const { determineAndHandleSubmitButtonDisabledState } = this.props;
+			onItemSelect = (item) => {
+				const { determineAndHandleSubmitButtonDisabledState } =
+					this.props;
 
 				if (this.isMountedInDOM) {
 					this.setState({
-						selectedItem: item
+						selectedItem: item,
 					});
 
 					if (determineAndHandleSubmitButtonDisabledState) {
 						determineAndHandleSubmitButtonDisabledState(item);
 					}
 
-					if (item && item.type !== 'folder' && item.id !== this.initialSelectedItem.id) {
+					if (
+						item &&
+						item.type !== 'folder' &&
+						item.id !== this.initialSelectedItem.id
+					) {
 						// An other item (that is not a folder) was selected so the initialSelectedItem is no longer cached
 						this.initialSelectedItem = {};
 					}
@@ -86,7 +95,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to set the initialSelectedItem
-			onInitialSelectedItemIdChange = item => {
+			onInitialSelectedItemIdChange = (item) => {
 				if (this.isMountedInDOM) {
 					this.initialSelectedItem = item;
 				}
@@ -99,7 +108,8 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				noCache,
 				hierarchyItems = this.state.hierarchyItems
 			) => {
-				const { determineAndHandleSubmitButtonDisabledState, data } = this.props;
+				const { determineAndHandleSubmitButtonDisabledState, data } =
+					this.props;
 				if (this.isMountedInDOM) {
 					this.setState({ request: { type: 'browse', busy: true } });
 				}
@@ -113,26 +123,36 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 						data.query
 					)
 					.then(
-						result => {
+						(result) => {
 							if (!this.isMountedInDOM) {
 								return [];
 							}
 							// Because of jump in the tree with browse context document id,
 							// the folder that is actually loaded could be different from the folderToLoad.
 							let newSelectedItem =
-								result.hierarchyItems[result.hierarchyItems.length - 1] ||
-								folderToLoad;
+								result.hierarchyItems[
+									result.hierarchyItems.length - 1
+								] || folderToLoad;
 
 							// If the rootFolder is the folder to load, the newSelectedItem is null
-							newSelectedItem = newSelectedItem.id === null ? null : newSelectedItem;
+							newSelectedItem =
+								newSelectedItem.id === null
+									? null
+									: newSelectedItem;
 
 							if (this.initialSelectedItem.id) {
 								// If the initial selected item is in this folder, it should be selected
-								const initialSelectedResultItem = result.items.find(
-									item => item.id === this.initialSelectedItem.id
-								);
+								const initialSelectedResultItem =
+									result.items.find(
+										(item) =>
+											item.id ===
+											this.initialSelectedItem.id
+									);
 								newSelectedItem = initialSelectedResultItem
-									? { ...initialSelectedResultItem, ...this.initialSelectedItem }
+									? {
+											...initialSelectedResultItem,
+											...this.initialSelectedItem,
+									  }
 									: newSelectedItem;
 							}
 
@@ -140,16 +160,18 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 								selectedItem: newSelectedItem,
 								items: result.items,
 								hierarchyItems: result.hierarchyItems,
-								request: {}
+								request: {},
 							});
 
 							if (determineAndHandleSubmitButtonDisabledState) {
-								determineAndHandleSubmitButtonDisabledState(newSelectedItem);
+								determineAndHandleSubmitButtonDisabledState(
+									newSelectedItem
+								);
 							}
 
 							return result.items;
 						},
-						error => {
+						(error) => {
 							if (!this.isMountedInDOM || !error) {
 								// Modal is already closed or the old request was cancelled, wait for the newer one.
 								return;
@@ -166,19 +188,27 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 							}
 
 							this.setState({
-								hierarchyItems: [this.dataProvider.getRootHierarchyItem()],
+								hierarchyItems: [
+									this.dataProvider.getRootHierarchyItem(),
+								],
 								selectedItem: null,
-								request: { type: 'browse', error: error }
+								request: { type: 'browse', error: error },
 							});
 
 							if (determineAndHandleSubmitButtonDisabledState) {
-								determineAndHandleSubmitButtonDisabledState(null);
+								determineAndHandleSubmitButtonDisabledState(
+									null
+								);
 							}
 						}
 					);
 			};
 
-			onUploadFileSelect = (browseContextDocumentId, selectedFiles, uploadErrorMessages) => {
+			onUploadFileSelect = (
+				browseContextDocumentId,
+				selectedFiles,
+				uploadErrorMessages
+			) => {
 				const { hierarchyItems } = this.state;
 
 				if (!this.isMountedInDOM) {
@@ -187,27 +217,29 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 
 				// TODO: support multiple
 				if (
-					selectedFiles[0].size > this.dataProvider.getUploadOptions().maxFileSizeInBytes
+					selectedFiles[0].size >
+					this.dataProvider.getUploadOptions().maxFileSizeInBytes
 				) {
 					this.setState({
 						request: {
 							type: 'upload',
-							error: uploadErrorMessages.fileSizeTooLargeMessage
-						}
+							error: uploadErrorMessages.fileSizeTooLargeMessage,
+						},
 					});
 					return;
 				}
 
 				const selectedMimeType = selectedFiles[0].type;
 				// Note: this is a glob. It can be 'image/*'
-				const acceptableMimeType = this.dataProvider.getUploadOptions().mimeTypesToAccept;
+				const acceptableMimeType =
+					this.dataProvider.getUploadOptions().mimeTypesToAccept;
 
 				if (!isValidMimeType(selectedMimeType, acceptableMimeType)) {
 					this.setState({
 						request: {
 							type: 'upload',
-							error: uploadErrorMessages.invalidFileTypeMessage
-						}
+							error: uploadErrorMessages.invalidFileTypeMessage,
+						},
 					});
 					return;
 				}
@@ -215,45 +247,56 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				this.setState({
 					request: {
 						type: 'upload',
-						busy: true
-					}
+						busy: true,
+					},
 				});
 
-				const folderWithUploadedFile = hierarchyItems[hierarchyItems.length - 1];
+				const folderWithUploadedFile =
+					hierarchyItems[hierarchyItems.length - 1];
 
-				this.dataProvider.upload(folderWithUploadedFile.id, selectedFiles).then(
-					uploadedItem => {
-						return this.refreshItems(
-							browseContextDocumentId,
-							folderWithUploadedFile,
-							true
-						).then(items => {
-							this.onItemSelect(
-								items.find(item => item.id === uploadedItem.id) || null
-							);
-						});
-					},
-					error => {
-						if (!this.isMountedInDOM || !error) {
-							return;
-						}
-
-						this.setState({
-							request: {
-								type: 'upload',
-								error: uploadErrorMessages.serverErrorMessage
+				this.dataProvider
+					.upload(folderWithUploadedFile.id, selectedFiles)
+					.then(
+						(uploadedItem) => {
+							return this.refreshItems(
+								browseContextDocumentId,
+								folderWithUploadedFile,
+								true
+							).then((items) => {
+								this.onItemSelect(
+									items.find(
+										(item) => item.id === uploadedItem.id
+									) || null
+								);
+							});
+						},
+						(error) => {
+							if (!this.isMountedInDOM || !error) {
+								return;
 							}
-						});
-					}
-				);
+
+							this.setState({
+								request: {
+									type: 'upload',
+									error: uploadErrorMessages.serverErrorMessage,
+								},
+							});
+						}
+					);
 			};
 
 			// Used to update the viewMode
-			onViewModeChange = viewMode =>
+			onViewModeChange = (viewMode) =>
 				this.isMountedInDOM && this.setState({ viewMode: viewMode });
 
 			render() {
-				const { hierarchyItems, items, request, selectedItem, viewMode } = this.state;
+				const {
+					hierarchyItems,
+					items,
+					request,
+					selectedItem,
+					viewMode,
+				} = this.state;
 
 				const props = {
 					...this.props,
@@ -265,13 +308,14 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					onItemIsErrored: this.onItemIsErrored,
 					onItemIsLoaded: this.onItemIsLoaded,
 					onItemSelect: this.onItemSelect,
-					onInitialSelectedItemIdChange: this.onInitialSelectedItemIdChange,
+					onInitialSelectedItemIdChange:
+						this.onInitialSelectedItemIdChange,
 					onUploadFileSelect: this.onUploadFileSelect,
 					onViewModeChange: this.onViewModeChange,
 					refreshItems: this.refreshItems,
 					request,
 					selectedItem,
-					viewMode
+					viewMode,
 				};
 
 				return <WrappedComponent {...props} />;

@@ -8,8 +8,8 @@ class DocumentGridItem extends Component {
 		isDisabled: false,
 		isErrored: false,
 		isSelected: false,
-		onClick: _item => {},
-		onDoubleClick: _item => {}
+		onClick: (_item) => {},
+		onDoubleClick: (_item) => {},
 	};
 
 	static propTypes = {
@@ -20,14 +20,14 @@ class DocumentGridItem extends Component {
 			id: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired
+			type: PropTypes.string.isRequired,
 		}).isRequired,
 		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func
+		onDoubleClick: PropTypes.func,
 		// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
 	};
 
-	wrapInGridItem = content => (
+	wrapInGridItem = (content) => (
 		<GridItem
 			isSelected={this.props.isSelected}
 			isDisabled={this.props.isDisabled}

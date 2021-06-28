@@ -1,12 +1,12 @@
 import { block } from 'fds/system';
 import React from 'react';
 
-import applyCss from 'fontoxml-styles/src/applyCss.js';
+import applyCss from 'fontoxml-styles/src/applyCss';
 
 const imageStyles = applyCss([
 	block,
 	{ maxWidth: '100%', maxHeight: '100%' },
-	{ userSelect: 'none' }
+	{ userSelect: 'none' },
 ]);
 
 // TODO: Use ContainedImage in fds instead of this when it accepts width and height

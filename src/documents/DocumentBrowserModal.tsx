@@ -8,23 +8,23 @@ import {
 	ModalContent,
 	ModalContentToolbar,
 	ModalFooter,
-	ModalHeader
+	ModalHeader,
 } from 'fds/components';
-import documentsManager from 'fontoxml-documents/src/documentsManager.js';
+import documentsManager from 'fontoxml-documents/src/documentsManager';
 
-import configurationManager from 'fontoxml-configuration/src/configurationManager.js';
-import t from 'fontoxml-localization/src/t.js';
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import t from 'fontoxml-localization/src/t';
 
-import DocumentGridItem from './DocumentGridItem.jsx';
-import DocumentListItem from './DocumentListItem.jsx';
-import DocumentPreview from './DocumentPreview.jsx';
-import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList.jsx';
-import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs.jsx';
+import DocumentGridItem from './DocumentGridItem';
+import DocumentListItem from './DocumentListItem';
+import DocumentPreview from './DocumentPreview';
+import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
+import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
 import ModalBrowserListOrGridViewMode, {
-	VIEWMODES
-} from '../shared/ModalBrowserListOrGridViewMode.jsx';
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities.jsx';
-import withModularBrowserCapabilities from '../withModularBrowserCapabilities.jsx';
+	VIEWMODES,
+} from '../shared/ModalBrowserListOrGridViewMode';
+import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
+import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
 
 const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 	'cms-browser-sends-hierarchy-items-in-browse-response'
@@ -33,26 +33,30 @@ const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
 const stateLabels = {
 	loading: {
 		title: t('Loading documents…'),
-		message: null
+		message: null,
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: t('Fonto can’t open this folder. You can try again, or try a different folder.')
+		message: t(
+			'Fonto can’t open this folder. You can try again, or try a different folder.'
+		),
 	},
 	empty: {
 		title: t('No results'),
-		message: t('This folder does not contain files that can be opened with Fonto.')
+		message: t(
+			'This folder does not contain files that can be opened with Fonto.'
+		),
 	},
 	loadingPreview: {
 		title: t('Loading document preview…'),
-		message: null
-	}
+		message: null,
+	},
 };
 
 function getSubmitModalData(itemToSubmit) {
 	return {
 		remoteDocumentId: itemToSubmit.id,
-		documentId: itemToSubmit.documentId
+		documentId: itemToSubmit.documentId,
 	};
 }
 
@@ -68,7 +72,7 @@ let DocumentBrowserModal = ({
 		documentId,
 		modalIcon,
 		modalPrimaryButtonLabel,
-		modalTitle
+		modalTitle,
 	},
 	determineAndHandleItemSubmitForSelectedItem,
 	hierarchyItems,
@@ -86,14 +90,15 @@ let DocumentBrowserModal = ({
 	request,
 	selectedItem,
 	submitModal,
-	viewMode
+	viewMode,
 }) => {
 	const doubleClickedItemId = useRef(null);
 
 	useEffect(() => {
 		if (
 			doubleClickedItemId.current !== null &&
-			(selectedItem === null || doubleClickedItemId.current !== selectedItem.id)
+			(selectedItem === null ||
+				doubleClickedItemId.current !== selectedItem.id)
 		) {
 			doubleClickedItemId.current = null;
 		}
@@ -103,13 +108,21 @@ let DocumentBrowserModal = ({
 		const initialSelectedItem = documentId
 			? { id: documentsManager.getRemoteDocumentId(documentId) }
 			: null;
-		if (cmsBrowserSendsHierarchyItemsInBrowseResponse && initialSelectedItem) {
+		if (
+			cmsBrowserSendsHierarchyItemsInBrowseResponse &&
+			initialSelectedItem
+		) {
 			onInitialSelectedItemIdChange(initialSelectedItem);
 			refreshItems(browseContextDocumentId, { id: null });
-		} else if (lastOpenedState.hierarchyItems && lastOpenedState.hierarchyItems.length > 1) {
+		} else if (
+			lastOpenedState.hierarchyItems &&
+			lastOpenedState.hierarchyItems.length > 1
+		) {
 			refreshItems(
 				browseContextDocumentId,
-				lastOpenedState.hierarchyItems[lastOpenedState.hierarchyItems.length - 1],
+				lastOpenedState.hierarchyItems[
+					lastOpenedState.hierarchyItems.length - 1
+				],
 				false,
 				lastOpenedState.hierarchyItems
 			);
@@ -121,11 +134,11 @@ let DocumentBrowserModal = ({
 		documentId,
 		lastOpenedState.hierarchyItems,
 		onInitialSelectedItemIdChange,
-		refreshItems
+		refreshItems,
 	]);
 
 	const handleKeyDown = useCallback(
-		event => {
+		(event) => {
 			switch (event.key) {
 				case 'Escape':
 					if (isCancelable) {
@@ -139,14 +152,20 @@ let DocumentBrowserModal = ({
 					break;
 			}
 		},
-		[cancelModal, isCancelable, isSubmitButtonDisabled, selectedItem, submitModal]
+		[
+			cancelModal,
+			isCancelable,
+			isSubmitButtonDisabled,
+			selectedItem,
+			submitModal,
+		]
 	);
 
 	// Because we need to override the double click, because we need to add the documentId for submit.
 	// This will be done right away if the selectedItem already has the documentId, else we have to wait
 	// until the document is loaded in the preview.
 	const handleItemDoubleClick = useCallback(
-		item => {
+		(item) => {
 			if (item.type === 'folder') {
 				refreshItems(browseContextDocumentId, item);
 			} else if (selectedItem.id === item.id && selectedItem.documentId) {
@@ -159,7 +178,7 @@ let DocumentBrowserModal = ({
 			browseContextDocumentId,
 			determineAndHandleItemSubmitForSelectedItem,
 			refreshItems,
-			selectedItem
+			selectedItem,
 		]
 	);
 
@@ -197,7 +216,7 @@ let DocumentBrowserModal = ({
 	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
 	// preview is done loading. If the item was also double clicked, we want to submit right away.
 	const handleLoadIsDone = useCallback(
-		documentId => {
+		(documentId) => {
 			const newSelectedItem = { ...selectedItem, documentId };
 			if (newSelectedItem.id === doubleClickedItemId.current) {
 				determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
@@ -205,7 +224,12 @@ let DocumentBrowserModal = ({
 			onItemIsLoaded(newSelectedItem.id);
 			onItemSelect(newSelectedItem);
 		},
-		[determineAndHandleItemSubmitForSelectedItem, onItemIsLoaded, onItemSelect, selectedItem]
+		[
+			determineAndHandleItemSubmitForSelectedItem,
+			onItemIsLoaded,
+			onItemSelect,
+			selectedItem,
+		]
 	);
 
 	const handleSubmitButtonClick = useCallback(
@@ -217,18 +241,25 @@ let DocumentBrowserModal = ({
 
 	return (
 		<Modal size="l" isFullHeight onKeyDown={handleKeyDown}>
-			<ModalHeader icon={modalIcon} title={modalTitle || t('Select a document')} />
+			<ModalHeader
+				icon={modalIcon}
+				title={modalTitle || t('Select a document')}
+			/>
 
 			<ModalBody>
 				{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
 
 				<ModalContent flexDirection="column">
 					<ModalContentToolbar
-						justifyContent={hasHierarchyItems ? 'space-between' : 'flex-end'}
+						justifyContent={
+							hasHierarchyItems ? 'space-between' : 'flex-end'
+						}
 					>
 						{hasHierarchyItems && (
 							<ModalBrowserHierarchyBreadcrumbs
-								browseContextDocumentId={browseContextDocumentId}
+								browseContextDocumentId={
+									browseContextDocumentId
+								}
 								hierarchyItems={hierarchyItems}
 								refreshItems={refreshItems}
 								request={request}
@@ -244,7 +275,9 @@ let DocumentBrowserModal = ({
 					<ModalContent flexDirection="row">
 						<ModalContent flexDirection="column" flex="1">
 							<ModalBrowserFileAndFolderResultList
-								browseContextDocumentId={browseContextDocumentId}
+								browseContextDocumentId={
+									browseContextDocumentId
+								}
 								items={items}
 								onItemSelect={onItemSelect}
 								refreshItems={refreshItems}
@@ -273,7 +306,11 @@ let DocumentBrowserModal = ({
 
 			<ModalFooter>
 				{isCancelable && (
-					<Button type="default" label={t('Cancel')} onClick={cancelModal} />
+					<Button
+						type="default"
+						label={t('Cancel')}
+						onClick={cancelModal}
+					/>
 				)}
 
 				<Button
@@ -287,7 +324,7 @@ let DocumentBrowserModal = ({
 	);
 };
 DocumentBrowserModal.defaultProps = {
-	renderModalBodyToolbar: null
+	renderModalBodyToolbar: null,
 };
 
 DocumentBrowserModal.propTypes = {
@@ -300,13 +337,15 @@ DocumentBrowserModal.propTypes = {
 		isCancelable: PropTypes.bool,
 		modalIcon: PropTypes.string,
 		modalPrimaryButtonLabel: PropTypes.string,
-		modalTitle: PropTypes.string
+		modalTitle: PropTypes.string,
 	}).isRequired,
 	renderModalBodyToolbar: PropTypes.func,
-	submitModal: PropTypes.func.isRequired
+	submitModal: PropTypes.func.isRequired,
 };
 
-DocumentBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(DocumentBrowserModal);
+DocumentBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(
+	DocumentBrowserModal
+);
 DocumentBrowserModal = withInsertOperationNameCapabilities(
 	getSubmitModalData,
 	canSubmitSelectedItem

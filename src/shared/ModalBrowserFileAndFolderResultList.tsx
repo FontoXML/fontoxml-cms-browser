@@ -1,13 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { SpinnerIcon, StateMessage, VirtualGrid, VirtualList } from 'fds/components';
+import {
+	SpinnerIcon,
+	StateMessage,
+	VirtualGrid,
+	VirtualList,
+} from 'fds/components';
 
 class ModalBrowserFileAndFolderResultList extends Component {
 	static defaultProps = {
 		browseContextDocumentId: null,
 		onItemSubmit: () => {},
-		selectedItem: null
+		selectedItem: null,
 	};
 
 	static propTypes = {
@@ -18,16 +23,16 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		stateLabels: PropTypes.shape({
 			browseError: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
+				message: PropTypes.string,
 			}).isRequired,
 			empty: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
+				message: PropTypes.string,
 			}).isRequired,
 			loading: PropTypes.shape({
 				title: PropTypes.string,
-				message: PropTypes.string
-			}).isRequired
+				message: PropTypes.string,
+			}).isRequired,
 		}).isRequired,
 
 		// from withModularBrowserCapabilities
@@ -36,21 +41,24 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		refreshItems: PropTypes.func.isRequired,
 		request: PropTypes.object.isRequired,
 		selectedItem: PropTypes.object,
-		viewMode: PropTypes.object.isRequired
+		viewMode: PropTypes.object.isRequired,
 	};
 
 	state = {
-		windowHeight: null
+		windowHeight: null,
 	};
 
-	handleItemDoubleClick = item =>
+	handleItemDoubleClick = (item) =>
 		item.type === 'folder'
 			? this.props.refreshItems(this.props.browseContextDocumentId, item)
 			: this.props.onItemSubmit(item);
 
-	handleItemClick = item => {
+	handleItemClick = (item) => {
 		// Check if item is already selected, so that a documentId and/or nodeId on the selectedItem aren't overwritten
-		if (!this.props.selectedItem || item.id !== this.props.selectedItem.id) {
+		if (
+			!this.props.selectedItem ||
+			item.id !== this.props.selectedItem.id
+		) {
 			this.props.onItemSelect(item);
 		}
 	};
@@ -63,13 +71,20 @@ class ModalBrowserFileAndFolderResultList extends Component {
 			request,
 			selectedItem,
 			stateLabels,
-			viewMode
+			viewMode,
 		} = this.props;
 		const { windowHeight } = this.state;
 
-		if ((request.type === 'browse' || request.type === 'upload') && request.busy) {
+		if (
+			(request.type === 'browse' || request.type === 'upload') &&
+			request.busy
+		) {
 			return (
-				<StateMessage paddingSize="m" visual={<SpinnerIcon />} {...stateLabels.loading} />
+				<StateMessage
+					paddingSize="m"
+					visual={<SpinnerIcon />}
+					{...stateLabels.loading}
+				/>
 			);
 		}
 
@@ -85,7 +100,13 @@ class ModalBrowserFileAndFolderResultList extends Component {
 		}
 
 		if (items.length === 0) {
-			return <StateMessage paddingSize="m" visual="folder-open-o" {...stateLabels.empty} />;
+			return (
+				<StateMessage
+					paddingSize="m"
+					visual="folder-open-o"
+					{...stateLabels.empty}
+				/>
+			);
 		}
 
 		if (viewMode.name === 'list') {
