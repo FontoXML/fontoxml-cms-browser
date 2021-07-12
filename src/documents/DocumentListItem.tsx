@@ -14,6 +14,7 @@ type Props = {
 	onClick?(...args: unknown[]): unknown;
 	onDoubleClick?(...args: unknown[]): unknown;
 	onRef?(...args: unknown[]): unknown;
+	// @see TODO in DocumentGridItem.jsx
 };
 
 class DocumentListItem extends Component<Props> {

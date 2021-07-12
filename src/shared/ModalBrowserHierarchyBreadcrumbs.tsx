@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 
 type Props = {
 	browseContextDocumentId?: string;
+
+	// from withModularBrowserCapabilities
 	hierarchyItems?: unknown[];
 	refreshItems(...args: unknown[]): unknown;
 	request: object;

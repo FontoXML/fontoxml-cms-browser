@@ -13,6 +13,8 @@ type Props = {
 		serverErrorMessage: string;
 		invalidFileTypeMessage: string;
 	};
+
+	// from withModularBrowserCapabilities
 	hierarchyItems?: unknown[];
 	onUploadFileSelect(...args: unknown[]): unknown;
 	request: object;

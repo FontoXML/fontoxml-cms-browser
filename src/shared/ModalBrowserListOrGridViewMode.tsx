@@ -12,6 +12,7 @@ export const VIEWMODES = {
 };
 
 type Props = {
+	// from withModularBrowserCapabilities
 	onViewModeChange(...args: unknown[]): unknown;
 	viewMode: object;
 };

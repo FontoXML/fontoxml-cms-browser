@@ -13,6 +13,7 @@ type Props = {
 	};
 	onClick?(...args: unknown[]): unknown;
 	onDoubleClick?(...args: unknown[]): unknown;
+	// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
 };
 
 class DocumentGridItem extends Component<Props> {
