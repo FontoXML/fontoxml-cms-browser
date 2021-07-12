@@ -1,30 +1,27 @@
 import { SelectFileButton } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
 import t from 'fontoxml-localization/src/t';
 
 import dataProviders from '../dataProviders';
 
-class ModalBrowserUploadButton extends PureComponent {
+type Props = {
+	browseContextDocumentId?: string;
+	dataProviderName: string;
+	uploadErrorMessages: {
+		fileSizeTooLargeMessage: string;
+		serverErrorMessage: string;
+		invalidFileTypeMessage: string;
+	};
+	hierarchyItems?: unknown[];
+	onUploadFileSelect(...args: unknown[]): unknown;
+	request: object;
+};
+
+class ModalBrowserUploadButton extends PureComponent<Props> {
 	static defaultProps = {
 		hierarchyItems: [],
 		browseContextDocumentId: null,
-	};
-
-	static propTypes = {
-		browseContextDocumentId: PropTypes.string,
-		dataProviderName: PropTypes.string.isRequired,
-		uploadErrorMessages: PropTypes.shape({
-			fileSizeTooLargeMessage: PropTypes.string.isRequired,
-			serverErrorMessage: PropTypes.string.isRequired,
-			invalidFileTypeMessage: PropTypes.string.isRequired,
-		}).isRequired,
-
-		// from withModularBrowserCapabilities
-		hierarchyItems: PropTypes.array,
-		onUploadFileSelect: PropTypes.func.isRequired,
-		request: PropTypes.object.isRequired,
 	};
 
 	dataProvider = dataProviders.get(this.props.dataProviderName);

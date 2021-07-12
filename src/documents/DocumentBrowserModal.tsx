@@ -7,7 +7,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
@@ -63,8 +62,25 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.documentId);
 }
 
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId?: string;
+		dataProviderName: string;
+		documentId?: string;
+		insertOperationName?: string;
+		isCancelable?: boolean;
+		modalIcon?: string;
+		modalPrimaryButtonLabel?: string;
+		modalTitle?: string;
+	};
+	renderModalBodyToolbar?(...args: unknown[]): unknown;
+	submitModal(...args: unknown[]): unknown;
+};
+
 let DocumentBrowserModal = ({
 	cancelModal,
+
 	data: {
 		browseContextDocumentId,
 		isCancelable,
@@ -73,6 +89,7 @@ let DocumentBrowserModal = ({
 		modalPrimaryButtonLabel,
 		modalTitle,
 	},
+
 	determineAndHandleItemSubmitForSelectedItem,
 	hierarchyItems,
 	isItemErrored,
@@ -90,7 +107,7 @@ let DocumentBrowserModal = ({
 	selectedItem,
 	submitModal,
 	viewMode,
-}) => {
+}: Props) => {
 	const doubleClickedItemId = useRef(null);
 
 	useEffect(() => {
@@ -328,22 +345,6 @@ let DocumentBrowserModal = ({
 };
 DocumentBrowserModal.defaultProps = {
 	renderModalBodyToolbar: null,
-};
-
-DocumentBrowserModal.propTypes = {
-	cancelModal: PropTypes.func.isRequired,
-	data: PropTypes.shape({
-		browseContextDocumentId: PropTypes.string,
-		dataProviderName: PropTypes.string.isRequired,
-		documentId: PropTypes.string,
-		insertOperationName: PropTypes.string,
-		isCancelable: PropTypes.bool,
-		modalIcon: PropTypes.string,
-		modalPrimaryButtonLabel: PropTypes.string,
-		modalTitle: PropTypes.string,
-	}).isRequired,
-	renderModalBodyToolbar: PropTypes.func,
-	submitModal: PropTypes.func.isRequired,
 };
 
 DocumentBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(

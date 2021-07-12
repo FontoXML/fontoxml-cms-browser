@@ -1,29 +1,27 @@
 import { Flex, GridItem, Icon, Label } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-class DocumentGridItem extends Component {
+type Props = {
+	isDisabled?: boolean;
+	isErrored?: boolean;
+	isSelected?: boolean;
+	item: {
+		id: string;
+		icon?: string;
+		label: string;
+		type: string;
+	};
+	onClick?(...args: unknown[]): unknown;
+	onDoubleClick?(...args: unknown[]): unknown;
+};
+
+class DocumentGridItem extends Component<Props> {
 	static defaultProps = {
 		isDisabled: false,
 		isErrored: false,
 		isSelected: false,
 		onClick: (_item) => {},
 		onDoubleClick: (_item) => {},
-	};
-
-	static propTypes = {
-		isDisabled: PropTypes.bool,
-		isErrored: PropTypes.bool,
-		isSelected: PropTypes.bool,
-		item: PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			icon: PropTypes.string,
-			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired,
-		}).isRequired,
-		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func,
-		// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
 	};
 
 	wrapInGridItem = (content) => (

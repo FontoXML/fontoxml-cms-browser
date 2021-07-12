@@ -10,7 +10,6 @@ import {
 	StateMessage,
 	Toast,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
@@ -89,21 +88,21 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.type !== 'folder');
 }
 
-class ImageBrowserModal extends Component {
-	static propTypes = {
-		cancelModal: PropTypes.func.isRequired,
-		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string.isRequired,
-			dataProviderName: PropTypes.string.isRequired,
-			insertOperationName: PropTypes.string,
-			modalIcon: PropTypes.string,
-			modalPrimaryButtonLabel: PropTypes.string,
-			modalTitle: PropTypes.string,
-			selectedImageId: PropTypes.string,
-		}).isRequired,
-		submitModal: PropTypes.func.isRequired,
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId: string;
+		dataProviderName: string;
+		insertOperationName?: string;
+		modalIcon?: string;
+		modalPrimaryButtonLabel?: string;
+		modalTitle?: string;
+		selectedImageId?: string;
 	};
+	submitModal(...args: unknown[]): unknown;
+};
 
+class ImageBrowserModal extends Component<Props> {
 	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {

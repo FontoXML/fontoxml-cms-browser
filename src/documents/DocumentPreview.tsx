@@ -6,7 +6,6 @@ import {
 	StateMessage,
 	Text,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader';
@@ -15,23 +14,23 @@ import FxNodePreview from 'fontoxml-fx/src/FxNodePreview';
 
 const maxHeightStyles = { maxHeight: '50%' };
 
-class DocumentPreview extends Component {
+type Props = {
+	onLoadIsDone?(...args: unknown[]): unknown;
+	onItemIsErrored?(...args: unknown[]): unknown;
+	stateLabels: {
+		loadingPreview: {
+			title?: string;
+			message?: string;
+		};
+	};
+	selectedItem?: object;
+};
+
+class DocumentPreview extends Component<Props> {
 	static defaultProps = {
 		onLoadIsDone: (_documentId) => {},
 		onItemIsErrored: (_item) => {},
 		selectedItem: null,
-	};
-
-	static propTypes = {
-		onLoadIsDone: PropTypes.func,
-		onItemIsErrored: PropTypes.func,
-		stateLabels: PropTypes.shape({
-			loadingPreview: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-		}).isRequired,
-		selectedItem: PropTypes.object,
 	};
 
 	render() {

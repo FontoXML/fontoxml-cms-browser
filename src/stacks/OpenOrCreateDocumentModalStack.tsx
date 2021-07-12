@@ -1,5 +1,4 @@
 import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import t from 'fontoxml-localization/src/t';
@@ -21,22 +20,23 @@ const tabs = [
 		icon: 'folder-open-o',
 	},
 ];
-class OpenOrCreateDocumentModalStack extends Component {
-	static propTypes = {
-		cancelModal: PropTypes.func.isRequired,
-		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string,
-			insertOperationName: PropTypes.string,
-			isCancelable: PropTypes.bool,
-			modalIcon: PropTypes.string,
-			modalTitle: PropTypes.string,
-			openDocumentDataProviderName: PropTypes.string.isRequired,
-			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
-			selectFolderDataProviderName: PropTypes.string.isRequired,
-		}).isRequired,
-		submitModal: PropTypes.func.isRequired,
-	};
 
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId?: string;
+		insertOperationName?: string;
+		isCancelable?: boolean;
+		modalIcon?: string;
+		modalTitle?: string;
+		openDocumentDataProviderName: string;
+		selectDocumentTemplateDataProviderName: string;
+		selectFolderDataProviderName: string;
+	};
+	submitModal(...args: unknown[]): unknown;
+};
+
+class OpenOrCreateDocumentModalStack extends Component<Props> {
 	state = {
 		// Show "open" tab by default
 		activeTab: tabs[1],

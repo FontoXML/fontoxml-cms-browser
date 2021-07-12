@@ -1,8 +1,22 @@
 import { Icon, Label, ListItem } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-class DocumentListItem extends Component {
+type Props = {
+	isDisabled?: boolean;
+	isErrored?: boolean;
+	isSelected?: boolean;
+	item: {
+		id: string;
+		icon?: string;
+		label: string;
+		type: string;
+	};
+	onClick?(...args: unknown[]): unknown;
+	onDoubleClick?(...args: unknown[]): unknown;
+	onRef?(...args: unknown[]): unknown;
+};
+
+class DocumentListItem extends Component<Props> {
 	static defaultProps = {
 		isDisabled: false,
 		isErrored: false,
@@ -10,22 +24,6 @@ class DocumentListItem extends Component {
 		onClick: (_item) => {},
 		onDoubleClick: (_item) => {},
 		onRef: (_domNode) => {},
-	};
-
-	static propTypes = {
-		isDisabled: PropTypes.bool,
-		isErrored: PropTypes.bool,
-		isSelected: PropTypes.bool,
-		item: PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			icon: PropTypes.string,
-			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired,
-		}).isRequired,
-		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func,
-		// @see TODO in DocumentGridItem.jsx
-		onRef: PropTypes.func,
 	};
 
 	wrapInListItem = (content, label) => (

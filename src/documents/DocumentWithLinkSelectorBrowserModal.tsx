@@ -7,7 +7,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
@@ -63,23 +62,23 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.documentId && selectedItem.nodeId);
 }
 
-class DocumentWithLinkSelectorBrowserModal extends Component {
-	static propTypes = {
-		cancelModal: PropTypes.func.isRequired,
-		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string,
-			dataProviderName: PropTypes.string.isRequired,
-			documentId: PropTypes.string,
-			insertOperationName: PropTypes.string,
-			linkableElementsQuery: PropTypes.string.isRequired,
-			modalIcon: PropTypes.string,
-			modalPrimaryButtonLabel: PropTypes.string,
-			modalTitle: PropTypes.string,
-			nodeId: PropTypes.string,
-		}).isRequired,
-		submitModal: PropTypes.func.isRequired,
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId?: string;
+		dataProviderName: string;
+		documentId?: string;
+		insertOperationName?: string;
+		linkableElementsQuery: string;
+		modalIcon?: string;
+		modalPrimaryButtonLabel?: string;
+		modalTitle?: string;
+		nodeId?: string;
 	};
+	submitModal(...args: unknown[]): unknown;
+};
 
+class DocumentWithLinkSelectorBrowserModal extends Component<Props> {
 	handleKeyDown = (event) => {
 		switch (event.key) {
 			case 'Escape':

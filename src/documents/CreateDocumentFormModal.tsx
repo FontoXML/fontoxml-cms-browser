@@ -10,7 +10,6 @@ import {
 	ModalHeader,
 	TextInput,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import t from 'fontoxml-localization/src/t';
@@ -34,6 +33,22 @@ function canSubmitSelectedItem(selectedItem) {
 	);
 }
 
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data?: {
+		insertOperationName?: string;
+		isCancelable?: boolean;
+	};
+	modalIcon?: string;
+	modalTitle: string;
+	onSelectDocumentTemplateClick(...args: unknown[]): unknown;
+	onSelectFolderClick(...args: unknown[]): unknown;
+	renderModalBodyToolbar?(...args: unknown[]): unknown;
+	selectedDocumentTemplate?: object;
+	selectedFolder?: object;
+	submitModal(...args: unknown[]): unknown;
+};
+
 let CreateDocumentFormModal = ({
 	cancelModal,
 	data,
@@ -47,7 +62,7 @@ let CreateDocumentFormModal = ({
 	selectedDocumentTemplate,
 	selectedFolder,
 	submitModal,
-}) => {
+}: Props) => {
 	const [documentTitle, setDocumentTitle] = useState('');
 
 	useEffect(() => {
@@ -163,22 +178,6 @@ CreateDocumentFormModal.defaultProps = {
 	renderModalBodyToolbar: null,
 	selectedDocumentTemplate: {},
 	selectedFolder: {},
-};
-
-CreateDocumentFormModal.propTypes = {
-	cancelModal: PropTypes.func.isRequired,
-	data: PropTypes.shape({
-		insertOperationName: PropTypes.string,
-		isCancelable: PropTypes.bool,
-	}),
-	modalIcon: PropTypes.string,
-	modalTitle: PropTypes.string.isRequired,
-	onSelectDocumentTemplateClick: PropTypes.func.isRequired,
-	onSelectFolderClick: PropTypes.func.isRequired,
-	renderModalBodyToolbar: PropTypes.func,
-	selectedDocumentTemplate: PropTypes.object,
-	selectedFolder: PropTypes.object,
-	submitModal: PropTypes.func.isRequired,
 };
 
 CreateDocumentFormModal = withInsertOperationNameCapabilities(

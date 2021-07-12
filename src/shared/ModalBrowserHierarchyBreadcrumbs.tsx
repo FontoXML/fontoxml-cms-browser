@@ -1,19 +1,16 @@
 import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-class ModalBrowserHierarchyBreadcrumbs extends Component {
+type Props = {
+	browseContextDocumentId?: string;
+	hierarchyItems?: unknown[];
+	refreshItems(...args: unknown[]): unknown;
+	request: object;
+};
+
+class ModalBrowserHierarchyBreadcrumbs extends Component<Props> {
 	static defaultProps = {
 		browseContextDocumentId: null,
-	};
-
-	static propTypes = {
-		browseContextDocumentId: PropTypes.string,
-
-		// from withModularBrowserCapabilities
-		hierarchyItems: PropTypes.array,
-		refreshItems: PropTypes.func.isRequired,
-		request: PropTypes.object.isRequired,
 	};
 
 	renderBreadcrumbItem = ({

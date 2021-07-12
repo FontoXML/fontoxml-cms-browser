@@ -7,7 +7,6 @@ import {
 	StateMessage,
 } from 'fds/components';
 import { applyCss, block } from 'fds/system';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
@@ -26,22 +25,22 @@ const imageStyles = applyCss([
 	},
 ]);
 
-class ImagePreview extends Component {
-	static propTypes = {
-		stateLabels: PropTypes.shape({
-			previewError: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-			loadingPreview: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-		}).isRequired,
-		selectedItem: PropTypes.object,
-		referrerDocumentId: PropTypes.string.isRequired,
+type Props = {
+	stateLabels: {
+		previewError: {
+			title?: string;
+			message?: string;
+		};
+		loadingPreview: {
+			title?: string;
+			message?: string;
+		};
 	};
+	selectedItem?: object;
+	referrerDocumentId: string;
+};
 
+class ImagePreview extends Component<Props> {
 	render() {
 		const { stateLabels, selectedItem } = this.props;
 

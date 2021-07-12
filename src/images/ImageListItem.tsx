@@ -1,33 +1,32 @@
 import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
 
 import BlockImage from './BlockImage';
 
-class ImageListItem extends Component {
+type Props = {
+	isDisabled?: boolean;
+	isSelected?: boolean;
+	item: {
+		id: string;
+		icon?: string;
+		label: string;
+		type: string;
+	};
+	onClick?(...args: unknown[]): unknown;
+	onDoubleClick?(...args: unknown[]): unknown;
+	onRef?(...args: unknown[]): unknown;
+	referrerDocumentId: string;
+};
+
+class ImageListItem extends Component<Props> {
 	static defaultProps = {
 		isDisabled: false,
 		isSelected: false,
 		onClick: (_item) => {},
 		onDoubleClick: (_item) => {},
 		onRef: (_domNode) => {},
-	};
-
-	static propTypes = {
-		isDisabled: PropTypes.bool,
-		isSelected: PropTypes.bool,
-		item: PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			icon: PropTypes.string,
-			label: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired,
-		}).isRequired,
-		onClick: PropTypes.func,
-		onDoubleClick: PropTypes.func,
-		onRef: PropTypes.func,
-		referrerDocumentId: PropTypes.string.isRequired,
 	};
 
 	wrapInListItem = (content, label) => {

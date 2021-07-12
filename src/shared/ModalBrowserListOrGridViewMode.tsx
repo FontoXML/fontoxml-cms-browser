@@ -1,5 +1,4 @@
 import { ButtonGroup } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
 const viewModes = [
@@ -12,13 +11,12 @@ export const VIEWMODES = {
 	GRID: viewModes[1],
 };
 
-class ModalBrowserListOrGridViewMode extends PureComponent {
-	static propTypes = {
-		// from withModularBrowserCapabilities
-		onViewModeChange: PropTypes.func.isRequired,
-		viewMode: PropTypes.object.isRequired,
-	};
+type Props = {
+	onViewModeChange(...args: unknown[]): unknown;
+	viewMode: object;
+};
 
+class ModalBrowserListOrGridViewMode extends PureComponent<Props> {
 	render() {
 		return (
 			<ButtonGroup

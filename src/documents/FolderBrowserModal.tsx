@@ -7,7 +7,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import t from 'fontoxml-localization/src/t';
@@ -38,18 +37,18 @@ const stateLabels = {
 	},
 };
 
-class FolderBrowserModal extends Component {
-	static propTypes = {
-		cancelModal: PropTypes.func.isRequired,
-		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string,
-			dataProviderName: PropTypes.string.isRequired,
-			modalTitle: PropTypes.string,
-			modalPrimaryButtonLabel: PropTypes.string,
-		}).isRequired,
-		submitModal: PropTypes.func.isRequired,
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId?: string;
+		dataProviderName: string;
+		modalTitle?: string;
+		modalPrimaryButtonLabel?: string;
 	};
+	submitModal(...args: unknown[]): unknown;
+};
 
+class FolderBrowserModal extends Component<Props> {
 	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {

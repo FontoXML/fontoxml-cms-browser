@@ -1,5 +1,4 @@
 import { Block, SpinnerIcon, StateMessage } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint';
@@ -10,25 +9,25 @@ import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
 import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
 import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean';
 
-class DocumentWithLinkSelectorPreview extends Component {
+type Props = {
+	linkableElementsQuery: string;
+	onItemIsErrored?(...args: unknown[]): unknown;
+	onItemSelect(...args: unknown[]): unknown;
+	onLoadIsDone?(...args: unknown[]): unknown;
+	selectedItem?: object;
+	stateLabels: {
+		loadingPreview: {
+			title?: string;
+			message?: string;
+		};
+	};
+};
+
+class DocumentWithLinkSelectorPreview extends Component<Props> {
 	static defaultProps = {
 		onItemIsErrored: (_item) => {},
 		onLoadIsDone: (_documentId) => {},
 		selectedItem: null,
-	};
-
-	static propTypes = {
-		linkableElementsQuery: PropTypes.string.isRequired,
-		onItemIsErrored: PropTypes.func,
-		onItemSelect: PropTypes.func.isRequired,
-		onLoadIsDone: PropTypes.func,
-		selectedItem: PropTypes.object,
-		stateLabels: PropTypes.shape({
-			loadingPreview: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-		}).isRequired,
 	};
 
 	// When a item is selected we want to initially select the root node of the document. We do this

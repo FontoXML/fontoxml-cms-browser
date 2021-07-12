@@ -1,5 +1,4 @@
 import { ModalStack } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import t from 'fontoxml-localization/src/t';
@@ -8,21 +7,21 @@ import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal';
 import FolderBrowserModal from '../documents/FolderBrowserModal';
 
-class CreateDocumentFormModalStack extends Component {
-	static propTypes = {
-		cancelModal: PropTypes.func.isRequired,
-		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string,
-			insertOperationName: PropTypes.string,
-			isCancelable: PropTypes.bool,
-			modalIcon: PropTypes.string,
-			modalTitle: PropTypes.string,
-			selectDocumentTemplateDataProviderName: PropTypes.string.isRequired,
-			selectFolderDataProviderName: PropTypes.string.isRequired,
-		}).isRequired,
-		submitModal: PropTypes.func.isRequired,
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId?: string;
+		insertOperationName?: string;
+		isCancelable?: boolean;
+		modalIcon?: string;
+		modalTitle?: string;
+		selectDocumentTemplateDataProviderName: string;
+		selectFolderDataProviderName: string;
 	};
+	submitModal(...args: unknown[]): unknown;
+};
 
+class CreateDocumentFormModalStack extends Component<Props> {
 	state = {
 		activeModal: null,
 

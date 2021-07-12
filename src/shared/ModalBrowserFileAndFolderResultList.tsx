@@ -4,43 +4,40 @@ import {
 	VirtualGrid,
 	VirtualList,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-class ModalBrowserFileAndFolderResultList extends Component {
+type Props = {
+	browseContextDocumentId?: string;
+	onItemSubmit?(...args: unknown[]): unknown;
+	renderGridItem(...args: unknown[]): unknown;
+	renderListItem(...args: unknown[]): unknown;
+	stateLabels: {
+		browseError: {
+			title?: string;
+			message?: string;
+		};
+		empty: {
+			title?: string;
+			message?: string;
+		};
+		loading: {
+			title?: string;
+			message?: string;
+		};
+	};
+	items: unknown[];
+	onItemSelect(...args: unknown[]): unknown;
+	refreshItems(...args: unknown[]): unknown;
+	request: object;
+	selectedItem?: object;
+	viewMode: object;
+};
+
+class ModalBrowserFileAndFolderResultList extends Component<Props> {
 	static defaultProps = {
 		browseContextDocumentId: null,
 		onItemSubmit: () => {},
 		selectedItem: null,
-	};
-
-	static propTypes = {
-		browseContextDocumentId: PropTypes.string,
-		onItemSubmit: PropTypes.func,
-		renderGridItem: PropTypes.func.isRequired,
-		renderListItem: PropTypes.func.isRequired,
-		stateLabels: PropTypes.shape({
-			browseError: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-			empty: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-			loading: PropTypes.shape({
-				title: PropTypes.string,
-				message: PropTypes.string,
-			}).isRequired,
-		}).isRequired,
-
-		// from withModularBrowserCapabilities
-		items: PropTypes.array.isRequired,
-		onItemSelect: PropTypes.func.isRequired,
-		refreshItems: PropTypes.func.isRequired,
-		request: PropTypes.object.isRequired,
-		selectedItem: PropTypes.object,
-		viewMode: PropTypes.object.isRequired,
 	};
 
 	state = {

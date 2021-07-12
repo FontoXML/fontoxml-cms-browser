@@ -7,7 +7,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fds/components';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
@@ -66,23 +65,23 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.type !== 'folder');
 }
 
-class DocumentTemplateBrowserModal extends Component {
+type Props = {
+	cancelModal(...args: unknown[]): unknown;
+	data: {
+		browseContextDocumentId?: string;
+		dataProviderName: string;
+		insertOperationName?: string;
+		modalIcon?: string;
+		modalPrimaryButtonLabel?: string;
+		modalTitle?: string;
+	};
+	remoteDocumentId?: string;
+	submitModal(...args: unknown[]): unknown;
+};
+
+class DocumentTemplateBrowserModal extends Component<Props> {
 	static defaultProps = {
 		remoteDocumentId: null,
-	};
-
-	static propTypes = {
-		cancelModal: PropTypes.func.isRequired,
-		data: PropTypes.shape({
-			browseContextDocumentId: PropTypes.string,
-			dataProviderName: PropTypes.string.isRequired,
-			insertOperationName: PropTypes.string,
-			modalIcon: PropTypes.string,
-			modalPrimaryButtonLabel: PropTypes.string,
-			modalTitle: PropTypes.string,
-		}).isRequired,
-		remoteDocumentId: PropTypes.string,
-		submitModal: PropTypes.func.isRequired,
 	};
 
 	handleKeyDown = (event) => {
