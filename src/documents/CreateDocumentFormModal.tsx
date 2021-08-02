@@ -12,6 +12,7 @@ import {
 } from 'fds/components';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
@@ -33,12 +34,10 @@ function canSubmitSelectedItem(selectedItem) {
 	);
 }
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data?: {
-		insertOperationName?: string;
-		isCancelable?: boolean;
-	};
+type Props = ModalProps<{
+	insertOperationName?: string;
+	isCancelable?: boolean;
+}> & {
 	modalIcon?: string;
 	modalTitle: string;
 	onSelectDocumentTemplateClick(...args: unknown[]): unknown;
@@ -46,7 +45,6 @@ type Props = {
 	renderModalBodyToolbar?(...args: unknown[]): unknown;
 	selectedDocumentTemplate?: object;
 	selectedFolder?: object;
-	submitModal(...args: unknown[]): unknown;
 };
 
 let CreateDocumentFormModal = ({
@@ -78,17 +76,15 @@ let CreateDocumentFormModal = ({
 		selectedFolder,
 	]);
 
-	const handleSubmitButtonClick = useCallback(
-		() =>
-			submitModal(
-				getSubmitModalData({
-					selectedDocumentTemplate,
-					selectedFolder,
-					documentTitle,
-				})
-			),
-		[documentTitle, selectedDocumentTemplate, selectedFolder, submitModal]
-	);
+	const handleSubmitButtonClick = useCallback(() => {
+		submitModal(
+			getSubmitModalData({
+				selectedDocumentTemplate,
+				selectedFolder,
+				documentTitle,
+			})
+		);
+	}, [documentTitle, selectedDocumentTemplate, selectedFolder, submitModal]);
 
 	const handleKeyDown = useCallback(
 		(event) => {

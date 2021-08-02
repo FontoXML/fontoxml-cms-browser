@@ -11,6 +11,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
@@ -62,20 +63,17 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.documentId);
 }
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data: {
-		browseContextDocumentId?: string;
-		dataProviderName: string;
-		documentId?: string;
-		insertOperationName?: string;
-		isCancelable?: boolean;
-		modalIcon?: string;
-		modalPrimaryButtonLabel?: string;
-		modalTitle?: string;
-	};
+type Props = ModalProps<{
+	browseContextDocumentId?: string;
+	dataProviderName: string;
+	documentId?: string;
+	insertOperationName?: string;
+	isCancelable?: boolean;
+	modalIcon?: string;
+	modalPrimaryButtonLabel?: string;
+	modalTitle?: string;
+}> & {
 	renderModalBodyToolbar?(...args: unknown[]): unknown;
-	submitModal(...args: unknown[]): unknown;
 };
 
 let DocumentBrowserModal = ({
@@ -252,10 +250,9 @@ let DocumentBrowserModal = ({
 		]
 	);
 
-	const handleSubmitButtonClick = useCallback(
-		() => submitModal(getSubmitModalData(selectedItem)),
-		[selectedItem, submitModal]
-	);
+	const handleSubmitButtonClick = useCallback(() => {
+		submitModal(getSubmitModalData(selectedItem));
+	}, [selectedItem, submitModal]);
 
 	const hasHierarchyItems = hierarchyItems.length > 0;
 

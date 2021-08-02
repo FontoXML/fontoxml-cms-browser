@@ -1,6 +1,7 @@
 import { ButtonGroup, ModalBodyToolbar, ModalStack } from 'fds/components';
 import React, { Component } from 'react';
 
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
@@ -21,9 +22,8 @@ const tabs = [
 	},
 ];
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data: {
+class OpenOrCreateDocumentModalStack extends Component<
+	ModalProps<{
 		browseContextDocumentId?: string;
 		insertOperationName?: string;
 		isCancelable?: boolean;
@@ -32,11 +32,8 @@ type Props = {
 		openDocumentDataProviderName: string;
 		selectDocumentTemplateDataProviderName: string;
 		selectFolderDataProviderName: string;
-	};
-	submitModal(...args: unknown[]): unknown;
-};
-
-class OpenOrCreateDocumentModalStack extends Component<Props> {
+	}>
+> {
 	state = {
 		// Show "open" tab by default
 		activeTab: tabs[1],

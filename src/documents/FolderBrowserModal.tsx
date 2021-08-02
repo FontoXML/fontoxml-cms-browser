@@ -9,6 +9,7 @@ import {
 } from 'fds/components';
 import React, { Component } from 'react';
 
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
@@ -37,18 +38,14 @@ const stateLabels = {
 	},
 };
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data: {
+class FolderBrowserModal extends Component<
+	ModalProps<{
 		browseContextDocumentId?: string;
 		dataProviderName: string;
 		modalTitle?: string;
 		modalPrimaryButtonLabel?: string;
-	};
-	submitModal(...args: unknown[]): unknown;
-};
-
-class FolderBrowserModal extends Component<Props> {
+	}>
+> {
 	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
@@ -92,8 +89,9 @@ class FolderBrowserModal extends Component<Props> {
 		/>
 	);
 
-	handleSubmitButtonClick = () =>
+	handleSubmitButtonClick = () => {
 		this.props.submitModal(this.props.selectedItem);
+	};
 
 	render() {
 		const {

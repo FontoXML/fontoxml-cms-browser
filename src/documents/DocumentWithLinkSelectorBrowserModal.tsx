@@ -11,6 +11,7 @@ import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
@@ -62,9 +63,8 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.documentId && selectedItem.nodeId);
 }
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data: {
+class DocumentWithLinkSelectorBrowserModal extends Component<
+	ModalProps<{
 		browseContextDocumentId?: string;
 		dataProviderName: string;
 		documentId?: string;
@@ -74,11 +74,8 @@ type Props = {
 		modalPrimaryButtonLabel?: string;
 		modalTitle?: string;
 		nodeId?: string;
-	};
-	submitModal(...args: unknown[]): unknown;
-};
-
-class DocumentWithLinkSelectorBrowserModal extends Component<Props> {
+	}>
+> {
 	handleKeyDown = (event) => {
 		switch (event.key) {
 			case 'Escape':
@@ -129,8 +126,9 @@ class DocumentWithLinkSelectorBrowserModal extends Component<Props> {
 		this.props.onItemIsLoaded(this.props.selectedItem.id);
 	};
 
-	handleSubmitButtonClick = () =>
+	handleSubmitButtonClick = () => {
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
+	};
 
 	render() {
 		const {

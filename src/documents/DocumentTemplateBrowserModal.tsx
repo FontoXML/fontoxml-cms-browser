@@ -10,6 +10,7 @@ import {
 import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
@@ -65,18 +66,15 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.type !== 'folder');
 }
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data: {
-		browseContextDocumentId?: string;
-		dataProviderName: string;
-		insertOperationName?: string;
-		modalIcon?: string;
-		modalPrimaryButtonLabel?: string;
-		modalTitle?: string;
-	};
+type Props = ModalProps<{
+	browseContextDocumentId?: string;
+	dataProviderName: string;
+	insertOperationName?: string;
+	modalIcon?: string;
+	modalPrimaryButtonLabel?: string;
+	modalTitle?: string;
+}> & {
 	remoteDocumentId?: string;
-	submitModal(...args: unknown[]): unknown;
 };
 
 class DocumentTemplateBrowserModal extends Component<Props> {
@@ -145,8 +143,9 @@ class DocumentTemplateBrowserModal extends Component<Props> {
 		this.props.onItemIsLoaded(this.props.selectedItem.id);
 	};
 
-	handleSubmitButtonClick = () =>
+	handleSubmitButtonClick = () => {
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
+	};
 
 	render() {
 		const {

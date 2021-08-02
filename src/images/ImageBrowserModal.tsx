@@ -13,6 +13,7 @@ import {
 import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
@@ -88,9 +89,8 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.type !== 'folder');
 }
 
-type Props = {
-	cancelModal(...args: unknown[]): unknown;
-	data: {
+class ImageBrowserModal extends Component<
+	ModalProps<{
 		browseContextDocumentId: string;
 		dataProviderName: string;
 		insertOperationName?: string;
@@ -98,11 +98,8 @@ type Props = {
 		modalPrimaryButtonLabel?: string;
 		modalTitle?: string;
 		selectedImageId?: string;
-	};
-	submitModal(...args: unknown[]): unknown;
-};
-
-class ImageBrowserModal extends Component<Props> {
+	}>
+> {
 	handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
@@ -151,8 +148,9 @@ class ImageBrowserModal extends Component<Props> {
 		/>
 	);
 
-	handleSubmitButtonClick = () =>
+	handleSubmitButtonClick = () => {
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
+	};
 
 	render() {
 		const {
