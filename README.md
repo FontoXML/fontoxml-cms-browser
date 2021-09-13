@@ -1,5 +1,6 @@
 ---
 category: add-on/fontoxml-cms-browser
+fontosdk: true
 ---
 
 # CMS browser library
