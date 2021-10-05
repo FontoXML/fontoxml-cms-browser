@@ -2,5 +2,5 @@
 	"dependencies": {
 		"fontoxml-platform-base": "*"
 	},
-	"role": "internal"
+	"role": "add-on"
 }
