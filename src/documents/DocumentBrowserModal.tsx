@@ -259,6 +259,7 @@ let DocumentBrowserModal = ({
 	return (
 		<Modal size="l" isFullHeight onKeyDown={handleKeyDown}>
 			<ModalHeader
+				hideCloseButton={!isCancelable}
 				icon={modalIcon}
 				title={modalTitle || t('Select a document')}
 			/>
