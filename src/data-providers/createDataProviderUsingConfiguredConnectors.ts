@@ -108,17 +108,7 @@ function getUploadOptions(options: $TSFixMeAny): $TSFixMeAny {
 }
 
 /**
- * @param {{
- *   assetTypes: string[],
- *   resultTypes: string[],
- *   rootFolderLabel: string,
- *   query: Object,
- *   uploadAssetType: string,
- *   uploadMimeTypesToAccept: string,
- *   uploadMaxFileSizeInBytes: number
- * }} options
- *
- * @return {DataProvider}
+ * @param options -
  */
 export default function createDataProviderUsingConfiguredConnectors(options: {
 	assetTypes: string[];
@@ -131,15 +121,10 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 }): DataProvider {
 	return {
 		/**
-		 * @param {string} browseContextDocumentId
-		 * @param {object} targetFolder
-		 * @param {boolean} noCache
-		 * @param {object[]} hierarchyItems
-		 *
-		 * @return {Promise<{
-		 *   hierarchyItems: string[]
-		 *   items: { id: string, label: string, icon: string, isDisabled: Boolean, externalUrl: string }[]
-		 * }>}
+		 * @param browseContextDocumentId -
+		 * @param targetFolder            -
+		 * @param noCache                 -
+		 * @param hierarchyItems          -
 		 */
 		getFolderContents(
 			browseContextDocumentId,
@@ -163,30 +148,25 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 		},
 
 		/**
-		 * @param {string} folderToUploadInId
-		 * @param {File[]} filesToUpload
-		 *
-		 * TODO: what type does this resolve to?
-		 * @return {Promise}
+		 * @param folderToUploadInId -
+		 * @param filesToUpload      - TODO: what type does this resolve to?
 		 */
 		upload(folderToUploadInId, filesToUpload) {
 			return upload(options, folderToUploadInId, filesToUpload);
 		},
 
-		/**
-		 * @return {{ mimeTypesToAccept: string, maxFileSizeInBytes: number }}
-		 */
+
 		getUploadOptions() {
 			return getUploadOptions(options);
 		},
 
 		_lastOpenedState: { hierarchyItems: null, selectedItem: null },
 		/**
-		 * Stores the last opened hierarchyItems.
-		 * Used to restore this state whenever the browse modal for this data provider is
-		 * opened again.
+		 * @remarks
+		 * Stores the last opened hierarchyItems. Used to restore this state whenever the
+		 * browse modal for this data provider is opened again.
 		 *
-		 * @param {object[]} hierarchyItems
+		 * @param hierarchyItems -
 		 */
 		storeLastOpenedState(hierarchyItems) {
 			this._lastOpenedState = {

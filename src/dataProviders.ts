@@ -4,20 +4,13 @@ const dataProvidersByName = Object.create(null);
 
 export default {
 	/**
+	 * @remarks
 	 * Set a data provider that can be used by the cms browser modals.
 	 *
 	 * @fontosdk
 	 *
-	 * @param {string} name
-	 * @param {{
-	 *   assetTypes: string[],
-	 *   resultTypes: string[],
-	 *   rootFolderLabel: string,
-	 *   query: Object,
-	 *   uploadAssetType: string,
-	 *   uploadMimeTypesToAccept: string,
-	 *   uploadMaxFileSizeInBytes: number
-	 * }} options
+	 * @param name    -
+	 * @param options -
 	 */
 	set(name: $TSFixMeAny, options: $TSFixMeAny): void {
 		dataProvidersByName[name] =
