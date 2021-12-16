@@ -115,7 +115,11 @@ let CreateDocumentFormModal = ({
 
 	return (
 		<Modal size="s" onKeyDown={handleKeyDown}>
-			<ModalHeader icon={modalIcon} title={modalTitle} />
+			<ModalHeader
+				icon={modalIcon}
+				title={modalTitle}
+				hideCloseButton={!data.isCancelable}
+			/>
 
 			<ModalBody>
 				{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
