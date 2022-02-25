@@ -6,7 +6,7 @@ import documentsManager from 'fontoxml-documents/src/documentsManager';
 import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
 import FxDocumentLoader from 'fontoxml-fx/src/FxDocumentLoader';
 import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
-import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
+import _FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
 import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean';
 
 type Props = {
@@ -95,7 +95,7 @@ class DocumentWithLinkSelectorPreview extends Component<Props> {
 					}
 
 					return (
-						<FxNodePreviewWithLinkSelector
+						<_FxNodePreviewWithLinkSelector
 							documentId={documentId}
 							onSelectedNodeChange={this.handleSelectedNodeChange}
 							selector={linkableElementsQuery}

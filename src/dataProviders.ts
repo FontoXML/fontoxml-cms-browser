@@ -2,7 +2,7 @@ import createDataProviderUsingConfiguredConnectors from './data-providers/create
 
 const dataProvidersByName = Object.create(null);
 
-export default {
+const dataProviders = {
 	/**
 	 * @remarks
 	 * Set a data provider that can be used by the cms browser modals.
@@ -35,3 +35,5 @@ export default {
 		return dataProvider;
 	},
 };
+
+export default dataProviders;
