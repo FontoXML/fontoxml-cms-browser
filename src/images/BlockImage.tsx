@@ -5,7 +5,7 @@ import applyCss from 'fontoxml-styles/src/applyCss';
 
 const imageStyles = applyCss([
 	block,
-	{ maxWidth: '100%', maxHeight: '100%' },
+	{ maxWidth: '100%', maxHeight: '100%', objectFit: 'scale-down'},
 	{ userSelect: 'none' },
 ]);
 
