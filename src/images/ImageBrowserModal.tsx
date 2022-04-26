@@ -200,7 +200,7 @@ class ImageBrowserModal extends Component<
 								/>
 							)}
 
-							<Flex flex="none" spaceSize="l">
+							<Flex flex="none" spaceSize="l" alignItems="center">
 								<ModalBrowserUploadButton
 									browseContextDocumentId={
 										browseContextDocumentId
