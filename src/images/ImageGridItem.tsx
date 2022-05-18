@@ -1,7 +1,14 @@
-import { Flex, GridItem, Icon, Label, SpinnerIcon } from 'fds/components';
-import React, { Component } from 'react';
+import type { FC } from 'react';
+import React, { useCallback } from 'react';
 
-import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
+import {
+	Flex,
+	GridItem,
+	Icon,
+	Label,
+	SpinnerIcon,
+} from 'fontoxml-design-system/src/components';
+import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 import BlockImage from './BlockImage';
 
@@ -19,100 +26,91 @@ type Props = {
 	referrerDocumentId: string;
 };
 
-class ImageGridItem extends Component<Props> {
-	static defaultProps = {
-		isDisabled: false,
-		isSelected: false,
-		onClick: (_item) => {},
-		onDoubleClick: (_item) => {},
-	};
-
-	wrapInGridItem = (content) => (
-		<GridItem
-			isSelected={this.props.isSelected}
-			isDisabled={this.props.isDisabled}
-			onClick={this.props.onClick}
-			onDoubleClick={this.props.onDoubleClick}
-		>
-			{content}
-		</GridItem>
+const ImageGridItem: FC<Props> = ({
+	isDisabled,
+	isSelected,
+	item,
+	onClick,
+	onDoubleClick,
+	referrerDocumentId,
+}) => {
+	const wrapInGridItem = useCallback(
+		(content) => (
+			<GridItem
+				isSelected={isSelected}
+				isDisabled={isDisabled}
+				onClick={onClick}
+				onDoubleClick={onDoubleClick}
+			>
+				{content}
+			</GridItem>
+		),
+		[isDisabled, isSelected, onClick, onDoubleClick]
 	);
 
-	render() {
-		const { item } = this.props;
+	const { isErrored, isLoading, imageData } = useImageLoader(
+		referrerDocumentId,
+		item.id,
+		'thumbnail'
+	);
 
-		if (item.type === 'folder') {
-			return this.wrapInGridItem(
-				<Flex alignItems="center" flexDirection="column">
-					<Icon icon={item.icon || 'folder-o'} size="m" />
-					<Label>{item.label}</Label>
-				</Flex>
-			);
-		}
-
-		return (
-			<FxImageLoader
-				remoteId={item.id}
-				referrerDocumentId={this.props.referrerDocumentId}
-				type="thumbnail"
-			>
-				{({ isErrored, isLoading, imageData }) => {
-					if (isErrored) {
-						return this.wrapInGridItem(
-							<Flex
-								alignItems="center"
-								flex="1"
-								flexDirection="column"
-							>
-								<Icon
-									colorName="icon-m-error-color"
-									icon={item.icon || 'file-image-o'}
-									size="m"
-								/>
-								<Label colorName="text-muted-color">
-									{item.label}
-								</Label>
-							</Flex>
-						);
-					}
-
-					if (isLoading) {
-						return this.wrapInGridItem(
-							<Flex
-								alignItems="center"
-								flex="1"
-								flexDirection="column"
-							>
-								<SpinnerIcon size="m" />
-								<Label>{item.label}</Label>
-							</Flex>
-						);
-					}
-
-					return this.wrapInGridItem(
-						<Flex
-							alignItems="center"
-							flex="1"
-							flexDirection="column"
-						>
-							<Flex
-								alignItems="center"
-								flex="none"
-								flexDirection="row"
-								applyCss={{ height: '3rem' }}
-							>
-								<BlockImage
-									src={imageData.dataUrl}
-									width={imageData.width || 150}
-								/>
-							</Flex>
-							<Label>{item.label}</Label>
-						</Flex>
-					);
-				}}
-			</FxImageLoader>
+	if (item.type === 'folder') {
+		return wrapInGridItem(
+			<Flex alignItems="center" flexDirection="column">
+				<Icon icon={item.icon || 'folder-o'} size="m" />
+				<Label>{item.label}</Label>
+			</Flex>
 		);
 	}
-}
+
+	if (isErrored) {
+		return wrapInGridItem(
+			<Flex alignItems="center" flex="1" flexDirection="column">
+				<Icon
+					colorName="icon-m-error-color"
+					icon={item.icon || 'file-image-o'}
+					size="m"
+				/>
+				<Label colorName="text-muted-color">{item.label}</Label>
+			</Flex>
+		);
+	}
+
+	if (isLoading) {
+		return wrapInGridItem(
+			<Flex alignItems="center" flex="1" flexDirection="column">
+				<SpinnerIcon size="m" />
+				<Label>{item.label}</Label>
+			</Flex>
+		);
+	}
+
+	return wrapInGridItem(
+		<Flex alignItems="center" flex="1" flexDirection="column">
+			<Flex
+				alignItems="center"
+				flex="none"
+				flexDirection="row"
+				applyCss={{ height: '3rem' }}
+			>
+				<BlockImage
+					src={imageData.dataUrl}
+					width={imageData.width || 150}
+					height={imageData.height}
+				/>
+			</Flex>
+			<Label>{item.label}</Label>
+		</Flex>
+	);
+};
+
+ImageGridItem.defaultProps = {
+	isDisabled: false,
+	isSelected: false,
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onClick: (_item) => {},
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onDoubleClick: (_item) => {},
+};
 
 export default ImageGridItem;

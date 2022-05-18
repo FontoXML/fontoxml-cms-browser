@@ -1,3 +1,7 @@
+import { applyCss, block } from 'fds/system';
+import type { FC, ReactNode } from 'react';
+import React from 'react';
+
 import {
 	Flex,
 	Heading,
@@ -5,11 +9,8 @@ import {
 	KeyValueList,
 	SpinnerIcon,
 	StateMessage,
-} from 'fds/components';
-import { applyCss, block } from 'fds/system';
-import React, { Component } from 'react';
-
-import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
+} from 'fontoxml-design-system/src/components';
+import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 const imageStyles = applyCss([
 	block,
@@ -36,85 +37,82 @@ type Props = {
 			message?: string;
 		};
 	};
-	selectedItem?: object;
+	selectedItem?: {
+		id: string;
+		label: string;
+		metadata: {
+			properties: { [key: string]: ReactNode };
+		};
+	};
 	referrerDocumentId: string;
 };
 
-class ImagePreview extends Component<Props> {
-	render() {
-		const { stateLabels, selectedItem } = this.props;
+const ImagePreview: FC<Props> = ({
+	stateLabels,
+	selectedItem,
+	referrerDocumentId,
+}) => {
+	const { isErrored, isLoading, imageData } = useImageLoader(
+		referrerDocumentId,
+		selectedItem.id,
+		'web'
+	);
 
+	if (isErrored) {
 		return (
-			<FxImageLoader
-				remoteId={selectedItem.id}
-				referrerDocumentId={this.props.referrerDocumentId}
-				type="web"
-			>
-				{({ isErrored, isLoading, imageData }) => {
-					if (isErrored) {
-						return (
-							<StateMessage
-								connotation="warning"
-								paddingSize="m"
-								visual="exclamation-triangle"
-								{...stateLabels.previewError}
-							/>
-						);
-					}
-
-					if (isLoading) {
-						return (
-							<StateMessage
-								paddingSize="m"
-								visual={<SpinnerIcon />}
-								{...stateLabels.loadingPreview}
-							/>
-						);
-					}
-
-					return (
-						<Flex flex="auto" flexDirection="column">
-							<Flex
-								flex="auto"
-								flexDirection="column"
-								paddingSize="l"
-								spaceSize="m"
-							>
-								<Heading level="4">
-									{selectedItem.label}
-								</Heading>
-
-								<Flex flex="auto">
-									<img
-										src={imageData.dataUrl}
-										{...imageStyles}
-										width={imageData.width || 150}
-									/>
-								</Flex>
-							</Flex>
-
-							{selectedItem.metadata &&
-								selectedItem.metadata.properties && (
-									<Flex flex="none" flexDirection="column">
-										<Flex paddingSize={{ horizontal: 'l' }}>
-											<HorizontalSeparationLine />
-										</Flex>
-
-										<KeyValueList
-											valueByKey={
-												selectedItem.metadata.properties
-											}
-											scrollLimit={5}
-											paddingSize="l"
-										/>
-									</Flex>
-								)}
-						</Flex>
-					);
-				}}
-			</FxImageLoader>
+			<StateMessage
+				connotation="warning"
+				paddingSize="m"
+				visual="exclamation-triangle"
+				{...stateLabels.previewError}
+			/>
 		);
 	}
-}
+
+	if (isLoading) {
+		return (
+			<StateMessage
+				paddingSize="m"
+				visual={<SpinnerIcon />}
+				{...stateLabels.loadingPreview}
+			/>
+		);
+	}
+
+	return (
+		<Flex flex="auto" flexDirection="column">
+			<Flex
+				flex="auto"
+				flexDirection="column"
+				paddingSize="l"
+				spaceSize="m"
+			>
+				<Heading level="4">{selectedItem.label}</Heading>
+
+				<Flex flex="auto">
+					<img
+						src={imageData.dataUrl}
+						{...imageStyles}
+						width={imageData.width || 150}
+					/>
+				</Flex>
+			</Flex>
+
+			{selectedItem.metadata && selectedItem.metadata.properties && (
+				<Flex flex="none" flexDirection="column">
+					<Flex paddingSize={{ horizontal: 'l' }}>
+						<HorizontalSeparationLine />
+					</Flex>
+
+					<KeyValueList
+						valueByKey={selectedItem.metadata.properties}
+						scrollLimit={5}
+						paddingSize="l"
+					/>
+				</Flex>
+			)}
+		</Flex>
+	);
+};
 
 export default ImagePreview;

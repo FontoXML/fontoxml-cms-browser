@@ -1,7 +1,8 @@
 import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-import React, { Component } from 'react';
+import type { FC } from 'react';
+import React, { useCallback } from 'react';
 
-import FxImageLoader from 'fontoxml-fx/src/FxImageLoader';
+import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 import BlockImage from './BlockImage';
 
@@ -20,82 +21,85 @@ type Props = {
 	referrerDocumentId: string;
 };
 
-class ImageListItem extends Component<Props> {
-	static defaultProps = {
-		isDisabled: false,
-		isSelected: false,
-		onClick: (_item) => {},
-		onDoubleClick: (_item) => {},
-		onRef: (_domNode) => {},
-	};
-
-	wrapInListItem = (content, label) => {
-		return (
-			<ListItem
-				isSelected={this.props.isSelected}
-				isDisabled={this.props.isDisabled}
-				onClick={this.props.onClick}
-				onDoubleClick={this.props.onDoubleClick}
-				onRef={this.props.onRef}
-			>
-				{content}
-				{label}
-			</ListItem>
-		);
-	};
-
-	render() {
-		const { item } = this.props;
-
-		if (item.type === 'folder') {
-			return this.wrapInListItem(
-				<Icon icon={item.icon || 'folder-o'} size="s" />,
-				<Label>{item.label}</Label>
+const ImageListItem: FC<Props> = ({
+	isDisabled,
+	isSelected,
+	item,
+	onClick,
+	onDoubleClick,
+	onRef,
+	referrerDocumentId,
+}) => {
+	const wrapInListItem = useCallback(
+		(content, label) => {
+			return (
+				<ListItem
+					isSelected={isSelected}
+					isDisabled={isDisabled}
+					onClick={onClick}
+					onDoubleClick={onDoubleClick}
+					onRef={onRef}
+				>
+					{content}
+					{label}
+				</ListItem>
 			);
-		}
+		},
+		[isDisabled, isSelected, onClick, onDoubleClick, onRef]
+	);
 
-		return (
-			<FxImageLoader
-				remoteId={item.id}
-				referrerDocumentId={this.props.referrerDocumentId}
-				type="thumbnail"
-			>
-				{({ isErrored, isLoading, imageData }) => {
-					if (isErrored) {
-						return this.wrapInListItem(
-							<Icon
-								colorName="icon-s-error-color"
-								icon={item.icon || 'file-image-o'}
-								size="s"
-							/>,
-							<Label colorName="text-muted-color">
-								{item.label}
-							</Label>
-						);
-					}
+	const { isErrored, isLoading, imageData } = useImageLoader(
+		referrerDocumentId,
+		item.id,
+		'thumbnail'
+	);
 
-					if (isLoading) {
-						return this.wrapInListItem(
-							<SpinnerIcon size="s" />,
-							<Label>{item.label}</Label>
-						);
-					}
-
-					return this.wrapInListItem(
-						<Block
-							applyCss={{ width: '.875rem', height: '.875rem' }}
-						>
-							<BlockImage
-								src={imageData.dataUrl}
-								width={imageData.width || 150}
-							/>
-						</Block>,
-						<Label>{item.label}</Label>
-					);
-				}}
-			</FxImageLoader>
+	if (item.type === 'folder') {
+		return wrapInListItem(
+			<Icon icon={item.icon || 'folder-o'} size="s" />,
+			<Label>{item.label}</Label>
 		);
 	}
-}
+
+	if (isErrored) {
+		return wrapInListItem(
+			<Icon
+				colorName="icon-s-error-color"
+				icon={item.icon || 'file-image-o'}
+				size="s"
+			/>,
+			<Label colorName="text-muted-color">{item.label}</Label>
+		);
+	}
+
+	if (isLoading) {
+		return wrapInListItem(
+			<SpinnerIcon size="s" />,
+			<Label>{item.label}</Label>
+		);
+	}
+
+	return wrapInListItem(
+		<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
+			<BlockImage
+				src={imageData.dataUrl}
+				width={imageData.width || 150}
+				height={imageData.height}
+			/>
+		</Block>,
+		<Label>{item.label}</Label>
+	);
+};
+
+ImageListItem.defaultProps = {
+	isDisabled: false,
+	isSelected: false,
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onClick: (_item) => {},
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onDoubleClick: (_item) => {},
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onRef: (_domNode) => {},
+};
 
 export default ImageListItem;
