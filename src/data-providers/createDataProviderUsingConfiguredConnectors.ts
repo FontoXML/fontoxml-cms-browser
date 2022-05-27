@@ -1,7 +1,6 @@
 import connectorsManager from 'fontoxml-configuration/src/connectorsManager';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
 import selectionManager from 'fontoxml-selection/src/selectionManager';
-import type { DataProvider } from 'fontoxml-typescript-migration-debt/src/types';
 
 const configuredAssetConnector =
 	connectorsManager.getConnector('asset-connector');
@@ -118,7 +117,7 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 	uploadAssetType: string;
 	uploadMimeTypesToAccept: string;
 	uploadMaxFileSizeInBytes: number;
-}): DataProvider {
+}): $TSFixMeAny {
 	return {
 		/**
 		 * @param browseContextDocumentId -
@@ -154,7 +153,6 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 		upload(folderToUploadInId, filesToUpload) {
 			return upload(options, folderToUploadInId, filesToUpload);
 		},
-
 
 		getUploadOptions() {
 			return getUploadOptions(options);
