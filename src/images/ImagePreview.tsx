@@ -53,8 +53,8 @@ const ImagePreview: FC<Props> = ({
 	referrerDocumentId,
 }) => {
 	const { isErrored, isLoading, imageData } = useImageLoader(
-		referrerDocumentId,
 		selectedItem.id,
+		referrerDocumentId,
 		'web'
 	);
 

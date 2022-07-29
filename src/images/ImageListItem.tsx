@@ -49,8 +49,8 @@ const ImageListItem: FC<Props> = ({
 	);
 
 	const { isErrored, isLoading, imageData } = useImageLoader(
-		referrerDocumentId,
 		item.id,
+		referrerDocumentId,
 		'thumbnail'
 	);
 
