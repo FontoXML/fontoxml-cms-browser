@@ -7,7 +7,13 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fds/components';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
@@ -231,22 +237,24 @@ let DocumentBrowserModal = ({
 		[handleItemDoubleClick, isItemErrored, selectedItem]
 	);
 
+	const selectedItemId = useMemo(() => selectedItem?.id, [selectedItem?.id]);
+
 	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
 	// preview is done loading. If the item was also double clicked, we want to submit right away.
 	const handleLoadIsDone = useCallback(
 		(documentId) => {
-			const newSelectedItem = { ...selectedItem, documentId };
+			const newSelectedItem = { id: selectedItemId, documentId };
 			if (newSelectedItem.id === doubleClickedItemId.current) {
 				determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
 			}
 			onItemIsLoaded(newSelectedItem.id);
-			onItemSelect(newSelectedItem);
+			onItemSelect(newSelectedItem.id);
 		},
 		[
 			determineAndHandleItemSubmitForSelectedItem,
 			onItemIsLoaded,
 			onItemSelect,
-			selectedItem,
+			selectedItemId,
 		]
 	);
 

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
 	Block,
@@ -38,7 +38,26 @@ const DocumentPreview: FC<Props> = ({
 	selectedItem,
 }) => {
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
-		useDocumentLoader(selectedItem.id, onLoadIsDone, onItemIsErrored);
+		useDocumentLoader(selectedItem.id);
+
+	useEffect(() => {
+		if (isLoading) {
+			return;
+		}
+
+		if (error) {
+			onItemIsErrored(selectedItem.id, error);
+		} else {
+			onLoadIsDone(documentId);
+		}
+	}, [
+		documentId,
+		error,
+		isLoading,
+		onItemIsErrored,
+		onLoadIsDone,
+		selectedItem.id,
+	]);
 
 	if (isErrored) {
 		return (
