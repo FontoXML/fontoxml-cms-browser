@@ -11,6 +11,7 @@ import React, { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
+import type { DocumentId } from 'fontoxml-documents/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
@@ -122,8 +123,10 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 		/>
 	);
 
-	handleLoadIsDone = () => {
-		this.props.onItemIsLoaded(this.props.selectedItem.id);
+	handleLoadIsDone = (documentId: DocumentId) => {
+		const newSelectedItem = { ...this.props.selectedItem, documentId };
+		this.props.onItemIsLoaded(newSelectedItem.id);
+		this.props.onItemSelect(newSelectedItem);
 	};
 
 	handleSubmitButtonClick = () => {
@@ -245,7 +248,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 
 	componentDidMount() {
 		const {
-			data: { browseContextDocumentId, documentId },
+			data: { browseContextDocumentId, documentId, nodeId },
 			lastOpenedState,
 			onInitialSelectedItemIdChange,
 			refreshItems,
@@ -254,7 +257,11 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 		const { hierarchyItems } = lastOpenedState;
 
 		const initialSelectedItem = documentId
-			? { id: documentsManager.getRemoteDocumentId(documentId) }
+			? {
+					id: documentsManager.getRemoteDocumentId(documentId),
+					documentId,
+					nodeId,
+			  }
 			: null;
 		if (
 			cmsBrowserSendsHierarchyItemsInBrowseResponse &&

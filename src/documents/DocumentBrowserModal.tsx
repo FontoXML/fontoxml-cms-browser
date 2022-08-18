@@ -248,7 +248,7 @@ let DocumentBrowserModal = ({
 				determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
 			}
 			onItemIsLoaded(newSelectedItem.id);
-			onItemSelect(newSelectedItem.id);
+			onItemSelect(newSelectedItem);
 		},
 		[
 			determineAndHandleItemSubmitForSelectedItem,

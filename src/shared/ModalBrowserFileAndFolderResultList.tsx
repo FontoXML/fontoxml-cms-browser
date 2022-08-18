@@ -26,7 +26,7 @@ type Props = {
 		};
 	};
 	items: unknown[];
-	onItemSelect(newSelectedItemId: string): unknown;
+	onItemSelect(newSelectedItem: unknown): unknown;
 	refreshItems(...args: unknown[]): unknown;
 	request: object;
 	selectedItem?: object;
@@ -55,7 +55,7 @@ class ModalBrowserFileAndFolderResultList extends Component<Props> {
 			!this.props.selectedItem ||
 			item.id !== this.props.selectedItem.id
 		) {
-			this.props.onItemSelect(item.id);
+			this.props.onItemSelect(item);
 		}
 	};
 

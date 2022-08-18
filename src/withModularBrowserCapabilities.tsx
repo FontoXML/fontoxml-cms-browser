@@ -72,27 +72,25 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used by any component to change the currently selected item
-			onItemSelect = (newSelectedItemId) => {
+			onItemSelect = (newSelectedItem) => {
 				const { determineAndHandleSubmitButtonDisabledState } =
 					this.props;
 
-				const item = this.state.items.find(
-					(item) => item.id === newSelectedItemId
-				);
-
 				if (this.isMountedInDOM) {
 					this.setState({
-						selectedItem: item,
+						selectedItem: newSelectedItem,
 					});
 
 					if (determineAndHandleSubmitButtonDisabledState) {
-						determineAndHandleSubmitButtonDisabledState(item);
+						determineAndHandleSubmitButtonDisabledState(
+							newSelectedItem
+						);
 					}
 
 					if (
-						item &&
-						item.type !== 'folder' &&
-						item.id !== this.initialSelectedItem.id
+						newSelectedItem &&
+						newSelectedItem.type !== 'folder' &&
+						newSelectedItem.id !== this.initialSelectedItem.id
 					) {
 						// An other item (that is not a folder) was selected so the initialSelectedItem is no longer cached
 						this.initialSelectedItem = {};
@@ -269,7 +267,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 								folderWithUploadedFile,
 								true
 							).then((items) => {
-								this.onItemSelect(uploadedItem.id);
+								this.onItemSelect(uploadedItem);
 							});
 						},
 						(error) => {

@@ -1,9 +1,10 @@
 import { Block, SpinnerIcon, StateMessage } from 'fds/components';
 import type { FC } from 'react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
+import type { DocumentId } from 'fontoxml-documents/src/types';
 import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
 import type { NodeId } from 'fontoxml-dom-identification/src/types';
 import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
@@ -38,40 +39,78 @@ const DocumentWithLinkSelectorPreview: FC<Props> = ({
 	selectedItem,
 	stateLabels,
 }) => {
+	// used to prevent infinite updates > handleLoadIsDone depends on selectedItem
+	// but also changes selectedItem (via onItemSelect) > useEffect() is called again
+	const lastSelectedItem = useRef<{
+		id: RemoteDocumentId;
+		documentId: DocumentId;
+		nodeId: NodeId;
+	}>(null);
+
 	// When a item is selected we want to initially select the root node of the document. We do this
 	// once when the preview is loaded.
 	const handleLoadIsDone = useCallback(
 		(documentId) => {
 			const newSelectedItem = { ...selectedItem, documentId };
 
-			// Select the documentElement initially as nodeId if it validates against the linkableElementsQuery
-			const node =
-				documentsManager.getDocumentNode(documentId).documentElement;
-			if (
-				!newSelectedItem.nodeId &&
-				node &&
-				evaluateXPathToBoolean(
-					`let $selectableNodes := ${linkableElementsQuery} return some $node in $selectableNodes satisfies . is $node`,
-					node,
-					readOnlyBlueprint
-				)
-			) {
-				newSelectedItem.nodeId = getNodeId(node);
+			if (!newSelectedItem.nodeId) {
+				// Select the documentElement initially as nodeId if it validates against the linkableElementsQuery
+				const node =
+					documentsManager.getDocumentNode(
+						documentId
+					).documentElement;
+				if (
+					node &&
+					evaluateXPathToBoolean(
+						`let $selectableNodes := ${linkableElementsQuery} return some $node in $selectableNodes satisfies . is $node`,
+						node,
+						readOnlyBlueprint
+					)
+				) {
+					newSelectedItem.nodeId = getNodeId(node);
+				}
 			}
 
-			onItemSelect(newSelectedItem);
-			onLoadIsDone(documentId);
+			const hasChanged =
+				!lastSelectedItem.current ||
+				lastSelectedItem.current.nodeId !== newSelectedItem.nodeId ||
+				lastSelectedItem.current.documentId !==
+					newSelectedItem.documentId;
+			if (hasChanged) {
+				lastSelectedItem.current = newSelectedItem;
+				onLoadIsDone(documentId);
+				onItemSelect(newSelectedItem);
+			}
 		},
 		[linkableElementsQuery, onItemSelect, onLoadIsDone, selectedItem]
 	);
 
+	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
+		useDocumentLoader(selectedItem.id);
+
 	const handleSelectedNodeChange = useCallback(
-		(nodeId) => onItemSelect({ ...selectedItem, nodeId }),
-		[onItemSelect, selectedItem]
+		(nodeId) => onItemSelect({ ...selectedItem, documentId, nodeId }),
+		[documentId, onItemSelect, selectedItem]
 	);
 
-	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
-		useDocumentLoader(selectedItem.id, handleLoadIsDone, onItemIsErrored);
+	useEffect(() => {
+		if (isLoading) {
+			return;
+		}
+
+		if (error) {
+			onItemIsErrored(selectedItem.id, error);
+		} else {
+			handleLoadIsDone(documentId);
+		}
+	}, [
+		documentId,
+		error,
+		handleLoadIsDone,
+		isLoading,
+		onItemIsErrored,
+		selectedItem.id,
+	]);
 
 	if (isErrored) {
 		return (
