@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import React, { useCallback } from 'react';
+import * as React from 'react';
 
 import {
 	Flex,
@@ -26,7 +25,7 @@ type Props = {
 	referrerDocumentId: string;
 };
 
-const ImageGridItem: FC<Props> = ({
+const LoadableImageGridItem: React.FC<Props> = ({
 	isDisabled,
 	isSelected,
 	item,
@@ -34,7 +33,7 @@ const ImageGridItem: FC<Props> = ({
 	onDoubleClick,
 	referrerDocumentId,
 }) => {
-	const wrapInGridItem = useCallback(
+	const wrapInGridItem = React.useCallback(
 		(content) => (
 			<GridItem
 				isSelected={isSelected}
@@ -53,15 +52,6 @@ const ImageGridItem: FC<Props> = ({
 		referrerDocumentId,
 		'thumbnail'
 	);
-
-	if (item.type === 'folder') {
-		return wrapInGridItem(
-			<Flex alignItems="center" flexDirection="column">
-				<Icon icon={item.icon || 'folder-o'} size="m" />
-				<Label>{item.label}</Label>
-			</Flex>
-		);
-	}
 
 	if (isErrored) {
 		return wrapInGridItem(
@@ -101,6 +91,43 @@ const ImageGridItem: FC<Props> = ({
 			</Flex>
 			<Label>{item.label}</Label>
 		</Flex>
+	);
+};
+
+const ImageGridItem: React.FC<Props> = ({
+	isDisabled,
+	isSelected,
+	item,
+	onClick,
+	onDoubleClick,
+	referrerDocumentId,
+}) => {
+	if (item.type === 'folder') {
+		return (
+			<GridItem
+				isSelected={isSelected}
+				isDisabled={isDisabled}
+				onClick={onClick}
+				onDoubleClick={onDoubleClick}
+			>
+				<Flex alignItems="center" flexDirection="column">
+					<Icon icon={item.icon || 'folder-o'} size="m" />
+
+					<Label>{item.label}</Label>
+				</Flex>
+			</GridItem>
+		);
+	}
+
+	return (
+		<LoadableImageGridItem
+			isDisabled={isDisabled}
+			isSelected={isSelected}
+			item={item}
+			onClick={onClick}
+			onDoubleClick={onDoubleClick}
+			referrerDocumentId={referrerDocumentId}
+		/>
 	);
 };
 

@@ -1,7 +1,12 @@
-import { Block, Icon, Label, ListItem, SpinnerIcon } from 'fds/components';
-import type { FC } from 'react';
-import React, { useCallback } from 'react';
+import * as React from 'react';
 
+import {
+	Block,
+	Icon,
+	Label,
+	ListItem,
+	SpinnerIcon,
+} from 'fontoxml-design-system/src/components';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 import BlockImage from './BlockImage';
@@ -21,7 +26,7 @@ type Props = {
 	referrerDocumentId: string;
 };
 
-const ImageListItem: FC<Props> = ({
+const LoadableImageListItem: React.FC<Props> = ({
 	isDisabled,
 	isSelected,
 	item,
@@ -30,7 +35,7 @@ const ImageListItem: FC<Props> = ({
 	onRef,
 	referrerDocumentId,
 }) => {
-	const wrapInListItem = useCallback(
+	const wrapInListItem = React.useCallback(
 		(content, label) => {
 			return (
 				<ListItem
@@ -53,13 +58,6 @@ const ImageListItem: FC<Props> = ({
 		referrerDocumentId,
 		'thumbnail'
 	);
-
-	if (item.type === 'folder') {
-		return wrapInListItem(
-			<Icon icon={item.icon || 'folder-o'} size="s" />,
-			<Label>{item.label}</Label>
-		);
-	}
 
 	if (isErrored) {
 		return wrapInListItem(
@@ -88,6 +86,44 @@ const ImageListItem: FC<Props> = ({
 			/>
 		</Block>,
 		<Label>{item.label}</Label>
+	);
+};
+
+const ImageListItem: React.FC<Props> = ({
+	isDisabled,
+	isSelected,
+	item,
+	onClick,
+	onDoubleClick,
+	onRef,
+	referrerDocumentId,
+}) => {
+	if (item.type === 'folder') {
+		return (
+			<ListItem
+				isSelected={isSelected}
+				isDisabled={isDisabled}
+				onClick={onClick}
+				onDoubleClick={onDoubleClick}
+				onRef={onRef}
+			>
+				<Icon icon={item.icon || 'folder-o'} size="s" />
+
+				<Label>{item.label}</Label>
+			</ListItem>
+		);
+	}
+
+	return (
+		<LoadableImageListItem
+			isDisabled={isDisabled}
+			isSelected={isSelected}
+			item={item}
+			onClick={onClick}
+			onDoubleClick={onDoubleClick}
+			onRef={onRef}
+			referrerDocumentId={referrerDocumentId}
+		/>
 	);
 };
 
