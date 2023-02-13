@@ -7,7 +7,7 @@ import documentsManager from 'fontoxml-documents/src/documentsManager';
 import type { DocumentId } from 'fontoxml-documents/src/types';
 import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
 import type { NodeId } from 'fontoxml-dom-identification/src/types';
-import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
+import FxNodePreviewErrorPlaceholder from 'fontoxml-fx/src/FxNodePreviewErrorPlaceholder';
 import _FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
 import useDocumentLoader from 'fontoxml-fx/src/useDocumentLoader';
 import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
@@ -115,7 +115,7 @@ const DocumentWithLinkSelectorPreview: FC<Props> = ({
 	if (isErrored) {
 		return (
 			<Block flex="1" paddingSize="l" isScrollContainer>
-				<FxErroredTemplatedView
+				<FxNodePreviewErrorPlaceholder
 					error={error}
 					retryLoadDocument={retryLoadDocument}
 				/>

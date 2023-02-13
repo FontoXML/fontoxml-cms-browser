@@ -9,8 +9,8 @@ import {
 	StateMessage,
 	Text,
 } from 'fontoxml-design-system/src/components';
-import FxErroredTemplatedView from 'fontoxml-fx/src/FxErroredTemplatedView';
 import FxNodePreview from 'fontoxml-fx/src/FxNodePreview';
+import FxNodePreviewErrorPlaceholder from 'fontoxml-fx/src/FxNodePreviewErrorPlaceholder';
 import useDocumentLoader from 'fontoxml-fx/src/useDocumentLoader';
 import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
@@ -62,7 +62,7 @@ const DocumentPreview: FC<Props> = ({
 	if (isErrored) {
 		return (
 			<Block flex="1" paddingSize="l" isScrollContainer>
-				<FxErroredTemplatedView
+				<FxNodePreviewErrorPlaceholder
 					error={error}
 					retryLoadDocument={retryLoadDocument}
 				/>
