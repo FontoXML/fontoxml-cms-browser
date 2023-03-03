@@ -118,6 +118,7 @@ const DocumentWithLinkSelectorPreview: FC<Props> = ({
 				<FxNodePreviewErrorPlaceholder
 					error={error}
 					retryLoadDocument={retryLoadDocument}
+					remoteDocumentId={selectedItem.id}
 				/>
 			</Block>
 		);
