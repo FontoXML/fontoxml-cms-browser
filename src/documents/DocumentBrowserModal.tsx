@@ -273,7 +273,7 @@ let DocumentBrowserModal = ({
 			/>
 
 			<ModalBody>
-				{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
+				{renderModalBodyToolbar && renderModalBodyToolbar()}
 
 				<ModalContent flexDirection="column">
 					<ModalContentToolbar
@@ -348,9 +348,6 @@ let DocumentBrowserModal = ({
 			</ModalFooter>
 		</Modal>
 	);
-};
-DocumentBrowserModal.defaultProps = {
-	renderModalBodyToolbar: null,
 };
 
 DocumentBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(

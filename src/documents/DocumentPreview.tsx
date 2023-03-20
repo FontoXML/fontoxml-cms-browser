@@ -25,6 +25,7 @@ type Props = {
 			message?: string;
 		};
 	};
+	// TODO: the implementation assumes this is required... bug waiting to happen...
 	selectedItem?: {
 		id: RemoteDocumentId;
 		description: string;
@@ -32,8 +33,8 @@ type Props = {
 };
 
 const DocumentPreview: FC<Props> = ({
-	onItemIsErrored,
-	onLoadIsDone,
+	onItemIsErrored = (_item) => undefined,
+	onLoadIsDone = (_documentId) => undefined,
 	stateLabels,
 	selectedItem,
 }) => {
@@ -111,13 +112,4 @@ const DocumentPreview: FC<Props> = ({
 		</Flex>
 	);
 };
-
-DocumentPreview.defaultProps = {
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onLoadIsDone: (_documentId) => {},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onItemIsErrored: (_item) => {},
-	selectedItem: null,
-};
-
 export default DocumentPreview;

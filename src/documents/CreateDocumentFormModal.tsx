@@ -57,8 +57,8 @@ let CreateDocumentFormModal = ({
 	onSelectDocumentTemplateClick,
 	onSelectFolderClick,
 	renderModalBodyToolbar,
-	selectedDocumentTemplate,
-	selectedFolder,
+	selectedDocumentTemplate = {},
+	selectedFolder = {},
 	submitModal,
 }: Props) => {
 	const [documentTitle, setDocumentTitle] = useState('');
@@ -122,7 +122,7 @@ let CreateDocumentFormModal = ({
 			/>
 
 			<ModalBody>
-				{renderModalBodyToolbar !== null && renderModalBodyToolbar()}
+				{renderModalBodyToolbar && renderModalBodyToolbar()}
 
 				<ModalContent flexDirection="column" paddingSize="m">
 					<Form labelPosition="above">
@@ -172,12 +172,6 @@ let CreateDocumentFormModal = ({
 			</ModalFooter>
 		</Modal>
 	);
-};
-
-CreateDocumentFormModal.defaultProps = {
-	renderModalBodyToolbar: null,
-	selectedDocumentTemplate: {},
-	selectedFolder: {},
 };
 
 CreateDocumentFormModal = withInsertOperationNameCapabilities(

@@ -7,6 +7,7 @@ import {
 	ListItem,
 	SpinnerIcon,
 } from 'fontoxml-design-system/src/components';
+import type { FdsOnRefCallback } from 'fontoxml-design-system/src/types';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 import BlockImage from './BlockImage';
@@ -22,17 +23,17 @@ type Props = {
 	};
 	onClick?(...args: unknown[]): unknown;
 	onDoubleClick?(...args: unknown[]): unknown;
-	onRef?(...args: unknown[]): unknown;
+	onRef?: FdsOnRefCallback;
 	referrerDocumentId: string;
 };
 
 const LoadableImageListItem: React.FC<Props> = ({
-	isDisabled,
-	isSelected,
+	isDisabled = false,
+	isSelected = false,
 	item,
-	onClick,
-	onDoubleClick,
-	onRef,
+	onClick = (_item) => undefined,
+	onDoubleClick = (_item) => undefined,
+	onRef = (_domNode) => undefined,
 	referrerDocumentId,
 }) => {
 	const wrapInListItem = React.useCallback(
@@ -90,12 +91,12 @@ const LoadableImageListItem: React.FC<Props> = ({
 };
 
 const ImageListItem: React.FC<Props> = ({
-	isDisabled,
-	isSelected,
+	isDisabled = false,
+	isSelected = false,
 	item,
-	onClick,
-	onDoubleClick,
-	onRef,
+	onClick = (_item) => undefined,
+	onDoubleClick = (_item) => undefined,
+	onRef = (_domNode) => undefined,
 	referrerDocumentId,
 }) => {
 	if (item.type === 'folder') {
@@ -125,17 +126,6 @@ const ImageListItem: React.FC<Props> = ({
 			referrerDocumentId={referrerDocumentId}
 		/>
 	);
-};
-
-ImageListItem.defaultProps = {
-	isDisabled: false,
-	isSelected: false,
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onClick: (_item) => {},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onDoubleClick: (_item) => {},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onRef: (_domNode) => {},
 };
 
 export default ImageListItem;

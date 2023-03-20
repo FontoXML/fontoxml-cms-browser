@@ -18,6 +18,7 @@ type Props = {
 	onItemIsErrored?(...args: unknown[]): unknown;
 	onItemSelect(...args: unknown[]): unknown;
 	onLoadIsDone?(...args: unknown[]): unknown;
+	// TODO: the implementation assumes this is required... bug waiting to happen...
 	selectedItem?: {
 		id: RemoteDocumentId;
 		description: string;
@@ -34,8 +35,8 @@ type Props = {
 const DocumentWithLinkSelectorPreview: FC<Props> = ({
 	linkableElementsQuery,
 	onItemSelect,
-	onItemIsErrored,
-	onLoadIsDone,
+	onItemIsErrored = (_item) => undefined,
+	onLoadIsDone = (_documentId) => undefined,
 	selectedItem,
 	stateLabels,
 }) => {
@@ -142,14 +143,6 @@ const DocumentWithLinkSelectorPreview: FC<Props> = ({
 			selectedNodeId={selectedItem.nodeId}
 		/>
 	);
-};
-
-DocumentWithLinkSelectorPreview.defaultProps = {
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onItemIsErrored: (_item) => {},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onLoadIsDone: (_documentId) => {},
-	selectedItem: null,
 };
 
 export default DocumentWithLinkSelectorPreview;

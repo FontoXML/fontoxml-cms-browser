@@ -26,11 +26,11 @@ type Props = {
 };
 
 const LoadableImageGridItem: React.FC<Props> = ({
-	isDisabled,
-	isSelected,
+	isDisabled = false,
+	isSelected = false,
 	item,
-	onClick,
-	onDoubleClick,
+	onClick = (_item) => undefined,
+	onDoubleClick = (_item) => undefined,
 	referrerDocumentId,
 }) => {
 	const wrapInGridItem = React.useCallback(
@@ -95,11 +95,11 @@ const LoadableImageGridItem: React.FC<Props> = ({
 };
 
 const ImageGridItem: React.FC<Props> = ({
-	isDisabled,
-	isSelected,
+	isDisabled = false,
+	isSelected = false,
 	item,
-	onClick,
-	onDoubleClick,
+	onClick = (_item) => undefined,
+	onDoubleClick = (_item) => undefined,
 	referrerDocumentId,
 }) => {
 	if (item.type === 'folder') {
@@ -129,15 +129,6 @@ const ImageGridItem: React.FC<Props> = ({
 			referrerDocumentId={referrerDocumentId}
 		/>
 	);
-};
-
-ImageGridItem.defaultProps = {
-	isDisabled: false,
-	isSelected: false,
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onClick: (_item) => {},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onDoubleClick: (_item) => {},
 };
 
 export default ImageGridItem;
