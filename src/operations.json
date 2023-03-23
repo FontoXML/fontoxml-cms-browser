@@ -6,10 +6,10 @@
 			"summary": "Opens the document with link selector browser in which the user can select a node.",
 			"params": [
 				{
-					"name": "browseContextDocumentId",
+					"name": "[browseContextDocumentId]",
 					"type": "RemoteDocumentId|null",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made. If ",
+						"This id is sent to the CMS when the browse call is made. If ",
 						"the CMS resolves a hierarchy for a reference in the metadata of a reference, ",
 						"the folder containing the browseContextDocument will be opened.",
 						"",
@@ -20,27 +20,27 @@
 					]
 				},
 				{
-					"name": "dataProviderName",
+					"name": "[dataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) Use this property when the default data provider can not be used. ",
+						"Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "documentId",
+					"name": "[documentId]",
 					"type": "DocumentId",
 					"description": [
-						"(Optional) Can be used to open the document with link selector browser with ",
+						"Can be used to open the document with link selector browser with ",
 						"a node preselected. Should only be used in combination with nodeId."
 					]
 				},
 				{
-					"name": "insertOperationName",
+					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
-						"(Optional) The primary button will be disabled if the selected node can't",
+						"The primary button will be disabled if the selected node can't",
 						"be inserted with the 'insert operation'.",
 						"",
 						"The operation data collected until the current operation together with the",
@@ -48,33 +48,33 @@
 					]
 				},
 				{
-					"name": "linkableElementsQuery",
+					"name": "[linkableElementsQuery]",
 					"type": "XPathQuery",
 					"description": [
-						"(Optional) Selector used to find the nodes which can be selected by the user. ",
+						"Selector used to find the nodes which can be selected by the user. ",
 						"Defaults to `//*[@id]`."
 					]
 				},
 				{
-					"name": "modalIcon",
+					"name": "[modalIcon]",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
-					"name": "modalPrimaryButtonLabel",
+					"name": "[modalPrimaryButtonLabel]",
 					"type": "string",
-					"description": "(Optional) The label for the primary button. Defaults to `t__Insert`."
+					"description": "The label for the primary button. Defaults to `t__Insert`."
 				},
 				{
-					"name": "modalTitle",
+					"name": "[modalTitle]",
 					"type": "string",
-					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a link`."
+					"description": "The title being shown at the top of the modal. Defaults to `t__Select a link`."
 				},
 				{
-					"name": "nodeId",
+					"name": "[nodeId]",
 					"type": "NodeId",
 					"description": [
-						"(Optional) Can be used to open the document with link selector browser with ",
+						"Can be used to open the document with link selector browser with ",
 						"a node preselected. Should only be used in combination with documentId."
 					]
 				}
@@ -134,19 +134,19 @@
 					]
 				},
 				{
-					"name": "dataProviderName",
+					"name": "[dataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) Use this property when the default data provider can not be used. ",
+						"Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "insertOperationName",
+					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
-						"(Optional) The primary button will be disabled if the selected image can't",
+						"The primary button will be disabled if the selected image can't",
 						"be inserted with the 'insert operation'.",
 						"",
 						"The operation data collected until the current operation together with the",
@@ -154,25 +154,25 @@
 					]
 				},
 				{
-					"name": "modalIcon",
+					"name": "[modalIcon]",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
-					"name": "modalPrimaryButtonLabel",
+					"name": "[modalPrimaryButtonLabel]",
 					"type": "string",
-					"description": "(Optional) The label for the primary button. Defaults to `t__Insert`."
+					"description": "The label for the primary button. Defaults to `t__Insert`."
 				},
 				{
-					"name": "modalTitle",
+					"name": "[modalTitle]",
 					"type": "string",
-					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select an image`."
+					"description": "The title being shown at the top of the modal. Defaults to `t__Select an image`."
 				},
 				{
-					"name": "selectedImageId",
+					"name": "[selectedImageId]",
 					"type": "AssetId",
 					"description": [
-						"(Optional) Can be used to open the image browser with an image preselected."
+						"Can be used to open the image browser with an image preselected."
 					]
 				}
 			],
@@ -210,10 +210,10 @@
 			"summary": "Opens the document browser in which the user can select a document.",
 			"params": [
 				{
-					"name": "browseContextDocumentId",
+					"name": "[browseContextDocumentId]",
 					"type": "RemoteDocumentId|null",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"This id is sent to the CMS when the browse call is made.",
 						"",
 						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
 						"the folder containing the browseContextDocument will be opened.",
@@ -225,26 +225,26 @@
 					]
 				},
 				{
-					"name": "dataProviderName",
+					"name": "[dataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) Use this property when the default data provider can not be used. ",
+						"Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "documentId",
+					"name": "[documentId]",
 					"type": "DocumentId",
 					"description": [
-						"(Optional) Can be used to open the document browser with a document preselected."
+						"Can be used to open the document browser with a document preselected."
 					]
 				},
 				{
-					"name": "insertOperationName",
+					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
-						"(Optional) The primary button will be disabled if the selected document can't",
+						"The primary button will be disabled if the selected document can't",
 						"be inserted with the 'insert operation'.",
 						"",
 						"The operation data collected until the current operation together with the",
@@ -252,24 +252,24 @@
 					]
 				},
 				{
-					"name": "isCancelable",
+					"name": "[isCancelable]",
 					"type": "boolean",
-					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
+					"description": "Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
-					"name": "modalIcon",
+					"name": "[modalIcon]",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
-					"name": "modalPrimaryButtonLabel",
+					"name": "[modalPrimaryButtonLabel]",
 					"type": "string",
-					"description": "(Optional) The label for the primary button. Defaults to `t__Insert`."
+					"description": "The label for the primary button. Defaults to `t__Insert`."
 				},
 				{
-					"name": "modalTitle",
+					"name": "[modalTitle]",
 					"type": "string",
-					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a document`."
+					"description": "The title being shown at the top of the modal. Defaults to `t__Select a document`."
 				}
 			],
 			"returns": [
@@ -316,10 +316,10 @@
 			"summary": "Opens the document template browser in which the user can select a document template.",
 			"params": [
 				{
-					"name": "browseContextDocumentId",
+					"name": "[browseContextDocumentId]",
 					"type": "RemoteDocumentId|null",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"This id is sent to the CMS when the browse call is made.",
 						"",
 						"By default the browseContextDocument is set to the focusedDocument or,",
 						"when the focusedDocument is not available, to the first document in the hierarchy.",
@@ -328,19 +328,19 @@
 					]
 				},
 				{
-					"name": "dataProviderName",
+					"name": "[dataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) Use this property when the default data provider can not be used. ",
+						"Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "insertOperationName",
+					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
-						"(Optional) The primary button will be disabled if the selected document",
+						"The primary button will be disabled if the selected document",
 						"template can't be inserted with the 'insert operation'.",
 						"",
 						"The operation data collected until the current operation together with the",
@@ -348,19 +348,19 @@
 					]
 				},
 				{
-					"name": "modalIcon",
+					"name": "[modalIcon]",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
-					"name": "modalPrimaryButtonLabel",
+					"name": "[modalPrimaryButtonLabel]",
 					"type": "string",
-					"description": "(Optional) The label for the primary button. Defaults to `t__Select`."
+					"description": "The label for the primary button. Defaults to `t__Select`."
 				},
 				{
-					"name": "modalTitle",
+					"name": "[modalTitle]",
 					"type": "string",
-					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Select a template`."
+					"description": "The title being shown at the top of the modal. Defaults to `t__Select a template`."
 				}
 			],
 			"returns": [
@@ -402,10 +402,10 @@
 			],
 			"params": [
 				{
-					"name": "browseContextDocumentId",
+					"name": "[browseContextDocumentId]",
 					"type": "RemoteDocumentId|null",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"This id is sent to the CMS when the browse call is made.",
 						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
 						"the folder containing the browseContextDocument will be opened.",
 						"",
@@ -416,40 +416,40 @@
 					]
 				},
 				{
-					"name": "openDocumentDataProviderName",
+					"name": "[openDocumentDataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) The data provider name for browsing documents to open in the editor. ",
+						"The data provider name for browsing documents to open in the editor. ",
 						"Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "selectDocumentTemplateDataProviderName",
+					"name": "[selectDocumentTemplateDataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) The data provider name for browsing document templates to create a ",
+						"The data provider name for browsing document templates to create a ",
 						"new document. Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "selectFolderDataProviderName",
+					"name": "[selectFolderDataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) The data provider name for browsing the folders in which the new ",
+						"The data provider name for browsing the folders in which the new ",
 						"document can be placed. Use this property when the default data provider ",
 						"can not be used. Set your own properties for your modal with ",
 						"{@link dataProviders} and use the set name in the operation data."
 					]
 				},
 				{
-					"name": "insertOperationName",
+					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
-						"(Optional) The primary button will be disabled if the selected document or document",
+						"The primary button will be disabled if the selected document or document",
 						"template, folder and document title can't be inserted with the 'insert operation'.",
 						"",
 						"The operation data collected until the current operation together with the",
@@ -458,19 +458,19 @@
 					]
 				},
 				{
-					"name": "isCancelable",
+					"name": "[isCancelable]",
 					"type": "boolean",
-					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
+					"description": "Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
-					"name": "modalIcon",
+					"name": "[modalIcon]",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
-					"name": "modalTitle",
+					"name": "[modalTitle]",
 					"type": "string",
-					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Open or create document`."
+					"description": "The title being shown at the top of the modal. Defaults to `t__Open or create document`."
 				}
 			],
 			"returns": [
@@ -534,10 +534,10 @@
 			],
 			"params": [
 				{
-					"name": "browseContextDocumentId",
+					"name": "[browseContextDocumentId]",
 					"type": "RemoteDocumentId|null",
 					"description": [
-						"(Optional) This id is sent to the CMS when the browse call is made.",
+						"This id is sent to the CMS when the browse call is made.",
 						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
 						"the folder containing the browseContextDocument will be opened.",
 						"",
@@ -548,30 +548,30 @@
 					]
 				},
 				{
-					"name": "selectDocumentTemplateDataProviderName",
+					"name": "[selectDocumentTemplateDataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) The data provider name for browsing document templates to create a ",
+						"The data provider name for browsing document templates to create a ",
 						"new document. Use this property when the default data provider can not be used. ",
 						"Set your own properties for your modal with {@link dataProviders} and use ",
 						"the set name in the operation data."
 					]
 				},
 				{
-					"name": "selectFolderDataProviderName",
+					"name": "[selectFolderDataProviderName]",
 					"type": "string",
 					"desription": [
-						"(Optional) The data provider name for browsing the folders in which the new ",
+						"The data provider name for browsing the folders in which the new ",
 						"document can be placed. Use this property when the default data provider ",
 						"can not be used. Set your own properties for your modal with ",
 						"{@link dataProviders} and use the set name in the operation data."
 					]
 				},
 				{
-					"name": "insertOperationName",
+					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
-						"(Optional) The primary button will be disabled if the selected document",
+						"The primary button will be disabled if the selected document",
 						"template, folder and document title can't be inserted with the 'insert operation'.",
 						"",
 						"The operation data collected until the current operation together with the",
@@ -580,19 +580,19 @@
 					]
 				},
 				{
-					"name": "isCancelable",
+					"name": "[isCancelable]",
 					"type": "boolean",
-					"description": "(Optional) Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
+					"description": "Whether or not the modal is cancelable (with a cancel button in the footer or by pressing the escape key), defaults to true."
 				},
 				{
-					"name": "modalIcon",
+					"name": "[modalIcon]",
 					"type": "string",
-					"description": "(Optional) The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
+					"description": "The icon to show at the top of the modal. This should be one of the [Font Awesome](fonto-documentation/docs/configure/learn-more-about/font-awesome.xml) icons. Do not include the fa- prefix, just use the icon names as-is from the documentation."
 				},
 				{
-					"name": "modalTitle",
+					"name": "[modalTitle]",
 					"type": "string",
-					"description": "(Optional) The title being shown at the top of the modal. Defaults to `t__Create new document`."
+					"description": "The title being shown at the top of the modal. Defaults to `t__Create new document`."
 				}
 			],
 			"returns": [
