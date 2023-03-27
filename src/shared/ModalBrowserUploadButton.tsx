@@ -1,6 +1,6 @@
-import { SelectFileButton } from 'fds/components';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 
+import { SelectFileButton } from 'fontoxml-design-system/src/components';
 import t from 'fontoxml-localization/src/t';
 
 import dataProviders from '../dataProviders';
@@ -20,46 +20,52 @@ type Props = {
 	request: object;
 };
 
-class ModalBrowserUploadButton extends PureComponent<Props> {
-	static defaultProps = {
-		hierarchyItems: [],
-		browseContextDocumentId: null,
-	};
+const DEFAULT_HIERARCHY_ITEMS: Props['hierarchyItems'] = [];
 
-	dataProvider = dataProviders.get(this.props.dataProviderName);
+const ModalBrowserUploadButton: React.FC<Props> = ({
+	browseContextDocumentId = null,
+	dataProviderName,
+	uploadErrorMessages,
+	hierarchyItems = DEFAULT_HIERARCHY_ITEMS,
+	onUploadFileSelect,
+	request,
+}) => {
+	const dataProvider = React.useMemo(
+		() => dataProviders.get(dataProviderName),
+		[dataProviderName]
+	);
 
-	handleSelect = (selectedFiles) =>
-		this.props.onUploadFileSelect(
-			this.props.browseContextDocumentId,
-			selectedFiles,
-			this.props.uploadErrorMessages
-		);
+	const handleSelect = React.useCallback(
+		(selectedFiles) =>
+			onUploadFileSelect(
+				browseContextDocumentId,
+				selectedFiles,
+				uploadErrorMessages
+			),
+		[browseContextDocumentId, onUploadFileSelect, uploadErrorMessages]
+	);
 
-	render() {
-		const { hierarchyItems, request } = this.props;
+	const isUploading = request.type === 'upload' && request.busy;
+	const isLoading =
+		isUploading || (request.type === 'browse' && request.busy);
 
-		const isUploading = request.type === 'upload' && request.busy;
-		const isLoading =
-			isUploading || (request.type === 'browse' && request.busy);
+	const lastLoadedFolder =
+		hierarchyItems.length > 0
+			? hierarchyItems[hierarchyItems.length - 1]
+			: null;
 
-		const lastLoadedFolder =
-			hierarchyItems.length > 0
-				? hierarchyItems[hierarchyItems.length - 1]
-				: null;
-
-		return (
-			<SelectFileButton
-				label={t('Upload')}
-				isDisabled={isLoading || lastLoadedFolder === null}
-				mimeTypesToAccept={
-					this.dataProvider.getUploadOptions().mimeTypesToAccept
-				}
-				icon="upload"
-				iconAfter={isUploading ? 'spinner' : null}
-				onSelect={this.handleSelect}
-			/>
-		);
-	}
-}
+	return (
+		<SelectFileButton
+			label={t('Upload')}
+			isDisabled={isLoading || lastLoadedFolder === null}
+			mimeTypesToAccept={
+				dataProvider.getUploadOptions().mimeTypesToAccept
+			}
+			icon="upload"
+			iconAfter={isUploading ? 'spinner' : undefined}
+			onSelect={handleSelect}
+		/>
+	);
+};
 
 export default ModalBrowserUploadButton;

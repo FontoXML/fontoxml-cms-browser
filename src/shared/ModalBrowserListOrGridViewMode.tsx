@@ -1,5 +1,6 @@
-import { ButtonGroup } from 'fds/components';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
+
+import { ButtonGroup } from 'fontoxml-design-system/src/components';
 
 const viewModes = [
 	{ name: 'list', icon: 'list' },
@@ -17,16 +18,17 @@ type Props = {
 	viewMode: object;
 };
 
-class ModalBrowserListOrGridViewMode extends PureComponent<Props> {
-	render() {
-		return (
-			<ButtonGroup
-				items={viewModes}
-				selectedItem={this.props.viewMode}
-				onItemClick={this.props.onViewModeChange}
-			/>
-		);
-	}
-}
+const ModalBrowserListOrGridViewMode: React.FC<Props> = ({
+	onViewModeChange,
+	viewMode,
+}) => {
+	return (
+		<ButtonGroup
+			items={viewModes}
+			selectedItem={viewMode}
+			onItemClick={onViewModeChange}
+		/>
+	);
+};
 
 export default ModalBrowserListOrGridViewMode;

@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
 	Button,
 	Modal,
@@ -6,9 +8,7 @@ import {
 	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader,
-} from 'fds/components';
-import React, { Component } from 'react';
-
+} from 'fontoxml-design-system/src/components';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
@@ -38,15 +38,15 @@ const stateLabels = {
 	},
 };
 
-class FolderBrowserModal extends Component<
-	ModalProps<{
-		browseContextDocumentId?: string;
-		dataProviderName: string;
-		modalTitle?: string;
-		modalPrimaryButtonLabel?: string;
-	}>
-> {
-	handleKeyDown = (event) => {
+type Props = ModalProps<{
+	browseContextDocumentId?: string;
+	dataProviderName: string;
+	modalTitle?: string;
+	modalPrimaryButtonLabel?: string;
+}>;
+
+class FolderBrowserModal extends React.Component<Props> {
+	private readonly handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
@@ -60,7 +60,13 @@ class FolderBrowserModal extends Component<
 		}
 	};
 
-	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
+	private readonly handleRenderListItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+		onRef,
+	}) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -75,7 +81,12 @@ class FolderBrowserModal extends Component<
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
+	private readonly handleRenderGridItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+	}) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -89,11 +100,11 @@ class FolderBrowserModal extends Component<
 		/>
 	);
 
-	handleSubmitButtonClick = () => {
+	private readonly handleSubmitButtonClick = () => {
 		this.props.submitModal(this.props.selectedItem);
 	};
 
-	render() {
+	public override render(): JSX.Element {
 		const {
 			cancelModal,
 			data: {
@@ -177,7 +188,7 @@ class FolderBrowserModal extends Component<
 		);
 	}
 
-	componentDidMount() {
+	public override componentDidMount(): void {
 		const {
 			data: { browseContextDocumentId },
 			lastOpenedState,

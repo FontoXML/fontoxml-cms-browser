@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
 	Button,
 	Modal,
@@ -6,10 +9,7 @@ import {
 	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader,
-} from 'fds/components';
-import React, { Component } from 'react';
-
-import configurationManager from 'fontoxml-configuration/src/configurationManager';
+} from 'fontoxml-design-system/src/components';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
@@ -77,12 +77,12 @@ type Props = ModalProps<{
 	remoteDocumentId?: string;
 };
 
-class DocumentTemplateBrowserModal extends Component<Props> {
-	static defaultProps = {
+class DocumentTemplateBrowserModal extends React.Component<Props> {
+	public static defaultProps = {
 		remoteDocumentId: null,
 	};
 
-	handleKeyDown = (event) => {
+	private readonly handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
@@ -96,7 +96,13 @@ class DocumentTemplateBrowserModal extends Component<Props> {
 		}
 	};
 
-	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
+	private readonly handleRenderListItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+		onRef,
+	}) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -116,7 +122,12 @@ class DocumentTemplateBrowserModal extends Component<Props> {
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
+	private readonly handleRenderGridItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+	}) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -135,19 +146,21 @@ class DocumentTemplateBrowserModal extends Component<Props> {
 		/>
 	);
 
-	handleFileAndFolderResultListItemSubmit = (selectedItem) => {
+	private readonly handleFileAndFolderResultListItemSubmit = (
+		selectedItem
+	) => {
 		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
 	};
 
-	handleLoadIsDone = () => {
+	private readonly handleLoadIsDone = () => {
 		this.props.onItemIsLoaded(this.props.selectedItem.id);
 	};
 
-	handleSubmitButtonClick = () => {
+	private readonly handleSubmitButtonClick = () => {
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 	};
 
-	render() {
+	public override render(): JSX.Element {
 		const {
 			cancelModal,
 			data: {
@@ -254,7 +267,7 @@ class DocumentTemplateBrowserModal extends Component<Props> {
 		);
 	}
 
-	componentDidMount() {
+	public override componentDidMount(): void {
 		const {
 			data: { browseContextDocumentId },
 			lastOpenedState,

@@ -1,5 +1,11 @@
-import { Icon, Label, ListItem } from 'fds/components';
-import React, { Component } from 'react';
+import * as React from 'react';
+
+import { Icon, Label, ListItem } from 'fontoxml-design-system/src/components';
+import type {
+	FdsOnClickCallback,
+	FdsOnDoubleClickCallback,
+	FdsOnRefCallback,
+} from 'fontoxml-design-system/src/types';
 
 type Props = {
 	isDisabled?: boolean;
@@ -11,61 +17,62 @@ type Props = {
 		label: string;
 		type: string;
 	};
-	onClick?(...args: unknown[]): unknown;
-	onDoubleClick?(...args: unknown[]): unknown;
-	onRef?(...args: unknown[]): unknown;
-	// @see TODO in DocumentGridItem.jsx
+	onClick?: FdsOnClickCallback;
+	onDoubleClick?: FdsOnDoubleClickCallback;
+	onRef?: FdsOnRefCallback;
 };
 
-class DocumentListItem extends Component<Props> {
-	static defaultProps = {
-		isDisabled: false,
-		isErrored: false,
-		isSelected: false,
-		onClick: (_item) => {},
-		onDoubleClick: (_item) => {},
-		onRef: (_domNode) => {},
-	};
+const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
+const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
+const DEFAULT_ON_REF: Props['onRef'] = (_domNode) => undefined;
 
-	wrapInListItem = (content, label) => (
-		<ListItem
-			isSelected={this.props.isSelected}
-			isDisabled={this.props.isDisabled}
-			onClick={this.props.onClick}
-			onDoubleClick={this.props.onDoubleClick}
-			onRef={this.props.onRef}
-		>
-			{content}
-			{label}
-		</ListItem>
+const DocumentListItem: React.FC<Props> = ({
+	isDisabled = false,
+	isErrored = false,
+	isSelected = false,
+	item,
+	onClick = DEFAULT_ON_CLICK,
+	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
+	onRef = DEFAULT_ON_REF,
+}) => {
+	const wrapInListItem = React.useCallback(
+		(content, label) => (
+			<ListItem
+				isSelected={isSelected}
+				isDisabled={isDisabled}
+				onClick={onClick}
+				onDoubleClick={onDoubleClick}
+				onRef={onRef}
+			>
+				{content}
+				{label}
+			</ListItem>
+		),
+		[isDisabled, isSelected, onClick, onDoubleClick, onRef]
 	);
 
-	render() {
-		const { item } = this.props;
-
-		if (item.type === 'folder') {
-			return this.wrapInListItem(
-				<Icon icon={item.icon || 'folder-o'} size="s" />,
-				<Label>{item.label}</Label>
-			);
-		}
-
-		if (this.props.isErrored) {
-			return this.wrapInListItem(
-				<Icon
-					colorName="icon-s-error-color"
-					icon={item.icon || 'file-text-o'}
-					size="s"
-				/>,
-				<Label colorName="text-muted-color">{item.label}</Label>
-			);
-		}
-
-		return this.wrapInListItem(
-			<Icon icon={item.icon || 'file-text-o'} size="s" />,
+	if (item.type === 'folder') {
+		return wrapInListItem(
+			<Icon icon={item.icon || 'folder-o'} size="s" />,
 			<Label>{item.label}</Label>
 		);
 	}
-}
+
+	if (isErrored) {
+		return wrapInListItem(
+			<Icon
+				colorName="icon-s-error-color"
+				icon={item.icon || 'file-text-o'}
+				size="s"
+			/>,
+			<Label colorName="text-muted-color">{item.label}</Label>
+		);
+	}
+
+	return wrapInListItem(
+		<Icon icon={item.icon || 'file-text-o'} size="s" />,
+		<Label>{item.label}</Label>
+	);
+};
 
 export default DocumentListItem;

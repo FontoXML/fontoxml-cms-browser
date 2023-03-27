@@ -1,5 +1,10 @@
-import { BreadcrumbItemLink, Breadcrumbs, MenuItem } from 'fds/components';
-import React, { Component } from 'react';
+import * as React from 'react';
+
+import {
+	BreadcrumbItemLink,
+	Breadcrumbs,
+	MenuItem,
+} from 'fontoxml-design-system/src/components';
 
 type Props = {
 	browseContextDocumentId?: string;
@@ -10,79 +15,70 @@ type Props = {
 	request: object;
 };
 
-class ModalBrowserHierarchyBreadcrumbs extends Component<Props> {
-	static defaultProps = {
-		browseContextDocumentId: null,
-	};
+const ModalBrowserHierarchyBreadcrumbs: React.FC<Props> = ({
+	browseContextDocumentId = null,
+	hierarchyItems,
+	refreshItems,
+	request,
+}) => {
+	const renderBreadcrumbItem = React.useCallback(
+		({
+			key,
+			isDisabled,
+			isDropOpened,
+			isLastItem,
+			item,
+			onClick,
+			onRef,
+		}) => (
+			<BreadcrumbItemLink
+				key={key}
+				label={item.label}
+				isDisabled={isDisabled}
+				isDropOpened={isDropOpened}
+				isLastItem={isLastItem}
+				onClick={() => {
+					onClick();
 
-	renderBreadcrumbItem = ({
-		key,
-		isDisabled,
-		isDropOpened,
-		isLastItem,
-		item,
-		onClick,
-		onRef,
-	}) => (
-		<BreadcrumbItemLink
-			key={key}
-			label={item.label}
-			isDisabled={isDisabled}
-			isDropOpened={isDropOpened}
-			isLastItem={isLastItem}
-			onClick={() => {
-				onClick();
-
-				if (item.label !== '…') {
-					this.props.refreshItems(
-						this.props.browseContextDocumentId,
-						item,
-						true
-					);
-				}
-			}}
-			onRef={onRef}
-		/>
-	);
-
-	renderTruncatedBreadcrumbMenuItem = ({
-		key,
-		onClick,
-		isDisabled,
-		item,
-	}) => (
-		<MenuItem
-			key={key}
-			isDisabled={isDisabled}
-			label={item.label}
-			onClick={() => {
-				onClick();
-
-				this.props.refreshItems(
-					this.props.browseContextDocumentId,
-					item,
-					true
-				);
-			}}
-		/>
-	);
-
-	render() {
-		const { request } = this.props;
-		return (
-			<Breadcrumbs
-				isDisabled={
-					(request.type === 'browse' || request.type === 'upload') &&
-					request.busy
-				}
-				items={this.props.hierarchyItems}
-				renderBreadcrumbItem={this.renderBreadcrumbItem}
-				renderTruncatedBreadcrumbMenuItem={
-					this.renderTruncatedBreadcrumbMenuItem
-				}
+					if (item.label !== '…') {
+						refreshItems(browseContextDocumentId, item, true);
+					}
+				}}
+				onRef={onRef}
 			/>
-		);
-	}
-}
+		),
+		[browseContextDocumentId, refreshItems]
+	);
+
+	const renderTruncatedBreadcrumbMenuItem = React.useCallback(
+		({ key, onClick, isDisabled, item }) => (
+			<MenuItem
+				key={key}
+				isDisabled={isDisabled}
+				label={item.label}
+				onClick={() => {
+					onClick();
+
+					refreshItems(browseContextDocumentId, item, true);
+				}}
+			/>
+		),
+		[browseContextDocumentId, refreshItems]
+	);
+
+	return (
+		<Breadcrumbs
+			isDisabled={
+				(request.type === 'browse' || request.type === 'upload') &&
+				request.busy
+			}
+			items={hierarchyItems}
+			renderBreadcrumbItem={renderBreadcrumbItem}
+			renderTruncatedBreadcrumbMenuItem={
+				renderTruncatedBreadcrumbMenuItem
+			}
+		/>
+	);
+};
 
 export default ModalBrowserHierarchyBreadcrumbs;

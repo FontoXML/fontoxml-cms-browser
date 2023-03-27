@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
 	Button,
 	Modal,
@@ -6,16 +9,7 @@ import {
 	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader,
-} from 'fds/components';
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-
-import configurationManager from 'fontoxml-configuration/src/configurationManager';
+} from 'fontoxml-design-system/src/components';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
@@ -82,7 +76,7 @@ type Props = ModalProps<{
 	renderModalBodyToolbar?(...args: unknown[]): unknown;
 };
 
-let DocumentBrowserModal = ({
+let DocumentBrowserModal: React.FC<Props> = ({
 	cancelModal,
 
 	data: {
@@ -111,10 +105,10 @@ let DocumentBrowserModal = ({
 	selectedItem,
 	submitModal,
 	viewMode,
-}: Props) => {
-	const doubleClickedItemId = useRef(null);
+}) => {
+	const doubleClickedItemId = React.useRef(null);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (
 			doubleClickedItemId.current !== null &&
 			(selectedItem === null ||
@@ -124,7 +118,7 @@ let DocumentBrowserModal = ({
 		}
 	}, [selectedItem]);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		const initialSelectedItem = documentId
 			? { id: documentsManager.getRemoteDocumentId(documentId) }
 			: null;
@@ -157,7 +151,7 @@ let DocumentBrowserModal = ({
 		refreshItems,
 	]);
 
-	const handleKeyDown = useCallback(
+	const handleKeyDown = React.useCallback(
 		(event) => {
 			switch (event.key) {
 				case 'Escape':
@@ -184,7 +178,7 @@ let DocumentBrowserModal = ({
 	// Because we need to override the double click, because we need to add the documentId for submit.
 	// This will be done right away if the selectedItem already has the documentId, else we have to wait
 	// until the document is loaded in the preview.
-	const handleItemDoubleClick = useCallback(
+	const handleItemDoubleClick = React.useCallback(
 		(item) => {
 			if (item.type === 'folder') {
 				refreshItems(browseContextDocumentId, item);
@@ -202,7 +196,7 @@ let DocumentBrowserModal = ({
 		]
 	);
 
-	const handleRenderListItem = useCallback(
+	const handleRenderListItem = React.useCallback(
 		({ key, item, onClick, onRef }) => (
 			<DocumentListItem
 				key={key}
@@ -220,7 +214,7 @@ let DocumentBrowserModal = ({
 		[handleItemDoubleClick, isItemErrored, selectedItem]
 	);
 
-	const handleRenderGridItem = useCallback(
+	const handleRenderGridItem = React.useCallback(
 		({ key, item, onClick }) => (
 			<DocumentGridItem
 				key={key}
@@ -237,11 +231,14 @@ let DocumentBrowserModal = ({
 		[handleItemDoubleClick, isItemErrored, selectedItem]
 	);
 
-	const selectedItemId = useMemo(() => selectedItem?.id, [selectedItem?.id]);
+	const selectedItemId = React.useMemo(
+		() => selectedItem?.id,
+		[selectedItem?.id]
+	);
 
 	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
 	// preview is done loading. If the item was also double clicked, we want to submit right away.
-	const handleLoadIsDone = useCallback(
+	const handleLoadIsDone = React.useCallback(
 		(documentId) => {
 			const newSelectedItem = { id: selectedItemId, documentId };
 			if (newSelectedItem.id === doubleClickedItemId.current) {
@@ -258,7 +255,7 @@ let DocumentBrowserModal = ({
 		]
 	);
 
-	const handleSubmitButtonClick = useCallback(() => {
+	const handleSubmitButtonClick = React.useCallback(() => {
 		submitModal(getSubmitModalData(selectedItem));
 	}, [selectedItem, submitModal]);
 

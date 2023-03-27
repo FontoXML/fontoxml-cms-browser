@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
 	Button,
 	Flex,
@@ -9,10 +12,7 @@ import {
 	ModalHeader,
 	StateMessage,
 	Toast,
-} from 'fds/components';
-import React, { Component } from 'react';
-
-import configurationManager from 'fontoxml-configuration/src/configurationManager';
+} from 'fontoxml-design-system/src/components';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
@@ -89,18 +89,18 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.type !== 'folder');
 }
 
-class ImageBrowserModal extends Component<
-	ModalProps<{
-		browseContextDocumentId: string;
-		dataProviderName: string;
-		insertOperationName?: string;
-		modalIcon?: string;
-		modalPrimaryButtonLabel?: string;
-		modalTitle?: string;
-		selectedImageId?: string;
-	}>
-> {
-	handleKeyDown = (event) => {
+type Props = ModalProps<{
+	browseContextDocumentId: string;
+	dataProviderName: string;
+	insertOperationName?: string;
+	modalIcon?: string;
+	modalPrimaryButtonLabel?: string;
+	modalTitle?: string;
+	selectedImageId?: string;
+}>;
+
+class ImageBrowserModal extends React.Component<Props> {
+	private readonly handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {
 			case 'Escape':
@@ -114,10 +114,16 @@ class ImageBrowserModal extends Component<
 		}
 	};
 
-	handleFileAndFolderResultListItemSubmit = (selectedItem) =>
+	private readonly handleFileAndFolderResultListItemSubmit = (selectedItem) =>
 		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
 
-	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
+	private readonly handleRenderListItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+		onRef,
+	}) => (
 		<ImageListItem
 			key={key}
 			referrerDocumentId={this.props.data.browseContextDocumentId}
@@ -133,7 +139,12 @@ class ImageBrowserModal extends Component<
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
+	private readonly handleRenderGridItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+	}) => (
 		<ImageGridItem
 			key={key}
 			referrerDocumentId={this.props.data.browseContextDocumentId}
@@ -148,11 +159,11 @@ class ImageBrowserModal extends Component<
 		/>
 	);
 
-	handleSubmitButtonClick = () => {
+	private readonly handleSubmitButtonClick = () => {
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 	};
 
-	render() {
+	public override render(): JSX.Element {
 		const {
 			cancelModal,
 			data: {
@@ -298,7 +309,7 @@ class ImageBrowserModal extends Component<
 		);
 	}
 
-	componentDidMount() {
+	public override componentDidMount(): void {
 		const {
 			data: { browseContextDocumentId, selectedImageId },
 			lastOpenedState,

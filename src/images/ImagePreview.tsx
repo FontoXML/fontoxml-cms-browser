@@ -1,6 +1,4 @@
-import { applyCss, block } from 'fds/system';
-import type { FC, ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 
 import {
 	Flex,
@@ -10,6 +8,7 @@ import {
 	SpinnerIcon,
 	StateMessage,
 } from 'fontoxml-design-system/src/components';
+import { applyCss, block } from 'fontoxml-design-system/src/system';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 const imageStyles = applyCss([
@@ -37,17 +36,18 @@ type Props = {
 			message?: string;
 		};
 	};
+	// TODO: required by implementation, optional according to type ... bug waiting to happen ...
 	selectedItem?: {
 		id: string;
 		label: string;
 		metadata: {
-			properties: { [key: string]: ReactNode };
+			properties: { [key: string]: React.ReactNode };
 		};
 	};
 	referrerDocumentId: string;
 };
 
-const ImagePreview: FC<Props> = ({
+const ImagePreview: React.FC<Props> = ({
 	stateLabels,
 	selectedItem,
 	referrerDocumentId,

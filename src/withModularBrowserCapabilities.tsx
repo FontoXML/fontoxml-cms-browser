@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+
+import type { ModalProps } from 'fontoxml-fx/src/types';
 
 import dataProviders from './dataProviders';
 
@@ -11,16 +13,24 @@ function isValidMimeType(selectedMimeType, mimeTypeGlob) {
 	return true;
 }
 
-export default function withModularBrowserCapabilities(initialViewMode = null) {
-	return function wrapWithModularBrowserCapabilities(WrappedComponent) {
-		return class ModularBrowser extends Component {
-			dataProvider = dataProviders.get(this.props.data.dataProviderName);
+type Props = ModalProps<{ dataProviderName: string }>;
 
-			initialSelectedItem = {};
+export default function withModularBrowserCapabilities(
+	initialViewMode: string | null = null
+) {
+	return function wrapWithModularBrowserCapabilities(
+		WrappedComponent: React.ComponentType
+	): React.ComponentType {
+		return class ModularBrowser extends React.Component<Props> {
+			private readonly dataProvider = dataProviders.get(
+				this.props.data.dataProviderName
+			);
 
-			isMountedInDOM = true;
+			private initialSelectedItem = {};
 
-			state = {
+			private isMountedInDOM = true;
+
+			public override state = {
 				// Errors that occured when loading a item, for if the items are only loaded in the preview.
 				cachedErrorByRemoteId: {},
 
@@ -41,10 +51,10 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				viewMode: initialViewMode,
 			};
 
-			isItemErrored = (item) =>
+			private readonly isItemErrored = (item) =>
 				!!this.state.cachedErrorByRemoteId[item.id];
 
-			onItemIsErrored = (remoteId, error) => {
+			private readonly onItemIsErrored = (remoteId, error) => {
 				if (this.isMountedInDOM) {
 					const cachedErrorByRemoteId =
 						this.state.cachedErrorByRemoteId;
@@ -53,7 +63,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				}
 			};
 
-			onItemIsLoaded = (remoteId) => {
+			private readonly onItemIsLoaded = (remoteId) => {
 				if (this.isMountedInDOM) {
 					this.setState(({ cachedErrorByRemoteId }) => {
 						if (!cachedErrorByRemoteId[remoteId]) {
@@ -72,7 +82,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used by any component to change the currently selected item
-			onItemSelect = (newSelectedItem) => {
+			private readonly onItemSelect = (newSelectedItem) => {
 				const { determineAndHandleSubmitButtonDisabledState } =
 					this.props;
 
@@ -99,14 +109,14 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to set the initialSelectedItem
-			onInitialSelectedItemIdChange = (item) => {
+			private readonly onInitialSelectedItemIdChange = (item) => {
 				if (this.isMountedInDOM) {
 					this.initialSelectedItem = item;
 				}
 			};
 
 			// Used to update the items with a browse callback
-			refreshItems = (
+			private readonly refreshItems = (
 				browseContextDocumentId,
 				folderToLoad,
 				noCache,
@@ -208,7 +218,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 					);
 			};
 
-			onUploadFileSelect = (
+			private readonly onUploadFileSelect = (
 				browseContextDocumentId,
 				selectedFiles,
 				uploadErrorMessages
@@ -266,7 +276,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 								browseContextDocumentId,
 								folderWithUploadedFile,
 								true
-							).then((items) => {
+							).then((_items) => {
 								this.onItemSelect(uploadedItem);
 							});
 						},
@@ -286,11 +296,13 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 			};
 
 			// Used to update the viewMode
-			onViewModeChange = (viewMode) => {
-				this.isMountedInDOM && this.setState({ viewMode });
+			private readonly onViewModeChange = (viewMode) => {
+				if (this.isMountedInDOM) {
+					this.setState({ viewMode });
+				}
 			};
 
-			render() {
+			public override render() {
 				const {
 					hierarchyItems,
 					items,
@@ -322,7 +334,7 @@ export default function withModularBrowserCapabilities(initialViewMode = null) {
 				return <WrappedComponent {...props} />;
 			}
 
-			componentWillUnmount() {
+			public override componentWillUnmount() {
 				this.isMountedInDOM = false;
 
 				this.dataProvider.storeLastOpenedState(

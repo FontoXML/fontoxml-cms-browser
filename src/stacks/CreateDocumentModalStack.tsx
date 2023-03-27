@@ -1,6 +1,6 @@
-import { ModalStack } from 'fds/components';
-import React, { Component } from 'react';
+import * as React from 'react';
 
+import { ModalStack } from 'fontoxml-design-system/src/components';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
@@ -8,119 +8,123 @@ import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal';
 import FolderBrowserModal from '../documents/FolderBrowserModal';
 
-class CreateDocumentFormModalStack extends Component<
-	ModalProps<{
-		browseContextDocumentId?: string;
-		insertOperationName?: string;
-		isCancelable?: boolean;
-		modalIcon?: string;
-		modalTitle?: string;
-		selectDocumentTemplateDataProviderName: string;
-		selectFolderDataProviderName: string;
-	}>
-> {
-	state = {
+type Props = ModalProps<{
+	browseContextDocumentId?: string;
+	insertOperationName?: string;
+	isCancelable?: boolean;
+	modalIcon?: string;
+	modalTitle?: string;
+	selectDocumentTemplateDataProviderName: string;
+	selectFolderDataProviderName: string;
+}>;
+
+const CreateDocumentFormModalStack: React.FC<Props> = ({
+	cancelModal,
+	data,
+	submitModal,
+}) => {
+	const [state, setState] = React.useState<{
+		activeModal: string | null;
+		selectedDocumentTemplate: $TSFixMeAny;
+		selectedFolder: $TSFixMeAny;
+	}>({
 		activeModal: null,
 
 		selectedDocumentTemplate: {},
 		selectedFolder: {},
-	};
+	});
 
-	handleSelectFolderClick = () => {
-		this.setState({ activeModal: 'FolderBrowser' });
-	};
+	const handleSelectFolderClick = React.useCallback(() => {
+		setState((state) => ({ ...state, activeModal: 'FolderBrowser' }));
+	}, []);
 
-	handleSelectDocumentTemplateClick = () => {
-		this.setState({ activeModal: 'DocumentTemplateBrowser' });
-	};
+	const handleSelectDocumentTemplateClick = React.useCallback(() => {
+		setState((state) => ({
+			...state,
+			activeModal: 'DocumentTemplateBrowser',
+		}));
+	}, []);
 
-	handleCancelModal = () => {
-		this.setState({ activeModal: null });
-	};
+	const handleCancelModal = React.useCallback(() => {
+		setState((state) => ({ ...state, activeModal: null }));
+	}, []);
 
-	handleDocumentTemplateSubmit = (submittedItem) => {
-		this.setState({
+	const handleDocumentTemplateSubmit = React.useCallback((submittedItem) => {
+		setState((state) => ({
+			...state,
 			activeModal: null,
 			selectedDocumentTemplate: submittedItem,
-		});
-	};
+		}));
+	}, []);
 
-	handleFolderSubmit = (submittedItem) => {
-		this.setState({
+	const handleFolderSubmit = React.useCallback((submittedItem) => {
+		setState((state) => ({
+			...state,
 			activeModal: null,
 			selectedFolder: submittedItem,
-		});
-	};
+		}));
+	}, []);
 
-	render() {
-		const {
-			data: {
-				browseContextDocumentId,
-				insertOperationName,
-				isCancelable,
-				modalIcon,
-				modalTitle,
-				selectDocumentTemplateDataProviderName,
-				selectFolderDataProviderName,
-			},
-			cancelModal,
-			submitModal,
-		} = this.props;
-		const { activeModal, selectedDocumentTemplate, selectedFolder } =
-			this.state;
-		return (
-			<ModalStack>
-				<CreateDocumentFormModal
-					cancelModal={cancelModal}
+	const {
+		browseContextDocumentId,
+		insertOperationName,
+		isCancelable,
+		modalIcon,
+		modalTitle,
+		selectDocumentTemplateDataProviderName,
+		selectFolderDataProviderName,
+	} = data;
+
+	const { activeModal, selectedDocumentTemplate, selectedFolder } = state;
+
+	return (
+		<ModalStack>
+			<CreateDocumentFormModal
+				cancelModal={cancelModal}
+				data={{
+					insertOperationName,
+					isCancelable,
+				}}
+				modalIcon={modalIcon}
+				modalTitle={modalTitle || t('Create new document')}
+				onSelectDocumentTemplateClick={
+					handleSelectDocumentTemplateClick
+				}
+				onSelectFolderClick={handleSelectFolderClick}
+				selectedDocumentTemplate={selectedDocumentTemplate}
+				selectedFolder={selectedFolder}
+				submitModal={submitModal}
+			/>
+
+			{activeModal === 'DocumentTemplateBrowser' && (
+				<DocumentTemplateBrowserModal
+					cancelModal={handleCancelModal}
 					data={{
-						insertOperationName,
-						isCancelable,
+						browseContextDocumentId: null,
+						dataProviderName:
+							selectDocumentTemplateDataProviderName,
+						modalTitle: t('Select a template for your document'),
 					}}
-					modalIcon={modalIcon}
-					modalTitle={modalTitle || t('Create new document')}
-					onSelectDocumentTemplateClick={
-						this.handleSelectDocumentTemplateClick
-					}
-					onSelectFolderClick={this.handleSelectFolderClick}
-					selectedDocumentTemplate={selectedDocumentTemplate}
-					selectedFolder={selectedFolder}
-					submitModal={submitModal}
+					remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
+					submitModal={handleDocumentTemplateSubmit}
 				/>
+			)}
 
-				{activeModal === 'DocumentTemplateBrowser' && (
-					<DocumentTemplateBrowserModal
-						cancelModal={this.handleCancelModal}
-						data={{
-							browseContextDocumentId: null,
-							dataProviderName:
-								selectDocumentTemplateDataProviderName,
-							modalTitle: t(
-								'Select a template for your document'
-							),
-						}}
-						remoteDocumentId={
-							selectedDocumentTemplate.remoteDocumentId
-						}
-						submitModal={this.handleDocumentTemplateSubmit}
-					/>
-				)}
-
-				{activeModal === 'FolderBrowser' && (
-					<FolderBrowserModal
-						cancelModal={this.handleCancelModal}
-						data={{
-							browseContextDocumentId,
-							dataProviderName: selectFolderDataProviderName,
-							modalTitle: t(
-								'Select a folder to save your documents in'
-							),
-						}}
-						submitModal={this.handleFolderSubmit}
-					/>
-				)}
-			</ModalStack>
-		);
-	}
-}
+			{activeModal === 'FolderBrowser' && (
+				<FolderBrowserModal
+					cancelModal={handleCancelModal}
+					data={{
+						browseContextDocumentId,
+						dataProviderName: selectFolderDataProviderName,
+						modalTitle: t(
+							'Select a folder to save your documents in'
+						),
+					}}
+					submitModal={handleFolderSubmit}
+				/>
+			)}
+		</ModalStack>
+	);
+};
 
 export default CreateDocumentFormModalStack;

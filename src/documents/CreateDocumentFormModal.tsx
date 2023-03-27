@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
 	Button,
 	ButtonWithValue,
@@ -9,9 +11,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	TextInput,
-} from 'fds/components';
-import React, { useCallback, useEffect, useState } from 'react';
-
+} from 'fontoxml-design-system/src/components';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
 
@@ -47,7 +47,10 @@ type Props = ModalProps<{
 	selectedFolder?: object;
 };
 
-let CreateDocumentFormModal = ({
+const DEFAULT_SELECTED_DOCUMENT_TEMPLATE = {};
+const DEFAULT_SELECTED_FOLDER = {};
+
+const CreateDocumentFormModalInternal: React.FC<Props> = ({
 	cancelModal,
 	data,
 	determineAndHandleSubmitButtonDisabledState,
@@ -57,13 +60,13 @@ let CreateDocumentFormModal = ({
 	onSelectDocumentTemplateClick,
 	onSelectFolderClick,
 	renderModalBodyToolbar,
-	selectedDocumentTemplate = {},
-	selectedFolder = {},
+	selectedDocumentTemplate = DEFAULT_SELECTED_DOCUMENT_TEMPLATE,
+	selectedFolder = DEFAULT_SELECTED_FOLDER,
 	submitModal,
-}: Props) => {
-	const [documentTitle, setDocumentTitle] = useState('');
+}) => {
+	const [documentTitle, setDocumentTitle] = React.useState('');
 
-	useEffect(() => {
+	React.useEffect(() => {
 		determineAndHandleSubmitButtonDisabledState({
 			selectedDocumentTemplate,
 			selectedFolder,
@@ -76,7 +79,7 @@ let CreateDocumentFormModal = ({
 		selectedFolder,
 	]);
 
-	const handleSubmitButtonClick = useCallback(() => {
+	const handleSubmitButtonClick = React.useCallback(() => {
 		submitModal(
 			getSubmitModalData({
 				selectedDocumentTemplate,
@@ -86,7 +89,7 @@ let CreateDocumentFormModal = ({
 		);
 	}, [documentTitle, selectedDocumentTemplate, selectedFolder, submitModal]);
 
-	const handleKeyDown = useCallback(
+	const handleKeyDown = React.useCallback(
 		(event) => {
 			switch (event.key) {
 				case 'Escape':
@@ -109,7 +112,7 @@ let CreateDocumentFormModal = ({
 		]
 	);
 
-	const handleDocumentTitleChange = useCallback((documentTitle) => {
+	const handleDocumentTitleChange = React.useCallback((documentTitle) => {
 		setDocumentTitle(documentTitle);
 	}, []);
 
@@ -174,9 +177,9 @@ let CreateDocumentFormModal = ({
 	);
 };
 
-CreateDocumentFormModal = withInsertOperationNameCapabilities(
+const CreateDocumentFormModal = withInsertOperationNameCapabilities(
 	getSubmitModalData,
 	canSubmitSelectedItem
-)(CreateDocumentFormModal);
+)(CreateDocumentFormModalInternal);
 
 export default CreateDocumentFormModal;

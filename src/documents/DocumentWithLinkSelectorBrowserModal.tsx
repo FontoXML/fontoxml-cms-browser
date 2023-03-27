@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
 	Button,
 	Modal,
@@ -6,10 +9,7 @@ import {
 	ModalContentToolbar,
 	ModalFooter,
 	ModalHeader,
-} from 'fds/components';
-import React, { Component } from 'react';
-
-import configurationManager from 'fontoxml-configuration/src/configurationManager';
+} from 'fontoxml-design-system/src/components';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
 import type { DocumentId } from 'fontoxml-documents/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
@@ -64,20 +64,20 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.documentId && selectedItem.nodeId);
 }
 
-class DocumentWithLinkSelectorBrowserModal extends Component<
-	ModalProps<{
-		browseContextDocumentId?: string;
-		dataProviderName: string;
-		documentId?: string;
-		insertOperationName?: string;
-		linkableElementsQuery: string;
-		modalIcon?: string;
-		modalPrimaryButtonLabel?: string;
-		modalTitle?: string;
-		nodeId?: string;
-	}>
-> {
-	handleKeyDown = (event) => {
+type Props = ModalProps<{
+	browseContextDocumentId?: string;
+	dataProviderName: string;
+	documentId?: string;
+	insertOperationName?: string;
+	linkableElementsQuery: string;
+	modalIcon?: string;
+	modalPrimaryButtonLabel?: string;
+	modalTitle?: string;
+	nodeId?: string;
+}>;
+
+class DocumentWithLinkSelectorBrowserModal extends React.Component<Props> {
+	private readonly handleKeyDown = (event) => {
 		switch (event.key) {
 			case 'Escape':
 				this.props.cancelModal();
@@ -92,7 +92,13 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 		}
 	};
 
-	handleRenderListItem = ({ key, item, onClick, onDoubleClick, onRef }) => (
+	private readonly handleRenderListItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+		onRef,
+	}) => (
 		<DocumentListItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -108,7 +114,12 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 		/>
 	);
 
-	handleRenderGridItem = ({ key, item, onClick, onDoubleClick }) => (
+	private readonly handleRenderGridItem = ({
+		key,
+		item,
+		onClick,
+		onDoubleClick,
+	}) => (
 		<DocumentGridItem
 			key={key}
 			isDisabled={item.isDisabled}
@@ -123,17 +134,17 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 		/>
 	);
 
-	handleLoadIsDone = (documentId: DocumentId) => {
+	private readonly handleLoadIsDone = (documentId: DocumentId) => {
 		const newSelectedItem = { ...this.props.selectedItem, documentId };
 		this.props.onItemIsLoaded(newSelectedItem.id);
 		this.props.onItemSelect(newSelectedItem);
 	};
 
-	handleSubmitButtonClick = () => {
+	private readonly handleSubmitButtonClick = () => {
 		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
 	};
 
-	render() {
+	public override render(): JSX.Element {
 		const {
 			cancelModal,
 			data: {
@@ -246,7 +257,7 @@ class DocumentWithLinkSelectorBrowserModal extends Component<
 		);
 	}
 
-	componentDidMount() {
+	public override componentDidMount(): void {
 		const {
 			data: { browseContextDocumentId, documentId, nodeId },
 			lastOpenedState,

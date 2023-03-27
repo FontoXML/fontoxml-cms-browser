@@ -1,5 +1,16 @@
-import { Flex, GridItem, Icon, Label } from 'fds/components';
-import React, { Component } from 'react';
+import * as React from 'react';
+
+import {
+	Flex,
+	GridItem,
+	Icon,
+	Label,
+} from 'fontoxml-design-system/src/components';
+import type {
+	FdsOnClickCallback,
+	FdsOnDoubleClickCallback,
+	FdsOnRefCallback,
+} from 'fontoxml-design-system/src/types';
 
 type Props = {
 	isDisabled?: boolean;
@@ -11,64 +22,68 @@ type Props = {
 		label: string;
 		type: string;
 	};
-	onClick?(...args: unknown[]): unknown;
-	onDoubleClick?(...args: unknown[]): unknown;
-	// TODO: no onRef > FDS GridItem has no onRef (because fds-grid-row has onRef of VirtualList)
+	onClick?: FdsOnClickCallback;
+	onDoubleClick?: FdsOnDoubleClickCallback;
+	onRef?: FdsOnRefCallback;
 };
 
-class DocumentGridItem extends Component<Props> {
-	static defaultProps = {
-		isDisabled: false,
-		isErrored: false,
-		isSelected: false,
-		onClick: (_item) => {},
-		onDoubleClick: (_item) => {},
-	};
+const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
+const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
+const DEFAULT_ON_REF: Props['onRef'] = (_domNode) => undefined;
 
-	wrapInGridItem = (content) => (
-		<GridItem
-			isSelected={this.props.isSelected}
-			isDisabled={this.props.isDisabled}
-			onClick={this.props.onClick}
-			onDoubleClick={this.props.onDoubleClick}
-		>
-			{content}
-		</GridItem>
+const DocumentGridItem: React.FC<Props> = ({
+	isDisabled = false,
+	isErrored = false,
+	isSelected = false,
+	item,
+	onClick = DEFAULT_ON_CLICK,
+	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
+	onRef = DEFAULT_ON_REF,
+}) => {
+	const wrapInGridItem = React.useCallback(
+		(content) => (
+			<GridItem
+				isSelected={isSelected}
+				isDisabled={isDisabled}
+				onClick={onClick}
+				onDoubleClick={onDoubleClick}
+				onRef={onRef}
+			>
+				{content}
+			</GridItem>
+		),
+		[isDisabled, isSelected, onClick, onDoubleClick, onRef]
 	);
 
-	render() {
-		const { item } = this.props;
-
-		if (item.type === 'folder') {
-			return this.wrapInGridItem(
-				<Flex alignItems="center" flexDirection="column">
-					<Icon icon={item.icon || 'folder-o'} size="m" />
-					<Label>{item.label}</Label>
-				</Flex>
-			);
-		}
-
-		if (this.props.isErrored) {
-			return this.wrapInGridItem(
-				<Flex alignItems="center" flex="1" flexDirection="column">
-					<Icon
-						colorName="icon-m-error-color"
-						icon={item.icon || 'file-text-o'}
-						size="m"
-					/>
-					<Label colorName="text-muted-color">{item.label}</Label>
-				</Flex>
-			);
-		}
-
-		return this.wrapInGridItem(
+	if (item.type === 'folder') {
+		return wrapInGridItem(
 			<Flex alignItems="center" flexDirection="column">
-				<Icon icon={item.icon || 'file-text-o'} size="m" />
-
+				<Icon icon={item.icon || 'folder-o'} size="m" />
 				<Label>{item.label}</Label>
 			</Flex>
 		);
 	}
-}
+
+	if (isErrored) {
+		return wrapInGridItem(
+			<Flex alignItems="center" flex="1" flexDirection="column">
+				<Icon
+					colorName="icon-m-error-color"
+					icon={item.icon || 'file-text-o'}
+					size="m"
+				/>
+				<Label colorName="text-muted-color">{item.label}</Label>
+			</Flex>
+		);
+	}
+
+	return wrapInGridItem(
+		<Flex alignItems="center" flexDirection="column">
+			<Icon icon={item.icon || 'file-text-o'} size="m" />
+
+			<Label>{item.label}</Label>
+		</Flex>
+	);
+};
 
 export default DocumentGridItem;

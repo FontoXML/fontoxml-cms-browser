@@ -1,22 +1,31 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
+import type { ModalProps } from 'fontoxml-fx/src/types';
 import operationsManager from 'fontoxml-operations/src/operationsManager';
 
-export default function withInsertOperationNameCapabilities(
-	getSubmitModalData,
-	canSubmitSelectedItem
-) {
-	return function wrapWithInsertOperationNameCapabilities(WrappedComponent) {
-		return class InsertOperationNameCapabilities extends Component {
-			isMountedInDOM = true;
+type SubmitModalData = { [key: string]: unknown };
 
-			state = {
+type Props = ModalProps<{ insertOperationName: string }, SubmitModalData>;
+
+export default function withInsertOperationNameCapabilities(
+	getSubmitModalData: (selectedItem: $TSFixMeAny) => SubmitModalData,
+	canSubmitSelectedItem: (selectedItem: $TSFixMeAny) => boolean
+) {
+	return function wrapWithInsertOperationNameCapabilities(
+		WrappedComponent: React.ComponentType
+	): React.ComponentType {
+		return class InsertOperationNameCapabilities extends React.Component<Props> {
+			private isMountedInDOM = true;
+
+			public override state = {
 				isSubmitButtonDisabled: true,
 			};
 
 			// Use this to check if the selectedItem can be submitted based on the insertOperationName.
 			// When this is true, it will be submitted, else nothing happens.
-			determineAndHandleItemSubmitForSelectedItem = (selectedItem) => {
+			private readonly determineAndHandleItemSubmitForSelectedItem = (
+				selectedItem
+			) => {
 				const {
 					data: { insertOperationName },
 					submitModal,
@@ -31,13 +40,12 @@ export default function withInsertOperationNameCapabilities(
 
 					operationsManager
 						.getOperationState(insertOperationName, initialData)
-						.then(
-							(operationState) =>
-								this.isMountedInDOM &&
-								operationState.enabled &&
-								submitModal(submitModalData)
-						)
-						.catch((_error) => {});
+						.then((operationState) => {
+							if (this.isMountedInDOM && operationState.enabled) {
+								submitModal(submitModalData);
+							}
+						})
+						.catch((_error) => undefined);
 				} else if (this.isMountedInDOM) {
 					submitModal(submitModalData);
 				}
@@ -45,7 +53,9 @@ export default function withInsertOperationNameCapabilities(
 
 			// Use this to determine if the submit button should be disabled based on the
 			// insertOperationName.
-			determineAndHandleSubmitButtonDisabledState = (selectedItem) => {
+			private readonly determineAndHandleSubmitButtonDisabledState = (
+				selectedItem
+			) => {
 				const { insertOperationName } = this.props.data;
 
 				this.setState({
@@ -66,24 +76,26 @@ export default function withInsertOperationNameCapabilities(
 
 					operationsManager
 						.getOperationState(
-							this.props.data.insertOperationName,
+							this.props.data.insertOperationName!,
 							initialData
 						)
 						.then((operationState) => {
-							this.isMountedInDOM &&
+							if (this.isMountedInDOM) {
 								this.setState({
 									isSubmitButtonDisabled:
 										!operationState.enabled,
 								});
+							}
 						})
 						.catch((_) => {
-							this.isMountedInDOM &&
+							if (this.isMountedInDOM) {
 								this.setState({ isSubmitButtonDisabled: true });
+							}
 						});
 				}
 			};
 
-			render() {
+			public override render() {
 				const props = {
 					...this.props,
 					determineAndHandleItemSubmitForSelectedItem:
@@ -96,7 +108,7 @@ export default function withInsertOperationNameCapabilities(
 				return <WrappedComponent {...props} />;
 			}
 
-			componentWillUnmount() {
+			public override componentWillUnmount() {
 				this.isMountedInDOM = false;
 			}
 		};

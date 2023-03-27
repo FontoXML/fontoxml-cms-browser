@@ -1,10 +1,11 @@
+import * as React from 'react';
+
 import {
 	SpinnerIcon,
 	StateMessage,
 	VirtualGrid,
 	VirtualList,
-} from 'fds/components';
-import React, { Component } from 'react';
+} from 'fontoxml-design-system/src/components';
 
 type Props = {
 	browseContextDocumentId?: string;
@@ -33,23 +34,23 @@ type Props = {
 	viewMode: object;
 };
 
-class ModalBrowserFileAndFolderResultList extends Component<Props> {
-	static defaultProps = {
+class ModalBrowserFileAndFolderResultList extends React.Component<Props> {
+	public static defaultProps = {
 		browseContextDocumentId: null,
-		onItemSubmit: () => {},
+		onItemSubmit: (_item): void => undefined,
 		selectedItem: null,
 	};
 
-	state = {
+	public override state = {
 		windowHeight: null,
 	};
 
-	handleItemDoubleClick = (item) =>
+	private readonly handleItemDoubleClick = (item) =>
 		item.type === 'folder'
 			? this.props.refreshItems(this.props.browseContextDocumentId, item)
 			: this.props.onItemSubmit(item);
 
-	handleItemClick = (item) => {
+	private readonly handleItemClick = (item) => {
 		// Check if item is already selected, so that a documentId and/or nodeId on the selectedItem aren't overwritten
 		if (
 			!this.props.selectedItem ||
@@ -59,7 +60,7 @@ class ModalBrowserFileAndFolderResultList extends Component<Props> {
 		}
 	};
 
-	render() {
+	public override render(): JSX.Element {
 		const {
 			items,
 			renderGridItem,
@@ -135,19 +136,19 @@ class ModalBrowserFileAndFolderResultList extends Component<Props> {
 		);
 	}
 
-	updateWindowHeight = () => {
+	private readonly updateWindowHeight = () => {
 		// Fix for VirtualList/VirtualGrid growing inside the Modal without a fixed height.
 		// Passed to the maxHeight property of both components.
 		this.setState({ windowHeight: window.innerHeight });
 	};
 
-	componentDidMount() {
+	public override componentDidMount(): void {
 		this.updateWindowHeight();
 
 		window.addEventListener('resize', this.updateWindowHeight);
 	}
 
-	componentWillUnmount() {
+	public override componentWillUnmount(): void {
 		window.removeEventListener('resize', this.updateWindowHeight);
 	}
 }
