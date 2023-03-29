@@ -92,7 +92,7 @@ const DocumentWithLinkSelectorPreview: React.FC<Props> = ({
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
 		useDocumentLoader(selectedItem.id);
 
-	const handleSelectedNodeChange = useCallback(
+	const handleSelectedNodeChange = React.useCallback(
 		(nodeId) => onItemSelect({ ...selectedItem, documentId, nodeId }),
 		[documentId, onItemSelect, selectedItem]
 	);
