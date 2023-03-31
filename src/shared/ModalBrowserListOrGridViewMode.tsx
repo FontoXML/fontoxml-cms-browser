@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 import { ButtonGroup } from 'fontoxml-design-system/src/components';
 
@@ -18,7 +18,7 @@ type Props = {
 	viewMode: object;
 };
 
-const ModalBrowserListOrGridViewMode: React.FC<Props> = ({
+const ModalBrowserListOrGridViewMode: FC<Props> = ({
 	onViewModeChange,
 	viewMode,
 }) => {

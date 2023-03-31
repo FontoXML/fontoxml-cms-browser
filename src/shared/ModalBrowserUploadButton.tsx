@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { SelectFileButton } from 'fontoxml-design-system/src/components';
 import t from 'fontoxml-localization/src/t';
@@ -22,7 +23,7 @@ type Props = {
 
 const DEFAULT_HIERARCHY_ITEMS: Props['hierarchyItems'] = [];
 
-const ModalBrowserUploadButton: React.FC<Props> = ({
+const ModalBrowserUploadButton: FC<Props> = ({
 	browseContextDocumentId = null,
 	dataProviderName,
 	uploadErrorMessages,
@@ -30,12 +31,12 @@ const ModalBrowserUploadButton: React.FC<Props> = ({
 	onUploadFileSelect,
 	request,
 }) => {
-	const dataProvider = React.useMemo(
+	const dataProvider = useMemo(
 		() => dataProviders.get(dataProviderName),
 		[dataProviderName]
 	);
 
-	const handleSelect = React.useCallback(
+	const handleSelect = useCallback(
 		(selectedFiles) =>
 			onUploadFileSelect(
 				browseContextDocumentId,

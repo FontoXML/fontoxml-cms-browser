@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 
 import {
 	Block,
@@ -31,16 +32,21 @@ type Props = {
 	};
 };
 
-const DocumentPreview: React.FC<Props> = ({
-	onItemIsErrored = (_item) => undefined,
-	onLoadIsDone = (_documentId) => undefined,
+const DEFAULT_ON_ITEM_IS_ERRORED: Props['onItemIsErrored'] = (_item) =>
+	undefined;
+const DEFAULT_ON_LOAD_IS_DONE: Props['onLoadIsDone'] = (_documentId) =>
+	undefined;
+
+const DocumentPreview: FC<Props> = ({
+	onItemIsErrored = DEFAULT_ON_ITEM_IS_ERRORED,
+	onLoadIsDone = DEFAULT_ON_LOAD_IS_DONE,
 	stateLabels,
 	selectedItem,
 }) => {
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
 		useDocumentLoader(selectedItem.id);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isLoading) {
 			return;
 		}

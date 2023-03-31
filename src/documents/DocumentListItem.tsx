@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback } from 'react';
 
 import { Icon, Label, ListItem } from 'fontoxml-design-system/src/components';
 import type {
@@ -26,7 +27,7 @@ const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
 const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
 const DEFAULT_ON_REF: Props['onRef'] = (_domNode) => undefined;
 
-const DocumentListItem: React.FC<Props> = ({
+const DocumentListItem: FC<Props> = ({
 	isDisabled = false,
 	isErrored = false,
 	isSelected = false,
@@ -35,7 +36,7 @@ const DocumentListItem: React.FC<Props> = ({
 	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
 	onRef = DEFAULT_ON_REF,
 }) => {
-	const wrapInListItem = React.useCallback(
+	const wrapInListItem = useCallback(
 		(content, label) => (
 			<ListItem
 				isSelected={isSelected}

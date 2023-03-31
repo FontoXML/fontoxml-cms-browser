@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 
 import {
 	Button,
@@ -45,7 +45,7 @@ type Props = ModalProps<{
 	modalPrimaryButtonLabel?: string;
 }>;
 
-class FolderBrowserModal extends React.Component<Props> {
+class FolderBrowserModal extends Component<Props> {
 	private readonly handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {

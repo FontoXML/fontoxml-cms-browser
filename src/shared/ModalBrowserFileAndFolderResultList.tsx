@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 
 import {
 	SpinnerIcon,
@@ -34,7 +34,7 @@ type Props = {
 	viewMode: object;
 };
 
-class ModalBrowserFileAndFolderResultList extends React.Component<Props> {
+class ModalBrowserFileAndFolderResultList extends Component<Props> {
 	public static defaultProps = {
 		browseContextDocumentId: null,
 		onItemSubmit: (_item): void => undefined,

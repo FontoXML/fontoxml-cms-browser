@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC, ReactNode } from 'react';
 
 import {
 	Flex,
@@ -41,13 +41,13 @@ type Props = {
 		id: string;
 		label: string;
 		metadata: {
-			properties: { [key: string]: React.ReactNode };
+			properties: { [key: string]: ReactNode };
 		};
 	};
 	referrerDocumentId: string;
 };
 
-const ImagePreview: React.FC<Props> = ({
+const ImagePreview: FC<Props> = ({
 	stateLabels,
 	selectedItem,
 	referrerDocumentId,

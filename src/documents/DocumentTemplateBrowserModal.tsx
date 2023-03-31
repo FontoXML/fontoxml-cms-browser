@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
@@ -77,7 +77,7 @@ type Props = ModalProps<{
 	remoteDocumentId?: string;
 };
 
-class DocumentTemplateBrowserModal extends React.Component<Props> {
+class DocumentTemplateBrowserModal extends Component<Props> {
 	public static defaultProps = {
 		remoteDocumentId: null,
 	};

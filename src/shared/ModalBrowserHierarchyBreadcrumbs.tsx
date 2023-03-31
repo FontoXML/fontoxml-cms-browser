@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback } from 'react';
 
 import {
 	BreadcrumbItemLink,
@@ -15,13 +16,13 @@ type Props = {
 	request: object;
 };
 
-const ModalBrowserHierarchyBreadcrumbs: React.FC<Props> = ({
+const ModalBrowserHierarchyBreadcrumbs: FC<Props> = ({
 	browseContextDocumentId = null,
 	hierarchyItems,
 	refreshItems,
 	request,
 }) => {
-	const renderBreadcrumbItem = React.useCallback(
+	const renderBreadcrumbItem = useCallback(
 		({
 			key,
 			isDisabled,
@@ -50,7 +51,7 @@ const ModalBrowserHierarchyBreadcrumbs: React.FC<Props> = ({
 		[browseContextDocumentId, refreshItems]
 	);
 
-	const renderTruncatedBreadcrumbMenuItem = React.useCallback(
+	const renderTruncatedBreadcrumbMenuItem = useCallback(
 		({ key, onClick, isDisabled, item }) => (
 			<MenuItem
 				key={key}

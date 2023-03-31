@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback } from 'react';
 
 import {
 	Block,
@@ -7,7 +8,11 @@ import {
 	ListItem,
 	SpinnerIcon,
 } from 'fontoxml-design-system/src/components';
-import type { FdsOnRefCallback } from 'fontoxml-design-system/src/types';
+import type {
+	FdsOnClickCallback,
+	FdsOnDoubleClickCallback,
+	FdsOnRefCallback,
+} from 'fontoxml-design-system/src/types';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 import BlockImage from './BlockImage';
@@ -21,22 +26,26 @@ type Props = {
 		label: string;
 		type: string;
 	};
-	onClick?(...args: unknown[]): unknown;
-	onDoubleClick?(...args: unknown[]): unknown;
+	onClick?: FdsOnClickCallback;
+	onDoubleClick?: FdsOnDoubleClickCallback;
 	onRef?: FdsOnRefCallback;
 	referrerDocumentId: string;
 };
 
-const LoadableImageListItem: React.FC<Props> = ({
+const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
+const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
+const DEFAULT_ON_REF: Props['onRef'] = (_domNode) => undefined;
+
+const LoadableImageListItem: FC<Props> = ({
 	isDisabled = false,
 	isSelected = false,
 	item,
-	onClick = (_item) => undefined,
-	onDoubleClick = (_item) => undefined,
-	onRef = (_domNode) => undefined,
+	onClick = DEFAULT_ON_CLICK,
+	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
+	onRef = DEFAULT_ON_REF,
 	referrerDocumentId,
 }) => {
-	const wrapInListItem = React.useCallback(
+	const wrapInListItem = useCallback(
 		(content, label) => {
 			return (
 				<ListItem
@@ -90,13 +99,13 @@ const LoadableImageListItem: React.FC<Props> = ({
 	);
 };
 
-const ImageListItem: React.FC<Props> = ({
+const ImageListItem: FC<Props> = ({
 	isDisabled = false,
 	isSelected = false,
 	item,
-	onClick = (_item) => undefined,
-	onDoubleClick = (_item) => undefined,
-	onRef = (_domNode) => undefined,
+	onClick = DEFAULT_ON_CLICK,
+	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
+	onRef = DEFAULT_ON_REF,
 	referrerDocumentId,
 }) => {
 	if (item.type === 'folder') {

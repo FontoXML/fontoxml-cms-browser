@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
 
 import { ModalStack } from 'fontoxml-design-system/src/components';
 import type { ModalProps } from 'fontoxml-fx/src/types';
@@ -18,12 +19,12 @@ type Props = ModalProps<{
 	selectFolderDataProviderName: string;
 }>;
 
-const CreateDocumentFormModalStack: React.FC<Props> = ({
+const CreateDocumentFormModalStack: FC<Props> = ({
 	cancelModal,
 	data,
 	submitModal,
 }) => {
-	const [state, setState] = React.useState<{
+	const [state, setState] = useState<{
 		activeModal: string | null;
 		selectedDocumentTemplate: $TSFixMeAny;
 		selectedFolder: $TSFixMeAny;
@@ -34,22 +35,22 @@ const CreateDocumentFormModalStack: React.FC<Props> = ({
 		selectedFolder: {},
 	});
 
-	const handleSelectFolderClick = React.useCallback(() => {
+	const handleSelectFolderClick = useCallback(() => {
 		setState((state) => ({ ...state, activeModal: 'FolderBrowser' }));
 	}, []);
 
-	const handleSelectDocumentTemplateClick = React.useCallback(() => {
+	const handleSelectDocumentTemplateClick = useCallback(() => {
 		setState((state) => ({
 			...state,
 			activeModal: 'DocumentTemplateBrowser',
 		}));
 	}, []);
 
-	const handleCancelModal = React.useCallback(() => {
+	const handleCancelModal = useCallback(() => {
 		setState((state) => ({ ...state, activeModal: null }));
 	}, []);
 
-	const handleDocumentTemplateSubmit = React.useCallback((submittedItem) => {
+	const handleDocumentTemplateSubmit = useCallback((submittedItem) => {
 		setState((state) => ({
 			...state,
 			activeModal: null,
@@ -57,7 +58,7 @@ const CreateDocumentFormModalStack: React.FC<Props> = ({
 		}));
 	}, []);
 
-	const handleFolderSubmit = React.useCallback((submittedItem) => {
+	const handleFolderSubmit = useCallback((submittedItem) => {
 		setState((state) => ({
 			...state,
 			activeModal: null,

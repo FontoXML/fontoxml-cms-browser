@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { ComponentType } from 'react';
+import { Component } from 'react';
 
 import type { ModalProps } from 'fontoxml-fx/src/types';
 
@@ -19,9 +20,9 @@ export default function withModularBrowserCapabilities(
 	initialViewMode: string | null = null
 ) {
 	return function wrapWithModularBrowserCapabilities(
-		WrappedComponent: React.ComponentType
-	): React.ComponentType {
-		return class ModularBrowser extends React.Component<Props> {
+		WrappedComponent: ComponentType
+	): ComponentType {
+		return class ModularBrowser extends Component<Props> {
 			private readonly dataProvider = dataProviders.get(
 				this.props.data.dataProviderName
 			);

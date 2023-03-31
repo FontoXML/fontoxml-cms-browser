@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
@@ -76,7 +76,7 @@ type Props = ModalProps<{
 	nodeId?: string;
 }>;
 
-class DocumentWithLinkSelectorBrowserModal extends React.Component<Props> {
+class DocumentWithLinkSelectorBrowserModal extends Component<Props> {
 	private readonly handleKeyDown = (event) => {
 		switch (event.key) {
 			case 'Escape':

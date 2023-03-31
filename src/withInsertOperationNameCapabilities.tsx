@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { ComponentType } from 'react';
+import { Component } from 'react';
 
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import operationsManager from 'fontoxml-operations/src/operationsManager';
@@ -12,9 +13,9 @@ export default function withInsertOperationNameCapabilities(
 	canSubmitSelectedItem: (selectedItem: $TSFixMeAny) => boolean
 ) {
 	return function wrapWithInsertOperationNameCapabilities(
-		WrappedComponent: React.ComponentType
-	): React.ComponentType {
-		return class InsertOperationNameCapabilities extends React.Component<Props> {
+		WrappedComponent: ComponentType
+	): ComponentType {
+		return class InsertOperationNameCapabilities extends Component<Props> {
 			private isMountedInDOM = true;
 
 			public override state = {
@@ -75,10 +76,7 @@ export default function withInsertOperationNameCapabilities(
 					};
 
 					operationsManager
-						.getOperationState(
-							this.props.data.insertOperationName!,
-							initialData
-						)
+						.getOperationState(insertOperationName, initialData)
 						.then((operationState) => {
 							if (this.isMountedInDOM) {
 								this.setState({

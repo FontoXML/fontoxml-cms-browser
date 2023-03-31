@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback } from 'react';
 
 import {
 	Flex,
@@ -7,6 +8,10 @@ import {
 	Label,
 	SpinnerIcon,
 } from 'fontoxml-design-system/src/components';
+import type {
+	FdsOnClickCallback,
+	FdsOnDoubleClickCallback,
+} from 'fontoxml-design-system/src/types';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
 
 import BlockImage from './BlockImage';
@@ -20,20 +25,23 @@ type Props = {
 		label: string;
 		type: string;
 	};
-	onClick?(...args: unknown[]): unknown;
-	onDoubleClick?(...args: unknown[]): unknown;
+	onClick?: FdsOnClickCallback;
+	onDoubleClick?: FdsOnDoubleClickCallback;
 	referrerDocumentId: string;
 };
 
-const LoadableImageGridItem: React.FC<Props> = ({
+const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
+const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
+
+const LoadableImageGridItem: FC<Props> = ({
 	isDisabled = false,
 	isSelected = false,
 	item,
-	onClick = (_item) => undefined,
-	onDoubleClick = (_item) => undefined,
+	onClick = DEFAULT_ON_CLICK,
+	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
 	referrerDocumentId,
 }) => {
-	const wrapInGridItem = React.useCallback(
+	const wrapInGridItem = useCallback(
 		(content) => (
 			<GridItem
 				isSelected={isSelected}
@@ -94,12 +102,12 @@ const LoadableImageGridItem: React.FC<Props> = ({
 	);
 };
 
-const ImageGridItem: React.FC<Props> = ({
+const ImageGridItem: FC<Props> = ({
 	isDisabled = false,
 	isSelected = false,
 	item,
-	onClick = (_item) => undefined,
-	onDoubleClick = (_item) => undefined,
+	onClick = DEFAULT_ON_CLICK,
+	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
 	referrerDocumentId,
 }) => {
 	if (item.type === 'folder') {

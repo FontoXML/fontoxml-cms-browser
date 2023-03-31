@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
 	ButtonGroup,
@@ -41,7 +42,7 @@ type Props = ModalProps<{
 	selectFolderDataProviderName: string;
 }>;
 
-const OpenOrCreateDocumentModalStack: React.FC<Props> = ({
+const OpenOrCreateDocumentModalStack: FC<Props> = ({
 	data: {
 		browseContextDocumentId,
 		insertOperationName,
@@ -55,7 +56,7 @@ const OpenOrCreateDocumentModalStack: React.FC<Props> = ({
 	cancelModal,
 	submitModal,
 }) => {
-	const [state, setState] = React.useState<{
+	const [state, setState] = useState<{
 		activeTab: {
 			tabId: string;
 			label: FdsLabelValue;
@@ -74,18 +75,18 @@ const OpenOrCreateDocumentModalStack: React.FC<Props> = ({
 		selectedFolder: {},
 	});
 
-	const handleSelectFolderClick = React.useCallback(() => {
+	const handleSelectFolderClick = useCallback(() => {
 		setState((state) => ({ ...state, activeModal: 'FolderBrowser' }));
 	}, []);
 
-	const handleSelectDocumentTemplateClick = React.useCallback(() => {
+	const handleSelectDocumentTemplateClick = useCallback(() => {
 		setState((state) => ({
 			...state,
 			activeModal: 'DocumentTemplateBrowser',
 		}));
 	}, []);
 
-	const handleTabItemClick = React.useCallback((activeTab) => {
+	const handleTabItemClick = useCallback((activeTab) => {
 		setState((state) => ({
 			...state,
 			activeTab,
@@ -94,7 +95,7 @@ const OpenOrCreateDocumentModalStack: React.FC<Props> = ({
 		}));
 	}, []);
 
-	const handleRenderModalBodyToolbar = React.useCallback(
+	const handleRenderModalBodyToolbar = useCallback(
 		() => (
 			<ModalBodyToolbar>
 				<ButtonGroup
@@ -107,11 +108,11 @@ const OpenOrCreateDocumentModalStack: React.FC<Props> = ({
 		[handleTabItemClick, state.activeTab]
 	);
 
-	const handleCancelModal = React.useCallback(() => {
+	const handleCancelModal = useCallback(() => {
 		setState((state) => ({ ...state, activeModal: null }));
 	}, []);
 
-	const handleDocumentTemplateSubmit = React.useCallback((submittedItem) => {
+	const handleDocumentTemplateSubmit = useCallback((submittedItem) => {
 		setState((state) => ({
 			...state,
 			activeModal: null,
@@ -119,7 +120,7 @@ const OpenOrCreateDocumentModalStack: React.FC<Props> = ({
 		}));
 	}, []);
 
-	const handleFolderSubmit = React.useCallback((submittedItem) => {
+	const handleFolderSubmit = useCallback((submittedItem) => {
 		setState((state) => ({
 			...state,
 			activeModal: null,

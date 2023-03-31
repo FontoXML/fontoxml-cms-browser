@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
 	Button,
@@ -50,7 +51,7 @@ type Props = ModalProps<{
 const DEFAULT_SELECTED_DOCUMENT_TEMPLATE = {};
 const DEFAULT_SELECTED_FOLDER = {};
 
-const CreateDocumentFormModalInternal: React.FC<Props> = ({
+const CreateDocumentFormModalInternal: FC<Props> = ({
 	cancelModal,
 	data,
 	determineAndHandleSubmitButtonDisabledState,
@@ -64,9 +65,9 @@ const CreateDocumentFormModalInternal: React.FC<Props> = ({
 	selectedFolder = DEFAULT_SELECTED_FOLDER,
 	submitModal,
 }) => {
-	const [documentTitle, setDocumentTitle] = React.useState('');
+	const [documentTitle, setDocumentTitle] = useState('');
 
-	React.useEffect(() => {
+	useEffect(() => {
 		determineAndHandleSubmitButtonDisabledState({
 			selectedDocumentTemplate,
 			selectedFolder,
@@ -79,7 +80,7 @@ const CreateDocumentFormModalInternal: React.FC<Props> = ({
 		selectedFolder,
 	]);
 
-	const handleSubmitButtonClick = React.useCallback(() => {
+	const handleSubmitButtonClick = useCallback(() => {
 		submitModal(
 			getSubmitModalData({
 				selectedDocumentTemplate,
@@ -89,7 +90,7 @@ const CreateDocumentFormModalInternal: React.FC<Props> = ({
 		);
 	}, [documentTitle, selectedDocumentTemplate, selectedFolder, submitModal]);
 
-	const handleKeyDown = React.useCallback(
+	const handleKeyDown = useCallback(
 		(event) => {
 			switch (event.key) {
 				case 'Escape':
@@ -112,7 +113,7 @@ const CreateDocumentFormModalInternal: React.FC<Props> = ({
 		]
 	);
 
-	const handleDocumentTitleChange = React.useCallback((documentTitle) => {
+	const handleDocumentTitleChange = useCallback((documentTitle) => {
 		setDocumentTitle(documentTitle);
 	}, []);
 

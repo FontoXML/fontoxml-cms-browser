@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
@@ -99,7 +99,7 @@ type Props = ModalProps<{
 	selectedImageId?: string;
 }>;
 
-class ImageBrowserModal extends React.Component<Props> {
+class ImageBrowserModal extends Component<Props> {
 	private readonly handleKeyDown = (event) => {
 		const { selectedItem } = this.props;
 		switch (event.key) {

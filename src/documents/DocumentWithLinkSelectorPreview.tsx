@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import readOnlyBlueprint from 'fontoxml-blueprints/src/readOnlyBlueprint';
 import {
@@ -35,17 +36,22 @@ type Props = {
 	};
 };
 
-const DocumentWithLinkSelectorPreview: React.FC<Props> = ({
+const DEFAULT_ON_ITEM_IS_ERRORED: Props['onItemIsErrored'] = (_item) =>
+	undefined;
+const DEFAULT_ON_LOAD_IS_DONE: Props['onLoadIsDone'] = (_documentId) =>
+	undefined;
+
+const DocumentWithLinkSelectorPreview: FC<Props> = ({
 	linkableElementsQuery,
 	onItemSelect,
-	onItemIsErrored = (_item) => undefined,
-	onLoadIsDone = (_documentId) => undefined,
+	onItemIsErrored = DEFAULT_ON_ITEM_IS_ERRORED,
+	onLoadIsDone = DEFAULT_ON_LOAD_IS_DONE,
 	selectedItem,
 	stateLabels,
 }) => {
 	// used to prevent infinite updates > handleLoadIsDone depends on selectedItem
 	// but also changes selectedItem (via onItemSelect) > useEffect() is called again
-	const lastSelectedItem = React.useRef<{
+	const lastSelectedItem = useRef<{
 		id: RemoteDocumentId;
 		documentId: DocumentId;
 		nodeId: NodeId;
@@ -53,7 +59,7 @@ const DocumentWithLinkSelectorPreview: React.FC<Props> = ({
 
 	// When a item is selected we want to initially select the root node of the document. We do this
 	// once when the preview is loaded.
-	const handleLoadIsDone = React.useCallback(
+	const handleLoadIsDone = useCallback(
 		(documentId) => {
 			const newSelectedItem = { ...selectedItem, documentId };
 
@@ -92,12 +98,12 @@ const DocumentWithLinkSelectorPreview: React.FC<Props> = ({
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
 		useDocumentLoader(selectedItem.id);
 
-	const handleSelectedNodeChange = React.useCallback(
+	const handleSelectedNodeChange = useCallback(
 		(nodeId) => onItemSelect({ ...selectedItem, documentId, nodeId }),
 		[documentId, onItemSelect, selectedItem]
 	);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (isLoading) {
 			return;
 		}
