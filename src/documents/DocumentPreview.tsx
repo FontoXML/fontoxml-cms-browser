@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import {
 	Block,
@@ -46,24 +46,32 @@ const DocumentPreview: FC<Props> = ({
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
 		useDocumentLoader(selectedItem.id);
 
-	useEffect(() => {
-		if (isLoading) {
-			return;
-		}
+	// To ensure the onItemIsErrored and onLoadIsDone callbacks are only called,
+	// when isLoading is false and we either have an error or we don't
+	// but not when the callback itself changes for some reason
+	// (eg. when its dependencies change, which could include the id of a new
+	// selected document even before it is loaded),
+	// we use this "ugly" trickery with useRef and a separate useEffect so those
+	// effects only invalidate when we want to.
+	// Without this, onLoadIsDone would get called directly after we've loaded
+	// at least 1 document successfully, and then select a different document.
+	const onItemIsErroredRef = useRef(onItemIsErrored);
+	onItemIsErroredRef.current = onItemIsErrored;
 
-		if (error) {
-			onItemIsErrored(selectedItem.id, error);
-		} else {
-			onLoadIsDone(documentId);
+	const onLoadIsDoneRef = useRef(onLoadIsDone);
+	onLoadIsDoneRef.current = onLoadIsDone;
+
+	useEffect(() => {
+		if (!isLoading && error && onItemIsErroredRef.current) {
+			onItemIsErroredRef.current(selectedItem.id, error);
 		}
-	}, [
-		documentId,
-		error,
-		isLoading,
-		onItemIsErrored,
-		onLoadIsDone,
-		selectedItem.id,
-	]);
+	}, [error, isLoading, selectedItem.id]);
+
+	useEffect(() => {
+		if (!isLoading && !error && onLoadIsDoneRef.current) {
+			onLoadIsDoneRef.current(documentId);
+		}
+	}, [documentId, error, isLoading]);
 
 	if (isErrored) {
 		return (
