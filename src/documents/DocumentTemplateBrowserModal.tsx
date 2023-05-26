@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
 import {
@@ -70,7 +70,7 @@ function getSubmitModalData(itemToSubmit): ModalSubmitData {
 }
 
 function canSubmitSelectedItem(selectedItem) {
-	return !!(selectedItem && selectedItem.type !== 'folder');
+	return !!(selectedItem && selectedItem.documentId);
 }
 
 type Props = ModalProps<
@@ -117,6 +117,18 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 	selectedItem,
 	viewMode,
 }) => {
+	const doubleClickedItemId = useRef(null);
+
+	useEffect(() => {
+		if (
+			doubleClickedItemId.current !== null &&
+			(selectedItem === null ||
+				doubleClickedItemId.current !== selectedItem.id)
+		) {
+			doubleClickedItemId.current = null;
+		}
+	}, [selectedItem]);
+
 	useEffect(() => {
 		const initialSelectedItem = remoteDocumentId
 			? { id: remoteDocumentId }
@@ -166,8 +178,29 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 		[cancelModal, isSubmitButtonDisabled, selectedItem, submitModal]
 	);
 
+	// Because we need to override the double click, because we need to add the documentId for submit.
+	// This will be done right away if the selectedItem already has the documentId, else we have to wait
+	// until the document is loaded in the preview.
+	const handleItemDoubleClick = useCallback(
+		(item) => {
+			if (item.type === 'folder') {
+				refreshItems(browseContextDocumentId, item);
+			} else if (selectedItem.id === item.id && selectedItem.documentId) {
+				determineAndHandleItemSubmitForSelectedItem(selectedItem);
+			} else {
+				doubleClickedItemId.current = item.id;
+			}
+		},
+		[
+			browseContextDocumentId,
+			determineAndHandleItemSubmitForSelectedItem,
+			refreshItems,
+			selectedItem,
+		]
+	);
+
 	const handleRenderListItem = useCallback(
-		({ key, item, onClick, onDoubleClick, onRef }) => (
+		({ key, item, onClick, onRef }) => (
 			<DocumentListItem
 				key={key}
 				isDisabled={item.isDisabled}
@@ -179,15 +212,17 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 						: { ...item, icon: 'file-o' }
 				}
 				onClick={onClick}
-				onDoubleClick={onDoubleClick}
+				onDoubleClick={() => {
+					handleItemDoubleClick(item);
+				}}
 				onRef={onRef}
 			/>
 		),
-		[isItemErrored, selectedItem]
+		[handleItemDoubleClick, isItemErrored, selectedItem]
 	);
 
 	const handleRenderGridItem = useCallback(
-		({ key, item, onClick, onDoubleClick }) => (
+		({ key, item, onClick }) => (
 			<DocumentGridItem
 				key={key}
 				isDisabled={item.isDisabled}
@@ -199,24 +234,34 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 						: { ...item, icon: 'file-o' }
 				}
 				onClick={onClick}
-				onDoubleClick={onDoubleClick}
+				onDoubleClick={() => {
+					handleItemDoubleClick(item);
+				}}
 			/>
 		),
-		[isItemErrored, selectedItem]
-	);
-
-	const handleFileAndFolderResultListItemSubmit = useCallback(
-		(selectedItem) => {
-			determineAndHandleItemSubmitForSelectedItem(selectedItem);
-		},
-		[determineAndHandleItemSubmitForSelectedItem]
+		[handleItemDoubleClick, isItemErrored, selectedItem]
 	);
 
 	const selectedItemId = useMemo(() => selectedItem?.id, [selectedItem?.id]);
 
-	const handleLoadIsDone = useCallback(() => {
-		onItemIsLoaded(selectedItemId);
-	}, [onItemIsLoaded, selectedItemId]);
+	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
+	// preview is done loading. If the item was also double clicked, we want to submit right away.
+	const handleLoadIsDone = useCallback(
+		(documentId) => {
+			const newSelectedItem = { id: selectedItemId, documentId };
+			if (newSelectedItem.id === doubleClickedItemId.current) {
+				determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
+			}
+			onItemIsLoaded(newSelectedItem.id);
+			onItemSelect(newSelectedItem);
+		},
+		[
+			determineAndHandleItemSubmitForSelectedItem,
+			onItemIsLoaded,
+			onItemSelect,
+			selectedItemId,
+		]
+	);
 
 	const handleSubmitButtonClick = useCallback(() => {
 		submitModal(getSubmitModalData(selectedItem));
@@ -263,9 +308,6 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 								}
 								items={items}
 								onItemSelect={onItemSelect}
-								onItemSubmit={
-									handleFileAndFolderResultListItemSubmit
-								}
 								refreshItems={refreshItems}
 								renderListItem={handleRenderListItem}
 								renderGridItem={handleRenderGridItem}
