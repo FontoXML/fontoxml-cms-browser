@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
@@ -12,8 +12,10 @@ import {
 	ModalHeader,
 } from 'fontoxml-design-system/src/components';
 import documentsManager from 'fontoxml-documents/src/documentsManager';
+import type { DocumentId } from 'fontoxml-documents/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
+import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
@@ -53,7 +55,12 @@ const stateLabels = {
 	},
 };
 
-function getSubmitModalData(itemToSubmit) {
+type ModalSubmitData = {
+	remoteDocumentId: RemoteDocumentId;
+	documentId: DocumentId;
+};
+
+function getSubmitModalData(itemToSubmit): ModalSubmitData {
 	return {
 		remoteDocumentId: itemToSubmit.id,
 		documentId: itemToSubmit.documentId,
@@ -64,22 +71,24 @@ function canSubmitSelectedItem(selectedItem) {
 	return !!(selectedItem && selectedItem.documentId);
 }
 
-type Props = ModalProps<{
-	browseContextDocumentId?: string;
-	dataProviderName: string;
-	documentId?: string;
-	insertOperationName?: string;
-	isCancelable?: boolean;
-	modalIcon?: string;
-	modalPrimaryButtonLabel?: string;
-	modalTitle?: string;
-}> & {
-	renderModalBodyToolbar?(...args: unknown[]): unknown;
+type Props = ModalProps<
+	{
+		browseContextDocumentId?: string;
+		dataProviderName: string;
+		documentId?: string;
+		insertOperationName?: string;
+		isCancelable?: boolean;
+		modalIcon?: string;
+		modalPrimaryButtonLabel?: string;
+		modalTitle?: string;
+	},
+	ModalSubmitData
+> & {
+	renderModalBodyToolbar?(): ReactNode;
 };
 
 let DocumentBrowserModal: FC<Props> = ({
 	cancelModal,
-
 	data: {
 		browseContextDocumentId,
 		isCancelable,
@@ -88,7 +97,11 @@ let DocumentBrowserModal: FC<Props> = ({
 		modalPrimaryButtonLabel,
 		modalTitle,
 	},
+	submitModal,
 
+	renderModalBodyToolbar,
+
+	// TODO: all of these props come from the HoCs, type them there and reuse here
 	determineAndHandleItemSubmitForSelectedItem,
 	hierarchyItems,
 	isItemErrored,
@@ -101,10 +114,8 @@ let DocumentBrowserModal: FC<Props> = ({
 	onItemSelect,
 	onViewModeChange,
 	refreshItems,
-	renderModalBodyToolbar,
 	request,
 	selectedItem,
-	submitModal,
 	viewMode,
 }) => {
 	const doubleClickedItemId = useRef(null);
