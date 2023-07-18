@@ -248,7 +248,11 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 	// preview is done loading. If the item was also double clicked, we want to submit right away.
 	const handleLoadIsDone = useCallback(
 		(documentId) => {
-			const newSelectedItem = { id: selectedItemId, documentId };
+			const newSelectedItem = {
+				id: selectedItemId,
+				label: selectedItem?.label,
+				documentId,
+			};
 			if (newSelectedItem.id === doubleClickedItemId.current) {
 				determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
 			}
@@ -259,6 +263,7 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 			determineAndHandleItemSubmitForSelectedItem,
 			onItemIsLoaded,
 			onItemSelect,
+			selectedItem,
 			selectedItemId,
 		]
 	);
