@@ -12,7 +12,7 @@ import type { DocumentId } from 'fontoxml-documents/src/types';
 import getNodeId from 'fontoxml-dom-identification/src/getNodeId';
 import type { NodeId } from 'fontoxml-dom-identification/src/types';
 import FxNodePreviewErrorPlaceholder from 'fontoxml-fx/src/FxNodePreviewErrorPlaceholder';
-import _FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
+import FxNodePreviewWithLinkSelector from 'fontoxml-fx/src/FxNodePreviewWithLinkSelector';
 import useDocumentLoader from 'fontoxml-fx/src/useDocumentLoader';
 import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 import evaluateXPathToBoolean from 'fontoxml-selectors/src/evaluateXPathToBoolean';
@@ -145,7 +145,7 @@ const DocumentWithLinkSelectorPreview: FC<Props> = ({
 	}
 
 	return (
-		<_FxNodePreviewWithLinkSelector
+		<FxNodePreviewWithLinkSelector
 			documentId={documentId}
 			onSelectedNodeChange={handleSelectedNodeChange}
 			selector={linkableElementsQuery}
