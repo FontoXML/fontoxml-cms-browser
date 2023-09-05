@@ -77,6 +77,14 @@
 						"Can be used to open the document with link selector browser with ",
 						"a node preselected. Should only be used in combination with documentId."
 					]
+				},
+				{
+					"name": "[query]",
+					"type": "Object",
+					"description": [
+						"Corresponds to the `query` property in the browser contracts. ",
+						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
+					]
 				}
 			],
 			"returns": [
@@ -174,6 +182,14 @@
 					"description": [
 						"Can be used to open the image browser with an image preselected."
 					]
+				},
+				{
+					"name": "[query]",
+					"type": "Object",
+					"description": [
+						"Corresponds to the `query` property in the browser contracts. ",
+						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
+					]
 				}
 			],
 			"returns": [
@@ -270,6 +286,14 @@
 					"name": "[modalTitle]",
 					"type": "string",
 					"description": "The title being shown at the top of the modal. Defaults to `t__Select a document`."
+				},
+				{
+					"name": "[query]",
+					"type": "Object",
+					"description": [
+						"Corresponds to the `query` property in the browser contracts. ",
+						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
+					]
 				}
 			],
 			"returns": [
@@ -361,6 +385,14 @@
 					"name": "[modalTitle]",
 					"type": "string",
 					"description": "The title being shown at the top of the modal. Defaults to `t__Select a template`."
+				},
+				{
+					"name": "[query]",
+					"type": "Object",
+					"description": [
+						"Corresponds to the `query` property in the browser contracts. ",
+						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
+					]
 				}
 			],
 			"returns": [
@@ -471,6 +503,14 @@
 					"name": "[modalTitle]",
 					"type": "string",
 					"description": "The title being shown at the top of the modal. Defaults to `t__Open or create document`."
+				},
+				{
+					"name": "[query]",
+					"type": "Object",
+					"description": [
+						"Corresponds to the `query` property in the browser contracts. ",
+						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
+					]
 				}
 			],
 			"returns": [
@@ -593,6 +633,14 @@
 					"name": "[modalTitle]",
 					"type": "string",
 					"description": "The title being shown at the top of the modal. Defaults to `t__Create new document`."
+				},
+				{
+					"name": "[query]",
+					"type": "Object",
+					"description": [
+						"Corresponds to the `query` property in the browser contracts. ",
+						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
+					]
 				}
 			],
 			"returns": [

@@ -1,4 +1,4 @@
-import createDataProviderUsingConfiguredConnectors from './data-providers/createDataProviderUsingConfiguredConnectors';
+import createDataProviderUsingConfiguredConnectors, { DataProviderUsingConfiguredConnectors } from './data-providers/createDataProviderUsingConfiguredConnectors';
 
 const dataProvidersByName = Object.create(null);
 
@@ -17,7 +17,7 @@ const dataProviders = {
 			createDataProviderUsingConfiguredConnectors(options);
 	},
 
-	get(name: $TSFixMeAny): $TSFixMeAny {
+	get(name: $TSFixMeAny): DataProviderUsingConfiguredConnectors {
 		const dataProvider = dataProvidersByName[name];
 
 		if (!dataProvider) {

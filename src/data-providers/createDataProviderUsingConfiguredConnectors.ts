@@ -106,6 +106,28 @@ function getUploadOptions(options: $TSFixMeAny): $TSFixMeAny {
 	};
 }
 
+export type DataProviderUsingConfiguredConnectors = {
+	getFolderContents(
+		browseContextDocumentId: $TSFixMeAny,
+		targetFolder: $TSFixMeAny,
+		noCache: $TSFixMeAny,
+		hierarchyItems: $TSFixMeAny,
+		additionalQueryProperties: $TSFixMeAny
+	): $TSFixMeAny;
+	getRootHierarchyItem(): { id: $TSFixMeAny; label: string; type: string };
+	upload(
+		folderToUploadInId: $TSFixMeAny,
+		filesToUpload: $TSFixMeAny
+	): $TSFixMeAny;
+	getUploadOptions(): $TSFixMeAny;
+	_lastOpenedState: {
+		hierarchyItems: $TSFixMeAny[];
+		selectedItem: $TSFixMeAny;
+	};
+	storeLastOpenedState(hierarchyItems: $TSFixMeAny[]): $TSFixMeAny;
+	getLastOpenedState(): $TSFixMeAny;
+};
+
 /**
  * @param options -
  */
@@ -117,7 +139,7 @@ export default function createDataProviderUsingConfiguredConnectors(options: {
 	uploadAssetType: string;
 	uploadMimeTypesToAccept: string;
 	uploadMaxFileSizeInBytes: number;
-}): $TSFixMeAny {
+}): DataProviderUsingConfiguredConnectors {
 	return {
 		/**
 		 * @param browseContextDocumentId -
