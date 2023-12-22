@@ -1,6 +1,11 @@
-import { Component } from 'react';
+import type { ComponentProps, FC } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import type {
+	AssetId,
+	BrowseResponseItem,
+} from 'fontoxml-connectors-standard/src/types';
 import {
 	Button,
 	Flex,
@@ -13,30 +18,41 @@ import {
 	StateMessage,
 	Toast,
 } from 'fontoxml-design-system/src/components';
+import type {
+	FdsOnClickCallback,
+	FdsOnKeyDownCallback,
+} from 'fontoxml-design-system/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
+import useOperation from 'fontoxml-fx/src/useOperation';
 import t from 'fontoxml-localization/src/t';
+import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
+import type { ViewMode } from '../shared/ModalBrowserListOrGridViewMode';
 import ModalBrowserListOrGridViewMode, {
-	VIEWMODES,
+	VIEW_MODES,
 } from '../shared/ModalBrowserListOrGridViewMode';
 import ModalBrowserUploadButton from '../shared/ModalBrowserUploadButton';
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
-import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
+import type { BrowseConfig, BrowseContext } from '../shared/useBrowse';
+import useBrowse from '../shared/useBrowse';
+import type { UploadConfig, UploadContext } from '../shared/useUpload';
+import useUpload from '../shared/useUpload';
 import ImageGridItem from './ImageGridItem';
 import ImageListItem from './ImageListItem';
 import ImagePreview from './ImagePreview';
-
-const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
-	'cms-browser-sends-hierarchy-items-in-browse-response'
-);
 
 const cmsBrowserUploadMaxFileSizeInBytes = configurationManager.get(
 	'cms-browser-upload-max-file-size-in-bytes'
 );
 
-const stateLabels = {
+const cmsBrowserUploadMimeTypesToAccept = configurationManager.get(
+	'cms-browser-upload-mime-types-to-accept'
+);
+
+const stateLabels: ComponentProps<
+	typeof ModalBrowserFileAndFolderResultList
+>['stateLabels'] = {
 	loading: {
 		title: t('Loading images…'),
 		message: null,
@@ -53,6 +69,8 @@ const stateLabels = {
 			'This folder does not contain images that can be opened with Fonto.'
 		),
 	},
+};
+const previewStateLabels: ComponentProps<typeof ImagePreview>['stateLabels'] = {
 	loadingPreview: {
 		title: t('Loading image preview…'),
 		message: null,
@@ -65,288 +83,371 @@ const stateLabels = {
 	},
 };
 
-const uploadErrorMessages = {
-	fileSizeTooLargeMessage: t(
-		'This image is larger than {MAX_IMAGE_UPLOAD_SIZE} megabyte, please select another image or resize it and try again.',
-		{
-			MAX_IMAGE_UPLOAD_SIZE:
-				Math.round(
-					(cmsBrowserUploadMaxFileSizeInBytes / 1000000) * 100
-				) / 100,
-		}
-	),
-	invalidFileTypeMessage: t('This file type is not valid.'),
-	serverErrorMessage: t('Fonto can’t upload this image, please try again.'),
-};
-
-function getSubmitModalData(itemToSubmit) {
-	return {
-		selectedImageId: itemToSubmit.id,
-	};
-}
-
-function canSubmitSelectedItem(selectedItem) {
-	return !!(selectedItem && selectedItem.type !== 'folder');
-}
-
-type Props = ModalProps<{
-	browseContextDocumentId: string;
-	dataProviderName: string;
+type IncomingModalData = {
+	browseContextDocumentId: RemoteDocumentId;
 	insertOperationName?: string;
 	modalIcon?: string;
 	modalPrimaryButtonLabel?: string;
 	modalTitle?: string;
-	selectedImageId?: string;
-}>;
+	selectedImageId?: BrowseResponseItem['id'];
+	query?: BrowseContext['query'];
+};
+type SubmittedModalData = {
+	selectedImageId: string;
+};
 
-class ImageBrowserModal extends Component<Props> {
-	private readonly handleKeyDown = (event) => {
-		const { selectedItem } = this.props;
-		switch (event.key) {
-			case 'Escape':
-				this.props.cancelModal();
-				break;
-			case 'Enter':
-				if (!this.props.isSubmitButtonDisabled) {
-					this.props.submitModal(getSubmitModalData(selectedItem));
+type Props = ModalProps<IncomingModalData, SubmittedModalData>;
+
+const assetTypes = ['image'];
+const resultTypes = ['file', 'folder'];
+
+const browseConfig: BrowseConfig = {
+	assetTypes,
+	resultTypes,
+	rootFolderLabel: t('Image library'),
+};
+
+const uploadConfig: UploadConfig = {
+	errorMessages: {
+		fileSizeTooLargeMessage: t(
+			'This image is larger than {MAX_IMAGE_UPLOAD_SIZE} megabyte, please select another image or resize it and try again.',
+			{
+				MAX_IMAGE_UPLOAD_SIZE:
+					Math.round(
+						(cmsBrowserUploadMaxFileSizeInBytes / 1000000) * 100
+					) / 100,
+			}
+		),
+		invalidFileTypeMessage: t('This file type is not valid.'),
+		serverErrorMessage: t(
+			'Fonto can’t upload this image, please try again.'
+		),
+	},
+	fileType: 'image',
+	maxFileSizeInBytes: cmsBrowserUploadMaxFileSizeInBytes,
+	mimeTypesToAccept: cmsBrowserUploadMimeTypesToAccept,
+};
+
+const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
+	const [viewMode, setViewMode] = useState<ViewMode>(VIEW_MODES.GRID);
+
+	const browseContext = useMemo<BrowseContext>(
+		() => ({
+			query: data.query,
+			remoteDocumentId: data.browseContextDocumentId,
+		}),
+		[data.browseContextDocumentId, data.query]
+	);
+
+	const { browse, browseRequestState } = useBrowse(
+		browseContext,
+		browseConfig
+	);
+
+	const [selectedItemId, setSelectedItemId] = useState<AssetId | null>(
+		data.selectedImageId ?? null
+	);
+
+	const selectedItem = useMemo(
+		() =>
+			browseRequestState.name === 'successful'
+				? browseRequestState.items.find(
+						(item) => item.id === selectedItemId
+				  )
+				: undefined,
+		[browseRequestState, selectedItemId]
+	);
+
+	const uploadTargetFolder = useMemo(
+		() => browseRequestState.folder,
+		[browseRequestState.folder]
+	);
+
+	const uploadContext = useMemo<UploadContext>(
+		() => ({
+			metadata: {},
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			remoteDocumentId: data.browseContextDocumentId!,
+			targetFolder: uploadTargetFolder,
+		}),
+		[data.browseContextDocumentId, uploadTargetFolder]
+	);
+
+	const { upload, uploadRequestState } = useUpload(
+		uploadContext,
+		uploadConfig
+	);
+
+	useEffect(() => {
+		if (uploadTargetFolder && uploadRequestState.name === 'successful') {
+			let canceled = false;
+
+			void browse(
+				data.browseContextDocumentId,
+				uploadTargetFolder,
+				true
+			).then(() => {
+				if (canceled) {
+					return;
 				}
-				break;
+
+				setSelectedItemId(uploadRequestState.item.id);
+			});
+
+			return () => {
+				canceled = true;
+			};
 		}
-	};
 
-	private readonly handleFileAndFolderResultListItemSubmit = (selectedItem) =>
-		this.props.determineAndHandleItemSubmitForSelectedItem(selectedItem);
+		return undefined;
+	}, [
+		browse,
+		data.browseContextDocumentId,
+		uploadRequestState,
+		uploadTargetFolder,
+	]);
 
-	private readonly handleRenderListItem = ({
-		key,
-		item,
-		onClick,
-		onDoubleClick,
-		onRef,
-	}) => (
-		<ImageListItem
-			key={key}
-			referrerDocumentId={this.props.data.browseContextDocumentId}
-			isDisabled={item.isDisabled}
-			isSelected={
-				this.props.selectedItem &&
-				this.props.selectedItem.id === item.id
-			}
-			item={item}
-			onClick={onClick}
-			onDoubleClick={onDoubleClick}
-			onRef={onRef}
-		/>
+	const dataToSubmit = useMemo<SubmittedModalData | undefined>(() => {
+		return selectedItem && selectedItem.type !== 'folder'
+			? {
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					selectedImageId: selectedItem.id!,
+			  }
+			: data.selectedImageId
+			? {
+					selectedImageId: data.selectedImageId,
+			  }
+			: undefined;
+	}, [data.selectedImageId, selectedItem]);
+
+	const operationData = useMemo(
+		() => ({ ...data, ...dataToSubmit }),
+		[data, dataToSubmit]
 	);
 
-	private readonly handleRenderGridItem = ({
-		key,
-		item,
-		onClick,
-		onDoubleClick,
-	}) => (
-		<ImageGridItem
-			key={key}
-			referrerDocumentId={this.props.data.browseContextDocumentId}
-			isDisabled={item.isDisabled}
-			isSelected={
-				this.props.selectedItem &&
-				this.props.selectedItem.id === item.id
-			}
-			item={item}
-			onClick={onClick}
-			onDoubleClick={onDoubleClick}
-		/>
+	const { operationState } = useOperation(
+		data.insertOperationName,
+		operationData
 	);
 
-	private readonly handleSubmitButtonClick = () => {
-		this.props.submitModal(getSubmitModalData(this.props.selectedItem));
-	};
+	const isSubmitButtonDisabled = useMemo(
+		() =>
+			!selectedItem ||
+			selectedItem.type === 'folder' ||
+			!operationState.enabled,
+		[operationState.enabled, selectedItem]
+	);
 
-	public override render(): JSX.Element {
-		const {
-			cancelModal,
-			data: {
-				browseContextDocumentId,
-				dataProviderName,
-				modalIcon,
-				modalPrimaryButtonLabel,
-				modalTitle,
-			},
-			hierarchyItems,
+	const handleKeyDown = useCallback<FdsOnKeyDownCallback>(
+		(event) => {
+			switch (event.key) {
+				case 'Escape':
+					cancelModal();
+					break;
+				case 'Enter':
+					if (!isSubmitButtonDisabled) {
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						submitModal(dataToSubmit!);
+					}
+					break;
+			}
+		},
+		[cancelModal, dataToSubmit, isSubmitButtonDisabled, submitModal]
+	);
+
+	const handleBreadcrumbsItemClick = useCallback<
+		ComponentProps<typeof ModalBrowserHierarchyBreadcrumbs>['onItemClick']
+	>(
+		(item) => {
+			void browse(data.browseContextDocumentId, item, true);
+		},
+		[browse, data.browseContextDocumentId]
+	);
+
+	const handleItemDoubleClick = useCallback(
+		(item: BrowseResponseItem) => {
+			if (item.type === 'folder') {
+				void browse(data.browseContextDocumentId, item);
+			} else if (selectedItemId === item.id && !isSubmitButtonDisabled) {
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				submitModal(dataToSubmit!);
+			}
+		},
+		[
+			data.browseContextDocumentId,
+			dataToSubmit,
 			isSubmitButtonDisabled,
-			items,
-			onItemSelect,
-			onUploadFileSelect,
-			onViewModeChange,
-			refreshItems,
-			request,
-			selectedItem,
-			viewMode,
-		} = this.props;
-		const hasHierarchyItems = hierarchyItems.length > 0;
+			browse,
+			selectedItemId,
+			submitModal,
+		]
+	);
 
-		return (
-			<Modal size="l" isFullHeight onKeyDown={this.handleKeyDown}>
-				<ModalHeader
-					icon={modalIcon}
-					title={modalTitle || t('Select an image')}
-				/>
+	const handleRenderListItem = useCallback<
+		ComponentProps<
+			typeof ModalBrowserFileAndFolderResultList
+		>['renderListItem']
+	>(
+		({ key, item, onClick }) => (
+			<ImageListItem
+				key={key}
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				referrerDocumentId={data.browseContextDocumentId!}
+				isDisabled={item.metadata?.isDisabled}
+				isSelected={selectedItemId === item.id}
+				item={item}
+				onClick={onClick}
+				onItemDoubleClick={handleItemDoubleClick}
+			/>
+		),
+		[data.browseContextDocumentId, handleItemDoubleClick, selectedItemId]
+	);
 
-				<ModalBody>
-					<ModalContent flexDirection="column">
-						<ModalContentToolbar
-							justifyContent={
-								hasHierarchyItems ? 'space-between' : 'flex-end'
-							}
-						>
-							{hasHierarchyItems && (
-								<ModalBrowserHierarchyBreadcrumbs
-									browseContextDocumentId={
-										browseContextDocumentId
+	const handleRenderGridItem = useCallback<
+		ComponentProps<
+			typeof ModalBrowserFileAndFolderResultList
+		>['renderGridItem']
+	>(
+		({ key, item, onClick }) => (
+			<ImageGridItem
+				key={key}
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				referrerDocumentId={data.browseContextDocumentId!}
+				isDisabled={item.metadata?.isDisabled}
+				isSelected={selectedItemId === item.id}
+				item={item}
+				onClick={onClick}
+				onItemDoubleClick={handleItemDoubleClick}
+			/>
+		),
+		[data.browseContextDocumentId, handleItemDoubleClick, selectedItemId]
+	);
+
+	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		submitModal(dataToSubmit!);
+	}, [dataToSubmit, submitModal]);
+
+	const hasHierarchyItems =
+		browseRequestState.name === 'successful' &&
+		browseRequestState.hierarchyItems.length > 0;
+
+	return (
+		<Modal size="l" isFullHeight onKeyDown={handleKeyDown}>
+			<ModalHeader
+				icon={data.modalIcon}
+				title={data.modalTitle || t('Select an image')}
+			/>
+
+			<ModalBody>
+				<ModalContent flexDirection="column">
+					<ModalContentToolbar
+						justifyContent={
+							hasHierarchyItems ? 'space-between' : 'flex-end'
+						}
+					>
+						{hasHierarchyItems && (
+							<ModalBrowserHierarchyBreadcrumbs
+								browseRequestState={browseRequestState}
+								onItemClick={handleBreadcrumbsItemClick}
+								uploadRequestState={uploadRequestState}
+							/>
+						)}
+
+						<Flex flex="none" spaceSize="l" alignItems="center">
+							<ModalBrowserUploadButton
+								browseRequest={browseRequestState}
+								uploadRequest={uploadRequestState}
+								mimeTypesToAccept={
+									cmsBrowserUploadMimeTypesToAccept
+								}
+								uploadSelectedFiles={upload}
+							/>
+
+							<ModalBrowserListOrGridViewMode
+								setViewMode={setViewMode}
+								viewMode={viewMode}
+							/>
+						</Flex>
+					</ModalContentToolbar>
+
+					{uploadRequestState.name === 'errored' && (
+						<ModalContent flex="none" paddingSize="m">
+							<Toast
+								connotation="error"
+								icon="exclamation-triangle"
+								content={uploadRequestState.errorMessage}
+							/>
+						</ModalContent>
+					)}
+
+					<ModalContent flexDirection="row">
+						<ModalContent flexDirection="column">
+							<ModalBrowserFileAndFolderResultList
+								browseRequestState={browseRequestState}
+								renderListItem={handleRenderListItem}
+								renderGridItem={handleRenderGridItem}
+								selectedItemId={selectedItemId}
+								setSelectedItemId={setSelectedItemId}
+								stateLabels={stateLabels}
+								uploadRequestState={uploadRequestState}
+								viewMode={viewMode}
+							/>
+						</ModalContent>
+
+						{selectedItem && selectedItem.type !== 'folder' && (
+							<ModalContent flexDirection="column">
+								<ImagePreview
+									heading={selectedItem.label}
+									properties={
+										selectedItem.metadata?.properties
 									}
-									hierarchyItems={hierarchyItems}
-									refreshItems={refreshItems}
-									request={request}
-								/>
-							)}
-
-							<Flex flex="none" spaceSize="l" alignItems="center">
-								<ModalBrowserUploadButton
-									browseContextDocumentId={
-										browseContextDocumentId
+									referrerDocumentId={
+										// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+										data.browseContextDocumentId!
 									}
-									dataProviderName={dataProviderName}
-									hierarchyItems={hierarchyItems}
-									request={request}
-									uploadErrorMessages={uploadErrorMessages}
-									onUploadFileSelect={onUploadFileSelect}
-								/>
-
-								<ModalBrowserListOrGridViewMode
-									onViewModeChange={onViewModeChange}
-									viewMode={viewMode}
-								/>
-							</Flex>
-						</ModalContentToolbar>
-
-						{request.type === 'upload' && request.error && (
-							<ModalContent flex="none" paddingSize="m">
-								<Toast
-									connotation="error"
-									icon="exclamation-triangle"
-									content={request.error}
+									// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+									remoteImageId={selectedItem.id!}
+									stateLabels={previewStateLabels}
 								/>
 							</ModalContent>
 						)}
 
-						<ModalContent flexDirection="row">
+						{/* Always show something in the "preview area" to
+						prevent the layout from "jumping" when selecting an item
+						in the grid. */}
+						{(!selectedItem || selectedItem.type === 'folder') && (
 							<ModalContent flexDirection="column">
-								<ModalBrowserFileAndFolderResultList
-									browseContextDocumentId={
-										browseContextDocumentId
-									}
-									items={items}
-									onItemSelect={onItemSelect}
-									onItemSubmit={
-										this
-											.handleFileAndFolderResultListItemSubmit
-									}
-									refreshItems={refreshItems}
-									renderListItem={this.handleRenderListItem}
-									renderGridItem={this.handleRenderGridItem}
-									request={request}
-									selectedItem={selectedItem}
-									stateLabels={stateLabels}
-									viewMode={viewMode}
+								<StateMessage
+									message={t(
+										'Select an item in the list to the left.'
+									)}
+									paddingSize="m"
+									title={t('No item selected')}
+									visual="hand-pointer-o"
 								/>
 							</ModalContent>
-
-							{selectedItem && selectedItem.type !== 'folder' && (
-								<ModalContent flexDirection="column">
-									<ImagePreview
-										referrerDocumentId={
-											this.props.data
-												.browseContextDocumentId
-										}
-										selectedItem={selectedItem}
-										stateLabels={stateLabels}
-									/>
-								</ModalContent>
-							)}
-
-							{selectedItem && selectedItem.type === 'folder' && (
-								<ModalContent flexDirection="column">
-									<StateMessage
-										message={t(
-											'Select an item in the list to the left.'
-										)}
-										paddingSize="m"
-										title={t('No item selected')}
-										visual="hand-pointer-o"
-									/>
-								</ModalContent>
-							)}
-						</ModalContent>
+						)}
 					</ModalContent>
-				</ModalBody>
+				</ModalContent>
+			</ModalBody>
 
-				<ModalFooter>
-					<Button
-						type="default"
-						label={t('Cancel')}
-						onClick={cancelModal}
-					/>
+			<ModalFooter>
+				<Button
+					type="default"
+					label={t('Cancel')}
+					onClick={cancelModal}
+				/>
 
-					<Button
-						type="primary"
-						label={modalPrimaryButtonLabel || t('Insert')}
-						isDisabled={isSubmitButtonDisabled}
-						onClick={this.handleSubmitButtonClick}
-					/>
-				</ModalFooter>
-			</Modal>
-		);
-	}
-
-	public override componentDidMount(): void {
-		const {
-			data: { browseContextDocumentId, selectedImageId },
-			lastOpenedState,
-			onInitialSelectedItemIdChange,
-			refreshItems,
-		} = this.props;
-
-		const { hierarchyItems } = lastOpenedState;
-
-		const initialSelectedItem = selectedImageId
-			? { id: selectedImageId }
-			: null;
-		if (
-			cmsBrowserSendsHierarchyItemsInBrowseResponse &&
-			initialSelectedItem
-		) {
-			onInitialSelectedItemIdChange(initialSelectedItem);
-			refreshItems(browseContextDocumentId, { id: null });
-		} else if (hierarchyItems && hierarchyItems.length > 1) {
-			refreshItems(
-				browseContextDocumentId,
-				hierarchyItems[hierarchyItems.length - 1],
-				false,
-				hierarchyItems
-			);
-		} else {
-			refreshItems(browseContextDocumentId, { id: null });
-		}
-	}
-}
-
-ImageBrowserModal = withModularBrowserCapabilities(VIEWMODES.GRID)(
-	ImageBrowserModal
-);
-ImageBrowserModal = withInsertOperationNameCapabilities(
-	getSubmitModalData,
-	canSubmitSelectedItem
-)(ImageBrowserModal);
+				<Button
+					type="primary"
+					label={data.modalPrimaryButtonLabel || t('Insert')}
+					isDisabled={isSubmitButtonDisabled}
+					onClick={handleSubmitButtonClick}
+				/>
+			</ModalFooter>
+		</Modal>
+	);
+};
 
 export default ImageBrowserModal;

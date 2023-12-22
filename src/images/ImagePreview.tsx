@@ -1,5 +1,6 @@
-import type { FC, ReactNode } from 'react';
+import type { ComponentProps, FC } from 'react';
 
+import type { AssetId } from 'fontoxml-connectors-standard/src/types';
 import {
 	Flex,
 	Heading,
@@ -10,6 +11,7 @@ import {
 } from 'fontoxml-design-system/src/components';
 import { applyCss, block } from 'fontoxml-design-system/src/system';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
+import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 const imageStyles = applyCss([
 	block,
@@ -26,6 +28,10 @@ const imageStyles = applyCss([
 ]);
 
 type Props = {
+	heading: string;
+	properties?: ComponentProps<typeof KeyValueList>['valueByKey'];
+	referrerDocumentId: RemoteDocumentId;
+	remoteImageId: AssetId;
 	stateLabels: {
 		previewError: {
 			title?: string;
@@ -36,24 +42,17 @@ type Props = {
 			message?: string;
 		};
 	};
-	// TODO: required by implementation, optional according to type ... bug waiting to happen ...
-	selectedItem?: {
-		id: string;
-		label: string;
-		metadata: {
-			properties: { [key: string]: ReactNode };
-		};
-	};
-	referrerDocumentId: string;
 };
 
 const ImagePreview: FC<Props> = ({
-	stateLabels,
-	selectedItem,
+	heading,
+	properties,
 	referrerDocumentId,
+	remoteImageId,
+	stateLabels,
 }) => {
 	const { isErrored, isLoading, imageData } = useImageLoader(
-		selectedItem.id,
+		remoteImageId,
 		referrerDocumentId,
 		'web'
 	);
@@ -87,25 +86,27 @@ const ImagePreview: FC<Props> = ({
 				paddingSize="l"
 				spaceSize="m"
 			>
-				<Heading level="4">{selectedItem.label}</Heading>
+				<Heading level="4">{heading}</Heading>
 
 				<Flex flex="auto">
 					<img
-						src={imageData.dataUrl}
 						{...imageStyles}
-						width={imageData.width || 150}
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						src={imageData!.dataUrl}
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						width={imageData!.width || 150}
 					/>
 				</Flex>
 			</Flex>
 
-			{selectedItem.metadata && selectedItem.metadata.properties && (
+			{properties && (
 				<Flex flex="none" flexDirection="column">
 					<Flex paddingSize={{ horizontal: 'l' }}>
 						<HorizontalSeparationLine />
 					</Flex>
 
 					<KeyValueList
-						valueByKey={selectedItem.metadata.properties}
+						valueByKey={properties}
 						scrollLimit={5}
 						paddingSize="l"
 					/>

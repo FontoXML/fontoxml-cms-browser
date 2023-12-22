@@ -1,70 +1,36 @@
 import type { FC } from 'react';
-import { useCallback, useMemo } from 'react';
 
+import type { ConfigurationValueTypes } from 'fontoxml-configuration/src/types';
 import { SelectFileButton } from 'fontoxml-design-system/src/components';
 import t from 'fontoxml-localization/src/t';
 
-import dataProviders from '../dataProviders';
+import type useBrowse from './useBrowse';
+import type useUpload from './useUpload';
 
 type Props = {
-	browseContextDocumentId?: string;
-	dataProviderName: string;
-	uploadErrorMessages: {
-		fileSizeTooLargeMessage: string;
-		serverErrorMessage: string;
-		invalidFileTypeMessage: string;
-	};
-
-	// from withModularBrowserCapabilities
-	hierarchyItems?: unknown[];
-	onUploadFileSelect(...args: unknown[]): unknown;
-	request: object;
+	browseRequest: ReturnType<typeof useBrowse>['browseRequestState'];
+	mimeTypesToAccept?: ConfigurationValueTypes['cms-browser-upload-mime-types-to-accept'];
+	uploadRequest: ReturnType<typeof useUpload>['uploadRequestState'];
+	uploadSelectedFiles: ReturnType<typeof useUpload>['upload'];
 };
 
-const DEFAULT_HIERARCHY_ITEMS: Props['hierarchyItems'] = [];
-
 const ModalBrowserUploadButton: FC<Props> = ({
-	browseContextDocumentId = null,
-	dataProviderName,
-	uploadErrorMessages,
-	hierarchyItems = DEFAULT_HIERARCHY_ITEMS,
-	onUploadFileSelect,
-	request,
+	browseRequest,
+	mimeTypesToAccept,
+	uploadRequest,
+	uploadSelectedFiles,
 }) => {
-	const dataProvider = useMemo(
-		() => dataProviders.get(dataProviderName),
-		[dataProviderName]
-	);
-
-	const handleSelect = useCallback(
-		(selectedFiles) =>
-			onUploadFileSelect(
-				browseContextDocumentId,
-				selectedFiles,
-				uploadErrorMessages
-			),
-		[browseContextDocumentId, onUploadFileSelect, uploadErrorMessages]
-	);
-
-	const isUploading = request.type === 'upload' && request.busy;
-	const isLoading =
-		isUploading || (request.type === 'browse' && request.busy);
-
-	const lastLoadedFolder =
-		hierarchyItems.length > 0
-			? hierarchyItems[hierarchyItems.length - 1]
-			: null;
-
 	return (
 		<SelectFileButton
 			label={t('Upload')}
-			isDisabled={isLoading || lastLoadedFolder === null}
-			mimeTypesToAccept={
-				dataProvider.getUploadOptions().mimeTypesToAccept
+			isDisabled={
+				browseRequest.name === 'loading' ||
+				uploadRequest.name === 'loading'
 			}
+			mimeTypesToAccept={mimeTypesToAccept}
 			icon="upload"
-			iconAfter={isUploading ? 'spinner' : undefined}
-			onSelect={handleSelect}
+			iconAfter={uploadRequest.name === 'loading' ? 'spinner' : undefined}
+			onSelect={uploadSelectedFiles}
 		/>
 	);
 };

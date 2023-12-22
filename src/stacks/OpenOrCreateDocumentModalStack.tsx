@@ -1,46 +1,70 @@
-import type { FC } from 'react';
-import { useCallback, useState } from 'react';
+import type { ComponentProps, FC } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import {
 	ButtonGroup,
+	CancelModalContext,
 	ModalBodyToolbar,
 	ModalStack,
 } from 'fontoxml-design-system/src/components';
 import type {
 	FdsIconName,
 	FdsLabelValue,
+	FdsOnClickCallback,
+	FdsOnItemClickCallback,
 } from 'fontoxml-design-system/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import t from 'fontoxml-localization/src/t';
+import type { OperationName } from 'fontoxml-operations/src/types';
+import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 import CreateDocumentFormModal from '../documents/CreateDocumentFormModal';
 import DocumentBrowserModal from '../documents/DocumentBrowserModal';
+import type { SubmittedModalData as DocumentTemplateBrowserSubmittedModalData } from '../documents/DocumentTemplateBrowserModal';
 import DocumentTemplateBrowserModal from '../documents/DocumentTemplateBrowserModal';
+import type { SubmittedModalData as FolderBrowserSubmittedModalData } from '../documents/FolderBrowserModal';
 import FolderBrowserModal from '../documents/FolderBrowserModal';
 
-const tabs = [
+type Tab = {
+	id: string;
+	label: FdsLabelValue;
+	icon: FdsIconName;
+};
+
+const tabs: Tab[] = [
 	{
-		tabId: 'create',
+		id: 'create',
 		label: t('Create new'),
 		icon: 'plus',
 	},
 	{
-		tabId: 'open',
+		id: 'open',
 		label: t('Open from'),
 		icon: 'folder-open-o',
 	},
 ];
 
-type Props = ModalProps<{
-	browseContextDocumentId?: string;
-	insertOperationName?: string;
-	isCancelable?: boolean;
-	modalIcon?: string;
-	modalTitle?: string;
-	openDocumentDataProviderName: string;
-	selectDocumentTemplateDataProviderName: string;
-	selectFolderDataProviderName: string;
-}>;
+type CreateDocumentFormModalSubmitModal = ComponentProps<
+	typeof CreateDocumentFormModal
+>['submitModal'];
+type CreateDocumentFormModalSubmittedData =
+	Parameters<CreateDocumentFormModalSubmitModal>[0];
+type DocumentBrowserModalSubmitModal = ComponentProps<
+	typeof DocumentBrowserModal
+>['submitModal'];
+type DocumentBrowserModalSubmittedData =
+	Parameters<DocumentBrowserModalSubmitModal>[0];
+
+type Props = ModalProps<
+	{
+		browseContextDocumentId?: RemoteDocumentId;
+		insertOperationName?: OperationName;
+		isCancelable?: boolean;
+		modalIcon?: string;
+		modalTitle?: string;
+	},
+	CreateDocumentFormModalSubmittedData | DocumentBrowserModalSubmittedData
+>;
 
 const OpenOrCreateDocumentModalStack: FC<Props> = ({
 	data: {
@@ -49,154 +73,190 @@ const OpenOrCreateDocumentModalStack: FC<Props> = ({
 		isCancelable,
 		modalIcon,
 		modalTitle,
-		openDocumentDataProviderName,
-		selectDocumentTemplateDataProviderName,
-		selectFolderDataProviderName,
 	},
 	cancelModal,
 	submitModal,
 }) => {
-	const [state, setState] = useState<{
-		activeTab: {
-			tabId: string;
-			label: FdsLabelValue;
-			icon: FdsIconName;
-		};
-		activeModal: string | null;
+	const [activeTab, setActiveTab] = useState<Tab>(tabs[1]);
 
-		selectedDocumentTemplate: { [key: string]: unknown };
-		selectedFolder: { [key: string]: unknown };
-	}>({
-		// Show "open" tab by default
-		activeTab: tabs[1],
-		activeModal: null,
+	const [activeModal, setActiveModal] = useState<string>();
 
-		selectedDocumentTemplate: {},
-		selectedFolder: {},
-	});
+	const [selectedDocumentTemplate, setSelectedDocumentTemplate] =
+		useState<DocumentTemplateBrowserSubmittedModalData>();
 
-	const handleSelectFolderClick = useCallback(() => {
-		setState((state) => ({ ...state, activeModal: 'FolderBrowser' }));
+	const [selectedFolder, setSelectedFolder] =
+		useState<FolderBrowserSubmittedModalData>();
+
+	const handleSelectFolderClick = useCallback<FdsOnClickCallback>(() => {
+		setActiveModal('FolderBrowser');
 	}, []);
 
-	const handleSelectDocumentTemplateClick = useCallback(() => {
-		setState((state) => ({
-			...state,
-			activeModal: 'DocumentTemplateBrowser',
-		}));
-	}, []);
+	const handleSelectDocumentTemplateClick =
+		useCallback<FdsOnClickCallback>(() => {
+			setActiveModal('DocumentTemplateBrowser');
+		}, []);
 
-	const handleTabItemClick = useCallback((activeTab) => {
-		setState((state) => ({
-			...state,
-			activeTab,
-			selectedDocumentTemplate: {},
-			selectedFolder: {},
-		}));
-	}, []);
+	const handleTabItemClick = useCallback<FdsOnItemClickCallback>(
+		(activeTab: Tab) => {
+			setActiveTab(activeTab);
+			setSelectedDocumentTemplate(undefined);
+			setSelectedFolder(undefined);
+		},
+		[]
+	);
 
 	const handleRenderModalBodyToolbar = useCallback(
 		() => (
 			<ModalBodyToolbar>
 				<ButtonGroup
 					items={tabs}
-					selectedItem={state.activeTab}
+					selectedItem={activeTab}
 					onItemClick={handleTabItemClick}
 				/>
 			</ModalBodyToolbar>
 		),
-		[handleTabItemClick, state.activeTab]
+		[activeTab, handleTabItemClick]
 	);
 
-	const handleCancelModal = useCallback(() => {
-		setState((state) => ({ ...state, activeModal: null }));
+	const handleTemplateOrFolderBrowserCancelModal = useCallback(() => {
+		setActiveModal(undefined);
 	}, []);
 
-	const handleDocumentTemplateSubmit = useCallback((submittedItem) => {
-		setState((state) => ({
-			...state,
-			activeModal: null,
-			selectedDocumentTemplate: submittedItem,
-		}));
+	const handleDocumentTemplateBrowserSubmitModal = useCallback<
+		ComponentProps<typeof DocumentTemplateBrowserModal>['submitModal']
+	>((submittedItem) => {
+		setActiveModal(undefined);
+
+		setSelectedDocumentTemplate(submittedItem);
 	}, []);
 
-	const handleFolderSubmit = useCallback((submittedItem) => {
-		setState((state) => ({
-			...state,
-			activeModal: null,
-			selectedFolder: submittedItem,
-		}));
+	const handleFolderBrowserSubmitModal = useCallback<
+		ComponentProps<typeof FolderBrowserModal>['submitModal']
+	>((submittedItem) => {
+		setActiveModal(undefined);
+
+		setSelectedFolder(submittedItem);
 	}, []);
 
-	const { activeModal, activeTab, selectedDocumentTemplate, selectedFolder } =
-		state;
-	const openOrCreateModalTitle = modalTitle || t('Open or create document');
+	const openOrCreateModalTitle = useMemo(
+		() => modalTitle || t('Open or create document'),
+		[modalTitle]
+	);
+
+	const documentBrowserModalData = useMemo<
+		ComponentProps<typeof CreateDocumentFormModal>['data']
+	>(
+		() => ({
+			browseContextDocumentId,
+			insertOperationName,
+			isCancelable,
+			modalIcon,
+			modalPrimaryButtonLabel: t('Open'),
+			modalTitle: openOrCreateModalTitle,
+		}),
+		[
+			browseContextDocumentId,
+			insertOperationName,
+			isCancelable,
+			modalIcon,
+			openOrCreateModalTitle,
+		]
+	);
+	const createDocumentFormModalData = useMemo<
+		ComponentProps<typeof CreateDocumentFormModal>['data']
+	>(
+		() => ({
+			insertOperationName,
+			isCancelable,
+			modalIcon,
+			modalTitle: openOrCreateModalTitle,
+			selectedDocumentTemplate,
+			selectedFolder,
+		}),
+		[
+			insertOperationName,
+			isCancelable,
+			modalIcon,
+			openOrCreateModalTitle,
+			selectedDocumentTemplate,
+			selectedFolder,
+		]
+	);
+	const documentTemplateBrowserModalData = useMemo<
+		ComponentProps<typeof DocumentTemplateBrowserModal>['data']
+	>(
+		() => ({
+			browseContextDocumentId: undefined,
+			editId: selectedDocumentTemplate?.remoteDocumentId,
+			editLabel: selectedDocumentTemplate?.label,
+			modalTitle: t('Select a template for your document'),
+		}),
+		[
+			selectedDocumentTemplate?.label,
+			selectedDocumentTemplate?.remoteDocumentId,
+		]
+	);
+	const folderBrowserModalData = useMemo<
+		ComponentProps<typeof FolderBrowserModal>['data']
+	>(
+		() => ({
+			browseContextDocumentId,
+			editId: selectedFolder?.remoteDocumentId || undefined,
+			editLabel: selectedFolder?.label,
+			modalTitle: t('Select a folder to save your documents in'),
+		}),
+		[
+			browseContextDocumentId,
+			selectedFolder?.label,
+			selectedFolder?.remoteDocumentId,
+		]
+	);
+
 	return (
 		<ModalStack>
-			{activeTab.tabId === 'open' && (
+			{activeTab.id === 'open' && (
 				<DocumentBrowserModal
 					cancelModal={cancelModal}
-					data={{
-						browseContextDocumentId,
-						dataProviderName: openDocumentDataProviderName,
-						insertOperationName,
-						isCancelable,
-						modalIcon,
-						modalPrimaryButtonLabel: t('Open'),
-						modalTitle: openOrCreateModalTitle,
-					}}
+					data={documentBrowserModalData}
 					renderModalBodyToolbar={handleRenderModalBodyToolbar}
-					submitModal={submitModal}
+					submitModal={submitModal as DocumentBrowserModalSubmitModal}
 				/>
 			)}
 
-			{activeTab.tabId === 'create' && (
+			{activeTab.id === 'create' && (
 				<CreateDocumentFormModal
 					cancelModal={cancelModal}
-					data={{
-						insertOperationName,
-						isCancelable,
-					}}
-					modalIcon={modalIcon}
-					modalTitle={openOrCreateModalTitle}
+					data={createDocumentFormModalData}
 					onSelectDocumentTemplateClick={
 						handleSelectDocumentTemplateClick
 					}
 					onSelectFolderClick={handleSelectFolderClick}
 					renderModalBodyToolbar={handleRenderModalBodyToolbar}
-					selectedDocumentTemplate={selectedDocumentTemplate}
-					selectedFolder={selectedFolder}
-					submitModal={submitModal}
+					submitModal={
+						submitModal as CreateDocumentFormModalSubmitModal
+					}
 				/>
 			)}
 
-			{activeModal === 'DocumentTemplateBrowser' && (
-				<DocumentTemplateBrowserModal
-					cancelModal={handleCancelModal}
-					data={{
-						browseContextDocumentId: null,
-						dataProviderName:
-							selectDocumentTemplateDataProviderName,
-						modalTitle: t('Select a template for your document'),
-					}}
-					remoteDocumentId={selectedDocumentTemplate.remoteDocumentId}
-					submitModal={handleDocumentTemplateSubmit}
-				/>
-			)}
+			<CancelModalContext.Provider
+				value={handleTemplateOrFolderBrowserCancelModal}
+			>
+				{activeModal === 'DocumentTemplateBrowser' && (
+					<DocumentTemplateBrowserModal
+						cancelModal={handleTemplateOrFolderBrowserCancelModal}
+						data={documentTemplateBrowserModalData}
+						submitModal={handleDocumentTemplateBrowserSubmitModal}
+					/>
+				)}
 
-			{activeModal === 'FolderBrowser' && (
-				<FolderBrowserModal
-					cancelModal={handleCancelModal}
-					data={{
-						browseContextDocumentId,
-						dataProviderName: selectFolderDataProviderName,
-						modalTitle: t(
-							'Select a folder to save your documents in'
-						),
-					}}
-					submitModal={handleFolderSubmit}
-				/>
-			)}
+				{activeModal === 'FolderBrowser' && (
+					<FolderBrowserModal
+						cancelModal={handleTemplateOrFolderBrowserCancelModal}
+						data={folderBrowserModalData}
+						submitModal={handleFolderBrowserSubmitModal}
+					/>
+				)}
+			</CancelModalContext.Provider>
 		</ModalStack>
 	);
 };

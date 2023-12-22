@@ -1,17 +1,25 @@
-import { Component } from 'react';
+import type { ComponentProps, Dispatch, FC, SetStateAction } from 'react';
+import { useCallback } from 'react';
 
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
 	SpinnerIcon,
 	StateMessage,
 	VirtualGrid,
 	VirtualList,
 } from 'fontoxml-design-system/src/components';
+import type { FdsOnItemClickCallback } from 'fontoxml-design-system/src/types';
+
+import type { ViewMode } from './ModalBrowserListOrGridViewMode';
+import type useBrowse from './useBrowse';
+import type useUpload from './useUpload';
 
 type Props = {
-	browseContextDocumentId?: string;
-	onItemSubmit?(...args: unknown[]): unknown;
-	renderGridItem(...args: unknown[]): unknown;
-	renderListItem(...args: unknown[]): unknown;
+	browseRequestState: ReturnType<typeof useBrowse>['browseRequestState'];
+	renderGridItem: ComponentProps<typeof VirtualGrid>['renderItem'];
+	renderListItem: ComponentProps<typeof VirtualList>['renderItem'];
+	selectedItemId?: BrowseResponseItem['id'];
+	setSelectedItemId: Dispatch<SetStateAction<BrowseResponseItem['id']>>;
 	stateLabels: {
 		browseError: {
 			title?: string;
@@ -26,131 +34,100 @@ type Props = {
 			message?: string;
 		};
 	};
-	items: unknown[];
-	onItemSelect(newSelectedItem: unknown): unknown;
-	refreshItems(...args: unknown[]): unknown;
-	request: object;
-	selectedItem?: object;
-	viewMode: object;
+	uploadRequestState?: ReturnType<typeof useUpload>['uploadRequestState'];
+	viewMode: ViewMode;
 };
 
-class ModalBrowserFileAndFolderResultList extends Component<Props> {
-	public static defaultProps = {
-		browseContextDocumentId: null,
-		onItemSubmit: (_item): void => undefined,
-		selectedItem: null,
-	};
+const ModalBrowserFileAndFolderResultList: FC<Props> = ({
+	browseRequestState,
+	renderGridItem,
+	renderListItem,
+	selectedItemId,
+	setSelectedItemId,
+	stateLabels,
+	uploadRequestState,
+	viewMode,
+}) => {
+	const handleItemClick = useCallback<FdsOnItemClickCallback>(
+		(item: BrowseResponseItem) => {
+			if (
+				browseRequestState.name === 'loading' ||
+				(uploadRequestState && uploadRequestState.name === 'loading')
+			) {
+				return;
+			}
 
-	public override state = {
-		windowHeight: null,
-	};
+			// Check if item is already selected, so that a documentId and/or nodeId on the selectedItem aren't overwritten
+			if (!selectedItemId || item.id !== selectedItemId) {
+				setSelectedItemId(item.id);
+			}
+		},
+		[
+			browseRequestState.name,
+			selectedItemId,
+			setSelectedItemId,
+			uploadRequestState,
+		]
+	);
 
-	private readonly handleItemDoubleClick = (item) =>
-		item.type === 'folder'
-			? this.props.refreshItems(this.props.browseContextDocumentId, item)
-			: this.props.onItemSubmit(item);
-
-	private readonly handleItemClick = (item) => {
-		// Check if item is already selected, so that a documentId and/or nodeId on the selectedItem aren't overwritten
-		if (
-			!this.props.selectedItem ||
-			item.id !== this.props.selectedItem.id
-		) {
-			this.props.onItemSelect(item);
-		}
-	};
-
-	public override render(): JSX.Element {
-		const {
-			items,
-			renderGridItem,
-			renderListItem,
-			request,
-			selectedItem,
-			stateLabels,
-			viewMode,
-		} = this.props;
-		const { windowHeight } = this.state;
-
-		if (
-			(request.type === 'browse' || request.type === 'upload') &&
-			request.busy
-		) {
-			return (
-				<StateMessage
-					paddingSize="m"
-					visual={<SpinnerIcon />}
-					{...stateLabels.loading}
-				/>
-			);
-		}
-
-		if (request.type === 'browse' && request.error) {
-			return (
-				<StateMessage
-					connotation="warning"
-					paddingSize="m"
-					visual="exclamation-triangle"
-					{...stateLabels.browseError}
-				/>
-			);
-		}
-
-		if (items.length === 0) {
-			return (
-				<StateMessage
-					paddingSize="m"
-					visual="folder-open-o"
-					{...stateLabels.empty}
-				/>
-			);
-		}
-
-		if (viewMode.name === 'list') {
-			return (
-				<VirtualList
-					estimatedItemHeight={30}
-					items={items}
-					maxHeight={windowHeight}
-					onItemClick={this.handleItemClick}
-					onItemDoubleClick={this.handleItemDoubleClick}
-					paddingSize="m"
-					renderItem={renderListItem}
-					idToScrollIntoView={selectedItem ? selectedItem.id : null}
-				/>
-			);
-		}
-
-		// else the viewMode.name is 'grid'
+	if (
+		browseRequestState.name === 'uninitialized' ||
+		browseRequestState.name === 'loading'
+	) {
 		return (
-			<VirtualGrid
-				estimatedRowHeight={86}
-				items={items}
-				maxHeight={windowHeight}
-				onItemClick={this.handleItemClick}
-				onItemDoubleClick={this.handleItemDoubleClick}
+			<StateMessage
 				paddingSize="m"
-				renderItem={renderGridItem}
-				idToScrollIntoView={selectedItem ? selectedItem.id : null}
+				visual={<SpinnerIcon />}
+				{...stateLabels.loading}
 			/>
 		);
 	}
 
-	private readonly updateWindowHeight = () => {
-		// Fix for VirtualList/VirtualGrid growing inside the Modal without a fixed height.
-		// Passed to the maxHeight property of both components.
-		this.setState({ windowHeight: window.innerHeight });
-	};
-
-	public override componentDidMount(): void {
-		this.updateWindowHeight();
-
-		window.addEventListener('resize', this.updateWindowHeight);
+	if (browseRequestState.name === 'errored') {
+		return (
+			<StateMessage
+				connotation="warning"
+				paddingSize="m"
+				visual="exclamation-triangle"
+				{...stateLabels.browseError}
+			/>
+		);
 	}
 
-	public override componentWillUnmount(): void {
-		window.removeEventListener('resize', this.updateWindowHeight);
+	if (browseRequestState.items.length === 0) {
+		return (
+			<StateMessage
+				paddingSize="m"
+				visual="folder-open-o"
+				{...stateLabels.empty}
+			/>
+		);
 	}
-}
+
+	if (viewMode.name === 'list') {
+		return (
+			<VirtualList
+				estimatedItemHeight={30}
+				idToScrollIntoView={selectedItemId || undefined}
+				items={browseRequestState.items}
+				onItemClick={handleItemClick}
+				paddingSize="m"
+				renderItem={renderListItem}
+			/>
+		);
+	}
+
+	// else the viewMode.name is 'grid'
+	return (
+		<VirtualGrid
+			estimatedRowHeight={86}
+			idToScrollIntoView={selectedItemId || undefined}
+			items={browseRequestState.items}
+			onItemClick={handleItemClick}
+			paddingSize="m"
+			renderItem={renderGridItem}
+		/>
+	);
+};
 
 export default ModalBrowserFileAndFolderResultList;

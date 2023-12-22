@@ -1,7 +1,9 @@
 import type { FC } from 'react';
 import { useCallback } from 'react';
 
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
+	ContainedImage,
 	Flex,
 	GridItem,
 	Icon,
@@ -11,48 +13,48 @@ import {
 import type {
 	FdsOnClickCallback,
 	FdsOnDoubleClickCallback,
+	FdsOnItemDoubleClickCallback,
 } from 'fontoxml-design-system/src/types';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
-
-import BlockImage from './BlockImage';
+import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 type Props = {
 	isDisabled?: boolean;
 	isSelected?: boolean;
-	item: {
-		id: string;
-		icon?: string;
-		label: string;
-		type: string;
-	};
+	item: BrowseResponseItem;
 	onClick?: FdsOnClickCallback;
-	onDoubleClick?: FdsOnDoubleClickCallback;
-	referrerDocumentId: string;
+	onItemDoubleClick?: FdsOnItemDoubleClickCallback;
+	referrerDocumentId: RemoteDocumentId;
 };
 
 const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
-const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
+const DEFAULT_ON_ITEM_DOUBLE_CLICK: Props['onItemDoubleClick'] = (_item) =>
+	undefined;
 
 const LoadableImageGridItem: FC<Props> = ({
 	isDisabled = false,
 	isSelected = false,
 	item,
 	onClick = DEFAULT_ON_CLICK,
-	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
+	onItemDoubleClick = DEFAULT_ON_ITEM_DOUBLE_CLICK,
 	referrerDocumentId,
 }) => {
+	const handleDoubleClick = useCallback<FdsOnDoubleClickCallback>(() => {
+		onItemDoubleClick(item);
+	}, [item, onItemDoubleClick]);
+
 	const wrapInGridItem = useCallback(
 		(content) => (
 			<GridItem
 				isSelected={isSelected}
 				isDisabled={isDisabled}
 				onClick={onClick}
-				onDoubleClick={onDoubleClick}
+				onDoubleClick={handleDoubleClick}
 			>
 				{content}
 			</GridItem>
 		),
-		[isDisabled, isSelected, onClick, onDoubleClick]
+		[handleDoubleClick, isDisabled, isSelected, onClick]
 	);
 
 	const { isErrored, isLoading, imageData } = useImageLoader(
@@ -66,9 +68,10 @@ const LoadableImageGridItem: FC<Props> = ({
 			<Flex alignItems="center" flex="1" flexDirection="column">
 				<Icon
 					colorName="icon-m-error-color"
-					icon={item.icon || 'file-image-o'}
+					icon={item.metadata?.icon || 'file-image-o'}
 					size="m"
 				/>
+
 				<Label colorName="text-muted-color">{item.label}</Label>
 			</Flex>
 		);
@@ -78,6 +81,7 @@ const LoadableImageGridItem: FC<Props> = ({
 		return wrapInGridItem(
 			<Flex alignItems="center" flex="1" flexDirection="column">
 				<SpinnerIcon size="m" />
+
 				<Label>{item.label}</Label>
 			</Flex>
 		);
@@ -91,12 +95,10 @@ const LoadableImageGridItem: FC<Props> = ({
 				flexDirection="row"
 				applyCss={{ height: '3rem' }}
 			>
-				<BlockImage
-					src={imageData.dataUrl}
-					width={imageData.width || 150}
-					height={imageData.height}
-				/>
+				{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion */}
+				<ContainedImage src={imageData!.dataUrl} />
 			</Flex>
+
 			<Label>{item.label}</Label>
 		</Flex>
 	);
@@ -107,19 +109,23 @@ const ImageGridItem: FC<Props> = ({
 	isSelected = false,
 	item,
 	onClick = DEFAULT_ON_CLICK,
-	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
+	onItemDoubleClick = DEFAULT_ON_ITEM_DOUBLE_CLICK,
 	referrerDocumentId,
 }) => {
+	const handleDoubleClick = useCallback<FdsOnDoubleClickCallback>(() => {
+		onItemDoubleClick(item);
+	}, [item, onItemDoubleClick]);
+
 	if (item.type === 'folder') {
 		return (
 			<GridItem
 				isSelected={isSelected}
 				isDisabled={isDisabled}
 				onClick={onClick}
-				onDoubleClick={onDoubleClick}
+				onDoubleClick={handleDoubleClick}
 			>
 				<Flex alignItems="center" flexDirection="column">
-					<Icon icon={item.icon || 'folder-o'} size="m" />
+					<Icon icon={item.metadata?.icon || 'folder-o'} size="m" />
 
 					<Label>{item.label}</Label>
 				</Flex>
@@ -133,7 +139,7 @@ const ImageGridItem: FC<Props> = ({
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
+			onItemDoubleClick={onItemDoubleClick}
 			referrerDocumentId={referrerDocumentId}
 		/>
 	);

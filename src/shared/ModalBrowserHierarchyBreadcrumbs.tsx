@@ -1,28 +1,30 @@
-import type { FC } from 'react';
+import type { ComponentProps, FC } from 'react';
 import { useCallback } from 'react';
 
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
 	BreadcrumbItemLink,
 	Breadcrumbs,
 	MenuItem,
 } from 'fontoxml-design-system/src/components';
 
-type Props = {
-	browseContextDocumentId?: string;
+import type useBrowse from './useBrowse';
+import type useUpload from './useUpload';
 
-	// from withModularBrowserCapabilities
-	hierarchyItems?: unknown[];
-	refreshItems(...args: unknown[]): unknown;
-	request: object;
+type Props = {
+	browseRequestState: ReturnType<typeof useBrowse>['browseRequestState'];
+	onItemClick: (item: BrowseResponseItem) => void;
+	uploadRequestState?: ReturnType<typeof useUpload>['uploadRequestState'];
 };
 
 const ModalBrowserHierarchyBreadcrumbs: FC<Props> = ({
-	browseContextDocumentId = null,
-	hierarchyItems,
-	refreshItems,
-	request,
+	browseRequestState,
+	onItemClick,
+	uploadRequestState,
 }) => {
-	const renderBreadcrumbItem = useCallback(
+	const renderBreadcrumbItem = useCallback<
+		ComponentProps<typeof Breadcrumbs>['renderBreadcrumbItem']
+	>(
 		({
 			key,
 			isDisabled,
@@ -38,42 +40,53 @@ const ModalBrowserHierarchyBreadcrumbs: FC<Props> = ({
 				isDisabled={isDisabled}
 				isDropOpened={isDropOpened}
 				isLastItem={isLastItem}
-				onClick={() => {
-					onClick();
+				onClick={(event) => {
+					onClick(event);
 
 					if (item.label !== '…') {
-						refreshItems(browseContextDocumentId, item, true);
+						onItemClick(item as BrowseResponseItem);
 					}
 				}}
 				onRef={onRef}
 			/>
 		),
-		[browseContextDocumentId, refreshItems]
+		[onItemClick]
 	);
 
-	const renderTruncatedBreadcrumbMenuItem = useCallback(
+	const renderTruncatedBreadcrumbMenuItem = useCallback<
+		Exclude<
+			ComponentProps<
+				typeof Breadcrumbs
+			>['renderTruncatedBreadcrumbMenuItem'],
+			undefined
+		>
+	>(
 		({ key, onClick, isDisabled, item }) => (
 			<MenuItem
 				key={key}
 				isDisabled={isDisabled}
 				label={item.label}
-				onClick={() => {
-					onClick();
+				onClick={(event) => {
+					onClick(event);
 
-					refreshItems(browseContextDocumentId, item, true);
+					onItemClick(item as BrowseResponseItem);
 				}}
 			/>
 		),
-		[browseContextDocumentId, refreshItems]
+		[onItemClick]
 	);
 
 	return (
 		<Breadcrumbs
 			isDisabled={
-				(request.type === 'browse' || request.type === 'upload') &&
-				request.busy
+				browseRequestState.name === 'loading' ||
+				(uploadRequestState && uploadRequestState.name === 'loading')
 			}
-			items={hierarchyItems}
+			items={
+				browseRequestState.name === 'successful'
+					? browseRequestState.hierarchyItems
+					: []
+			}
 			renderBreadcrumbItem={renderBreadcrumbItem}
 			renderTruncatedBreadcrumbMenuItem={
 				renderTruncatedBreadcrumbMenuItem

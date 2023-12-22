@@ -1,6 +1,7 @@
 import type { FC } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
 	Button,
 	ButtonWithValue,
@@ -13,84 +14,87 @@ import {
 	ModalHeader,
 	TextInput,
 } from 'fontoxml-design-system/src/components';
+import type {
+	FdsOnChangeCallback,
+	FdsOnClickCallback,
+	FdsOnKeyDownCallback,
+} from 'fontoxml-design-system/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
+import useOperation from 'fontoxml-fx/src/useOperation';
 import t from 'fontoxml-localization/src/t';
 
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
+import type { SubmittedModalData as DocumentTemplateBrowserSubmittedModalData } from './DocumentTemplateBrowserModal';
+import type { SubmittedModalData as FolderBrowserSubmittedModalData } from './FolderBrowserModal';
 
-function getSubmitModalData(itemToSubmit) {
-	return {
-		selectedDocumentTemplateId:
-			itemToSubmit.selectedDocumentTemplate.remoteDocumentId,
-		selectedFolderId: itemToSubmit.selectedFolder.id,
-		documentTitle: itemToSubmit.documentTitle,
-	};
-}
-
-function canSubmitSelectedItem(selectedItem) {
-	return !!(
-		selectedItem.documentTitle.trim().length > 0 &&
-		selectedItem.selectedFolder.id &&
-		selectedItem.selectedDocumentTemplate.remoteDocumentId
-	);
-}
-
-type Props = ModalProps<{
+type IncomingModalData = {
 	insertOperationName?: string;
 	isCancelable?: boolean;
-}> & {
 	modalIcon?: string;
 	modalTitle: string;
-	onSelectDocumentTemplateClick(...args: unknown[]): unknown;
-	onSelectFolderClick(...args: unknown[]): unknown;
-	renderModalBodyToolbar?(...args: unknown[]): unknown;
-	selectedDocumentTemplate?: object;
-	selectedFolder?: object;
+	selectedDocumentTemplate?: DocumentTemplateBrowserSubmittedModalData;
+	selectedFolder?: FolderBrowserSubmittedModalData;
+};
+type SubmittedModalData = {
+	selectedDocumentTemplateId: BrowseResponseItem['id'];
+	selectedFolderId: BrowseResponseItem['id'];
+	documentTitle: string;
 };
 
-const DEFAULT_SELECTED_DOCUMENT_TEMPLATE = {};
-const DEFAULT_SELECTED_FOLDER = {};
+type Props = ModalProps<IncomingModalData, SubmittedModalData> & {
+	onSelectDocumentTemplateClick: FdsOnClickCallback;
+	onSelectFolderClick: FdsOnClickCallback;
+	renderModalBodyToolbar?: () => JSX.Element;
+};
 
-const CreateDocumentFormModalInternal: FC<Props> = ({
+const CreateDocumentFormModal: FC<Props> = ({
 	cancelModal,
 	data,
-	determineAndHandleSubmitButtonDisabledState,
-	isSubmitButtonDisabled,
-	modalIcon,
-	modalTitle,
 	onSelectDocumentTemplateClick,
 	onSelectFolderClick,
 	renderModalBodyToolbar,
-	selectedDocumentTemplate = DEFAULT_SELECTED_DOCUMENT_TEMPLATE,
-	selectedFolder = DEFAULT_SELECTED_FOLDER,
 	submitModal,
 }) => {
 	const [documentTitle, setDocumentTitle] = useState('');
 
-	useEffect(() => {
-		determineAndHandleSubmitButtonDisabledState({
-			selectedDocumentTemplate,
-			selectedFolder,
-			documentTitle,
-		});
+	const dataToSubmit = useMemo<SubmittedModalData | undefined>(() => {
+		if (
+			!data.selectedDocumentTemplate?.remoteDocumentId ||
+			// selectedFolderId === null means the root folder is selected,
+			// which is valid
+			data.selectedFolder?.remoteDocumentId === undefined ||
+			!documentTitle
+		) {
+			return undefined;
+		}
+
+		return {
+			selectedDocumentTemplateId:
+				data.selectedDocumentTemplate.remoteDocumentId,
+			selectedFolderId: data.selectedFolder.remoteDocumentId,
+			documentTitle: documentTitle.trim(),
+		};
 	}, [
-		determineAndHandleSubmitButtonDisabledState,
+		data.selectedDocumentTemplate?.remoteDocumentId,
+		data.selectedFolder?.remoteDocumentId,
 		documentTitle,
-		selectedDocumentTemplate,
-		selectedFolder,
 	]);
 
-	const handleSubmitButtonClick = useCallback(() => {
-		submitModal(
-			getSubmitModalData({
-				selectedDocumentTemplate,
-				selectedFolder,
-				documentTitle,
-			})
-		);
-	}, [documentTitle, selectedDocumentTemplate, selectedFolder, submitModal]);
+	const operationData = useMemo(
+		() => ({ ...data, ...dataToSubmit }),
+		[data, dataToSubmit]
+	);
 
-	const handleKeyDown = useCallback(
+	const { operationState } = useOperation(
+		data.insertOperationName,
+		operationData
+	);
+
+	const isSubmitButtonDisabled = useMemo(
+		() => !dataToSubmit || !operationState.enabled,
+		[dataToSubmit, operationState.enabled]
+	);
+
+	const handleKeyDown = useCallback<FdsOnKeyDownCallback>(
 		(event) => {
 			switch (event.key) {
 				case 'Escape':
@@ -100,7 +104,8 @@ const CreateDocumentFormModalInternal: FC<Props> = ({
 					break;
 				case 'Enter':
 					if (!isSubmitButtonDisabled) {
-						handleSubmitButtonClick();
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						submitModal(dataToSubmit!);
 					}
 					break;
 			}
@@ -108,20 +113,29 @@ const CreateDocumentFormModalInternal: FC<Props> = ({
 		[
 			cancelModal,
 			data.isCancelable,
-			handleSubmitButtonClick,
+			dataToSubmit,
 			isSubmitButtonDisabled,
+			submitModal,
 		]
 	);
 
-	const handleDocumentTitleChange = useCallback((documentTitle) => {
-		setDocumentTitle(documentTitle);
-	}, []);
+	const handleDocumentTitleChange = useCallback<FdsOnChangeCallback>(
+		(documentTitle: string) => {
+			setDocumentTitle(documentTitle);
+		},
+		[]
+	);
+
+	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		submitModal(dataToSubmit!);
+	}, [dataToSubmit, submitModal]);
 
 	return (
 		<Modal size="s" onKeyDown={handleKeyDown}>
 			<ModalHeader
-				icon={modalIcon}
-				title={modalTitle}
+				icon={data.modalIcon}
+				title={data.modalTitle ?? ''}
 				hideCloseButton={!data.isCancelable}
 			/>
 
@@ -135,7 +149,7 @@ const CreateDocumentFormModalInternal: FC<Props> = ({
 								buttonLabel={t('Select a template')}
 								onClick={onSelectDocumentTemplateClick}
 								valueLabel={
-									selectedDocumentTemplate.label || null
+									data.selectedDocumentTemplate?.label
 								}
 							/>
 						</FormRow>
@@ -144,7 +158,7 @@ const CreateDocumentFormModalInternal: FC<Props> = ({
 							<ButtonWithValue
 								buttonLabel={t('Select a folder')}
 								onClick={onSelectFolderClick}
-								valueLabel={selectedFolder.label || null}
+								valueLabel={data.selectedFolder?.label}
 							/>
 						</FormRow>
 
@@ -177,10 +191,5 @@ const CreateDocumentFormModalInternal: FC<Props> = ({
 		</Modal>
 	);
 };
-
-const CreateDocumentFormModal = withInsertOperationNameCapabilities(
-	getSubmitModalData,
-	canSubmitSelectedItem
-)(CreateDocumentFormModalInternal);
 
 export default CreateDocumentFormModal;

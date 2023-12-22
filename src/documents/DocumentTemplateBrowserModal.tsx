@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import type { ComponentProps, FC } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import configurationManager from 'fontoxml-configuration/src/configurationManager';
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
 	Button,
 	Modal,
@@ -11,33 +11,36 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from 'fontoxml-design-system/src/components';
+import type {
+	FdsOnClickCallback,
+	FdsOnKeyDownCallback,
+} from 'fontoxml-design-system/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
+import useDocumentLoader from 'fontoxml-fx/src/useDocumentLoader';
+import useOperation from 'fontoxml-fx/src/useOperation';
 import t from 'fontoxml-localization/src/t';
 import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 import ModalBrowserFileAndFolderResultList from '../shared/ModalBrowserFileAndFolderResultList';
 import ModalBrowserHierarchyBreadcrumbs from '../shared/ModalBrowserHierarchyBreadcrumbs';
+import type { ViewMode } from '../shared/ModalBrowserListOrGridViewMode';
 import ModalBrowserListOrGridViewMode, {
-	VIEWMODES,
+	VIEW_MODES,
 } from '../shared/ModalBrowserListOrGridViewMode';
-import withInsertOperationNameCapabilities from '../withInsertOperationNameCapabilities';
-import withModularBrowserCapabilities from '../withModularBrowserCapabilities';
+import type { BrowseConfig, BrowseContext } from '../shared/useBrowse';
+import useBrowse from '../shared/useBrowse';
 import DocumentGridItem from './DocumentGridItem';
 import DocumentListItem from './DocumentListItem';
 import DocumentPreview from './DocumentPreview';
 
-const cmsBrowserSendsHierarchyItemsInBrowseResponse = configurationManager.get(
-	'cms-browser-sends-hierarchy-items-in-browse-response'
-);
-
-const stateLabels = {
+const stateLabels: ComponentProps<
+	typeof ModalBrowserFileAndFolderResultList
+>['stateLabels'] = {
 	loading: {
 		title: t('Loading templates…'),
-		message: null,
 	},
 	browseError: {
 		title: t('Can’t open this folder'),
-		message: null,
 	},
 	empty: {
 		title: t('No results'),
@@ -45,124 +48,132 @@ const stateLabels = {
 			'This folder does not contain files that can be opened with Fonto.'
 		),
 	},
+};
+const previewStateLabels: ComponentProps<
+	typeof DocumentPreview
+>['stateLabels'] = {
 	loadingPreview: {
 		title: t('Loading template preview…'),
-		message: null,
-	},
-	previewError: {
-		title: t('Can’t open this template'),
-		message: t(
-			'Fonto can’t open this template. You can try again, or try a different template.'
-		),
 	},
 };
 
-type ModalSubmitData = {
+type IncomingModalData = {
+	browseContextDocumentId?: string;
+	editId?: RemoteDocumentId;
+	editLabel?: string;
+	insertOperationName?: string;
+	modalIcon?: string;
+	modalPrimaryButtonLabel?: string;
+	modalTitle?: string;
+	query?: BrowseContext['query'];
+};
+export type SubmittedModalData = {
+	label: BrowseResponseItem['label'];
 	remoteDocumentId: RemoteDocumentId;
-	label: string;
 };
 
-function getSubmitModalData(itemToSubmit): ModalSubmitData {
-	return {
-		remoteDocumentId: itemToSubmit.id,
-		label: itemToSubmit.label,
-	};
-}
+type Props = ModalProps<IncomingModalData, SubmittedModalData>;
 
-function canSubmitSelectedItem(selectedItem) {
-	return !!(selectedItem && selectedItem.documentId);
-}
+const assetTypes = ['document-template'];
+// TODO: just file?
+const resultTypes = ['file'];
 
-type Props = ModalProps<
-	{
-		browseContextDocumentId?: string;
-		dataProviderName: string;
-		insertOperationName?: string;
-		modalIcon?: string;
-		modalPrimaryButtonLabel?: string;
-		modalTitle?: string;
-	},
-	ModalSubmitData
-> & {
-	remoteDocumentId?: RemoteDocumentId;
+const browseConfig: BrowseConfig = {
+	assetTypes,
+	resultTypes,
+	rootFolderLabel: t('Templates'),
 };
 
-let DocumentTemplateBrowserModal: FC<Props> = ({
-	// ModalProps
+const DocumentTemplateBrowserModal: FC<Props> = ({
 	cancelModal,
-	data: {
-		browseContextDocumentId,
-		modalIcon,
-		modalPrimaryButtonLabel,
-		modalTitle,
-	},
+	data,
 	submitModal,
-
-	remoteDocumentId = null,
-
-	// TODO: all of these props come from the HoCs, type them there and reuse here
-	determineAndHandleItemSubmitForSelectedItem,
-	hierarchyItems,
-	isItemErrored,
-	isSubmitButtonDisabled,
-	items,
-	lastOpenedState,
-	onInitialSelectedItemIdChange,
-	onItemIsErrored,
-	onItemIsLoaded,
-	onItemSelect,
-	onViewModeChange,
-	refreshItems,
-	request,
-	selectedItem,
-	viewMode,
 }) => {
-	const doubleClickedItemId = useRef(null);
+	const [viewMode, setViewMode] = useState<ViewMode>(VIEW_MODES.LIST);
+
+	const browseContext = useMemo<BrowseContext>(
+		() => ({
+			query: data.query,
+			remoteDocumentId: data.browseContextDocumentId,
+		}),
+		[data.browseContextDocumentId, data.query]
+	);
+
+	const {
+		browse,
+		browseRequestState,
+		deleteErrorForItem,
+		hasErrorForItem,
+		setErrorForItem,
+	} = useBrowse(browseContext, browseConfig);
+
+	const [selectedItemId, setSelectedItemId] =
+		useState<RemoteDocumentId | null>(data.editId ?? null);
+
+	const selectedItem = useMemo(
+		() =>
+			browseRequestState.name === 'successful'
+				? browseRequestState.items.find(
+						(item) => item.id === selectedItemId
+				  )
+				: undefined,
+		[browseRequestState, selectedItemId]
+	);
+
+	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
+		useDocumentLoader(selectedItemId);
 
 	useEffect(() => {
-		if (
-			doubleClickedItemId.current !== null &&
-			(selectedItem === null ||
-				doubleClickedItemId.current !== selectedItem.id)
-		) {
-			doubleClickedItemId.current = null;
-		}
-	}, [selectedItem]);
-
-	useEffect(() => {
-		const initialSelectedItem = remoteDocumentId
-			? { id: remoteDocumentId }
-			: null;
-		if (
-			cmsBrowserSendsHierarchyItemsInBrowseResponse &&
-			initialSelectedItem
-		) {
-			onInitialSelectedItemIdChange(initialSelectedItem);
-			refreshItems(browseContextDocumentId, { id: null });
-		} else if (
-			lastOpenedState.hierarchyItems &&
-			lastOpenedState.hierarchyItems.length > 1
-		) {
-			refreshItems(
-				browseContextDocumentId,
-				lastOpenedState.hierarchyItems[
-					lastOpenedState.hierarchyItems.length - 1
-				],
-				false,
-				lastOpenedState.hierarchyItems
-			);
-		} else {
-			refreshItems(browseContextDocumentId, { id: null });
+		if (error) {
+			setErrorForItem(selectedItemId, error);
+		} else if (documentId || isLoading) {
+			deleteErrorForItem(selectedItemId);
 		}
 	}, [
-		browseContextDocumentId,
-		lastOpenedState.hierarchyItems,
-		onInitialSelectedItemIdChange,
-		refreshItems,
-		remoteDocumentId,
+		deleteErrorForItem,
+		documentId,
+		error,
+		isLoading,
+		selectedItemId,
+		setErrorForItem,
 	]);
 
-	const handleKeyDown = useCallback(
+	const dataToSubmit = useMemo<SubmittedModalData | undefined>(() => {
+		return selectedItem && selectedItem.type !== 'folder'
+			? {
+					label: selectedItem.label,
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					remoteDocumentId: selectedItem.id!,
+			  }
+			: data.editId
+			? {
+					label: data.editLabel || '',
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					remoteDocumentId: data.editId!,
+			  }
+			: undefined;
+	}, [data.editId, data.editLabel, selectedItem]);
+
+	const operationData = useMemo(
+		() => ({ ...data, ...dataToSubmit }),
+		[data, dataToSubmit]
+	);
+
+	const { operationState } = useOperation(
+		data.insertOperationName,
+		operationData
+	);
+
+	const isSubmitButtonDisabled = useMemo(
+		() =>
+			!selectedItem ||
+			selectedItem.type === 'folder' ||
+			!documentId ||
+			!operationState.enabled,
+		[documentId, operationState.enabled, selectedItem]
+	);
+
+	const handleKeyDown = useCallback<FdsOnKeyDownCallback>(
 		(event) => {
 			switch (event.key) {
 				case 'Escape':
@@ -170,115 +181,95 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 					break;
 				case 'Enter':
 					if (!isSubmitButtonDisabled) {
-						submitModal(getSubmitModalData(selectedItem));
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						submitModal(dataToSubmit!);
 					}
 					break;
 			}
 		},
-		[cancelModal, isSubmitButtonDisabled, selectedItem, submitModal]
+		[cancelModal, dataToSubmit, isSubmitButtonDisabled, submitModal]
 	);
 
-	// Because we need to override the double click, because we need to add the documentId for submit.
-	// This will be done right away if the selectedItem already has the documentId, else we have to wait
-	// until the document is loaded in the preview.
-	const handleItemDoubleClick = useCallback(
+	const handleBreadcrumbsItemClick = useCallback<
+		ComponentProps<typeof ModalBrowserHierarchyBreadcrumbs>['onItemClick']
+	>(
 		(item) => {
+			void browse(data.browseContextDocumentId, item, true);
+		},
+		[browse, data.browseContextDocumentId]
+	);
+
+	const handleItemDoubleClick = useCallback(
+		(item: BrowseResponseItem) => {
 			if (item.type === 'folder') {
-				refreshItems(browseContextDocumentId, item);
-			} else if (selectedItem.id === item.id && selectedItem.documentId) {
-				determineAndHandleItemSubmitForSelectedItem(selectedItem);
-			} else {
-				doubleClickedItemId.current = item.id;
+				void browse(data.browseContextDocumentId, item);
+			} else if (selectedItemId === item.id && !isSubmitButtonDisabled) {
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				submitModal(dataToSubmit!);
 			}
 		},
 		[
-			browseContextDocumentId,
-			determineAndHandleItemSubmitForSelectedItem,
-			refreshItems,
-			selectedItem,
+			data.browseContextDocumentId,
+			dataToSubmit,
+			isSubmitButtonDisabled,
+			browse,
+			selectedItemId,
+			submitModal,
 		]
 	);
 
-	const handleRenderListItem = useCallback(
-		({ key, item, onClick, onRef }) => (
+	const handleRenderListItem = useCallback<
+		ComponentProps<
+			typeof ModalBrowserFileAndFolderResultList
+		>['renderListItem']
+	>(
+		({ key, item, onClick }) => (
 			<DocumentListItem
 				key={key}
-				isDisabled={item.isDisabled}
-				isErrored={isItemErrored(item)}
-				isSelected={selectedItem && selectedItem.id === item.id}
-				item={
-					item.icon || item.type === 'folder'
-						? item
-						: { ...item, icon: 'file-o' }
-				}
+				isDisabled={item.metadata?.isDisabled}
+				isErrored={hasErrorForItem(item)}
+				isSelected={selectedItemId === item.id}
+				item={item}
 				onClick={onClick}
-				onDoubleClick={() => {
-					handleItemDoubleClick(item);
-				}}
-				onRef={onRef}
+				onItemDoubleClick={handleItemDoubleClick}
 			/>
 		),
-		[handleItemDoubleClick, isItemErrored, selectedItem]
+		[handleItemDoubleClick, hasErrorForItem, selectedItemId]
 	);
 
-	const handleRenderGridItem = useCallback(
+	const handleRenderGridItem = useCallback<
+		ComponentProps<
+			typeof ModalBrowserFileAndFolderResultList
+		>['renderGridItem']
+	>(
 		({ key, item, onClick }) => (
 			<DocumentGridItem
 				key={key}
-				isDisabled={item.isDisabled}
-				isErrored={isItemErrored(item)}
-				isSelected={selectedItem && selectedItem.id === item.id}
-				item={
-					item.icon || item.type === 'folder'
-						? item
-						: { ...item, icon: 'file-o' }
-				}
+				isDisabled={item.metadata?.isDisabled}
+				isErrored={hasErrorForItem(item)}
+				isSelected={selectedItemId === item.id}
+				item={item}
 				onClick={onClick}
-				onDoubleClick={() => {
-					handleItemDoubleClick(item);
-				}}
+				onItemDoubleClick={handleItemDoubleClick}
 			/>
 		),
-		[handleItemDoubleClick, isItemErrored, selectedItem]
+		[handleItemDoubleClick, hasErrorForItem, selectedItemId]
 	);
 
-	const selectedItemId = useMemo(() => selectedItem?.id, [selectedItem?.id]);
+	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		submitModal(dataToSubmit!);
+	}, [dataToSubmit, submitModal]);
 
-	// Because the documentId is needed by submit, we need to add this to the selectedItem when the
-	// preview is done loading. If the item was also double clicked, we want to submit right away.
-	const handleLoadIsDone = useCallback(
-		(documentId) => {
-			const newSelectedItem = {
-				id: selectedItemId,
-				label: selectedItem?.label,
-				documentId,
-			};
-			if (newSelectedItem.id === doubleClickedItemId.current) {
-				determineAndHandleItemSubmitForSelectedItem(newSelectedItem);
-			}
-			onItemIsLoaded(newSelectedItem.id);
-			onItemSelect(newSelectedItem);
-		},
-		[
-			determineAndHandleItemSubmitForSelectedItem,
-			onItemIsLoaded,
-			onItemSelect,
-			selectedItem,
-			selectedItemId,
-		]
-	);
-
-	const handleSubmitButtonClick = useCallback(() => {
-		submitModal(getSubmitModalData(selectedItem));
-	}, [selectedItem, submitModal]);
-
-	const hasHierarchyItems = hierarchyItems.length > 0;
+	const hasHierarchyItems =
+		browseRequestState.name === 'successful' &&
+		browseRequestState.hierarchyItems.length > 0;
 
 	return (
 		<Modal size="l" onKeyDown={handleKeyDown} isFullHeight>
 			<ModalHeader
-				icon={modalIcon}
-				title={modalTitle || t('Select a template')}
+				icon={data.modalIcon}
+				title={data.modalTitle || t('Select a template')}
 			/>
 
 			<ModalBody>
@@ -290,17 +281,13 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 					>
 						{hasHierarchyItems && (
 							<ModalBrowserHierarchyBreadcrumbs
-								browseContextDocumentId={
-									browseContextDocumentId
-								}
-								hierarchyItems={hierarchyItems}
-								refreshItems={refreshItems}
-								request={request}
+								browseRequestState={browseRequestState}
+								onItemClick={handleBreadcrumbsItemClick}
 							/>
 						)}
 
 						<ModalBrowserListOrGridViewMode
-							onViewModeChange={onViewModeChange}
+							setViewMode={setViewMode}
 							viewMode={viewMode}
 						/>
 					</ModalContentToolbar>
@@ -308,16 +295,11 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 					<ModalContent flexDirection="row">
 						<ModalContent flexDirection="column" flex="1">
 							<ModalBrowserFileAndFolderResultList
-								browseContextDocumentId={
-									browseContextDocumentId
-								}
-								items={items}
-								onItemSelect={onItemSelect}
-								refreshItems={refreshItems}
+								browseRequestState={browseRequestState}
 								renderListItem={handleRenderListItem}
 								renderGridItem={handleRenderGridItem}
-								request={request}
-								selectedItem={selectedItem}
+								selectedItemId={selectedItemId}
+								setSelectedItemId={setSelectedItemId}
 								stateLabels={stateLabels}
 								viewMode={viewMode}
 							/>
@@ -326,10 +308,17 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 						{selectedItem && selectedItem.type !== 'folder' && (
 							<ModalContent flexDirection="column" flex="2">
 								<DocumentPreview
-									onItemIsErrored={onItemIsErrored}
-									onLoadIsDone={handleLoadIsDone}
-									selectedItem={selectedItem}
-									stateLabels={stateLabels}
+									description={
+										selectedItem.metadata?.description
+									}
+									documentId={documentId}
+									error={error}
+									isErrored={isErrored}
+									isLoading={isLoading}
+									// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+									remoteDocumentId={selectedItemId!}
+									retryLoadDocument={retryLoadDocument}
+									stateLabels={previewStateLabels}
 								/>
 							</ModalContent>
 						)}
@@ -346,7 +335,7 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 
 				<Button
 					type="primary"
-					label={modalPrimaryButtonLabel || t('Select')}
+					label={data.modalPrimaryButtonLabel || t('Select')}
 					isDisabled={isSubmitButtonDisabled}
 					onClick={handleSubmitButtonClick}
 				/>
@@ -354,12 +343,5 @@ let DocumentTemplateBrowserModal: FC<Props> = ({
 		</Modal>
 	);
 };
-DocumentTemplateBrowserModal = withModularBrowserCapabilities(VIEWMODES.LIST)(
-	DocumentTemplateBrowserModal
-);
-DocumentTemplateBrowserModal = withInsertOperationNameCapabilities(
-	getSubmitModalData,
-	canSubmitSelectedItem
-)(DocumentTemplateBrowserModal);
 
 export default DocumentTemplateBrowserModal;

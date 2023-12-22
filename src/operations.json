@@ -20,15 +20,6 @@
 					]
 				},
 				{
-					"name": "[dataProviderName]",
-					"type": "string",
-					"desription": [
-						"Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
-					]
-				},
-				{
 					"name": "[documentId]",
 					"type": "DocumentId",
 					"description": [
@@ -101,7 +92,6 @@
 			]
 		},
 		"initialData": {
-			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
 			"linkableElementsQuery": "//*[@id]",
 			"modalPrimaryButtonLabel": null,
@@ -116,12 +106,14 @@
 				"type": "modal/DocumentWithLinkSelectorBrowserModal",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
-					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
+					"insertOperationName": "{{insertOperationName}}",
 					"linkableElementsQuery": "{{linkableElementsQuery}}",
+					"modalIcon": "{{modalIcon}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
-					"nodeId": "{{nodeId}}"
+					"nodeId": "{{nodeId}}",
+					"query": "{{query}}"
 				}
 			}
 		]
@@ -139,15 +131,6 @@
 						"This id is sent to the CMS when the browse call is made.",
 						"If the CMS resolves a hierarchy for a reference in the metadata of a reference,",
 						"the folder containing the browseContextDocument will be opened."
-					]
-				},
-				{
-					"name": "[dataProviderName]",
-					"type": "string",
-					"desription": [
-						"Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
 					]
 				},
 				{
@@ -201,7 +184,6 @@
 			]
 		},
 		"initialData": {
-			"dataProviderName": "dataProviderUsingConfiguredConnectorsForImages",
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null,
 			"selectedImageId": null
@@ -211,10 +193,12 @@
 				"type": "modal/ImageBrowserModal",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
-					"dataProviderName": "{{dataProviderName}}",
+					"insertOperationName": "{{insertOperationName}}",
+					"modalIcon": "{{modalIcon}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
 					"modalTitle": "{{modalTitle}}",
-					"selectedImageId": "{{selectedImageId}}"
+					"selectedImageId": "{{selectedImageId}}",
+					"query": "{{query}}"
 				}
 			}
 		]
@@ -238,15 +222,6 @@
 						"when the focusedDocument is not available, to the first document in the hierarchy.",
 						"",
 						"If set to null, no reference document ID will be sent to the CMS."
-					]
-				},
-				{
-					"name": "[dataProviderName]",
-					"type": "string",
-					"desription": [
-						"Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
 					]
 				},
 				{
@@ -310,7 +285,6 @@
 			]
 		},
 		"initialData": {
-			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
 			"documentId": null,
 			"isCancelable": true,
 			"modalPrimaryButtonLabel": null,
@@ -324,11 +298,13 @@
 				"type": "modal/DocumentBrowserModal",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
-					"isCancelable": "{{isCancelable}}",
-					"dataProviderName": "{{dataProviderName}}",
 					"documentId": "{{documentId}}",
+					"insertOperationName": "{{insertOperationName}}",
+					"isCancelable": "{{isCancelable}}",
+					"modalIcon": "{{modalIcon}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
-					"modalTitle": "{{modalTitle}}"
+					"modalTitle": "{{modalTitle}}",
+					"query": "{{query}}"
 				}
 			}
 		]
@@ -349,15 +325,6 @@
 						"when the focusedDocument is not available, to the first document in the hierarchy.",
 						"",
 						"If set to null, no reference document ID will be sent to the CMS."
-					]
-				},
-				{
-					"name": "[dataProviderName]",
-					"type": "string",
-					"desription": [
-						"Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
 					]
 				},
 				{
@@ -404,7 +371,6 @@
 			]
 		},
 		"initialData": {
-			"dataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
 			"modalPrimaryButtonLabel": null,
 			"modalTitle": null
 		},
@@ -416,9 +382,11 @@
 				"type": "modal/DocumentTemplateBrowserModal",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
-					"dataProviderName": "{{dataProviderName}}",
+					"insertOperationName": "{{insertOperationName}}",
+					"modalIcon": "{{modalIcon}}",
 					"modalPrimaryButtonLabel": "{{modalPrimaryButtonLabel}}",
-					"modalTitle": "{{modalTitle}}"
+					"modalTitle": "{{modalTitle}}",
+					"query": "{{query}}"
 				}
 			}
 		]
@@ -448,36 +416,6 @@
 					]
 				},
 				{
-					"name": "[openDocumentDataProviderName]",
-					"type": "string",
-					"desription": [
-						"The data provider name for browsing documents to open in the editor. ",
-						"Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
-					]
-				},
-				{
-					"name": "[selectDocumentTemplateDataProviderName]",
-					"type": "string",
-					"desription": [
-						"The data provider name for browsing document templates to create a ",
-						"new document. Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
-					]
-				},
-				{
-					"name": "[selectFolderDataProviderName]",
-					"type": "string",
-					"desription": [
-						"The data provider name for browsing the folders in which the new ",
-						"document can be placed. Use this property when the default data provider ",
-						"can not be used. Set your own properties for your modal with ",
-						"{@link dataProviders} and use the set name in the operation data."
-					]
-				},
-				{
 					"name": "[insertOperationName]",
 					"type": "string",
 					"description": [
@@ -503,14 +441,6 @@
 					"name": "[modalTitle]",
 					"type": "string",
 					"description": "The title being shown at the top of the modal. Defaults to `t__Open or create document`."
-				},
-				{
-					"name": "[query]",
-					"type": "Object",
-					"description": [
-						"Corresponds to the `query` property in the browser contracts. ",
-						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
-					]
 				}
 			],
 			"returns": [
@@ -543,10 +473,7 @@
 		},
 		"initialData": {
 			"isCancelable": true,
-			"modalTitle": null,
-			"openDocumentDataProviderName": "dataProviderUsingConfiguredConnectorsForDocuments",
-			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
-			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
+			"modalTitle": null
 		},
 		"steps": [
 			{
@@ -556,11 +483,10 @@
 				"type": "modal/OpenOrCreateDocumentModalStack",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"insertOperationName": "{{insertOperationName}}",
 					"isCancelable": "{{isCancelable}}",
-					"modalTitle": "{{modalTitle}}",
-					"openDocumentDataProviderName": "{{openDocumentDataProviderName}}",
-					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
-					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+					"modalIcon": "{{modalIcon}}",
+					"modalTitle": "{{modalTitle}}"
 				}
 			}
 		]
@@ -585,26 +511,6 @@
 						"when the focusedDocument is not available, to the first document in the hierarchy.",
 						"",
 						"If set to null, no reference document ID will be sent to the CMS."
-					]
-				},
-				{
-					"name": "[selectDocumentTemplateDataProviderName]",
-					"type": "string",
-					"desription": [
-						"The data provider name for browsing document templates to create a ",
-						"new document. Use this property when the default data provider can not be used. ",
-						"Set your own properties for your modal with {@link dataProviders} and use ",
-						"the set name in the operation data."
-					]
-				},
-				{
-					"name": "[selectFolderDataProviderName]",
-					"type": "string",
-					"desription": [
-						"The data provider name for browsing the folders in which the new ",
-						"document can be placed. Use this property when the default data provider ",
-						"can not be used. Set your own properties for your modal with ",
-						"{@link dataProviders} and use the set name in the operation data."
 					]
 				},
 				{
@@ -633,14 +539,6 @@
 					"name": "[modalTitle]",
 					"type": "string",
 					"description": "The title being shown at the top of the modal. Defaults to `t__Create new document`."
-				},
-				{
-					"name": "[query]",
-					"type": "Object",
-					"description": [
-						"Corresponds to the `query` property in the browser contracts. ",
-						"Anything added here will be sent in the `query` field in the call to the `browse` endpoint."
-					]
 				}
 			],
 			"returns": [
@@ -663,9 +561,7 @@
 		},
 		"initialData": {
 			"isCancelable": true,
-			"modalTitle": null,
-			"selectDocumentTemplateDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentTemplates",
-			"selectFolderDataProviderName": "dataProviderUsingConfiguredConnectorsForDocumentFolders"
+			"modalTitle": null
 		},
 		"steps": [
 			{
@@ -675,10 +571,10 @@
 				"type": "modal/CreateDocumentModalStack",
 				"data": {
 					"browseContextDocumentId": "{{browseContextDocumentId}}",
+					"insertOperationName": "{{insertOperationName}}",
 					"isCancelable": "{{isCancelable}}",
-					"modalTitle": "{{modalTitle}}",
-					"selectDocumentTemplateDataProviderName": "{{selectDocumentTemplateDataProviderName}}",
-					"selectFolderDataProviderName": "{{selectFolderDataProviderName}}"
+					"modalIcon": "{{modalIcon}}",
+					"modalTitle": "{{modalTitle}}"
 				}
 			}
 		]

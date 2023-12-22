@@ -1,8 +1,10 @@
 import type { FC } from 'react';
 import { useCallback } from 'react';
 
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
 	Block,
+	ContainedImage,
 	Icon,
 	Label,
 	ListItem,
@@ -11,40 +13,38 @@ import {
 import type {
 	FdsOnClickCallback,
 	FdsOnDoubleClickCallback,
+	FdsOnItemDoubleClickCallback,
 	FdsOnRefCallback,
 } from 'fontoxml-design-system/src/types';
 import useImageLoader from 'fontoxml-fx/src/useImageLoader';
-
-import BlockImage from './BlockImage';
+import type { RemoteDocumentId } from 'fontoxml-remote-documents/src/types';
 
 type Props = {
 	isDisabled?: boolean;
 	isSelected?: boolean;
-	item: {
-		id: string;
-		icon?: string;
-		label: string;
-		type: string;
-	};
+	item: BrowseResponseItem;
 	onClick?: FdsOnClickCallback;
-	onDoubleClick?: FdsOnDoubleClickCallback;
+	onItemDoubleClick?: FdsOnItemDoubleClickCallback;
 	onRef?: FdsOnRefCallback;
-	referrerDocumentId: string;
+	referrerDocumentId: RemoteDocumentId;
 };
 
 const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
-const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
-const DEFAULT_ON_REF: Props['onRef'] = (_domNode) => undefined;
+const DEFAULT_ON_ITEM_DOUBLE_CLICK: Props['onItemDoubleClick'] = (_item) =>
+	undefined;
 
 const LoadableImageListItem: FC<Props> = ({
 	isDisabled = false,
 	isSelected = false,
 	item,
 	onClick = DEFAULT_ON_CLICK,
-	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
-	onRef = DEFAULT_ON_REF,
+	onItemDoubleClick = DEFAULT_ON_ITEM_DOUBLE_CLICK,
 	referrerDocumentId,
 }) => {
+	const handleDoubleClick = useCallback<FdsOnDoubleClickCallback>(() => {
+		onItemDoubleClick(item);
+	}, [item, onItemDoubleClick]);
+
 	const wrapInListItem = useCallback(
 		(content, label) => {
 			return (
@@ -52,19 +52,19 @@ const LoadableImageListItem: FC<Props> = ({
 					isSelected={isSelected}
 					isDisabled={isDisabled}
 					onClick={onClick}
-					onDoubleClick={onDoubleClick}
-					onRef={onRef}
+					onDoubleClick={handleDoubleClick}
 				>
 					{content}
 					{label}
 				</ListItem>
 			);
 		},
-		[isDisabled, isSelected, onClick, onDoubleClick, onRef]
+		[handleDoubleClick, isDisabled, isSelected, onClick]
 	);
 
 	const { isErrored, isLoading, imageData } = useImageLoader(
-		item.id,
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		item.id!,
 		referrerDocumentId,
 		'thumbnail'
 	);
@@ -73,7 +73,7 @@ const LoadableImageListItem: FC<Props> = ({
 		return wrapInListItem(
 			<Icon
 				colorName="icon-s-error-color"
-				icon={item.icon || 'file-image-o'}
+				icon={item.metadata?.icon || 'file-image-o'}
 				size="s"
 			/>,
 			<Label colorName="text-muted-color">{item.label}</Label>
@@ -89,11 +89,8 @@ const LoadableImageListItem: FC<Props> = ({
 
 	return wrapInListItem(
 		<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
-			<BlockImage
-				src={imageData.dataUrl}
-				width={imageData.width || 150}
-				height={imageData.height}
-			/>
+			{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion */}
+			<ContainedImage src={imageData!.dataUrl} />
 		</Block>,
 		<Label>{item.label}</Label>
 	);
@@ -104,20 +101,22 @@ const ImageListItem: FC<Props> = ({
 	isSelected = false,
 	item,
 	onClick = DEFAULT_ON_CLICK,
-	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
-	onRef = DEFAULT_ON_REF,
+	onItemDoubleClick = DEFAULT_ON_ITEM_DOUBLE_CLICK,
 	referrerDocumentId,
 }) => {
+	const handleDoubleClick = useCallback<FdsOnDoubleClickCallback>(() => {
+		onItemDoubleClick(item);
+	}, [item, onItemDoubleClick]);
+
 	if (item.type === 'folder') {
 		return (
 			<ListItem
 				isSelected={isSelected}
 				isDisabled={isDisabled}
 				onClick={onClick}
-				onDoubleClick={onDoubleClick}
-				onRef={onRef}
+				onDoubleClick={handleDoubleClick}
 			>
-				<Icon icon={item.icon || 'folder-o'} size="s" />
+				<Icon icon={item.metadata?.icon || 'folder-o'} size="s" />
 
 				<Label>{item.label}</Label>
 			</ListItem>
@@ -130,8 +129,7 @@ const ImageListItem: FC<Props> = ({
 			isSelected={isSelected}
 			item={item}
 			onClick={onClick}
-			onDoubleClick={onDoubleClick}
-			onRef={onRef}
+			onItemDoubleClick={onItemDoubleClick}
 			referrerDocumentId={referrerDocumentId}
 		/>
 	);

@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useCallback } from 'react';
 
+import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
 	Flex,
 	GridItem,
@@ -10,27 +11,21 @@ import {
 import type {
 	FdsOnClickCallback,
 	FdsOnDoubleClickCallback,
-	FdsOnRefCallback,
+	FdsOnItemDoubleClickCallback,
 } from 'fontoxml-design-system/src/types';
 
 type Props = {
 	isDisabled?: boolean;
 	isErrored?: boolean;
 	isSelected?: boolean;
-	item: {
-		id: string;
-		icon?: string;
-		label: string;
-		type: string;
-	};
+	item: BrowseResponseItem;
 	onClick?: FdsOnClickCallback;
-	onDoubleClick?: FdsOnDoubleClickCallback;
-	onRef?: FdsOnRefCallback;
+	onItemDoubleClick?: FdsOnItemDoubleClickCallback;
 };
 
 const DEFAULT_ON_CLICK: Props['onClick'] = (_event) => undefined;
-const DEFAULT_ON_DOUBLE_CLICK: Props['onDoubleClick'] = (_event) => undefined;
-const DEFAULT_ON_REF: Props['onRef'] = (_domNode) => undefined;
+const DEFAULT_ON_ITEM_DOUBLE_CLICK: Props['onItemDoubleClick'] = (_item) =>
+	undefined;
 
 const DocumentGridItem: FC<Props> = ({
 	isDisabled = false,
@@ -38,28 +33,30 @@ const DocumentGridItem: FC<Props> = ({
 	isSelected = false,
 	item,
 	onClick = DEFAULT_ON_CLICK,
-	onDoubleClick = DEFAULT_ON_DOUBLE_CLICK,
-	onRef = DEFAULT_ON_REF,
+	onItemDoubleClick = DEFAULT_ON_ITEM_DOUBLE_CLICK,
 }) => {
+	const handleDoubleClick = useCallback<FdsOnDoubleClickCallback>(() => {
+		onItemDoubleClick(item);
+	}, [item, onItemDoubleClick]);
+
 	const wrapInGridItem = useCallback(
-		(content) => (
+		(content: JSX.Element) => (
 			<GridItem
 				isSelected={isSelected}
 				isDisabled={isDisabled}
 				onClick={onClick}
-				onDoubleClick={onDoubleClick}
-				onRef={onRef}
+				onDoubleClick={handleDoubleClick}
 			>
 				{content}
 			</GridItem>
 		),
-		[isDisabled, isSelected, onClick, onDoubleClick, onRef]
+		[handleDoubleClick, isDisabled, isSelected, onClick]
 	);
 
 	if (item.type === 'folder') {
 		return wrapInGridItem(
 			<Flex alignItems="center" flexDirection="column">
-				<Icon icon={item.icon || 'folder-o'} size="m" />
+				<Icon icon={item.metadata?.icon || 'folder-o'} size="m" />
 				<Label>{item.label}</Label>
 			</Flex>
 		);
@@ -70,7 +67,7 @@ const DocumentGridItem: FC<Props> = ({
 			<Flex alignItems="center" flex="1" flexDirection="column">
 				<Icon
 					colorName="icon-m-error-color"
-					icon={item.icon || 'file-text-o'}
+					icon={item.metadata?.icon || 'file-text-o'}
 					size="m"
 				/>
 				<Label colorName="text-muted-color">{item.label}</Label>
@@ -80,7 +77,7 @@ const DocumentGridItem: FC<Props> = ({
 
 	return wrapInGridItem(
 		<Flex alignItems="center" flexDirection="column">
-			<Icon icon={item.icon || 'file-text-o'} size="m" />
+			<Icon icon={item.metadata?.icon || 'file-text-o'} size="m" />
 
 			<Label>{item.label}</Label>
 		</Flex>

@@ -2,11 +2,6 @@ import configurationManager from 'fontoxml-configuration/src/configurationManage
 
 export default function setDefaultConfiguration(): void {
 	configurationManager.setDefault(
-		'cms-browser-sends-hierarchy-items-in-browse-response',
-		false
-	);
-
-	configurationManager.setDefault(
 		'cms-browser-upload-mime-types-to-accept',
 		'image/*'
 	);
