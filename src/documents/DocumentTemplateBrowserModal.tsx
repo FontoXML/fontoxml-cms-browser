@@ -121,7 +121,11 @@ const DocumentTemplateBrowserModal: FC<Props> = ({
 	);
 
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
-		useDocumentLoader(selectedItemId);
+		useDocumentLoader(
+			selectedItem && selectedItem.type !== 'folder'
+				? selectedItemId
+				: null
+		);
 
 	useEffect(() => {
 		if (error) {

@@ -33,14 +33,14 @@ type Tab = {
 
 const tabs: Tab[] = [
 	{
-		id: 'create',
-		label: t('Create new'),
-		icon: 'plus',
-	},
-	{
 		id: 'open',
 		label: t('Open from'),
 		icon: 'folder-open-o',
+	},
+	{
+		id: 'create',
+		label: t('Create new'),
+		icon: 'plus',
 	},
 ];
 
@@ -77,7 +77,7 @@ const OpenOrCreateDocumentModalStack: FC<Props> = ({
 	cancelModal,
 	submitModal,
 }) => {
-	const [activeTab, setActiveTab] = useState<Tab>(tabs[1]);
+	const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
 
 	const [activeModal, setActiveModal] = useState<string>();
 

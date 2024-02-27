@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { BrowseResponseItem } from 'fontoxml-connectors-standard/src/types';
 import {
@@ -18,6 +18,7 @@ import type {
 	FdsOnChangeCallback,
 	FdsOnClickCallback,
 	FdsOnKeyDownCallback,
+	FdsOnRefCallback,
 } from 'fontoxml-design-system/src/types';
 import type { ModalProps } from 'fontoxml-fx/src/types';
 import useOperation from 'fontoxml-fx/src/useOperation';
@@ -43,7 +44,7 @@ type SubmittedModalData = {
 type Props = ModalProps<IncomingModalData, SubmittedModalData> & {
 	onSelectDocumentTemplateClick: FdsOnClickCallback;
 	onSelectFolderClick: FdsOnClickCallback;
-	renderModalBodyToolbar?: () => JSX.Element;
+	renderModalBodyToolbar?(): JSX.Element;
 };
 
 const CreateDocumentFormModal: FC<Props> = ({
@@ -55,6 +56,12 @@ const CreateDocumentFormModal: FC<Props> = ({
 	submitModal,
 }) => {
 	const [documentTitle, setDocumentTitle] = useState('');
+
+	const modalRef = useRef<HTMLElement | null>(null);
+
+	const handleModalRef = useCallback<FdsOnRefCallback>((domNode) => {
+		modalRef.current = domNode;
+	}, []);
 
 	const dataToSubmit = useMemo<SubmittedModalData | undefined>(() => {
 		if (
@@ -131,8 +138,20 @@ const CreateDocumentFormModal: FC<Props> = ({
 		submitModal(dataToSubmit!);
 	}, [dataToSubmit, submitModal]);
 
+	useEffect(() => {
+		// This is a fairly brittle solution to manage focus of the toolbar buttons on initial render.
+		const createNewButton = Array.from(
+			modalRef.current.querySelectorAll(
+				'fds-modal-body > fds-modal-body-toolbar > fds-button-group > fds-button:nth-child(2)'
+			)
+		)[0];
+		if (createNewButton instanceof HTMLElement) {
+			createNewButton.focus();
+		}
+	}, []);
+
 	return (
-		<Modal size="s" onKeyDown={handleKeyDown}>
+		<Modal size="s" onKeyDown={handleKeyDown} onRef={handleModalRef}>
 			<ModalHeader
 				icon={data.modalIcon}
 				title={data.modalTitle ?? ''}

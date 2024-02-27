@@ -142,7 +142,11 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 	const [nodeId, setNodeId] = useState<NodeId | null>(data.nodeId ?? null);
 
 	const { isErrored, isLoading, documentId, error, retryLoadDocument } =
-		useDocumentLoader(selectedItemId);
+		useDocumentLoader(
+			selectedItem && selectedItem.type !== 'folder'
+				? selectedItemId
+				: null
+		);
 
 	useEffect(() => {
 		if (error) {
