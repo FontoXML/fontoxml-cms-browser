@@ -44,7 +44,7 @@ type SubmittedModalData = {
 type Props = ModalProps<IncomingModalData, SubmittedModalData> & {
 	onSelectDocumentTemplateClick: FdsOnClickCallback;
 	onSelectFolderClick: FdsOnClickCallback;
-	renderModalBodyToolbar?(): JSX.Element;
+	renderModalBodyToolbar?: () => JSX.Element;
 };
 
 const CreateDocumentFormModal: FC<Props> = ({
@@ -137,18 +137,6 @@ const CreateDocumentFormModal: FC<Props> = ({
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		submitModal(dataToSubmit!);
 	}, [dataToSubmit, submitModal]);
-
-	useEffect(() => {
-		// This is a fairly brittle solution to manage focus of the toolbar buttons on initial render.
-		const createNewButton = Array.from(
-			modalRef.current.querySelectorAll(
-				'fds-modal-body > fds-modal-body-toolbar > fds-button-group > fds-button:nth-child(2)'
-			)
-		)[0];
-		if (createNewButton instanceof HTMLElement) {
-			createNewButton.focus();
-		}
-	}, []);
 
 	return (
 		<Modal size="s" onKeyDown={handleKeyDown} onRef={handleModalRef}>
