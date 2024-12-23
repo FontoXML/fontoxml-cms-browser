@@ -71,8 +71,8 @@ export default function useUpload(
 	}, []);
 
 	const upload = useCallback(
-		(files: FileList) => {
-			if (!isMountedInDOM.current) {
+		(files: FileList | null) => {
+			if (!isMountedInDOM.current || !files) {
 				return;
 			}
 

@@ -38,6 +38,7 @@ import ModalBrowserListOrGridViewMode, {
 } from '../shared/ModalBrowserListOrGridViewMode';
 import type { BrowseConfig, BrowseContext } from '../shared/useBrowse';
 import useBrowse from '../shared/useBrowse';
+
 import DocumentGridItem from './DocumentGridItem';
 import DocumentListItem from './DocumentListItem';
 import DocumentWithLinkSelectorPreview from './DocumentWithLinkSelectorPreview';
@@ -134,7 +135,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 			browseRequestState.name === 'successful'
 				? browseRequestState.items.find(
 						(item) => item.id === selectedItemId
-				  )
+					)
 				: undefined,
 		[browseRequestState, selectedItemId]
 	);
@@ -151,7 +152,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 	useEffect(() => {
 		if (error) {
 			setErrorForItem(selectedItemId, error);
-		} else if (documentId || isLoading) {
+		} else if (documentId ?? isLoading) {
 			deleteErrorForItem(selectedItemId);
 		}
 	}, [
@@ -179,6 +180,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 		}
 
 		// documentId is loaded so documentNode will never be null, so add a !
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const documentNode = documentsManager.getDocumentNode(documentId)!;
 
 		const documentElement = blueprintQuery.findChild(
@@ -197,6 +199,8 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 			)
 		) {
 			setNodeId(getNodeId(documentElement));
+		} else {
+			setNodeId(null);
 		}
 	}, [data.linkableElementsQuery, documentId, nodeId]);
 
@@ -207,22 +211,26 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 			selectedItem.type !== 'folder'
 			? {
 					documentId,
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					id: selectedItem.id!,
 					nodeId,
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					remoteDocumentId: selectedItem.id!,
-			  }
+				}
 			: data.documentId && data.nodeId && documentId === data.documentId
-			? {
-					documentId: data.documentId,
-					id: documentsManager.getRemoteDocumentId(data.documentId)!,
-					nodeId: data.nodeId,
-					remoteDocumentId: documentsManager.getRemoteDocumentId(
-						data.documentId
-					)!,
-			  }
-			: undefined;
+				? {
+						documentId: data.documentId,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						id: documentsManager.getRemoteDocumentId(
+							data.documentId
+						)!,
+						nodeId: data.nodeId,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						remoteDocumentId: documentsManager.getRemoteDocumentId(
+							data.documentId
+						)!,
+					}
+				: undefined;
 	}, [data.documentId, data.nodeId, documentId, nodeId, selectedItem]);
 
 	const operationData = useMemo(
@@ -253,7 +261,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 					break;
 				case 'Enter':
 					if (!isSubmitButtonDisabled) {
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						submitModal(dataToSubmit!);
 					}
 					break;
@@ -319,7 +327,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 	);
 
 	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		submitModal(dataToSubmit!);
 	}, [dataToSubmit, submitModal]);
 
@@ -331,7 +339,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 		<Modal size="l" isFullHeight={true} onKeyDown={handleKeyDown}>
 			<ModalHeader
 				icon={data.modalIcon}
-				title={data.modalTitle || t('Select a link')}
+				title={data.modalTitle ?? t('Select a link')}
 			/>
 
 			<ModalBody>
@@ -378,7 +386,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 										data.linkableElementsQuery ?? '//*[@id]'
 									}
 									nodeId={nodeId ?? undefined}
-									// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+									// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 									remoteDocumentId={selectedItemId!}
 									retryLoadDocument={retryLoadDocument}
 									setNodeId={setNodeId}
@@ -399,7 +407,7 @@ const DocumentWithLinkSelectorBrowserModal: FC<Props> = ({
 
 				<Button
 					type="primary"
-					label={data.modalPrimaryButtonLabel || t('Insert')}
+					label={data.modalPrimaryButtonLabel ?? t('Insert')}
 					isDisabled={isSubmitButtonDisabled}
 					onClick={handleSubmitButtonClick}
 				/>
