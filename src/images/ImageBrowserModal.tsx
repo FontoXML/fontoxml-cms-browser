@@ -400,7 +400,8 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 								<ImagePreview
 									heading={selectedItem.label}
 									properties={
-										selectedItem.metadata?.properties
+										selectedItem.metadata?.properties ??
+										undefined
 									}
 									referrerDocumentId={
 										// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion

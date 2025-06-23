@@ -313,7 +313,8 @@ const DocumentTemplateBrowserModal: FC<Props> = ({
 							<ModalContent flexDirection="column" flex="2">
 								<DocumentPreview
 									description={
-										selectedItem.metadata?.description
+										selectedItem.metadata?.description ??
+										undefined
 									}
 									documentId={documentId}
 									error={error}
