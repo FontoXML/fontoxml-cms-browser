@@ -32,6 +32,7 @@ import ModalBrowserListOrGridViewMode, {
 } from '../shared/ModalBrowserListOrGridViewMode';
 import type { BrowseConfig, BrowseContext } from '../shared/useBrowse';
 import useBrowse from '../shared/useBrowse';
+
 import DocumentGridItem from './DocumentGridItem';
 import DocumentListItem from './DocumentListItem';
 import DocumentPreview from './DocumentPreview';
@@ -128,7 +129,7 @@ const DocumentBrowserModal: FC<Props> = ({
 			browseRequestState.name === 'successful'
 				? browseRequestState.items.find(
 						(item) => item.id === selectedItemId
-				  )
+					)
 				: undefined,
 		[browseRequestState, selectedItemId]
 	);
@@ -159,17 +160,18 @@ const DocumentBrowserModal: FC<Props> = ({
 		return selectedItem && selectedItem.type !== 'folder' && documentId
 			? {
 					documentId,
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					remoteDocumentId: selectedItem.id!,
-			  }
+				}
 			: data.documentId && documentId === data.documentId
-			? {
-					documentId: data.documentId,
-					remoteDocumentId: documentsManager.getRemoteDocumentId(
-						data.documentId
-					)!,
-			  }
-			: undefined;
+				? {
+						documentId: data.documentId,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						remoteDocumentId: documentsManager.getRemoteDocumentId(
+							data.documentId
+						)!,
+					}
+				: undefined;
 	}, [data.documentId, documentId, selectedItem]);
 
 	const operationData = useMemo(
@@ -201,7 +203,7 @@ const DocumentBrowserModal: FC<Props> = ({
 					break;
 				case 'Enter':
 					if (!isSubmitButtonDisabled) {
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						submitModal(dataToSubmit!);
 					}
 					break;
@@ -241,7 +243,7 @@ const DocumentBrowserModal: FC<Props> = ({
 			if (item.type === 'folder') {
 				void browse(data.browseContextDocumentId, item);
 			} else if (selectedItemId === item.id && !isSubmitButtonDisabled) {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				submitModal(dataToSubmit!);
 			} else {
 				doubleClickedItemId.current = item.id;
@@ -300,13 +302,13 @@ const DocumentBrowserModal: FC<Props> = ({
 			doubleClickedItemId.current === selectedItemId &&
 			!isSubmitButtonDisabled
 		) {
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			submitModal(dataToSubmit!);
 		}
 	}, [dataToSubmit, isSubmitButtonDisabled, selectedItemId, submitModal]);
 
 	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		submitModal(dataToSubmit!);
 	}, [dataToSubmit, submitModal]);
 
@@ -323,7 +325,7 @@ const DocumentBrowserModal: FC<Props> = ({
 			/>
 
 			<ModalBody>
-				{renderModalBodyToolbar && renderModalBodyToolbar()}
+				{renderModalBodyToolbar?.()}
 
 				<ModalContent flexDirection="column">
 					<ModalContentToolbar
@@ -368,7 +370,7 @@ const DocumentBrowserModal: FC<Props> = ({
 									error={error}
 									isErrored={isErrored}
 									isLoading={isLoading}
-									// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+									// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 									remoteDocumentId={selectedItemId!}
 									retryLoadDocument={retryLoadDocument}
 									stateLabels={previewStateLabels}

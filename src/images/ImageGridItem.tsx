@@ -95,7 +95,7 @@ const LoadableImageGridItem: FC<Props> = ({
 				flexDirection="row"
 				applyCss={{ height: '3rem' }}
 			>
-				{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion */}
+				{/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
 				<ContainedImage src={imageData!.dataUrl} />
 			</Flex>
 

@@ -73,8 +73,10 @@ type SetErrorForItemCallback = (
 	error: unknown
 ) => void;
 
-const lastOpenedStateByAssetAndResultTypes: Map<string, BrowseResponseItem[]> =
-	new Map();
+const lastOpenedStateByAssetAndResultTypes = new Map<
+	string,
+	BrowseResponseItem[]
+>();
 
 export default function useBrowse(
 	context: BrowseContext,

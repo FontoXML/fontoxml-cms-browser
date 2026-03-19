@@ -27,6 +27,7 @@ import ModalBrowserListOrGridViewMode, {
 } from '../shared/ModalBrowserListOrGridViewMode';
 import type { BrowseConfig, BrowseContext } from '../shared/useBrowse';
 import useBrowse from '../shared/useBrowse';
+
 import DocumentGridItem from './DocumentGridItem';
 import DocumentListItem from './DocumentListItem';
 
@@ -96,12 +97,12 @@ const FolderBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 			browseRequestState.name === 'successful'
 				? browseRequestState.items.find(
 						(item) => item.id === selectedItemId
-				  ) ||
-				  // if the selected item is not part of the current folder, maybe it
-				  // is still part of the current hierarchy (eg. when entering a folder)
-				  browseRequestState.hierarchyItems.find(
+					) ||
+					// if the selected item is not part of the current folder, maybe it
+					// is still part of the current hierarchy (eg. when entering a folder)
+					browseRequestState.hierarchyItems.find(
 						(item) => item.id === selectedItemId
-				  )
+					)
 				: undefined,
 		[browseRequestState, selectedItemId]
 	);
@@ -111,13 +112,13 @@ const FolderBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 			? {
 					label: selectedItem.label,
 					remoteDocumentId: selectedItem.id,
-			  }
+				}
 			: data.editId
-			? {
-					label: data.editLabel,
-					remoteDocumentId: data.editId,
-			  }
-			: undefined;
+				? {
+						label: data.editLabel,
+						remoteDocumentId: data.editId,
+					}
+				: undefined;
 	}, [data.editId, data.editLabel, selectedItem]);
 
 	const isSubmitButtonDisabled = useMemo(() => !dataToSubmit, [dataToSubmit]);

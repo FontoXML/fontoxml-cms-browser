@@ -63,7 +63,7 @@ const LoadableImageListItem: FC<Props> = ({
 	);
 
 	const { isErrored, isLoading, imageData } = useImageLoader(
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		item.id!,
 		referrerDocumentId,
 		'thumbnail'
@@ -89,7 +89,7 @@ const LoadableImageListItem: FC<Props> = ({
 
 	return wrapInListItem(
 		<Block applyCss={{ width: '.875rem', height: '.875rem' }}>
-			{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion */}
+			{/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
 			<ContainedImage src={imageData!.dataUrl} />
 		</Block>,
 		<Label>{item.label}</Label>

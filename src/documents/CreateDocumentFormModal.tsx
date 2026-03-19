@@ -111,7 +111,7 @@ const CreateDocumentFormModal: FC<Props> = ({
 					break;
 				case 'Enter':
 					if (!isSubmitButtonDisabled) {
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						submitModal(dataToSubmit!);
 					}
 					break;
@@ -134,7 +134,7 @@ const CreateDocumentFormModal: FC<Props> = ({
 	);
 
 	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		submitModal(dataToSubmit!);
 	}, [dataToSubmit, submitModal]);
 
@@ -147,7 +147,7 @@ const CreateDocumentFormModal: FC<Props> = ({
 			/>
 
 			<ModalBody>
-				{renderModalBodyToolbar && renderModalBodyToolbar()}
+				{renderModalBodyToolbar?.()}
 
 				<ModalContent flexDirection="column" paddingSize="m">
 					<Form labelPosition="above">

@@ -38,6 +38,7 @@ import type { BrowseConfig, BrowseContext } from '../shared/useBrowse';
 import useBrowse from '../shared/useBrowse';
 import type { UploadConfig, UploadContext } from '../shared/useUpload';
 import useUpload from '../shared/useUpload';
+
 import ImageGridItem from './ImageGridItem';
 import ImageListItem from './ImageListItem';
 import ImagePreview from './ImagePreview';
@@ -153,7 +154,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 			browseRequestState.name === 'successful'
 				? browseRequestState.items.find(
 						(item) => item.id === selectedItemId
-				  )
+					)
 				: undefined,
 		[browseRequestState, selectedItemId]
 	);
@@ -166,7 +167,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 	const uploadContext = useMemo<UploadContext>(
 		() => ({
 			metadata: {},
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			remoteDocumentId: data.browseContextDocumentId!,
 			targetFolder: uploadTargetFolder,
 		}),
@@ -210,14 +211,14 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 	const dataToSubmit = useMemo<SubmittedModalData | undefined>(() => {
 		return selectedItem && selectedItem.type !== 'folder'
 			? {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					selectedImageId: selectedItem.id!,
-			  }
+				}
 			: data.selectedImageId
-			? {
-					selectedImageId: data.selectedImageId,
-			  }
-			: undefined;
+				? {
+						selectedImageId: data.selectedImageId,
+					}
+				: undefined;
 	}, [data.selectedImageId, selectedItem]);
 
 	const operationData = useMemo(
@@ -246,7 +247,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 					break;
 				case 'Enter':
 					if (!isSubmitButtonDisabled) {
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						submitModal(dataToSubmit!);
 					}
 					break;
@@ -269,7 +270,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 			if (item.type === 'folder') {
 				void browse(data.browseContextDocumentId, item);
 			} else if (selectedItemId === item.id && !isSubmitButtonDisabled) {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				submitModal(dataToSubmit!);
 			}
 		},
@@ -291,7 +292,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 		({ key, item, onClick }) => (
 			<ImageListItem
 				key={key}
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				referrerDocumentId={data.browseContextDocumentId!}
 				isDisabled={item.metadata?.isDisabled}
 				isSelected={selectedItemId === item.id}
@@ -311,7 +312,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 		({ key, item, onClick }) => (
 			<ImageGridItem
 				key={key}
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				referrerDocumentId={data.browseContextDocumentId!}
 				isDisabled={item.metadata?.isDisabled}
 				isSelected={selectedItemId === item.id}
@@ -324,7 +325,7 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 	);
 
 	const handleSubmitButtonClick = useCallback<FdsOnClickCallback>(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		submitModal(dataToSubmit!);
 	}, [dataToSubmit, submitModal]);
 
@@ -404,10 +405,10 @@ const ImageBrowserModal: FC<Props> = ({ cancelModal, data, submitModal }) => {
 										undefined
 									}
 									referrerDocumentId={
-										// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+										// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 										data.browseContextDocumentId!
 									}
-									// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+									// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 									remoteImageId={selectedItem.id!}
 									stateLabels={previewStateLabels}
 								/>

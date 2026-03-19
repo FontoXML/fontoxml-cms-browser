@@ -91,9 +91,9 @@ const ImagePreview: FC<Props> = ({
 				<Flex flex="auto">
 					<img
 						{...imageStyles}
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						src={imageData!.dataUrl}
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						width={imageData!.width || 150}
 					/>
 				</Flex>
